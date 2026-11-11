@@ -11,12 +11,49 @@
     ],
   },
   "files": [
-    { "kind": "folder", "path": "Toolbox", "target-membership": [ "Toolbox" ] },
+    { "path": "ToolboxWidgetExtension.entitlements" },
+    {
+      "kind": "folder",
+      "path": "Toolbox",
+      "target-membership": [
+        "Toolbox",
+      ],
+      "membership-exceptions": [
+        {
+          "target": "ToolboxWidget",
+          "inclusions": [
+            "WaterStore.swift",
+          ],
+        },
+      ],
+    }, {
+      "kind": "folder",
+      "path": "ToolboxWidget",
+      "target-membership": [
+        "ToolboxWidget",
+      ],
+      "membership-exceptions": [
+        {
+          "target": "ToolboxWidget",
+          "exclusions": [
+            "Info.plist",
+          ],
+        },
+      ],
+    }, {
+      "kind": "group",
+      "name": "Frameworks",
+      "children": [
+        { "path": "<SDK>/System/Library/Frameworks/WidgetKit.framework", "target-membership": [ "ToolboxWidget/frameworks" ] },
+        { "path": "<SDK>/System/Library/Frameworks/SwiftUI.framework", "target-membership": [ "ToolboxWidget/frameworks" ] },
+      ],
+    },
     {
       "kind": "group",
       "name": "Products",
       "children": [
         { "path": "<PRODUCTS>/Toolbox.app", "id": "000000000000000000000120", "type": "wrapper.application", "index": false },
+        { "path": "<PRODUCTS>/ToolboxWidget.appex", "id": "3F478D7D309E83A800AC0E42", "type": "wrapper.app-extension", "index": false, "target-membership": [ { "build-phase": "Toolbox/copy/Embed Foundation Extensions", "header-preservation": "remove-on-copy" } ] },
       ],
     },
   ],
@@ -26,12 +63,21 @@
       "id": "000000000000000100000000",
       "product": "Products/Toolbox.app",
       "product-type": "application",
+      "dependencies": [
+        "ToolboxWidget",
+      ],
       "build-phases": [
         "compile-sources",
         "frameworks",
         "resources",
+        {
+          "kind": "copy",
+          "name": "Embed Foundation Extensions",
+          "bundle-base-path": "plugins-directory",
+        },
       ],
       "build-settings": {
+        "CODE_SIGN_ENTITLEMENTS": "Toolbox/Toolbox.entitlements",
         "CODE_SIGN_STYLE": "Automatic",
         "CURRENT_PROJECT_VERSION": "1",
         "ENABLE_APP_SANDBOX": "YES",
@@ -63,6 +109,49 @@
         "SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY": "YES",
         "SWIFT_VERSION": "5.0",
         "TARGETED_DEVICE_FAMILY": "1,2,7",
+      },
+    }, {
+      "name": "ToolboxWidget",
+      "id": "3F478D7C309E83A800AC0E42",
+      "product": "Products/ToolboxWidget.appex",
+      "product-type": "app-extension",
+      "build-phases": [
+        "compile-sources",
+        "frameworks",
+        "resources",
+      ],
+      "build-settings": {
+        "ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME": "AccentColor",
+        "ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME": "WidgetBackground",
+        "CODE_SIGN_ENTITLEMENTS": "ToolboxWidgetExtension.entitlements",
+        "CODE_SIGN_STYLE": "Automatic",
+        "CURRENT_PROJECT_VERSION": "1",
+        "ENABLE_APP_SANDBOX": "YES",
+        "ENABLE_HARDENED_RUNTIME": "YES",
+        "GENERATE_INFOPLIST_FILE": "YES",
+        "INFOPLIST_FILE": "ToolboxWidget/Info.plist",
+        "INFOPLIST_KEY_CFBundleDisplayName": "WassertrackerWidget",
+        "INFOPLIST_KEY_NSHumanReadableCopyright": "",
+        "LD_RUNPATH_SEARCH_PATHS": [
+          "$(inherited)",
+          "@executable_path/../Frameworks",
+          "@executable_path/../../../../Frameworks",
+        ],
+        "MACOSX_DEPLOYMENT_TARGET": "27.2",
+        "MARKETING_VERSION": "1.0",
+        "PRODUCT_BUNDLE_IDENTIFIER": "devplaceholder.$(PROJECT_UNIQUE_VALUE:identifier).Toolbox.widget",
+        "PRODUCT_NAME": "$(TARGET_NAME)",
+        "REGISTER_APP_GROUPS": "YES",
+        "SDKROOT": "macosx",
+        "SKIP_INSTALL": "YES",
+        "STRING_CATALOG_GENERATE_SYMBOLS": "YES",
+        "SUPPORTED_PLATFORMS": "iphoneos iphonesimulator",
+        "SUPPORTS_MACCATALYST": "NO",
+        "SWIFT_APPROACHABLE_CONCURRENCY": "YES",
+        "SWIFT_EMIT_LOC_STRINGS": "YES",
+        "SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY": "YES",
+        "SWIFT_VERSION": "5.0",
+        "TARGETED_DEVICE_FAMILY": "1",
       },
     },
   ],
