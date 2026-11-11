@@ -15,16 +15,16 @@ struct ContentView: View {
                 UnitConverterView()
             }
 
+            Tab("Zähler", systemImage: "plus.circle") {
+                CounterView()
+            }
+
             Tab("Downloadzeit", systemImage: "arrow.down.circle") {
                 DownloadTimeView()
             }
 
             Tab("Stromverbrauch", systemImage: "bolt.fill") {
                 EnergyCostView()
-            }
-
-            Tab("Zähler", systemImage: "plus.circle") {
-                CounterView()
             }
         }
     }
