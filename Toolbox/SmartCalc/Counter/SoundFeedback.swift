@@ -20,6 +20,16 @@ final class SoundManager {
     private let player = AVAudioPlayerNode()
     private let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1)!
 
+    #if os(iOS)
+    /// Die Session wird einmalig asynchron aktiviert. Das synchrone
+    /// `setActive(_:)` blockiert auf dem Main-Thread und kann die App
+    /// unresponsive werden lassen.
+    private var isSessionActive = false
+    private var isActivatingSession = false
+    /// Ton, der noch auf die Aktivierung wartet, damit der erste Tipp nicht stumm bleibt.
+    private var pendingTone: (frequency: Double, duration: Double)?
+    #endif
+
     private init() {
         #if os(iOS)
         try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
@@ -28,6 +38,10 @@ final class SoundManager {
         engine.attach(player)
         // Seit iOS 27 ersetzt `connectNode(_:to:format:)` das veraltete `connect(_:to:format:)`.
         try? engine.connectNode(player, to: engine.mainMixerNode, format: format)
+
+        #if os(iOS)
+        activateSession()
+        #endif
     }
 
     // MARK: - Töne
@@ -53,9 +67,18 @@ final class SoundManager {
         guard isSoundEnabled else { return }
 
         #if os(iOS)
-        try? AVAudioSession.sharedInstance().setActive(true)
+        guard isSessionActive else {
+            // Aktivierung läuft noch: Ton merken und danach abspielen.
+            pendingTone = (frequency, duration)
+            activateSession()
+            return
+        }
         #endif
 
+        playNow(frequency: frequency, duration: duration)
+    }
+
+    private func playNow(frequency: Double, duration: Double) {
         if !engine.isRunning {
             try? engine.start()
         }
@@ -71,6 +94,34 @@ final class SoundManager {
         // Seit iOS 27 ersetzt `playAudio()` das veraltete `play()`.
         try? player.playAudio()
     }
+
+    #if os(iOS)
+    /// Aktiviert die Audio-Session asynchron, ohne den Main-Thread zu blockieren.
+    private func activateSession() {
+        guard !isSessionActive, !isActivatingSession else { return }
+        isActivatingSession = true
+
+        Task { @MainActor in
+            defer { isActivatingSession = false }
+
+            do {
+                try await AVAudioSession.sharedInstance().activate(options: [])
+                isSessionActive = true
+
+                if let tone = pendingTone {
+                    pendingTone = nil
+                    playNow(frequency: tone.frequency, duration: tone.duration)
+                }
+            } catch {
+                // Aktivierung fehlgeschlagen: wartenden Ton als System-Ton spielen.
+                if pendingTone != nil {
+                    pendingTone = nil
+                    AudioServicesPlaySystemSound(1104)
+                }
+            }
+        }
+    }
+    #endif
 
     /// Kurzer Sinus-Ton mit weichem Ein- und Ausblenden (kein Knacken).
     private func makeBuffer(frequency: Double, duration: Double) -> AVAudioPCMBuffer? {
