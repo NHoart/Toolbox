@@ -11,10 +11,6 @@ struct ContentView: View {
                 HistoryView()
             }
 
-            Tab("Einstellungen", systemImage: "gearshape") {
-                SettingsView()
-            }
-
             Tab("Einheiten", systemImage: "arrow.left.arrow.right") {
                 UnitConverterView()
             }
