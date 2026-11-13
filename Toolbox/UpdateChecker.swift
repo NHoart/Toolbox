@@ -271,6 +271,45 @@ enum UpdateInstaller {
         var errorDescription: String? { message }
     }
 
+    /// Räumt Reste abgebrochener Update-Läufe auf: heruntergeladene DMGs,
+    /// entpackte Apps sowie Staging- und Backup-Bundles. Solange ein Installer
+    /// läuft (Lock mit lebender PID), bleibt alles unangetastet.
+    nonisolated static func cleanUpStaleData() {
+        let fm = FileManager.default
+        let lock = fm.temporaryDirectory.appendingPathComponent("ToolboxUpdate.lock", isDirectory: true)
+        let lockPID = (try? String(contentsOf: lock.appendingPathComponent("pid"), encoding: .utf8))?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if let lockPID, let pid = pid_t(lockPID), pid > 0,
+           kill(pid, 0) == 0 || errno == EPERM {
+            return
+        }
+
+        if let entries = try? fm.contentsOfDirectory(at: fm.temporaryDirectory, includingPropertiesForKeys: nil) {
+            for entry in entries where entry.lastPathComponent.hasPrefix("ToolboxUpdate-") {
+                try? fm.removeItem(at: entry)
+            }
+        }
+
+        // Nur Backups löschen, wenn die installierte App noch vorhanden ist.
+        let appURL = Bundle.main.bundleURL
+        let parent = appURL.deletingLastPathComponent()
+        if let entries = try? fm.contentsOfDirectory(at: parent, includingPropertiesForKeys: nil) {
+            for entry in entries {
+                let name = entry.lastPathComponent
+                if name.hasPrefix(".Toolbox-update-") {
+                    try? fm.removeItem(at: entry)
+                } else if name.hasPrefix(".Toolbox-backup-"), fm.fileExists(atPath: appURL.path) {
+                    try? fm.removeItem(at: entry)
+                }
+            }
+        }
+
+        if fm.fileExists(atPath: lock.path) {
+            try? fm.removeItem(at: lock)
+        }
+    }
+
     /// Nur Apps unter /Applications bzw. ~/Applications dürfen sich selbst ersetzen.
     static func canReplaceRunningApp(at appURL: URL) -> Bool {
         // In einer Sandbox kann kein Hilfsprozess zum Austauschen gestartet werden.

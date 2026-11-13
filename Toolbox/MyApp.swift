@@ -6,6 +6,13 @@ import SwiftUI
     init() {
         // Abgleich mit dem anderen Gerät im lokalen WLAN starten.
         LocalSync.shared.start()
+
+        #if os(macOS)
+        // Reste abgebrochener Update-Läufe im Hintergrund entfernen.
+        Task.detached(priority: .utility) {
+            UpdateInstaller.cleanUpStaleData()
+        }
+        #endif
     }
 
     var body: some Scene {
