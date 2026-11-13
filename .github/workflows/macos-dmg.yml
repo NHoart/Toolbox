@@ -81,3 +81,33 @@ jobs:
         run: |
           set -euo pipefail
           gh workflow run windows-exe.yml --ref "$GITHUB_REF_NAME" -f publish=true
+
+      - name: Release-Assets prüfen
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "build/dmg/Toolbox.app/Contents/Info.plist")"
+
+          if [ "${GITHUB_REF_TYPE:-}" = "tag" ]; then
+            tag="$GITHUB_REF_NAME"
+          else
+            tag="v$version"
+          fi
+
+          for attempt in $(seq 1 90); do
+            names="$(gh release view "$tag" --json assets --jq '.assets[] | select(.state == "uploaded") | .name' 2>/dev/null || true)"
+            if printf '%s\n' "$names" | grep -qx 'Toolbox.dmg' \
+              && printf '%s\n' "$names" | grep -qx 'Toolbox-Setup.exe'; then
+              echo "Beide Release-Assets vorhanden: Toolbox.dmg, Toolbox-Setup.exe"
+              exit 0
+            fi
+            if [ "$attempt" -eq 90 ]; then
+              echo "::error::Release $tag enthält nicht beide Assets."
+              gh release view "$tag" --json assets --jq '.assets[] | "\(.name) (\(.state))"' || true
+              exit 1
+            fi
+            sleep 10
+          done

@@ -82,3 +82,31 @@ jobs:
             if ($attempt -eq 5) { exit 1 }
             Start-Sleep -Seconds 4
           }
+
+      - name: Release-Assets prüfen
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+
+          if ("${{ github.ref_type }}" -eq "tag") {
+            $tag = "${{ github.ref_name }}"
+          } else {
+            $tag = "v$version"
+          }
+
+          for ($attempt = 1; $attempt -le 90; $attempt++) {
+            $names = @(gh release view $tag --json assets --jq '.assets[] | select(.state == "uploaded") | .name' 2>$null)
+            if ($names -contains 'Toolbox.dmg' -and $names -contains 'Toolbox-Setup.exe') {
+              Write-Host "Beide Release-Assets vorhanden: Toolbox.dmg, Toolbox-Setup.exe"
+              exit 0
+            }
+            if ($attempt -eq 90) {
+              Write-Output "::error::Release $tag enthält nicht beide Assets."
+              gh release view $tag --json assets --jq '.assets[] | "\(.name) (\(.state))"'
+              exit 1
+            }
+            Start-Sleep -Seconds 10
+          }
