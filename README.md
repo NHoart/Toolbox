@@ -59,7 +59,7 @@ Config/                   Shared.xcconfig + lokale, nicht versionierte Local.xcc
 
 ## Datenspeicherung
 
-Alle Daten bleiben lokal auf dem Gerät – es gibt keinen Server und keine Netzwerkanfragen. Wassertracker und Widget teilen sich `UserDefaults` über die App Group `group.com.noahsapps.Wassertracker`:
+Alle Daten bleiben lokal auf dem Gerät – es gibt keinen Server und keine Netzwerkanfragen. Wassertracker und Widget teilen sich `UserDefaults` über eine App Group:
 
 - Tagesmenge und Verlauf (max. 400 Tage) für den Wassertracker
 - Glas-/Flaschengröße und Tagesziel
