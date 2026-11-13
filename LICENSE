@@ -1,0 +1,66 @@
+Copyright (c) 2026 Noah (github.com/NHoart)
+
+Alle Rechte vorbehalten.
+
+Toolbox ist kein Open-Source-Projekt. Der Quellcode ist öffentlich einsehbar,
+aber nicht zur freien Verwendung, Veränderung oder Weitergabe freigegeben.
+Ohne vorherige schriftliche Zustimmung des Rechteinhabers sind keine Rechte
+eingeräumt, außer den hier ausdrücklich genannten.
+
+## Erlaubt
+
+1. **Ansehen und Forken auf GitHub.** Der Quellcode darf auf GitHub betrachtet
+   und im Rahmen der GitHub-Nutzungsbedingungen dort geforkt werden. Das ist
+   eine Kopie innerhalb von GitHub, kein Nutzungsrecht darüber hinaus.
+2. **Beiträge vorschlagen.** Änderungen dürfen angefertigt und als Pull Request
+   eingereicht werden. Einzelheiten und die dafür geltende Rechtseinräumung
+   stehen in `CONTRIBUTING.md`. Übernommen wird ausschließlich, was der
+   Rechteinhaber zusammenführt.
+3. **Die App nutzen.** Die veröffentlichten Builds (z. B. die DMG aus den
+   Releases) dürfen unentgeltlich heruntergeladen, installiert und für eigene
+   Zwecke verwendet werden, solange dabei keine Rechte aus diesem Dokument
+   verletzt werden.
+
+## Nicht erlaubt
+
+Ohne vorherige schriftliche Zustimmung des Rechteinhabers ist es insbesondere
+untersagt,
+
+1. den Quellcode oder Teile davon zu vervielfältigen, zu verbreiten, öffentlich
+   zugänglich zu machen oder zu veröffentlichen – außer als Fork innerhalb von
+   GitHub nach Ziffer 1,
+2. den Quellcode oder Teile davon zu verändern und diese veränderten Fassungen
+   zu verbreiten oder zu veröffentlichen; ausgenommen sind Änderungen, die
+   ausschließlich als Pull Request nach Ziffer 2 eingereicht werden,
+3. den Quellcode oder Teile davon in eigene Programme, Apps, Bibliotheken,
+   Dienste oder sonstige Produkte zu übernehmen, egal ob ganz oder teilweise,
+   verändert oder unverändert,
+4. die App oder abgeleitete Fassungen davon unter eigenem Namen, eigener Marke
+   oder als eigenes Produkt anzubieten, zu vertreiben oder zu verkaufen,
+5. die veröffentlichten Builds weiterzuverbreiten, zu vermieten, zu verkaufen
+   oder in Softwarepakete, Stores oder ähnliche Vertriebswege einzustellen,
+6. Hinweise auf Urheberschaft, Lizenz oder Herkunft (Copyright-Vermerke,
+   Dateiköpfe, „Über"-Ansichten) zu entfernen oder zu verdecken.
+
+## Beiträge
+
+Rechte an eingereichten Beiträgen siehe `CONTRIBUTING.md`. Beiträge ändern
+nichts daran, dass alle Rechte am Projekt beim Rechteinhaber liegen.
+
+## Gewährleistung
+
+Die Software wird unentgeltlich und „wie besehen" bereitgestellt. Es wird keine
+Gewährleistung irgendeiner Art übernommen, weder ausdrücklich noch
+stillschweigend, einschließlich nicht für Marktgängigkeit, Eignung für einen
+bestimmten Zweck oder Nichtverletzung von Rechten Dritter. Der Rechteinhaber
+haftet nicht für Schäden, die aus der Nutzung der Software entstehen, soweit
+dies gesetzlich zulässig ist.
+
+## Schlussbestimmungen
+
+Diese Bedingungen werden durch deutsches Recht geregelt. Sollte eine Bestimmung
+unwirksam sein, bleibt der Rest davon unberührt; an die Stelle der unwirksamen
+Bestimmung tritt die zulässige Regelung, die dem verfolgten Zweck am nächsten
+kommt. Anfragen zu weitergehenden Rechten (z. B. kommerzielle Nutzung,
+Einbindung in andere Produkte oder eine andere Lizenzierung) sind an den
+Rechteinhaber über die im Repository genannten Kontaktwege zu richten.

@@ -112,4 +112,9 @@ Aktuell `2.0.2` (`MARKETING_VERSION` im Projekt).
 
 ## Lizenz
 
-Für dieses Repository ist noch keine Lizenz hinterlegt. Bis dahin gilt: alle Rechte vorbehalten.
+Toolbox ist **kein Open-Source-Projekt**. Der Quellcode ist öffentlich einsehbar, die Rechte bleiben aber beim Autor: alle Rechte vorbehalten.
+
+- **Erlaubt** ist: den Code auf GitHub ansehen und dort forken, Änderungen als Pull Request vorschlagen, die App unentgeltlich nutzen.
+- **Nicht erlaubt** ist: den Code oder Teile davon kopieren, verändern und weitergeben, in eigene Apps oder Produkte einbauen oder eigene Fassungen der App veröffentlichen.
+
+Der vollständige Text steht in [`LICENSE`](LICENSE), die Regeln für Beiträge in [`CONTRIBUTING.md`](CONTRIBUTING.md). Änderungen werden ausschließlich nach Review durch den Maintainer übernommen.
