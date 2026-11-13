@@ -1,6 +1,8 @@
 import SwiftUI
 
 @main struct MyApp: App {
+    @State private var selectedTab: AppTab = .today
+
     init() {
         // Abgleich mit dem anderen Gerät im lokalen WLAN starten.
         LocalSync.shared.start()
@@ -17,6 +19,16 @@ import SwiftUI
                     Task { await UpdateChecker.shared.checkManually() }
                 }
             }
+
+            // Im Menü „Ansicht“: Tabs ohne Maus über ⌘1–⌘6 wechseln.
+            CommandGroup(before: .sidebar) {
+                ForEach(AppTab.allCases) { tab in
+                    Button(tab.title) {
+                        selectedTab = tab
+                    }
+                    .keyboardShortcut(tab.shortcut, modifiers: .command)
+                }
+            }
         }
         #else
         WindowGroup {
@@ -26,7 +38,7 @@ import SwiftUI
     }
 
     private var rootView: some View {
-        ContentView()
+        ContentView(selection: $selectedTab)
             .modifier(UpdateCheckModifier())
     }
 }

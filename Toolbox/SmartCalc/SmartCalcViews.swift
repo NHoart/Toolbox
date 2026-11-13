@@ -274,7 +274,7 @@ private struct ResultCard: View {
     }
 }
 
-private enum UnitConversion: String, CaseIterable, Identifiable {
+enum UnitConversion: String, CaseIterable, Identifiable {
     case mbToGB
     case gbToMB
     case mbitToMB
@@ -347,7 +347,7 @@ private extension String {
     }
 }
 
-private func formattedDuration(_ seconds: Double) -> String {
+func formattedDuration(_ seconds: Double) -> String {
     let roundedSeconds = max(0, Int(seconds.rounded()))
     let hours = roundedSeconds / 3_600
     let minutes = (roundedSeconds % 3_600) / 60

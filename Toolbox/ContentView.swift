@@ -1,35 +1,85 @@
 import SwiftUI
 import WidgetKit
 
+/// Alle Werkzeuge der App als Tabs – inklusive der Ziffer für das Mac-Tastenkürzel.
+enum AppTab: CaseIterable, Identifiable {
+    case today
+    case history
+    case units
+    case counter
+    case download
+    case energy
+
+    var id: Self { self }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .today: "Heute"
+        case .history: "Verlauf"
+        case .units: "Einheiten"
+        case .counter: "Zähler"
+        case .download: "Downloadzeit"
+        case .energy: "Stromverbrauch"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .today: "drop.fill"
+        case .history: "chart.bar.fill"
+        case .units: "arrow.left.arrow.right"
+        case .counter: "plus.circle"
+        case .download: "arrow.down.circle"
+        case .energy: "bolt.fill"
+        }
+    }
+
+    #if os(macOS)
+    /// Taste für das Kürzel ⌘1–⌘6 in der Mac-App.
+    var shortcut: KeyEquivalent {
+        switch self {
+        case .today: "1"
+        case .history: "2"
+        case .units: "3"
+        case .counter: "4"
+        case .download: "5"
+        case .energy: "6"
+        }
+    }
+    #endif
+}
+
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
+    @Binding var selection: AppTab
 
     var body: some View {
-        TabView {
-            Tab("Heute", systemImage: "drop.fill") {
+        TabView(selection: $selection) {
+            Tab("Heute", systemImage: "drop.fill", value: .today) {
                 WaterTodayView()
             }
 
-            Tab("Verlauf", systemImage: "chart.bar.fill") {
+            Tab("Verlauf", systemImage: "chart.bar.fill", value: .history) {
                 HistoryView()
             }
 
-            Tab("Einheiten", systemImage: "arrow.left.arrow.right") {
+            Tab("Einheiten", systemImage: "arrow.left.arrow.right", value: .units) {
                 UnitConverterView()
             }
 
-            Tab("Zähler", systemImage: "plus.circle") {
+            Tab("Zähler", systemImage: "plus.circle", value: .counter) {
                 CounterView()
             }
 
-            Tab("Downloadzeit", systemImage: "arrow.down.circle") {
+            Tab("Downloadzeit", systemImage: "arrow.down.circle", value: .download) {
                 DownloadTimeView()
             }
 
-            Tab("Stromverbrauch", systemImage: "bolt.fill") {
+            Tab("Stromverbrauch", systemImage: "bolt.fill", value: .energy) {
                 EnergyCostView()
             }
         }
+        .macSidebarTabs()
         .onChange(of: scenePhase) { _, phase in
             // Beim Öffnen der App mit dem anderen Gerät abgleichen und das Widget nachziehen –
             // nötig für Einträge, die im Hintergrund (z. B. per Siri oder Widget) gemacht wurden.
@@ -42,7 +92,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(selection: .constant(.today))
 }
 
 #if os(macOS)
@@ -68,6 +118,17 @@ private struct MacSettingsToolbar: ViewModifier {
 #endif
 
 extension View {
+    /// Stellt die Tabs auf dem Mac als Seitenleiste an die linke Seite. iPhone, iPad und
+    /// Vision Pro behalten ihre Tab-Leiste – dort bleibt der Stil unverändert.
+    @ViewBuilder
+    func macSidebarTabs() -> some View {
+        #if os(macOS)
+        tabViewStyle(.sidebarAdaptable)
+        #else
+        self
+        #endif
+    }
+
     /// Zeigt das Einstellungen-Zahnrad neben der Tableiste. Nur die Mac-App bekommt es,
     /// iPhone, iPad und Vision Pro bleiben unverändert.
     @ViewBuilder

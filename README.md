@@ -108,7 +108,7 @@ Dafür nötig:
 
 ## Version
 
-Aktuell `1.3.0` (`MARKETING_VERSION` im Projekt).
+Aktuell `1.4.0` (`MARKETING_VERSION` im Projekt).
 
 ## Lizenz
 
