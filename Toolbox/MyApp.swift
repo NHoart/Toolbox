@@ -7,8 +7,26 @@ import SwiftUI
     }
 
     var body: some Scene {
+        #if os(macOS)
         WindowGroup {
-            ContentView()
+            rootView
         }
+        .commands {
+            CommandGroup(after: .appInfo) {
+                Button("Nach Updates suchen…") {
+                    Task { await UpdateChecker.shared.checkManually() }
+                }
+            }
+        }
+        #else
+        WindowGroup {
+            rootView
+        }
+        #endif
+    }
+
+    private var rootView: some View {
+        ContentView()
+            .modifier(UpdateCheckModifier())
     }
 }

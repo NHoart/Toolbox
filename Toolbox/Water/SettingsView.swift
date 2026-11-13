@@ -9,6 +9,8 @@ struct SettingsView: View {
     @ObservedObject private var lan = LocalSync.shared
     @State private var lanEnabled = LocalSync.shared.isEnabled
 
+    @AppStorage(UpdateChecker.automaticChecksKey) private var automaticUpdateChecks = true
+
     var body: some View {
         NavigationStack {
             Form {
@@ -35,6 +37,15 @@ struct SettingsView: View {
                 } footer: {
                     Text("Gleicht Wassertracker und Zähler direkt mit deinem anderen Gerät im selben WLAN ab – ohne Server. Öffne die App auf beiden Geräten, sie finden sich automatisch.")
                 }
+                #if os(macOS)
+                Section {
+                    Toggle("Automatisch nach Updates suchen", isOn: $automaticUpdateChecks)
+                } header: {
+                    Text("Updates")
+                } footer: {
+                    Text("Prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version bereitsteht. Manuell über „Toolbox → Nach Updates suchen…“.")
+                }
+                #endif
                 Section {
                     Button("Heute zurücksetzen", role: .destructive) { WaterStore.reset() }
                 }

@@ -2,6 +2,16 @@
 
 Eine kleine Sammlung von Alltagswerkzeugen als SwiftUI-App für iPhone, iPad, Mac und Vision Pro – inklusive Home-Screen-Widget und Siri-Kurzbefehlen.
 
+## Download (macOS)
+
+Die fertige Mac-App gibt es als DMG direkt von GitHub:
+
+[**Toolbox.dmg herunterladen**](https://github.com/NHoart/Toolbox/releases/latest/download/Toolbox.dmg)
+
+Alle Versionen stehen auf der [Releases-Seite](https://github.com/NHoart/Toolbox/releases). Nach dem Download die DMG öffnen, `Toolbox` in den Ordner **Programme** ziehen und die App per Rechtsklick → **Öffnen** starten. Die DMG ist nicht mit einem Apple-Developer-Zertifikat signiert und nicht notarisiert, deshalb blockiert macOS den allerersten Start.
+
+Die App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt, und bietet dann den Download an. Manuell geht das über **Toolbox → Nach Updates suchen…**, abschalten lässt sich die automatische Prüfung in den Einstellungen.
+
 ## Funktionen
 
 Die App ist in Tabs aufgeteilt:
@@ -43,6 +53,23 @@ Die Größe von Glas und Flasche stammt dabei aus den Einstellungen der App.
    `Config/Shared.xcconfig` bindet die Datei per `#include?` ein, ein frischer Clone baut also auch ohne sie (dann ohne automatisches Signieren).
 3. Das Schema `Toolbox` auswählen und auf einem Gerät, Simulator oder „My Mac (Designed for iPad)“ starten.
 
+### DMG lokal bauen
+
+```bash
+./scripts/build-dmg.sh
+```
+
+Das Skript baut die macOS-App (`Release`, Apple Silicon), signiert sie ad-hoc und legt das fertige Image unter `dist/Toolbox.dmg` ab.
+
+### Release veröffentlichen
+
+Der Workflow `.github/workflows/macos-dmg.yml` baut die DMG automatisch und hängt sie an ein GitHub-Release:
+
+- **Tag pushen**: `git tag v1.2.0 && git push origin v1.2.0` → Release `v1.2.0` mit `Toolbox.dmg`
+- **Actions → „macOS DMG“ → Run workflow** → Release `v<Version>` mit dem aktuellen Stand, erreichbar über den Download-Link oben
+
+Vor einem Release `MARKETING_VERSION` (und `CURRENT_PROJECT_VERSION`) im Projekt erhöhen – der Update-Check vergleicht diese Version mit dem Release-Tag.
+
 ## Projektstruktur
 
 ```
@@ -81,7 +108,7 @@ Dafür nötig:
 
 ## Version
 
-Aktuell `1.1.0` (`MARKETING_VERSION` im Projekt).
+Aktuell `1.2.0` (`MARKETING_VERSION` im Projekt).
 
 ## Lizenz
 
