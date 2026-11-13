@@ -97,7 +97,7 @@ final class UpdateChecker: ObservableObject {
             try await UpdateInstaller.install(update) { [weak self] fraction in
                 Task { @MainActor in self?.downloadProgress = fraction }
             }
-            NSApp.terminate(nil)
+            quitForInstall()
         } catch {
             installError = error.localizedDescription
             downloadProgress = nil
@@ -105,6 +105,17 @@ final class UpdateChecker: ObservableObject {
 
         isInstalling = false
         #endif
+    }
+
+    /// Beendet die App, damit der Installer sie ersetzen kann.
+    /// `NSApp.terminate` allein genügt nicht: Bei geöffnetem Update-Sheet
+    /// ignoriert AppKit die Anfrage und die App läuft weiter – der Installer
+    /// wartet dann endlos auf das Prozessende.
+    private func quitForInstall() {
+        NSApp.terminate(nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            exit(EXIT_SUCCESS)
+        }
     }
 
     private func check(announceResult: Bool) async {
@@ -445,16 +456,99 @@ enum UpdateInstaller {
     private static func scheduleInstall(newApp: URL, target: URL) throws {
         let workDir = newApp.deletingLastPathComponent()
         let script = workDir.appendingPathComponent("install.sh")
+        let log = workDir.appendingPathComponent("install.log")
         let pid = ProcessInfo.processInfo.processIdentifier
 
+        // Die neue App wird erst neben das Ziel kopiert und dann getauscht.
+        // Früher wurde die alte App zuerst gelöscht – schlug das Kopieren fehl,
+        // war sie weg. Bei einem Fehler wird die alte Version wieder geöffnet.
         let content = """
         #!/bin/sh
-        while kill -0 \(pid) 2>/dev/null; do sleep 0.2; done
-        rm -rf \(shellQuoted(target.path))
-        /usr/bin/ditto \(shellQuoted(newApp.path)) \(shellQuoted(target.path))
-        /usr/bin/xattr -dr com.apple.quarantine \(shellQuoted(target.path)) 2>/dev/null || true
-        /usr/bin/open \(shellQuoted(target.path)) || true
-        rm -rf \(shellQuoted(workDir.path))
+        set -u
+
+        TARGET=\(shellQuoted(target.path))
+        SOURCE=\(shellQuoted(newApp.path))
+        WORK=\(shellQuoted(workDir.path))
+        PID=\(pid)
+
+        exec >>\(shellQuoted(log.path)) 2>&1
+        echo "[$(date)] Update wird vorbereitet."
+
+        # Nur ein Installer gleichzeitig – ein alter, hängender Lauf darf nicht
+        # dazwischenfunken. Ein verwaister Lock wird übernommen.
+        LOCK="${TMPDIR:-/tmp}/ToolboxUpdate.lock"
+        if ! mkdir "$LOCK" 2>/dev/null; then
+            OTHER="$(cat "$LOCK/pid" 2>/dev/null || true)"
+            if [ -n "$OTHER" ] && kill -0 "$OTHER" 2>/dev/null; then
+                echo "Ein anderes Update läuft bereits (PID $OTHER)."
+                exit 0
+            fi
+            rm -rf "$LOCK"
+            mkdir "$LOCK" 2>/dev/null || exit 0
+        fi
+        echo "$$" > "$LOCK/pid"
+        trap 'rm -rf "$LOCK"' EXIT
+
+        # Auf das Ende der laufenden App warten (höchstens 30 Sekunden).
+        WAITED=0
+        while kill -0 "$PID" 2>/dev/null; do
+            if [ "$WAITED" -ge 150 ]; then
+                echo "Die App wurde nicht beendet; Update abgebrochen."
+                exit 1
+            fi
+            WAITED=$((WAITED + 1))
+            sleep 0.2
+        done
+
+        PARENT="$(dirname "$TARGET")"
+        STAGED="$PARENT/.Toolbox-update-$$.app"
+        BACKUP="$PARENT/.Toolbox-backup-$$.app"
+
+        reopen_target() {
+            /usr/bin/open "$TARGET" 2>/dev/null || true
+        }
+
+        rm -rf "$STAGED" "$BACKUP" 2>/dev/null || true
+
+        if ! /usr/bin/ditto "$SOURCE" "$STAGED" || [ ! -f "$STAGED/Contents/Info.plist" ]; then
+            echo "Die neue App konnte nicht vorbereitet werden."
+            rm -rf "$STAGED"
+            reopen_target
+            exit 1
+        fi
+
+        /usr/bin/xattr -dr com.apple.quarantine "$STAGED" 2>/dev/null || true
+
+        if ! mv "$TARGET" "$BACKUP"; then
+            echo "Die alte App konnte nicht gesichert werden."
+            rm -rf "$STAGED"
+            reopen_target
+            exit 1
+        fi
+
+        if ! mv "$STAGED" "$TARGET"; then
+            echo "Die neue App konnte nicht eingesetzt werden; die alte Version wird wiederhergestellt."
+            mv "$BACKUP" "$TARGET" 2>/dev/null || true
+            rm -rf "$STAGED"
+            reopen_target
+            exit 1
+        fi
+
+        rm -rf "$BACKUP" 2>/dev/null || true
+
+        # Neu starten; LaunchServices braucht manchmal einen Moment.
+        ATTEMPTS=0
+        until /usr/bin/open "$TARGET" 2>/dev/null; do
+            ATTEMPTS=$((ATTEMPTS + 1))
+            if [ "$ATTEMPTS" -ge 10 ]; then
+                echo "Die App konnte nicht automatisch geöffnet werden. Bitte manuell starten."
+                exit 1
+            fi
+            sleep 1
+        done
+
+        echo "[$(date)] Update abgeschlossen."
+        rm -rf "$WORK"
         """
 
         try content.write(to: script, atomically: true, encoding: .utf8)
