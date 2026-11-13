@@ -10,6 +10,9 @@ struct SettingsView: View {
     @State private var lanEnabled = LocalSync.shared.isEnabled
 
     @AppStorage(UpdateChecker.automaticChecksKey) private var automaticUpdateChecks = true
+    @ObservedObject private var updates = UpdateChecker.shared
+    @State private var manualUpdate: UpdateInfo?
+    @State private var manualStatus: String?
 
     var body: some View {
         NavigationStack {
@@ -40,10 +43,28 @@ struct SettingsView: View {
                 #if os(macOS)
                 Section {
                     Toggle("Automatisch nach Updates suchen", isOn: $automaticUpdateChecks)
+                    Button {
+                        Task { await checkNow() }
+                    } label: {
+                        HStack(spacing: 6) {
+                            if updates.isChecking {
+                                ProgressView().controlSize(.small)
+                                Text("Suche nach Updates…")
+                            } else {
+                                Text("Jetzt nach Updates suchen")
+                            }
+                        }
+                    }
+                    .disabled(updates.isChecking)
+                    if let manualStatus {
+                        Text(manualStatus)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
                 } header: {
                     Text("Updates")
                 } footer: {
-                    Text("Prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version bereitsteht. Manuell über „Toolbox → Nach Updates suchen…“.")
+                    Text("Prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version bereitsteht.")
                 }
                 #endif
                 Section {
@@ -55,6 +76,21 @@ struct SettingsView: View {
             .onChange(of: bottle) { _, _ in WaterStore.markChanged() }
             .onChange(of: goal) { _, _ in WaterStore.markChanged() }
             .onChange(of: lanEnabled) { _, enabled in LocalSync.shared.setEnabled(enabled) }
+        }
+        .sheet(item: $manualUpdate) { update in
+            UpdateSheet(update: update)
+        }
+    }
+
+    private func checkNow() async {
+        manualStatus = nil
+        switch await UpdateChecker.shared.checkForUpdates() {
+        case .update(let update):
+            manualUpdate = update
+        case .upToDate:
+            manualStatus = "Du benutzt bereits die neueste Version (\(UpdateChecker.currentVersion))."
+        case .failed(let message):
+            manualStatus = "Die Update-Prüfung ist fehlgeschlagen: \(message)"
         }
     }
 

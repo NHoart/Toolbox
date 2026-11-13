@@ -10,7 +10,7 @@ Die fertige Mac-App gibt es als DMG direkt von GitHub:
 
 Alle Versionen stehen auf der [Releases-Seite](https://github.com/NHoart/Toolbox/releases). Nach dem Download die DMG öffnen, `Toolbox` in den Ordner **Programme** ziehen und die App per Rechtsklick → **Öffnen** starten. Die DMG ist nicht mit einem Apple-Developer-Zertifikat signiert und nicht notarisiert, deshalb blockiert macOS den allerersten Start.
 
-Die App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt, und bietet dann den Download an. Manuell geht das über **Toolbox → Nach Updates suchen…**, abschalten lässt sich die automatische Prüfung in den Einstellungen.
+Die App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Liegt die App in **Programme**, lädt sie die neue DMG, prüft Prüfsumme und Signatur und ersetzt sich selbst; aus Xcode oder von der DMG gestartet bietet sie stattdessen den Download an. Manuell geht das über **Toolbox → Nach Updates suchen…** oder den Button in den Einstellungen; abschalten lässt sich die automatische Prüfung dort ebenfalls.
 
 ## Funktionen
 
@@ -108,7 +108,7 @@ Dafür nötig:
 
 ## Version
 
-Aktuell `1.2.0` (`MARKETING_VERSION` im Projekt).
+Aktuell `1.3.0` (`MARKETING_VERSION` im Projekt).
 
 ## Lizenz
 

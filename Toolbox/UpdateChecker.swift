@@ -2,14 +2,29 @@ import Combine
 import Foundation
 import SwiftUI
 
+#if os(macOS)
+import AppKit
+import CryptoKit
+import Security
+#endif
+
 /// Eine neuere, auf GitHub veröffentlichte Version der App.
 struct UpdateInfo: Identifiable {
     let version: String
     let notes: String
     let downloadURL: URL
     let pageURL: URL
+    let digest: String?
 
     var id: String { version }
+    var isDMG: Bool { downloadURL.pathExtension.lowercased() == "dmg" }
+}
+
+/// Ergebnis einer manuell ausgelösten Prüfung.
+enum UpdateCheckOutcome {
+    case update(UpdateInfo)
+    case upToDate
+    case failed(String)
 }
 
 /// Fragt die GitHub-Releases ab und meldet, wenn eine neuere Version bereitsteht.
@@ -23,17 +38,20 @@ final class UpdateChecker: ObservableObject {
     private static let lastCheckKey = "lastUpdateCheckDate"
     private static let checkInterval: TimeInterval = 24 * 60 * 60
 
+    @Published var availableUpdate: UpdateInfo?
+    @Published private(set) var isChecking = false
+    @Published var showsNoUpdate = false
+    @Published var errorMessage: String?
+    @Published private(set) var isInstalling = false
+    @Published private(set) var downloadProgress: Double?
+    @Published var installError: String?
+
     /// Schalter aus den Einstellungen (Standard: an).
     static var automaticChecksEnabled: Bool {
         UserDefaults.standard.object(forKey: automaticChecksKey) as? Bool ?? true
     }
 
-    @Published var availableUpdate: UpdateInfo?
-    @Published private(set) var isChecking = false
-    @Published var showsNoUpdate = false
-    @Published var errorMessage: String?
-
-    static var currentVersion: String {
+    nonisolated static var currentVersion: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0"
     }
 
@@ -56,8 +74,56 @@ final class UpdateChecker: ObservableObject {
         #endif
     }
 
+    /// Ob die laufende App sich selbst ersetzen kann.
+    func canInstall(_ update: UpdateInfo) -> Bool {
+        #if os(macOS)
+        return update.isDMG
+            && update.digest != nil
+            && UpdateInstaller.canReplaceRunningApp(at: Bundle.main.bundleURL)
+        #else
+        return false
+        #endif
+    }
+
+    /// Lädt die DMG, prüft sie und ersetzt die installierte App.
+    func install(_ update: UpdateInfo) async {
+        #if os(macOS)
+        guard !isInstalling else { return }
+        isInstalling = true
+        installError = nil
+        downloadProgress = 0
+
+        do {
+            try await UpdateInstaller.install(update) { [weak self] fraction in
+                Task { @MainActor in self?.downloadProgress = fraction }
+            }
+            NSApp.terminate(nil)
+        } catch {
+            installError = error.localizedDescription
+            downloadProgress = nil
+        }
+
+        isInstalling = false
+        #endif
+    }
+
     private func check(announceResult: Bool) async {
-        guard !isChecking else { return }
+        switch await checkForUpdates() {
+        case .update(let info):
+            availableUpdate = info
+        case .upToDate:
+            if announceResult { showsNoUpdate = true }
+        case .failed(let message):
+            if announceResult {
+                errorMessage = "Die Update-Prüfung ist fehlgeschlagen. Bitte später erneut versuchen.\n\n\(message)"
+            }
+        }
+    }
+
+    /// Prüft, ohne die globalen Hinweise des Hauptfensters zu setzen.
+    /// Wird aus den Einstellungen verwendet, wo ein eigener Status erscheint.
+    func checkForUpdates() async -> UpdateCheckOutcome {
+        guard !isChecking else { return .upToDate }
         isChecking = true
         defer { isChecking = false }
 
@@ -66,18 +132,17 @@ final class UpdateChecker: ObservableObject {
             UserDefaults.standard.set(Date(), forKey: Self.lastCheckKey)
 
             if Self.isVersion(release.version, newerThan: Self.currentVersion) {
-                availableUpdate = UpdateInfo(
+                return .update(UpdateInfo(
                     version: Self.displayVersion(release.version),
                     notes: release.notes,
                     downloadURL: release.downloadURL,
-                    pageURL: release.pageURL
-                )
-            } else if announceResult {
-                showsNoUpdate = true
+                    pageURL: release.pageURL,
+                    digest: release.digest
+                ))
             }
+            return .upToDate
         } catch {
-            guard announceResult else { return }
-            errorMessage = "Die Update-Prüfung ist fehlgeschlagen. Bitte später erneut versuchen.\n\n\(error.localizedDescription)"
+            return .failed(error.localizedDescription)
         }
     }
 
@@ -87,10 +152,12 @@ final class UpdateChecker: ObservableObject {
         struct Asset: Decodable {
             let name: String
             let url: URL
+            let digest: String?
 
             enum CodingKeys: String, CodingKey {
                 case name
                 case url = "browser_download_url"
+                case digest
             }
         }
 
@@ -112,6 +179,7 @@ final class UpdateChecker: ObservableObject {
         let notes: String
         let downloadURL: URL
         let pageURL: URL
+        let digest: String?
     }
 
     private enum UpdateError: LocalizedError {
@@ -141,14 +209,15 @@ final class UpdateChecker: ObservableObject {
             notes: release.body ?? "",
             // Ohne DMG im Release bleibt die Release-Seite als Ziel.
             downloadURL: dmg?.url ?? release.htmlURL,
-            pageURL: release.htmlURL
+            pageURL: release.htmlURL,
+            digest: dmg?.digest
         )
     }
 
     // MARK: - Versionen
 
     /// Vergleicht Versionsnummern wie `v1.2.0` und `1.1.0` komponentenweise.
-    static func isVersion(_ version: String, newerThan current: String) -> Bool {
+    nonisolated static func isVersion(_ version: String, newerThan current: String) -> Bool {
         let new = numericParts(of: version)
         let old = numericParts(of: current)
 
@@ -162,7 +231,7 @@ final class UpdateChecker: ObservableObject {
         return false
     }
 
-    static func displayVersion(_ version: String) -> String {
+    nonisolated static func displayVersion(_ version: String) -> String {
         var trimmed = version.trimmingCharacters(in: .whitespaces)
         if trimmed.lowercased().hasPrefix("v") {
             trimmed.removeFirst()
@@ -170,7 +239,7 @@ final class UpdateChecker: ObservableObject {
         return trimmed
     }
 
-    private static func numericParts(of version: String) -> [Int] {
+    nonisolated private static func numericParts(of version: String) -> [Int] {
         let trimmed = displayVersion(version)
         let core = trimmed.split(separator: "-", maxSplits: 1).first.map(String.init) ?? trimmed
         return core.split(separator: ".").map { component in
@@ -178,6 +247,262 @@ final class UpdateChecker: ObservableObject {
         }
     }
 }
+
+// MARK: - Installation
+
+#if os(macOS)
+/// Lädt die DMG, prüft Prüfsumme und Signatur und ersetzt die installierte App.
+enum UpdateInstaller {
+    private static let bundleID = "com.noahsapps.Toolbox"
+
+    private struct InstallError: LocalizedError {
+        let message: String
+        var errorDescription: String? { message }
+    }
+
+    /// Nur Apps unter /Applications bzw. ~/Applications dürfen sich selbst ersetzen.
+    static func canReplaceRunningApp(at appURL: URL) -> Bool {
+        // In einer Sandbox kann kein Hilfsprozess zum Austauschen gestartet werden.
+        guard ProcessInfo.processInfo.environment["APP_SANDBOX_CONTAINER_ID"] == nil else {
+            return false
+        }
+
+        let path = appURL.path
+        guard path.hasSuffix(".app") else { return false }
+        guard !path.contains("/AppTranslocation/") else { return false }
+        guard path.hasPrefix("/Applications/") || path.hasPrefix(NSHomeDirectory() + "/Applications/") else {
+            return false
+        }
+        return FileManager.default.isWritableFile(atPath: appURL.deletingLastPathComponent().path)
+    }
+
+    static func install(_ update: UpdateInfo, progress: @escaping @Sendable (Double?) -> Void) async throws {
+        guard let digest = update.digest else {
+            throw InstallError(message: "Im Release fehlt die Prüfsumme der DMG.")
+        }
+
+        let workDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ToolboxUpdate-\(UUID().uuidString)", isDirectory: true)
+
+        do {
+            try FileManager.default.createDirectory(at: workDir, withIntermediateDirectories: true)
+
+            let destination = workDir.appendingPathComponent("Toolbox.dmg")
+            let download = try await download(from: update.downloadURL, to: destination, progress: progress)
+            progress(nil)
+
+            try verify(download, sha256: digest)
+
+            let newApp = try extractApp(from: download, into: workDir)
+            try validate(newApp, expectedVersion: update.version)
+            try scheduleInstall(newApp: newApp, target: Bundle.main.bundleURL)
+        } catch {
+            progress(nil)
+            try? FileManager.default.removeItem(at: workDir)
+            throw error
+        }
+    }
+
+    // MARK: Download
+
+    private static func download(
+        from url: URL,
+        to destination: URL,
+        progress: @escaping @Sendable (Double?) -> Void
+    ) async throws -> URL {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<URL, Error>) in
+            let downloader = DMGDownloader(destination: destination, progress: progress) { result in
+                continuation.resume(with: result)
+            }
+            downloader.start(url)
+        }
+    }
+
+    private final class DMGDownloader: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {
+        private let destination: URL
+        private let progress: @Sendable (Double?) -> Void
+        private let completion: (Result<URL, Error>) -> Void
+        private var session: URLSession?
+        private var finished = false
+
+        init(
+            destination: URL,
+            progress: @escaping @Sendable (Double?) -> Void,
+            completion: @escaping (Result<URL, Error>) -> Void
+        ) {
+            self.destination = destination
+            self.progress = progress
+            self.completion = completion
+        }
+
+        func start(_ url: URL) {
+            let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            self.session = session
+            session.downloadTask(with: url).resume()
+        }
+
+        private func finish(_ result: Result<URL, Error>) {
+            guard !finished else { return }
+            finished = true
+            session?.finishTasksAndInvalidate()
+            session = nil
+            completion(result)
+        }
+
+        func urlSession(
+            _ session: URLSession,
+            downloadTask: URLSessionDownloadTask,
+            didWriteData bytesWritten: Int64,
+            totalBytesWritten: Int64,
+            totalBytesExpectedToWrite: Int64
+        ) {
+            guard totalBytesExpectedToWrite > 0 else { return }
+            progress(Double(totalBytesWritten) / Double(totalBytesExpectedToWrite))
+        }
+
+        func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+            guard let http = downloadTask.response as? HTTPURLResponse, http.statusCode == 200 else {
+                finish(.failure(InstallError(message: "Die DMG konnte nicht heruntergeladen werden.")))
+                return
+            }
+
+            do {
+                try FileManager.default.copyItem(at: location, to: destination)
+                finish(.success(destination))
+            } catch {
+                finish(.failure(error))
+            }
+        }
+
+        func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+            if let error {
+                finish(.failure(error))
+            }
+        }
+    }
+
+    // MARK: Prüfungen
+
+    private static func verify(_ file: URL, sha256 digest: String) throws {
+        let normalized = digest.lowercased()
+        guard normalized.hasPrefix("sha256:") else {
+            throw InstallError(message: "Unbekanntes Prüfsummenformat im Release.")
+        }
+
+        let expected = String(normalized.dropFirst("sha256:".count))
+        let data = try Data(contentsOf: file, options: .mappedIfSafe)
+        let actual = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+
+        guard actual == expected else {
+            throw InstallError(message: "Die heruntergeladene DMG ist beschädigt (Prüfsumme stimmt nicht).")
+        }
+    }
+
+    private static func validate(_ app: URL, expectedVersion: String) throws {
+        guard let bundle = Bundle(url: app),
+              bundle.bundleIdentifier == bundleID,
+              let version = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String else {
+            throw InstallError(message: "Die DMG enthält nicht die erwartete Toolbox-App.")
+        }
+
+        guard version == UpdateChecker.displayVersion(expectedVersion),
+              UpdateChecker.isVersion(version, newerThan: UpdateChecker.currentVersion) else {
+            throw InstallError(message: "Die Version in der DMG passt nicht zum Release.")
+        }
+
+        var staticCode: SecStaticCode?
+        guard SecStaticCodeCreateWithPath(app as CFURL, [], &staticCode) == errSecSuccess,
+              let staticCode,
+              SecStaticCodeCheckValidity(staticCode, SecCSFlags(rawValue: kSecCSCheckAllArchitectures), nil) == errSecSuccess else {
+            throw InstallError(message: "Die Signatur der neuen App ist ungültig.")
+        }
+    }
+
+    // MARK: DMG
+
+    private static func extractApp(from dmg: URL, into workDir: URL) throws -> URL {
+        let mountPoint = workDir.appendingPathComponent("mnt", isDirectory: true)
+        try FileManager.default.createDirectory(at: mountPoint, withIntermediateDirectories: true)
+
+        try run("/usr/bin/hdiutil", ["attach", "-nobrowse", "-readonly", "-mountpoint", mountPoint.path, dmg.path])
+        defer { try? run("/usr/bin/hdiutil", ["detach", mountPoint.path]) }
+
+        let apps = try FileManager.default
+            .contentsOfDirectory(at: mountPoint, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
+            .filter { $0.pathExtension.lowercased() == "app" }
+
+        guard apps.count == 1, let source = apps.first else {
+            throw InstallError(message: "Die DMG enthält nicht genau eine App.")
+        }
+
+        let destination = workDir.appendingPathComponent("Toolbox.app")
+        try run("/usr/bin/ditto", [source.path, destination.path])
+        return destination
+    }
+
+    // MARK: Austausch
+
+    private static func scheduleInstall(newApp: URL, target: URL) throws {
+        let workDir = newApp.deletingLastPathComponent()
+        let script = workDir.appendingPathComponent("install.sh")
+        let pid = ProcessInfo.processInfo.processIdentifier
+
+        let content = """
+        #!/bin/sh
+        while kill -0 \(pid) 2>/dev/null; do sleep 0.2; done
+        rm -rf \(shellQuoted(target.path))
+        /usr/bin/ditto \(shellQuoted(newApp.path)) \(shellQuoted(target.path))
+        /usr/bin/xattr -dr com.apple.quarantine \(shellQuoted(target.path)) 2>/dev/null || true
+        /usr/bin/open \(shellQuoted(target.path)) || true
+        rm -rf \(shellQuoted(workDir.path))
+        """
+
+        try content.write(to: script, atomically: true, encoding: .utf8)
+        try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: script.path)
+
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/bin/sh")
+        process.arguments = [script.path]
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+
+        do {
+            try process.run()
+        } catch {
+            throw InstallError(message: "Der Neustart konnte nicht vorbereitet werden: \(error.localizedDescription)")
+        }
+    }
+
+    private static func run(_ tool: String, _ arguments: [String]) throws {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: tool)
+        process.arguments = arguments
+
+        let errorPipe = Pipe()
+        process.standardError = errorPipe
+        process.standardOutput = Pipe()
+
+        do {
+            try process.run()
+        } catch {
+            throw InstallError(message: "\(tool) konnte nicht gestartet werden: \(error.localizedDescription)")
+        }
+
+        process.waitUntilExit()
+
+        guard process.terminationStatus == 0 else {
+            let data = errorPipe.fileHandleForReading.readDataToEndOfFile()
+            let message = String(data: data, encoding: .utf8)?
+                .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            throw InstallError(message: "\(tool) ist fehlgeschlagen. \(message)")
+        }
+    }
+
+    private static func shellQuoted(_ value: String) -> String {
+        "'" + value.replacingOccurrences(of: "'", with: "'\\''") + "'"
+    }
+}
+#endif
 
 // MARK: - SwiftUI
 
@@ -210,9 +535,10 @@ struct UpdateCheckModifier: ViewModifier {
     }
 }
 
-private struct UpdateSheet: View {
+struct UpdateSheet: View {
     let update: UpdateInfo
 
+    @ObservedObject private var checker = UpdateChecker.shared
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
 
@@ -232,17 +558,54 @@ private struct UpdateSheet: View {
                         .textSelection(.enabled)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(maxHeight: 200)
+                .frame(maxHeight: 180)
+            }
+
+            if let error = checker.installError {
+                Text(error)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            if checker.canInstall(update) {
+                Text("Toolbox lädt die neue Version, ersetzt die installierte App und startet neu.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
 
             HStack {
                 Button("Später") { dismiss() }
+                    .disabled(checker.isInstalling)
+
                 Spacer()
-                Button("Herunterladen") {
-                    openURL(update.downloadURL)
-                    dismiss()
+
+                if checker.isInstalling {
+                    if let progress = checker.downloadProgress {
+                        ProgressView(value: progress)
+                            .frame(width: 180)
+                        Text("Wird geladen … \(Int(progress * 100)) %")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ProgressView()
+                            .controlSize(.small)
+                        Text("Wird installiert…")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                    }
+                } else if checker.canInstall(update) {
+                    Button("Installieren und neu starten") {
+                        Task { await checker.install(update) }
+                    }
+                    .keyboardShortcut(.defaultAction)
+                } else {
+                    Button("Herunterladen") {
+                        openURL(update.downloadURL)
+                        dismiss()
+                    }
+                    .keyboardShortcut(.defaultAction)
                 }
-                .keyboardShortcut(.defaultAction)
             }
         }
         .padding(24)
