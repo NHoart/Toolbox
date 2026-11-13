@@ -80,7 +80,8 @@ Die Größe von Glas und Flasche stammt dabei aus den Einstellungen der App.
 cd windows
 npm ci
 npm start          # App lokal starten
-npm test           # Protokoll-, Speicher- und Sync-Tests
+npm test           # Protokoll-, Speicher- und Sync-Tests inkl. Drei-Client-Kette
+npm run smoke:sync # Headless-Smoke-Test des Sync-Clients
 npm run dist       # Installer unter windows/dist/Toolbox-Setup.exe
 ```
 

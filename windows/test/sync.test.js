@@ -210,3 +210,81 @@ test('Ein frisches Gerät überschreibt keinen neueren Stand', async t => {
   assert.equal(old.store.sizes.goal, 2400)
   assert.equal(old.store.count, 1)
 })
+
+test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t => {
+  const base = Date.UTC(2026, 10, 13, 9, 0, 0)
+  const clockMac = { value: base }
+  const clockPhone = { value: base + 60_000 }
+  const clockWindows = { value: base + 120_000 }
+
+  const mac = createNode(t, 'Mac', clockMac)
+  const phone = createNode(t, 'iPhone', clockPhone)
+  const windows = createNode(t, 'Windows-PC', clockWindows)
+
+  // v1 entsteht auf dem Mac, bevor das iPhone verbunden ist.
+  mac.store.addWater(400)
+  mac.store.setSizes({ glass: 250, bottle: 600, goal: 2400 })
+  mac.store.increment()
+  const v1Water = mac.store.waterUpdatedAt()
+  const v1Counter = mac.store.counterUpdatedAt()
+
+  await startNode(mac)
+  await startNode(phone)
+  phone.sync.connectTo('127.0.0.1', mac.sync.port)
+
+  await waitFor(
+    () => phone.store.todayML() === 400
+      && phone.store.count === 1
+      && phone.store.waterUpdatedAt() === v1Water
+      && phone.store.counterUpdatedAt() === v1Counter,
+    'das iPhone sollte v1 vom Mac erhalten'
+  )
+
+  // v2 entsteht auf dem Mac, während das iPhone bereits verbunden ist.
+  clockMac.value = base + 30_000
+  mac.store.addWater(200)
+
+  await waitFor(
+    () => phone.store.todayML() === 600
+      && phone.store.waterUpdatedAt() === mac.store.waterUpdatedAt(),
+    'das iPhone sollte v2 vom Mac erhalten'
+  )
+  const v2Water = mac.store.waterUpdatedAt()
+  const v2Counter = mac.store.counterUpdatedAt()
+
+  // Windows verbindet sich erst jetzt – und nur mit dem iPhone.
+  await startNode(windows)
+  windows.sync.connectTo('127.0.0.1', phone.sync.port)
+
+  await waitFor(
+    () => windows.store.todayML() === 600
+      && windows.store.count === 1
+      && windows.store.waterUpdatedAt() === v2Water
+      && windows.store.counterUpdatedAt() === v2Counter,
+    'das neue Windows-Gerät sollte v2 über das iPhone erhalten'
+  )
+
+  // Die Windows-Änderung muss über das iPhone zurück zu Mac und iPhone laufen.
+  clockWindows.value = base + 90_000
+  windows.store.addWater(250)
+  windows.store.increment()
+
+  await waitFor(
+    () => mac.store.todayML() === 850
+      && phone.store.todayML() === 850
+      && mac.store.count === 2
+      && phone.store.count === 2
+      && mac.store.waterUpdatedAt() === windows.store.waterUpdatedAt()
+      && phone.store.waterUpdatedAt() === windows.store.waterUpdatedAt(),
+    'die Windows-Änderung sollte Mac und iPhone erreichen'
+  )
+
+  // Alle drei Stores müssen denselben Stand inklusive Zeitstempel haben.
+  assert.deepEqual(mac.store.waterSnapshot(), phone.store.waterSnapshot())
+  assert.deepEqual(phone.store.waterSnapshot(), windows.store.waterSnapshot())
+  assert.deepEqual(mac.store.counterSnapshot(), phone.store.counterSnapshot())
+  assert.deepEqual(phone.store.counterSnapshot(), windows.store.counterSnapshot())
+  assert.equal(mac.store.todayML(), 850)
+  assert.equal(mac.store.count, 2)
+  assert.deepEqual(mac.store.sizes, { glass: 250, bottle: 600, goal: 2400 })
+})

@@ -10,6 +10,7 @@
   "scripts": {
     "start": "electron .",
     "test": "node --test",
+    "smoke:sync": "node scripts/smoke-sync.js",
     "dist": "electron-builder --win",
     "dist:dir": "electron-builder --win --dir"
   },
