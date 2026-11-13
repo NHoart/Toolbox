@@ -138,7 +138,7 @@ struct MacWaterTodayPage: View {
                 .animation(.easeOut(duration: 0.45), value: progress)
 
             VStack(spacing: 1) {
-                Text("\(Int((progress * 100).rounded()))%")
+                Text("\(Int((progress * 100).rounded()))")
                     .font(.system(size: 34, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .contentTransition(.numericText())

@@ -187,7 +187,7 @@ Umsetzung: `Toolbox/LocalSync.swift` (Apple) und `windows/src/sync.js` (Windows)
 
 ## Version
 
-Aktuell `2.0.5` (`MARKETING_VERSION` im Projekt).
+Aktuell `3.0.0` (`MARKETING_VERSION` im Projekt).
 
 ## Lizenz
 

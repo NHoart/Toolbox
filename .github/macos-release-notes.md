@@ -13,16 +13,18 @@ Lade unten unter **Assets** die Datei `Toolbox.dmg` herunter.
      „Toolbox wurde blockiert“ auf **Dennoch öffnen** klicken, oder
    - im Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
-### Neu in 2.0.5
+### Neu in 3.0.0
 
-- Toolbox gibt es jetzt auch als Windows-App. `Toolbox-Setup.exe` liegt im
-  selben Release und bringt dieselben sechs Werkzeuge mit.
-- Der lokale WLAN-Abgleich verbindet Mac, iPhone und Windows-PC gleichzeitig.
-  Übernommene Stände werden auch an weitere Geräte weitergegeben, sodass die
-  Kette Mac → iPhone → Windows den aktuellen Stand übernimmt.
-- Abgebrochene Update-Läufe werden beim Start automatisch aufgeräumt:
-  übrig gebliebene DMGs, entpackte Apps sowie Staging- und Backup-Bundles.
-- Ein gerade laufender Installer wird dabei nicht gestört.
+- Toolbox für Mac, iPhone und Windows: alle sechs Werkzeuge und der lokale
+  WLAN-Abgleich in einer gemeinsamen Version.
+- Mac, iPhone und Windows-PC können gleichzeitig verbunden sein. Änderungen
+  werden auch über ein drittes Gerät weitergegeben, sodass die Kette
+  Mac → iPhone → Windows den aktuellen Stand übernimmt.
+- Beide Release-Workflows prüfen automatisch, dass DMG und Windows-Installer
+  gemeinsam am Release hängen.
+- Die Checkliste für Installation und Drei-Geräte-Sync steht im README und in
+  den Windows-Release-Notes.
+- Der Fortschrittsring zeigt den Prozentwert ohne zusätzliches Prozentzeichen.
 
 ### Update von einer älteren Version
 
