@@ -13,6 +13,14 @@ Lade unten unter **Assets** die Datei `Toolbox.dmg` herunter.
      „Toolbox wurde blockiert“ auf **Dennoch öffnen** klicken, oder
    - im Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
+### Update von einer älteren Version
+
+Versionen **vor 2.0.3** (zum Beispiel 1.3.0 oder 2.0.2) können dieses Update
+noch nicht automatisch installieren – der eingebaute Updater bleibt nach dem
+Herunterladen hängen. Bitte die DMG in diesem Fall einmal manuell nach den
+Schritten oben installieren. Ab 2.0.3 genügt ein Klick auf
+„Installieren und neu starten“, danach startet sich die App selbst neu.
+
 ### Voraussetzungen
 
 - macOS 27.2 oder neuer (Apple Silicon)
