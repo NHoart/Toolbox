@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Xcode user state
+xcuserdata/
+*.xcuserstate
+
+# Build output
+build/
+DerivedData/
+*.moved-aside
+
+# Dependency managers
+.swiftpm/
+Pods/
+Carthage/Build/
+
+# Secrets and local config
+.env
+.env.*
+*.p12
+*.p8
+*.mobileprovision
