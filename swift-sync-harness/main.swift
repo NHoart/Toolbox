@@ -66,6 +66,14 @@ func handle(_ line: String) {
         let name = parts.count > 1 ? parts[1] : "Interop-Stand"
         counter.saveCurrent(name: name)
 
+    case "setsizes":
+        guard parts.count > 1 else { return }
+        let values = parts[1].split(separator: " ").compactMap { Int($0) }
+        guard values.count == 3 else { return }
+        WaterStore.glassML = values[0]
+        WaterStore.bottleML = values[1]
+        WaterStore.goalML = values[2]
+
     case "status":
         emit("STATUS", HarnessStatus(
             water: WaterStore.todayML,

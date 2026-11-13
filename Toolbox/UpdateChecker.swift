@@ -110,6 +110,7 @@ final class UpdateChecker: ObservableObject {
         #endif
     }
 
+    #if os(macOS)
     /// Beendet die App, damit der Installer sie ersetzen kann.
     /// `NSApp.terminate` allein genügt nicht: Bei geöffnetem Update-Sheet
     /// ignoriert AppKit die Anfrage und die App läuft weiter – der Installer
@@ -120,6 +121,7 @@ final class UpdateChecker: ObservableObject {
             exit(EXIT_SUCCESS)
         }
     }
+    #endif
 
     private func check(announceResult: Bool) async {
         switch await checkForUpdates() {

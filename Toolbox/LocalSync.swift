@@ -41,6 +41,16 @@ final class LocalSync: ObservableObject {
         static let lastSync = "lan_sync_lastSync"
     }
 
+    /// Der headless Interop-Test isoliert auch Geräte-ID und Sync-Schalter
+    /// pro Prozess über eine eigene Suite. Die App nutzt weiterhin standard.
+    private static let defaults: UserDefaults = {
+        if let testSuite = ProcessInfo.processInfo.environment["TOOLBOX_DEFAULTS_SUITE"],
+           let suite = UserDefaults(suiteName: testSuite) {
+            return suite
+        }
+        return .standard
+    }()
+
     private let queue = DispatchQueue(label: "Toolbox.LocalSync")
     private let parameters: NWParameters = {
         let parameters = NWParameters.tcp
@@ -69,15 +79,15 @@ final class LocalSync: ObservableObject {
     private let deviceName: String
 
     private init() {
-        isEnabled = UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool ?? true
-        lastSync = UserDefaults.standard.object(forKey: DefaultsKey.lastSync) as? Date
+        isEnabled = Self.defaults.object(forKey: Self.enabledKey) as? Bool ?? true
+        lastSync = Self.defaults.object(forKey: DefaultsKey.lastSync) as? Date
         deviceName = ProcessInfo.processInfo.hostName
 
-        if let stored = UserDefaults.standard.string(forKey: DefaultsKey.deviceID) {
+        if let stored = Self.defaults.string(forKey: DefaultsKey.deviceID) {
             deviceID = stored
         } else {
             let newID = UUID().uuidString
-            UserDefaults.standard.set(newID, forKey: DefaultsKey.deviceID)
+            Self.defaults.set(newID, forKey: DefaultsKey.deviceID)
             deviceID = newID
         }
     }
@@ -101,7 +111,7 @@ final class LocalSync: ObservableObject {
 
     func setEnabled(_ enabled: Bool) {
         guard enabled != isEnabled else { return }
-        UserDefaults.standard.set(enabled, forKey: Self.enabledKey)
+        Self.defaults.set(enabled, forKey: Self.enabledKey)
         isEnabled = enabled
 
         if enabled {
@@ -406,7 +416,7 @@ final class LocalSync: ObservableObject {
     private func markSynced() {
         let now = Date()
         lastSync = now
-        UserDefaults.standard.set(now, forKey: DefaultsKey.lastSync)
+        Self.defaults.set(now, forKey: DefaultsKey.lastSync)
     }
 }
 

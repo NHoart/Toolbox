@@ -87,16 +87,24 @@ npm run dist       # Installer unter windows/dist/Toolbox-Setup.exe
 
 Der Installer wird regulär im Workflow auf `windows-latest` gebaut. `npm run dist` funktioniert auch auf einem Mac, sofern die Windows-Build-Werkzeuge von electron-builder verfügbar sind.
 
-### Echten Swift↔Windows-Sync testen
+### Echten Drei-Geräte-Sync testen
 
-Der Interop-Test kompiliert den echten Apple-Sync-Code (`Toolbox/LocalSync.swift`, `WaterStore` und `CounterStore`) als headless CLI und verbindet ihn über TCP mit dem echten Windows-`SyncService` aus `windows/src/sync.js`:
+Der Interop-Test kompiliert den echten Apple-Sync-Code (`Toolbox/LocalSync.swift`, `WaterStore` und `CounterStore`) als headless CLI. Zwei unabhängige Prozesse – A=Mac und B=iPhone, jeweils mit eigener Defaults-Suite – verbinden sich gleichzeitig mit dem echten Windows-`SyncService` aus `windows/src/sync.js`, der als Relay und Store dient:
 
 ```bash
 bash scripts/build-sync-harness.sh
 node scripts/test-swift-windows-interop.js
 ```
 
-Der Test prüft Swift v1 → Windows, Swift v2 → Windows, die Rückrichtung Windows → Swift, die Zeitstempel und am Ende alle Felder der Wasser- und Zähler-Snapshots inklusive eines gespeicherten Zählerstands. Das Wire-Format wird direkt vom echten Swift-`LocalSync` erzeugt und vom echten Windows-Client gelesen – es gibt keine handgeschriebenen Fixtures. Haptik und Ton sind im Harness No-Ops; der Test-Listener läuft ohne Bonjour, damit keine echten Geräte im Netzwerk angezogen werden. In CI läuft er unter `.github/workflows/sync-interop.yml` auf `macos-latest`.
+Der Test prüft: A legt v1 an, Windows und B erhalten sie; A ändert auf v2, Windows und B erhalten sie, ohne dass B selbst schreibt; Windows ändert auf 850 ml/Zähler 2, beide Swift-Clients erhalten den Stand. Danach wird die echte, zuvor von A erzeugte v2-Wire-Zeile verspätet an Windows und B geschickt und muss dort verworfen werden. Am Ende werden alle Snapshot-Felder verglichen, inklusive Verlauf, `recentAdds`, Tag, Größen und einem gespeicherten Zählerstand. Das Wire-Format wird direkt vom echten Swift-`LocalSync` erzeugt und vom echten Windows-Client gelesen – es gibt keine handgeschriebenen Fixtures. Haptik und Ton sind im Harness No-Ops; die Listener laufen ohne Bonjour, damit keine echten Geräte im Netzwerk angezogen werden. In CI laufen der Drei-Peer-Test und der iOS-Build unter `.github/workflows/sync-interop.yml` auf `macos-latest`.
+
+Der iOS-Build des App-Targets lässt sich mit folgendem Befehl prüfen:
+
+```bash
+xcodebuild -quiet -project Toolbox.xcodeproj -scheme Toolbox -configuration Debug \
+  -destination 'generic/platform=iOS' -derivedDataPath build/xcode-ios \
+  CODE_SIGNING_ALLOWED=NO build
+```
 
 ### DMG lokal bauen
 

@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   interop:
-    name: Echter Swift-Client gegen Windows-SyncClient
+    name: Drei echte Peers (Swift A/B + Windows)
     runs-on: macos-latest
     steps:
       - name: Repository auschecken
@@ -25,5 +25,21 @@ jobs:
       - name: Swift-Sync-Harness bauen
         run: bash scripts/build-sync-harness.sh
 
-      - name: Swift↔Windows-Interop testen
+      - name: Drei-Peer-Interop testen
         run: node scripts/test-swift-windows-interop.js
+
+  ios-build:
+    name: iOS-App-Target bauen
+    runs-on: macos-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Xcode-Version
+        run: xcodebuild -version
+
+      - name: iOS-Build
+        run: >-
+          xcodebuild -quiet -project Toolbox.xcodeproj -scheme Toolbox
+          -configuration Debug -destination 'generic/platform=iOS'
+          -derivedDataPath build/xcode-ios-ci CODE_SIGNING_ALLOWED=NO build
