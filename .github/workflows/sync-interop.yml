@@ -30,13 +30,21 @@ jobs:
 
   ios-build:
     name: iOS-App-Target bauen
-    runs-on: macos-latest
+    # macos-latest hat derzeit Xcode 26.6 und kann das neue project.xcproj
+    # (Xcode 27) nicht öffnen. Der xcode-27-Runner wird auch für die DMG genutzt.
+    runs-on: xcode-27
     steps:
       - name: Repository auschecken
         uses: actions/checkout@v4
 
-      - name: Xcode-Version
-        run: xcodebuild -version
+      - name: Neueste installierte Xcode-Version auswählen
+        run: |
+          set -euo pipefail
+          latest="$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1 || true)"
+          if [ -n "$latest" ]; then
+            sudo xcode-select -s "$latest"
+          fi
+          xcodebuild -version
 
       - name: iOS-Build
         run: >-
