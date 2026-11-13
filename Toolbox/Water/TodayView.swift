@@ -57,7 +57,7 @@ struct WaterTodayView: View {
             }
             .navigationTitle("Wassertracker")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button { showSettings = true } label: { Image(systemName: "gearshape") }
                 }
             }
@@ -108,6 +108,28 @@ struct WaterTodayView: View {
     }
 }
 
+private extension View {
+    /// Zahlentastatur gibt es nur auf iOS.
+    @ViewBuilder
+    func numberKeyboard() -> some View {
+        #if os(iOS)
+        keyboardType(.numberPad)
+        #else
+        self
+        #endif
+    }
+
+    /// Kompakter Navigationstitel ist eine iOS-Darstellung.
+    @ViewBuilder
+    func inlineNavigationTitle() -> some View {
+        #if os(iOS)
+        navigationBarTitleDisplayMode(.inline)
+        #else
+        self
+        #endif
+    }
+}
+
 /// Sheet zum Eintragen einer frei wählbaren Menge in Millilitern.
 struct CustomAmountSheet: View {
     @Environment(\.dismiss) private var dismiss
@@ -130,7 +152,7 @@ struct CustomAmountSheet: View {
                 Section {
                     HStack(alignment: .firstTextBaseline, spacing: 8) {
                         TextField("0", text: $text)
-                            .keyboardType(.numberPad)
+                            .numberKeyboard()
                             .focused($inputFocused)
                             .font(.system(size: 40, weight: .bold, design: .rounded))
                             .monospacedDigit()
@@ -162,7 +184,7 @@ struct CustomAmountSheet: View {
                 }
             }
             .navigationTitle("Menge eintragen")
-            .navigationBarTitleDisplayMode(.inline)
+            .inlineNavigationTitle()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }

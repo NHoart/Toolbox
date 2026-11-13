@@ -14,14 +14,14 @@ struct UnitConverterView: View {
                             Text(conversion.title).tag(conversion)
                         }
                     }
-                    .pickerStyle(.navigationLink)
+                    .navigationLinkPicker()
                 } header: {
                     Text("Art der Umrechnung")
                 }
 
                 Section {
                     TextField(conversion.inputLabel, text: $input)
-                        .keyboardType(.decimalPad)
+                        .decimalKeyboard()
                         .focused($isInputFocused)
                 } header: {
                     Text("Wert eingeben")
@@ -35,13 +35,13 @@ struct UnitConverterView: View {
             }
             .navigationTitle("Einheiten")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button("Abbrechen") {
                         isInputFocused = false
                     }
                 }
 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button("Reset") {
                         input = ""
                         isInputFocused = false
@@ -98,7 +98,7 @@ struct DownloadTimeView: View {
             Form {
                 Section("Datei und Verbindung") {
                     TextField("Dateigröße in GB", text: $fileSize)
-                        .keyboardType(.decimalPad)
+                        .decimalKeyboard()
                         .focused($isInputFocused)
 
                     Picker("Einheit", selection: $speedUnit) {
@@ -109,7 +109,7 @@ struct DownloadTimeView: View {
                     .pickerStyle(.segmented)
 
                     TextField("Downloadgeschwindigkeit in \(speedUnit.rawValue)", text: $speed)
-                        .keyboardType(.decimalPad)
+                        .decimalKeyboard()
                         .focused($isInputFocused)
                 }
 
@@ -122,13 +122,13 @@ struct DownloadTimeView: View {
             }
             .navigationTitle("Downloadzeit")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button("Abbrechen") {
                         isInputFocused = false
                     }
                 }
 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button("Reset") {
                         fileSize = ""
                         speed = ""
@@ -167,15 +167,15 @@ struct EnergyCostView: View {
             Form {
                 Section("Verbrauch eingeben") {
                     TextField("Leistung in Watt", text: $power)
-                        .keyboardType(.decimalPad)
+                        .decimalKeyboard()
                         .focused($isInputFocused)
 
                     TextField("Nutzungsdauer in Stunden", text: $duration)
-                        .keyboardType(.decimalPad)
+                        .decimalKeyboard()
                         .focused($isInputFocused)
 
                     TextField("Strompreis pro kWh in € (optional)", text: $price)
-                        .keyboardType(.decimalPad)
+                        .decimalKeyboard()
                         .focused($isInputFocused)
                 }
 
@@ -188,13 +188,13 @@ struct EnergyCostView: View {
             }
             .navigationTitle("Stromverbrauch")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button("Abbrechen") {
                         isInputFocused = false
                     }
                 }
 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button("Reset") {
                         power = ""
                         duration = ""
@@ -312,6 +312,28 @@ private enum UnitConversion: String, CaseIterable, Identifiable {
         case .mbToMbit:
             "Mbit"
         }
+    }
+}
+
+private extension View {
+    /// Dezimaltastatur gibt es nur auf iOS; auf dem Mac tippt man mit der normalen Tastatur.
+    @ViewBuilder
+    func decimalKeyboard() -> some View {
+        #if os(iOS)
+        keyboardType(.decimalPad)
+        #else
+        self
+        #endif
+    }
+
+    /// Die NavigationLink-Darstellung eines Pickers ist iOS vorbehalten.
+    @ViewBuilder
+    func navigationLinkPicker() -> some View {
+        #if os(iOS)
+        pickerStyle(.navigationLink)
+        #else
+        pickerStyle(.menu)
+        #endif
     }
 }
 
