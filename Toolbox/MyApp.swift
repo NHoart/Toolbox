@@ -13,6 +13,8 @@ import SwiftUI
         WindowGroup {
             rootView
         }
+        .defaultSize(width: 1120, height: 680)
+        .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(after: .appInfo) {
                 Button("Nach Updates suchen…") {

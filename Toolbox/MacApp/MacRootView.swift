@@ -3,39 +3,8 @@ import SwiftUI
 
 // MARK: - Werkzeuge
 
-/// Die Werkzeuge der Mac-App für die Seitenleiste.
-enum MacTool: String, CaseIterable, Identifiable {
-    case today
-    case history
-    case units
-    case counter
-    case download
-    case energy
-
-    var id: String { rawValue }
-
-    var title: LocalizedStringKey {
-        switch self {
-        case .today: "Heute"
-        case .history: "Verlauf"
-        case .units: "Einheiten"
-        case .counter: "Zähler"
-        case .download: "Downloadzeit"
-        case .energy: "Stromverbrauch"
-        }
-    }
-
-    var icon: String {
-        switch self {
-        case .today: "drop.fill"
-        case .history: "chart.bar.fill"
-        case .units: "arrow.left.arrow.right"
-        case .counter: "plus.circle.fill"
-        case .download: "arrow.down.circle.fill"
-        case .energy: "bolt.fill"
-        }
-    }
-
+/// Farbliche Zuordnung der Werkzeuge in der Seitenleiste.
+private extension AppTab {
     var tint: Color {
         switch self {
         case .today: MacTheme.accent
@@ -53,25 +22,24 @@ enum MacTool: String, CaseIterable, Identifiable {
 /// Mac-Oberfläche: Seitenleiste links, verglaste Werkzeuge rechts.
 /// Wird nur in der Mac-App verwendet; iPhone, iPad und Vision Pro behalten die Tableiste.
 struct MacRootView: View {
-    @State private var selection: MacTool = .today
+    @Binding var selection: AppTab
     @State private var showSettings = false
 
     var body: some View {
-        ZStack {
-            MacBackdrop()
+        HStack(spacing: 0) {
+            MacSidebar(selection: $selection)
+                .frame(width: 246)
 
-            HStack(spacing: 0) {
-                MacSidebar(selection: $selection)
-                    .frame(width: 246)
-
-                page
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
+            page
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(minWidth: 1080, minHeight: 700)
+        .frame(minWidth: 1000, minHeight: 600)
+        .background {
+            MacBackdrop()
+                .ignoresSafeArea()
+        }
         .sheet(isPresented: $showSettings) {
-            SettingsView()
-                .frame(width: 540, height: 660)
+            MacSettingsSheet()
         }
     }
 
@@ -97,7 +65,7 @@ struct MacRootView: View {
 // MARK: - Seitenleiste
 
 private struct MacSidebar: View {
-    @Binding var selection: MacTool
+    @Binding var selection: AppTab
     @Environment(\.colorScheme) private var scheme
 
     var body: some View {
@@ -135,7 +103,7 @@ private struct MacSidebar: View {
                 .padding(.bottom, 6)
 
             VStack(spacing: 3) {
-                ForEach(MacTool.allCases) { tool in
+                ForEach(AppTab.allCases) { tool in
                     MacSidebarRow(
                         tool: tool,
                         isSelected: selection == tool
@@ -150,13 +118,13 @@ private struct MacSidebar: View {
             Spacer(minLength: 20)
         }
         .padding(.horizontal, 14)
-        .padding(.top, 46)
+        .padding(.top, 18)
         .padding(.bottom, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background {
             Rectangle()
                 .fill(.ultraThinMaterial)
-                .ignoresSafeArea()
+                .ignoresSafeArea(edges: .top)
                 .overlay {
                     LinearGradient(
                         colors: [Color.white.opacity(scheme == .dark ? 0.05 : 0.25), .clear],
@@ -174,7 +142,7 @@ private struct MacSidebar: View {
 }
 
 private struct MacSidebarRow: View {
-    let tool: MacTool
+    let tool: AppTab
     let isSelected: Bool
     let action: () -> Void
 
@@ -193,7 +161,7 @@ private struct MacSidebarRow: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 9) {
-                Image(systemName: tool.icon)
+                Image(systemName: tool.systemImage)
                     .font(.system(size: 11.5, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 24, height: 24)
@@ -224,6 +192,7 @@ private struct MacSidebarRow: View {
                     Color.white.opacity(isSelected ? (scheme == .dark ? 0.22 : 0.75) : 0),
                     lineWidth: 1
                 )
+                .allowsHitTesting(false)
             }
             .contentShape(rowShape)
         }
@@ -233,6 +202,6 @@ private struct MacSidebarRow: View {
 }
 
 #Preview {
-    MacRootView()
+    MacRootView(selection: .constant(.today))
 }
 #endif

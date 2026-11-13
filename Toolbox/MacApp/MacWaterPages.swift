@@ -8,7 +8,7 @@ struct MacWaterTodayPage: View {
     @Binding var showSettings: Bool
 
     @AppStorage(WaterStore.Key.goal, store: WaterStore.defaults) private var goal = 2000
-    @AppStorage(WaterStore.Key.glass, store: WaterStore.defaults) private var glass = 250
+    @AppStorage(WaterStore.Key.glass, store: WaterStore.defaults) private var glass = 200
     @AppStorage(WaterStore.Key.bottle, store: WaterStore.defaults) private var bottle = 500
 
     @State private var today = WaterStore.todayML
@@ -98,7 +98,7 @@ struct MacWaterTodayPage: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .macGlassCard(tint: MacTheme.accent.opacity(0.20), padding: 30)
+        .macGlassCard(tint: MacTheme.accent.opacity(0.20), padding: 32)
     }
 
     /// Dünner Fortschrittsbalken unter der Tagesmenge.
@@ -148,7 +148,7 @@ struct MacWaterTodayPage: View {
                     .monospacedDigit()
             }
         }
-                    .frame(width: 210, height: 210)
+                    .frame(width: 220, height: 220)
     }
 
     private var tileRow: some View {
@@ -302,7 +302,10 @@ struct MacCustomAmountSheet: View {
                         : Color.white.opacity(0.35),
                         lineWidth: 1
                     )
+                    .allowsHitTesting(false)
             }
+            .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .onTapGesture { inputFocused = true }
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 4), spacing: 8) {
                 ForEach(Self.presets, id: \.self) { preset in

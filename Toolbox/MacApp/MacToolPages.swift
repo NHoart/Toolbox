@@ -6,7 +6,7 @@ import SwiftUI
 struct MacUnitsPage: View {
     @Binding var showSettings: Bool
 
-    @State private var conversion = UnitConversion.mbToGB
+    @State private var conversion = MacUnitConversion.mbToGB
     @State private var input = ""
 
     private var result: Double? {
@@ -19,11 +19,6 @@ struct MacUnitsPage: View {
         }
     }
 
-    private var resultText: String {
-        guard let result else { return "–" }
-        return result.formatted(.number.precision(.fractionLength(0...3)))
-    }
-
     var body: some View {
         MacPage(title: "Einheiten",
                 subtitle: "MB/GB und Mbit/MB umrechnen",
@@ -33,7 +28,7 @@ struct MacUnitsPage: View {
                     MacCardHeader(title: "UMRECHNUNG", systemImage: "arrow.left.arrow.right", tint: MacTheme.cyan)
 
                     Picker("Umrechnung", selection: $conversion) {
-                        ForEach(UnitConversion.allCases) { option in
+                        ForEach(MacUnitConversion.allCases) { option in
                             Text(option.title).tag(option)
                         }
                     }
@@ -65,13 +60,19 @@ struct MacUnitsPage: View {
         VStack(alignment: .leading, spacing: 10) {
             MacCardHeader(title: "ERGEBNIS", systemImage: "equal.circle.fill", tint: MacTheme.violet)
 
-            Text(resultText)
-                .font(.system(size: 36, weight: .bold, design: .rounded))
-                .monospacedDigit()
-                .foregroundStyle(MacTheme.waterGradient)
-                .minimumScaleFactor(0.45)
-                .lineLimit(1)
-                .contentTransition(.numericText())
+            if let result {
+                Text(result.formatted(.number.precision(.fractionLength(0...3))))
+                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(MacTheme.waterGradient)
+                    .minimumScaleFactor(0.45)
+                    .lineLimit(1)
+                    .contentTransition(.numericText())
+            } else {
+                Text("—")
+                    .font(.system(size: 30, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.tertiary)
+            }
 
             Text(result == nil ? "Wert eingeben" : "Ergebnis in \(conversion.resultLabel)")
                 .font(.system(size: 11))
@@ -114,7 +115,7 @@ struct MacDownloadPage: View {
 
         let sizeInMB = size * 1_000
         let speedInMBPerSecond = downloadSpeed * speedUnit.megabytesPerSecond
-        return formattedDuration(sizeInMB / speedInMBPerSecond)
+        return macFormattedDuration(sizeInMB / speedInMBPerSecond)
     }
 
     var body: some View {
@@ -171,13 +172,19 @@ struct MacDownloadPage: View {
         VStack(alignment: .leading, spacing: 10) {
             MacCardHeader(title: "DOWNLOADZEIT", systemImage: "clock.fill", tint: MacTheme.pink)
 
-            Text(downloadTime ?? "–")
-                .font(.system(size: 34, weight: .bold, design: .rounded))
-                .monospacedDigit()
-                .foregroundStyle(MacTheme.waterGradient)
-                .minimumScaleFactor(0.45)
-                .lineLimit(2)
-                .contentTransition(.numericText())
+            if let downloadTime {
+                Text(downloadTime)
+                    .font(.system(size: 34, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(MacTheme.waterGradient)
+                    .minimumScaleFactor(0.45)
+                    .lineLimit(2)
+                    .contentTransition(.numericText())
+            } else {
+                Text("—")
+                    .font(.system(size: 30, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.tertiary)
+            }
 
             Text(downloadTime == nil
                  ? "Dateigröße und Geschwindigkeit eingeben"
@@ -207,8 +214,8 @@ struct MacEnergyPage: View {
         return watts / 1_000 * hours
     }
 
-    private var energyText: String {
-        guard let energy = energyConsumption else { return "–" }
+    private var energyText: String? {
+        guard let energy = energyConsumption else { return nil }
         return "\(energy.formatted(.number.precision(.fractionLength(0...3)))) kWh"
     }
 
@@ -257,13 +264,19 @@ struct MacEnergyPage: View {
         VStack(alignment: .leading, spacing: 10) {
             MacCardHeader(title: "ERGEBNIS", systemImage: "bolt.circle.fill", tint: MacTheme.amber)
 
-            Text(energyText)
-                .font(.system(size: 36, weight: .bold, design: .rounded))
-                .monospacedDigit()
-                .foregroundStyle(MacTheme.waterGradient)
-                .minimumScaleFactor(0.45)
-                .lineLimit(1)
-                .contentTransition(.numericText())
+            if let energyText {
+                Text(energyText)
+                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(MacTheme.waterGradient)
+                    .minimumScaleFactor(0.45)
+                    .lineLimit(1)
+                    .contentTransition(.numericText())
+            } else {
+                Text("—")
+                    .font(.system(size: 30, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.tertiary)
+            }
 
             Text("Kosten: \(costText)")
                 .font(.system(size: 11))
@@ -497,6 +510,7 @@ struct MacCounterPage: View {
                 .frame(maxHeight: 420)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .macGlassCard(cornerRadius: 24, padding: 18)
     }
 
@@ -537,6 +551,66 @@ struct MacCounterPage: View {
             }
         }
     }
+}
+
+// MARK: - Einheiten-Helfer
+
+/// Eigene Kopie für die Mac-Oberfläche, damit die iOS-Views unverändert bleiben.
+private enum MacUnitConversion: String, CaseIterable, Identifiable {
+    case mbToGB
+    case gbToMB
+    case mbitToMB
+    case mbToMbit
+
+    var id: Self { self }
+
+    var title: String {
+        switch self {
+        case .mbToGB: "MB in GB"
+        case .gbToMB: "GB in MB"
+        case .mbitToMB: "Mbit in MB"
+        case .mbToMbit: "MB in Mbit"
+        }
+    }
+
+    var inputLabel: String {
+        switch self {
+        case .gbToMB:
+            "Wert in GB"
+        case .mbToGB, .mbToMbit:
+            "Wert in MB"
+        case .mbitToMB:
+            "Wert in Mbit"
+        }
+    }
+
+    var resultLabel: String {
+        switch self {
+        case .mbToGB:
+            "GB"
+        case .gbToMB, .mbitToMB:
+            "MB"
+        case .mbToMbit:
+            "Mbit"
+        }
+    }
+}
+
+private func macFormattedDuration(_ seconds: Double) -> String {
+    let roundedSeconds = max(0, Int(seconds.rounded()))
+    let hours = roundedSeconds / 3_600
+    let minutes = (roundedSeconds % 3_600) / 60
+    let remainingSeconds = roundedSeconds % 60
+
+    if hours > 0 {
+        return "\(hours) Std. \(minutes) Min. \(remainingSeconds) Sek."
+    }
+
+    if minutes > 0 {
+        return "\(minutes) Min. \(remainingSeconds) Sek."
+    }
+
+    return "\(remainingSeconds) Sek."
 }
 
 // MARK: - Zahl-Helfer

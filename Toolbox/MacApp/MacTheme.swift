@@ -43,7 +43,6 @@ struct MacBackdrop: View {
             glow(MacTheme.pink, size: 620, x: 500, y: 470, dark: 0.26, light: 0.14)
             glow(MacTheme.violet, size: 900, x: 80, y: 60, dark: 0.14, light: 0.10)
         }
-        .ignoresSafeArea()
     }
 
     private func glow(_ color: Color, size: CGFloat, x: CGFloat, y: CGFloat,
@@ -113,6 +112,7 @@ private struct MacGlassCardModifier: ViewModifier {
                     ),
                     lineWidth: 1
                 )
+                .allowsHitTesting(false)
             }
             .shadow(color: .black.opacity(scheme == .dark ? 0.35 : 0.10), radius: 22, y: 12)
     }
@@ -235,7 +235,10 @@ struct MacField: View {
                         isFocused ? MacTheme.accent.opacity(0.6) : MacSurface.stroke(scheme),
                         lineWidth: 1
                     )
+                    .allowsHitTesting(false)
             }
+            .contentShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
+            .onTapGesture { isFocused = true }
             .animation(.easeOut(duration: 0.15), value: isFocused)
         }
     }
@@ -341,12 +344,13 @@ struct MacPage<Content: View>: View {
                 content
             }
             .padding(.horizontal, 30)
-            .padding(.top, 22)
+            .padding(.top, 10)
             .padding(.bottom, 30)
             .frame(maxWidth: 1060, alignment: .leading)
             .frame(maxWidth: .infinity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .defaultScrollAnchor(.top)
     }
 }
 #endif

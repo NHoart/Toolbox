@@ -54,32 +54,42 @@ struct ContentView: View {
     @Binding var selection: AppTab
 
     var body: some View {
-        TabView(selection: $selection) {
-            Tab("Heute", systemImage: "drop.fill", value: .today) {
+        #if os(macOS)
+        // Die Mac-App bekommt eine eigene Oberfläche mit Seitenleiste im Liquid-Glass-Look.
+        // iPhone, iPad und Vision Pro behalten unverändert die Tableiste.
+        MacRootView(selection: $selection)
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active {
+                    LocalSync.shared.syncNow()
+                    WidgetCenter.shared.reloadAllTimelines()
+                }
+            }
+        #else
+        TabView {
+            Tab("Heute", systemImage: "drop.fill") {
                 WaterTodayView()
             }
 
-            Tab("Verlauf", systemImage: "chart.bar.fill", value: .history) {
+            Tab("Verlauf", systemImage: "chart.bar.fill") {
                 HistoryView()
             }
 
-            Tab("Einheiten", systemImage: "arrow.left.arrow.right", value: .units) {
+            Tab("Einheiten", systemImage: "arrow.left.arrow.right") {
                 UnitConverterView()
             }
 
-            Tab("Zähler", systemImage: "plus.circle", value: .counter) {
+            Tab("Zähler", systemImage: "plus.circle") {
                 CounterView()
             }
 
-            Tab("Downloadzeit", systemImage: "arrow.down.circle", value: .download) {
+            Tab("Downloadzeit", systemImage: "arrow.down.circle") {
                 DownloadTimeView()
             }
 
-            Tab("Stromverbrauch", systemImage: "bolt.fill", value: .energy) {
+            Tab("Stromverbrauch", systemImage: "bolt.fill") {
                 EnergyCostView()
             }
         }
-        .macSidebarTabs()
         .onChange(of: scenePhase) { _, phase in
             // Beim Öffnen der App mit dem anderen Gerät abgleichen und das Widget nachziehen –
             // nötig für Einträge, die im Hintergrund (z. B. per Siri oder Widget) gemacht wurden.
@@ -88,6 +98,7 @@ struct ContentView: View {
                 WidgetCenter.shared.reloadAllTimelines()
             }
         }
+        #endif
     }
 }
 
