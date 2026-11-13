@@ -66,9 +66,12 @@ jobs:
           if gh release view "$tag" > /dev/null 2>&1; then
             gh release upload "$tag" dist/Toolbox.dmg --clobber
           else
-            gh release create "$tag" dist/Toolbox.dmg \
+            # Der Windows-Workflow kann denselben Release gleichzeitig anlegen.
+            if ! gh release create "$tag" dist/Toolbox.dmg \
               --title "Toolbox $version" \
-              --notes-file .github/macos-release-notes.md
+              --notes-file .github/macos-release-notes.md; then
+              gh release upload "$tag" dist/Toolbox.dmg --clobber
+            fi
           fi
 
       - name: Windows-Installer für denselben Release anstoßen
