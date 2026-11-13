@@ -95,7 +95,10 @@ final class UpdateChecker: ObservableObject {
 
         do {
             try await UpdateInstaller.install(update) { [weak self] fraction in
-                Task { @MainActor in self?.downloadProgress = fraction }
+                guard let self = self else { return }
+                Task { @MainActor in
+                    self.downloadProgress = fraction
+                }
             }
             quitForInstall()
         } catch {
