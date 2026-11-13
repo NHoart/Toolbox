@@ -13,6 +13,12 @@ Lade unten unter **Assets** die Datei `Toolbox.dmg` herunter.
      „Toolbox wurde blockiert“ auf **Dennoch öffnen** klicken, oder
    - im Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
+### Neu in 2.0.4
+
+- Abgebrochene Update-Läufe werden beim Start automatisch aufgeräumt:
+  übrig gebliebene DMGs, entpackte Apps sowie Staging- und Backup-Bundles.
+- Ein gerade laufender Installer wird dabei nicht gestört.
+
 ### Update von einer älteren Version
 
 Versionen **vor 2.0.3** (zum Beispiel 1.3.0 oder 2.0.2) können dieses Update
