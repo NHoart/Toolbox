@@ -176,7 +176,9 @@ enum WaterStore {
             glass: glassML,
             bottle: bottleML,
             goal: goalML,
-            updatedAt: updatedAt ?? Date()
+            // Ohne Änderungszeit gilt der Stand als alt: Ein frisches Gerät
+            // soll damit keinen neueren Stand der anderen überschreiben.
+            updatedAt: updatedAt ?? .distantPast
         )
     }
 

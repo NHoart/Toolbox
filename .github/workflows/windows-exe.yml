@@ -1,0 +1,84 @@
+name: Windows Installer
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "EXE als GitHub-Release veröffentlichen"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-exe-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  installer:
+    name: Windows-Installer bauen
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: windows
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Tests
+        run: npm test
+
+      - name: Installer bauen
+        run: npm run dist -- --publish never
+
+      - name: Installer als Workflow-Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: Toolbox-windows
+          path: windows/dist/Toolbox-Setup.exe
+          if-no-files-found: error
+
+      - name: Release veröffentlichen
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+
+          if ("${{ github.ref_type }}" -eq "tag") {
+            $tag = "${{ github.ref_name }}"
+          } else {
+            $tag = "v$version"
+          }
+
+          $notes = Join-Path $env:GITHUB_WORKSPACE ".github/windows-release-notes.md"
+
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -ne 0) {
+            # Falls der macOS-Workflow denselben Release gleichzeitig anlegt,
+            # ist ein Fehlschlag hier in Ordnung – das Hochladen versucht es erneut.
+            gh release create $tag --title "Toolbox $version" --notes-file $notes
+            Start-Sleep -Seconds 2
+          }
+
+          for ($attempt = 1; $attempt -le 5; $attempt++) {
+            gh release upload $tag "dist/Toolbox-Setup.exe" --clobber
+            if ($LASTEXITCODE -eq 0) { break }
+            if ($attempt -eq 5) { exit 1 }
+            Start-Sleep -Seconds 4
+          }

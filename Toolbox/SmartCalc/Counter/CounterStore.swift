@@ -281,7 +281,9 @@ final class CounterStore: ObservableObject {
             count: UserDefaults.standard.integer(forKey: countKey),
             savedCounters: stored,
             rate: storedRate > 0 ? min(maxRate, storedRate) : 5,
-            updatedAt: updatedAt ?? Date()
+            // Ohne Änderungszeit gilt der Stand als alt: Ein frisches Gerät
+            // soll damit keinen neueren Stand der anderen überschreiben.
+            updatedAt: updatedAt ?? .distantPast
         )
     }
 

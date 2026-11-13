@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: macos-dmg-${{ github.ref }}
@@ -69,3 +70,11 @@ jobs:
               --title "Toolbox $version" \
               --notes-file .github/macos-release-notes.md
           fi
+
+      - name: Windows-Installer für denselben Release anstoßen
+        if: github.ref_type != 'tag' && inputs.publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run windows-exe.yml --ref "$GITHUB_REF_NAME" -f publish=true

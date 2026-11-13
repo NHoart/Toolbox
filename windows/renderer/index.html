@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>Toolbox</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="titlebar">
+    <div class="brand">
+      <img class="brand-icon" src="icon.png" alt="">
+      <span>Toolbox</span>
+    </div>
+  </div>
+
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-heading">WERKZEUGE</div>
+
+      <nav class="nav" id="nav">
+        <button class="nav-row active" data-tab="today">
+          <span class="nav-icon blue">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c3.6 4 5.8 7.1 5.8 9.6a5.8 5.8 0 1 1-11.6 0c0-2.5 2.2-5.6 5.8-9.6z"/></svg>
+          </span>
+          <span>Heute</span>
+        </button>
+
+        <button class="nav-row" data-tab="history">
+          <span class="nav-icon mint">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/></svg>
+          </span>
+          <span>Verlauf</span>
+        </button>
+
+        <button class="nav-row" data-tab="units">
+          <span class="nav-icon cyan">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13m0 0-3-3m3 3-3 3M20 16H7m0 0 3-3m-3 3 3 3"/></svg>
+          </span>
+          <span>Einheiten</span>
+        </button>
+
+        <button class="nav-row" data-tab="counter">
+          <span class="nav-icon violet">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></svg>
+          </span>
+          <span>Zähler</span>
+        </button>
+
+        <button class="nav-row" data-tab="download">
+          <span class="nav-icon pink">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          </span>
+          <span>Downloadzeit</span>
+        </button>
+
+        <button class="nav-row" data-tab="energy">
+          <span class="nav-icon amber">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+          </span>
+          <span>Stromverbrauch</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+
+      <button class="sync-chip" id="syncChip" title="Sync-Einstellungen öffnen">
+        <span class="sync-dot" id="syncDot"></span>
+        <span class="sync-copy">
+          <strong id="syncChipTitle">Sync im WLAN</strong>
+          <small id="syncChipSub">Suche im WLAN…</small>
+        </span>
+      </button>
+    </aside>
+
+    <main class="main">
+      <header class="page-header">
+        <div class="header-inner">
+          <div>
+            <h1 id="pageTitle">Wassertracker</h1>
+            <p id="pageSubtitle">Dein Fortschritt für heute</p>
+          </div>
+          <button class="ghost-icon" id="openSettings" aria-label="Einstellungen" title="Einstellungen">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.14.37.46.66.85.8H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="page-scroll" id="pageScroll">
+        <!-- Heute -->
+        <section class="page" data-page="today">
+          <div class="card hero">
+            <div class="ring-wrap">
+              <svg class="ring" viewBox="0 0 220 220" aria-hidden="true">
+                <defs>
+                  <linearGradient id="ringGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#2b8cff"/>
+                    <stop offset="55%" stop-color="#33d4ed"/>
+                    <stop offset="100%" stop-color="#8c66ff"/>
+                  </linearGradient>
+                </defs>
+                <circle class="ring-track" cx="110" cy="110" r="92"/>
+                <circle class="ring-value" id="ringValue" cx="110" cy="110" r="92"/>
+              </svg>
+              <div class="ring-center">
+                <span id="ringPercent">0</span>
+                <small id="ringSub">0 / 2000</small>
+              </div>
+            </div>
+
+            <div class="hero-body">
+              <div class="eyebrow amber">HEUTE</div>
+              <div class="hero-number"><span id="todayML">0</span><span class="hero-unit">ml</span></div>
+              <p class="muted" id="todaySub">von 2000 ml Ziel · noch 2000 ml offen</p>
+              <div class="progress"><div class="progress-value" id="todayBar"></div></div>
+
+              <div class="quick-row">
+                <button class="quick" id="quickGlass">
+                  <span class="quick-icon blue">
+                    <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c3.6 4 5.8 7.1 5.8 9.6a5.8 5.8 0 1 1-11.6 0c0-2.5 2.2-5.6 5.8-9.6z"/></svg>
+                  </span>
+                  <span class="quick-copy"><strong>Glas</strong><small id="quickGlassSub">+200 ml</small></span>
+                </button>
+
+                <button class="quick" id="quickBottle">
+                  <span class="quick-icon cyan">
+                    <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4v3l1.6 2.4A4 4 0 0 1 16.3 11v8a2 2 0 0 1-2 2h-4.6a2 2 0 0 1-2-2v-8a4 4 0 0 1 .7-2.6L10 6V3z"/><path d="M8 12h8"/></svg>
+                  </span>
+                  <span class="quick-copy"><strong>Flasche</strong><small id="quickBottleSub">+500 ml</small></span>
+                </button>
+              </div>
+
+              <div class="action-row">
+                <button class="btn primary" id="addCustom">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                  Eigene Menge
+                </button>
+                <button class="btn" id="undoWater">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></svg>
+                  <span id="undoLabel">Rückgängig</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="tiles three">
+            <div class="tile">
+              <div class="tile-head blue">
+                <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c3.6 4 5.8 7.1 5.8 9.6a5.8 5.8 0 1 1-11.6 0c0-2.5 2.2-5.6 5.8-9.6z"/></svg>
+                Glas
+              </div>
+              <div class="tile-value" id="tileGlass">200 ml</div>
+              <div class="tile-sub">Schnellwahl</div>
+            </div>
+
+            <div class="tile">
+              <div class="tile-head cyan">
+                <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4v3l1.6 2.4A4 4 0 0 1 16.3 11v8a2 2 0 0 1-2 2h-4.6a2 2 0 0 1-2-2v-8a4 4 0 0 1 .7-2.6L10 6V3z"/><path d="M8 12h8"/></svg>
+                Flasche
+              </div>
+              <div class="tile-value" id="tileBottle">500 ml</div>
+              <div class="tile-sub">Schnellwahl</div>
+            </div>
+
+            <div class="tile">
+              <div class="tile-head violet">
+                <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1"/></svg>
+                Tagesziel
+              </div>
+              <div class="tile-value" id="tileGoal">2000 ml</div>
+              <div class="tile-sub">Ziel für heute</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Verlauf -->
+        <section class="page" data-page="history" hidden>
+          <div class="tiles three">
+            <div class="tile">
+              <div class="tile-head blue">
+                <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+                Durchschnitt
+              </div>
+              <div class="tile-value" id="histAvg">0 ml</div>
+              <div class="tile-sub">pro Tag</div>
+            </div>
+
+            <div class="tile">
+              <div class="tile-head mint">
+                <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9 17.5 20 6.5"/></svg>
+                Ziel erreicht
+              </div>
+              <div class="tile-value" id="histReached">0 von 30</div>
+              <div class="tile-sub">Tagen</div>
+            </div>
+
+            <div class="tile">
+              <div class="tile-head amber">
+                <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3M12 13v5M8 21h8"/></svg>
+                Bester Tag
+              </div>
+              <div class="tile-value" id="histBest">0 ml</div>
+              <div class="tile-sub">Höchstwert</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <span class="eyebrow blue">LETZTE 30 TAGE</span>
+              <span class="chart-legend">
+                <span><i class="legend-dot mint"></i>Ziel erreicht</span>
+                <span><i class="legend-dot blue"></i>Unter Ziel</span>
+              </span>
+            </div>
+            <div class="chart-wrap"><canvas id="chart"></canvas></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><span class="eyebrow violet">TAGE</span></div>
+            <div class="day-list" id="dayList"></div>
+          </div>
+        </section>
+
+        <!-- Einheiten -->
+        <section class="page" data-page="units" hidden>
+          <div class="split">
+            <div class="card">
+              <div class="card-head"><span class="eyebrow cyan">UMRECHNUNG</span></div>
+
+              <div class="segment" id="unitModes" role="group" aria-label="Umrechnung">
+                <button class="active" data-mode="mbToGB">MB → GB</button>
+                <button data-mode="gbToMB">GB → MB</button>
+                <button data-mode="mbitToMB">Mbit → MB</button>
+                <button data-mode="mbToMbit">MB → Mbit</button>
+              </div>
+
+              <label class="field">
+                <span id="unitFieldLabel">Wert in MB</span>
+                <div class="input-wrap">
+                  <input id="unitInput" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+                  <span id="unitSuffix">MB</span>
+                </div>
+              </label>
+
+              <div class="action-row end">
+                <button class="btn" id="unitReset">Reset</button>
+              </div>
+            </div>
+
+            <div class="card result-card">
+              <div class="eyebrow violet">ERGEBNIS</div>
+              <div class="result-number" id="unitResult">—</div>
+              <p class="muted" id="unitResultSub">Wert eingeben</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Zähler -->
+        <section class="page" data-page="counter" hidden>
+          <div class="split">
+            <div class="card counter-card">
+              <div class="card-head">
+                <span class="eyebrow violet">ZÄHLERSTAND</span>
+                <span class="badge mint" id="autoBadge" hidden><i class="live-dot"></i>Läuft</span>
+              </div>
+
+              <div class="counter-value" id="counterValue">0</div>
+
+              <div class="counter-actions">
+                <button class="circle-btn minus" id="counterMinus" aria-label="Verringern">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+                </button>
+                <button class="circle-btn plus" id="counterPlus" aria-label="Erhöhen">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+
+              <div class="action-row center">
+                <button class="btn" id="counterUndo">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></svg>
+                  Rückgängig
+                </button>
+                <button class="btn" id="counterReset">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>
+                  Zurücksetzen
+                </button>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="auto-row">
+                <div class="auto-copy">
+                  <strong>Automatisch</strong>
+                  <small id="autoRate">5× pro Sekunde</small>
+                </div>
+
+                <div class="mini-stepper">
+                  <button id="rateDown" aria-label="Langsamer">
+                    <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+                  </button>
+                  <button id="rateUp" aria-label="Schneller">
+                    <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                  </button>
+                </div>
+
+                <button class="btn primary" id="autoToggle">Start</button>
+              </div>
+            </div>
+
+            <div class="card saved-card">
+              <div class="card-head">
+                <span class="eyebrow cyan">GESPEICHERT</span>
+                <button class="ghost-icon small" id="saveCounter" title="Aktuellen Stand speichern" aria-label="Aktuellen Stand speichern">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4V3z"/></svg>
+                </button>
+              </div>
+              <div class="saved-list" id="savedList"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Downloadzeit -->
+        <section class="page" data-page="download" hidden>
+          <div class="split">
+            <div class="card">
+              <div class="card-head"><span class="eyebrow pink">DATEI UND VERBINDUNG</span></div>
+
+              <label class="field">
+                <span>Dateigröße</span>
+                <div class="input-wrap">
+                  <input id="downloadSize" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+                  <span>GB</span>
+                </div>
+              </label>
+
+              <div class="field">
+                <span>Einheit</span>
+                <div class="segment" id="speedUnits" role="group" aria-label="Geschwindigkeitseinheit">
+                  <button class="active" data-unit="mbit">Mbit/s</button>
+                  <button data-unit="mb">MB/s</button>
+                </div>
+              </div>
+
+              <label class="field">
+                <span>Downloadgeschwindigkeit</span>
+                <div class="input-wrap">
+                  <input id="downloadSpeed" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+                  <span id="speedSuffix">Mbit/s</span>
+                </div>
+              </label>
+
+              <div class="action-row end">
+                <button class="btn" id="downloadReset">Reset</button>
+              </div>
+            </div>
+
+            <div class="card result-card">
+              <div class="eyebrow pink">DOWNLOADZEIT</div>
+              <div class="result-number small" id="downloadResult">—</div>
+              <p class="muted" id="downloadResultSub">Dateigröße und Geschwindigkeit eingeben</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Stromverbrauch -->
+        <section class="page" data-page="energy" hidden>
+          <div class="split">
+            <div class="card">
+              <div class="card-head"><span class="eyebrow amber">VERBRAUCH EINGEBEN</span></div>
+
+              <label class="field">
+                <span>Leistung</span>
+                <div class="input-wrap">
+                  <input id="energyPower" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+                  <span>Watt</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>Nutzungsdauer</span>
+                <div class="input-wrap">
+                  <input id="energyDuration" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+                  <span>Stunden</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>Strompreis pro kWh (optional)</span>
+                <div class="input-wrap">
+                  <input id="energyPrice" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+                  <span>€</span>
+                </div>
+              </label>
+
+              <div class="action-row end">
+                <button class="btn" id="energyReset">Reset</button>
+              </div>
+            </div>
+
+            <div class="card result-card">
+              <div class="eyebrow amber">ERGEBNIS</div>
+              <div class="result-number" id="energyResult">—</div>
+              <p class="muted" id="energyCost">Kosten: Kein Strompreis angegeben</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Eigene Menge -->
+  <div class="overlay" id="amountModal" hidden>
+    <div class="modal amount-modal" role="dialog" aria-modal="true" aria-labelledby="amountTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="amountTitle">Menge eintragen</h2>
+          <p>Zahl eintippen oder eine Schnellauswahl verwenden.</p>
+        </div>
+        <button class="ghost-icon small" data-close="amountModal" aria-label="Schließen">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="amount-input">
+        <input id="amountInput" type="text" inputmode="numeric" placeholder="0" autocomplete="off">
+        <span>ml</span>
+      </div>
+      <p class="field-error" id="amountError" hidden>Bitte eine Zahl zwischen 1 und 10000 eingeben.</p>
+
+      <div class="preset-grid" id="amountPresets"></div>
+
+      <div class="modal-foot">
+        <span></span>
+        <div class="foot-actions">
+          <button class="btn" data-close="amountModal">Abbrechen</button>
+          <button class="btn primary" id="amountSave">Hinzufügen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stand speichern -->
+  <div class="overlay" id="saveModal" hidden>
+    <div class="modal save-modal" role="dialog" aria-modal="true" aria-labelledby="saveTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="saveTitle">Stand speichern</h2>
+          <p id="saveSubtitle">Aktueller Stand: 0</p>
+        </div>
+        <button class="ghost-icon small" data-close="saveModal" aria-label="Schließen">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <label class="field">
+        <span>Name</span>
+        <div class="input-wrap">
+          <input id="saveNameInput" type="text" placeholder="z. B. Runde 1" maxlength="200" autocomplete="off">
+        </div>
+      </label>
+
+      <div class="modal-foot">
+        <span></span>
+        <div class="foot-actions">
+          <button class="btn" data-close="saveModal">Abbrechen</button>
+          <button class="btn primary" id="saveConfirm">Speichern</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Einstellungen -->
+  <div class="overlay" id="settingsModal" hidden>
+    <div class="modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="settingsTitle">Einstellungen</h2>
+          <p>Wasser, Netzwerk und Anzeige</p>
+        </div>
+        <button class="ghost-icon small" data-close="settingsModal" aria-label="Schließen">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="card inset">
+          <div class="card-head"><span class="eyebrow blue">MENGEN</span></div>
+
+          <div class="setting-row">
+            <span>Glas</span>
+            <div class="stepper">
+              <button data-size="glass" data-step="-50" aria-label="Glas verkleinern">−</button>
+              <span id="settingGlass">200 ml</span>
+              <button data-size="glass" data-step="50" aria-label="Glas vergrößern">+</button>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="setting-row">
+            <span>Flasche</span>
+            <div class="stepper">
+              <button data-size="bottle" data-step="-50" aria-label="Flasche verkleinern">−</button>
+              <span id="settingBottle">500 ml</span>
+              <button data-size="bottle" data-step="50" aria-label="Flasche vergrößern">+</button>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="setting-row">
+            <span>Tagesziel</span>
+            <div class="stepper">
+              <button data-size="goal" data-step="-250" aria-label="Tagesziel verkleinern">−</button>
+              <span id="settingGoal">2000 ml</span>
+              <button data-size="goal" data-step="250" aria-label="Tagesziel vergrößern">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card inset">
+          <div class="card-head"><span class="eyebrow cyan">LOKALES NETZWERK</span></div>
+
+          <label class="switch-row">
+            <span>Sync im WLAN</span>
+            <input type="checkbox" id="syncToggle">
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+
+          <div class="kv"><span>Status</span><span id="syncStatus">Suche im WLAN…</span></div>
+          <div class="kv" id="syncDeviceRow"><span>Dieser PC</span><span id="syncDeviceName">—</span></div>
+
+          <div class="peer-list" id="peerList"></div>
+
+          <div class="action-row">
+            <button class="btn" id="syncNow">Jetzt suchen</button>
+          </div>
+
+          <p class="hint" id="syncHint">
+            Gleicht Wassertracker und Zähler direkt mit deinen Geräten im selben WLAN ab – ohne Server
+            und ohne Konto. Mac, iPhone und dieser PC können gleichzeitig verbunden sein; ein Gerät
+            gibt übernommene Änderungen automatisch an die anderen weiter.
+          </p>
+          <p class="hint error" id="syncError" hidden></p>
+        </div>
+
+        <div class="card inset row-between">
+          <div>
+            <strong>Heute zurücksetzen</strong>
+            <small>Setzt die heutige Trinkmenge auf 0 ml.</small>
+          </div>
+          <button class="btn danger" id="resetWater">Zurücksetzen</button>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <span class="version" id="versionText">Version 2.0.4</span>
+        <button class="btn primary" id="settingsDone">Fertig</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

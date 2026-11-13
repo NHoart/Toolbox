@@ -51,6 +51,8 @@ final class LocalSync: ObservableObject {
 
     private var listener: NWListener?
     private var browser: NWBrowser?
+    /// Zuletzt gefundene Peers, um fehlende Verbindungen erneut aufzubauen.
+    private var lastResults: Set<NWBrowser.Result> = []
     private var connections: [UUID: NWConnection] = [:]
     private var connectionEndpoints: [UUID: String] = [:]
     /// Geräte-ID je Verbindung, damit dasselbe Gerät nicht doppelt zählt.
@@ -103,13 +105,16 @@ final class LocalSync: ObservableObject {
         guard isEnabled else { return }
         start()
 
-        // Nach dem Wechsel in den Vordergrund kann die alte Suche veraltet sein.
-        if peerCount == 0 {
-            browser?.cancel()
-            browser = nil
-            startBrowser()
-        }
+        // Immer frisch suchen: Bei mehreren Geräten kann die alte Suche einen
+        // Peer verlieren, während die übrigen verbunden bleiben.
+        browser?.cancel()
+        browser = nil
+        startBrowser()
 
+        // Fehlende Peers auch dann erneut verbinden, wenn noch andere Geräte
+        // verbunden sind – sonst bleibt eine einzelne verlorene Verbindung
+        // unentdeckt, solange peerCount > 0 ist.
+        connect(to: lastResults)
         broadcast()
     }
 
@@ -126,6 +131,7 @@ final class LocalSync: ObservableObject {
 
         pendingBroadcast?.cancel()
         pendingBroadcast = nil
+        lastResults = []
         peerCount = 0
         isSearching = false
     }
@@ -166,9 +172,11 @@ final class LocalSync: ObservableObject {
     private func startBrowser() {
         let browser = NWBrowser(for: .bonjour(type: Self.serviceType, domain: nil), using: parameters)
 
-        browser.stateUpdateHandler = { [weak self] state in
-            guard let self else { return }
+        browser.stateUpdateHandler = { [weak self, weak browser] state in
+            guard let self, let browser else { return }
             Task { @MainActor in
+                // Ein bereits ersetzter Browser darf den neuen nicht zurücksetzen.
+                guard self.browser === browser else { return }
                 switch state {
                 case .ready:
                     self.isSearching = true
@@ -181,9 +189,14 @@ final class LocalSync: ObservableObject {
             }
         }
 
-        browser.browseResultsChangedHandler = { [weak self] results, _ in
-            guard let self else { return }
-            Task { @MainActor in self.connect(to: results) }
+        browser.browseResultsChangedHandler = { [weak self, weak browser] results, _ in
+            guard let self, let browser else { return }
+            Task { @MainActor in
+                // Ergebnisse einer alten, bereits ersetzten Suche ignorieren.
+                guard self.browser === browser else { return }
+                self.lastResults = results
+                self.connect(to: results)
+            }
         }
 
         browser.start(queue: queue)
@@ -267,11 +280,19 @@ final class LocalSync: ObservableObject {
     // MARK: - Abgleich
 
     private func sendState(on connection: NWConnection) {
+        // Ein Gerät ohne eigene Daten und ohne Änderungszeit schickt keinen
+        // leeren Stand mit – sonst könnte es den Stand anderer Geräte als
+        // „neuer“ überschreiben.
+        let water = (WaterStore.hasData || WaterStore.updatedAt != nil)
+            ? WaterStore.syncSnapshot() : nil
+        let counter = (CounterStore.hasData || CounterStore.updatedAt != nil)
+            ? CounterStore.syncSnapshot() : nil
+
         let message = Message(
             deviceID: deviceID,
             deviceName: deviceName,
-            water: WaterStore.syncSnapshot(),
-            counter: CounterStore.syncSnapshot()
+            water: water,
+            counter: counter
         )
 
         guard var payload = try? JSONEncoder().encode(message) else { return }
@@ -295,22 +316,24 @@ final class LocalSync: ObservableObject {
         var applied = false
 
         if let remote = message.water {
-            let local = WaterStore.updatedAt ?? .distantPast
-            if remote.updatedAt > local {
+            let local = WaterStore.updatedAt
+            // Ohne eigenen Stand (frisches Gerät) immer übernehmen, sonst
+            // gewinnt der zuletzt geänderte Stand.
+            if local == nil || remote.updatedAt > (local ?? .distantPast) {
                 WaterStore.applySync(remote)
                 WidgetCenter.shared.reloadAllTimelines()
                 applied = true
-            } else if local > remote.updatedAt {
+            } else if let local, local > remote.updatedAt {
                 peerIsBehind = true
             }
         }
 
         if let remote = message.counter {
-            let local = CounterStore.updatedAt ?? .distantPast
-            if remote.updatedAt > local {
+            let local = CounterStore.updatedAt
+            if local == nil || remote.updatedAt > (local ?? .distantPast) {
                 CounterStore.applySync(remote)
                 applied = true
-            } else if local > remote.updatedAt {
+            } else if let local, local > remote.updatedAt {
                 peerIsBehind = true
             }
         }
@@ -318,6 +341,10 @@ final class LocalSync: ObservableObject {
         if applied {
             NotificationCenter.default.post(name: .syncDidApplyRemote, object: nil)
             markSynced()
+            // Übernommenen Stand an die anderen offenen Verbindungen
+            // weiterreichen, damit auch Geräte ihn bekommen, die mit dem
+            // Ursprung nicht direkt verbunden sind.
+            broadcast(excluding: id)
         }
 
         // Das andere Gerät hat einen älteren Stand: unseren nachschicken.
@@ -326,9 +353,9 @@ final class LocalSync: ObservableObject {
         }
     }
 
-    private func broadcast() {
+    private func broadcast(excluding excludedID: UUID? = nil) {
         guard isEnabled else { return }
-        for connection in connections.values {
+        for (id, connection) in connections where id != excludedID {
             sendState(on: connection)
         }
     }

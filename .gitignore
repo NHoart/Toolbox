@@ -11,6 +11,13 @@ DerivedData/
 dist/
 *.moved-aside
 
+# Windows-App
+windows/node_modules/
+windows/dist/
+# Build-Ressourcen der Windows-App (Icon für den Installer)
+!windows/build/
+!windows/build/icon.png
+
 # Dependency managers
 .swiftpm/
 Pods/

@@ -1,8 +1,10 @@
 # Toolbox
 
-Eine kleine Sammlung von Alltagswerkzeugen als SwiftUI-App für iPhone, iPad, Mac und Vision Pro – inklusive Home-Screen-Widget und Siri-Kurzbefehlen.
+Eine kleine Sammlung von Alltagswerkzeugen als SwiftUI-App für iPhone, iPad, Mac und Vision Pro – inklusive Home-Screen-Widget und Siri-Kurzbefehlen. Dieselben sechs Werkzeuge gibt es als Desktop-App für Windows, mit Abgleich im lokalen WLAN über Mac, iPhone und PC hinweg.
 
-## Download (macOS)
+## Download
+
+### macOS
 
 Die fertige Mac-App gibt es als DMG direkt von GitHub:
 
@@ -10,7 +12,17 @@ Die fertige Mac-App gibt es als DMG direkt von GitHub:
 
 Alle Versionen stehen auf der [Releases-Seite](https://github.com/NHoart/Toolbox/releases). Nach dem Download die DMG öffnen, `Toolbox` in den Ordner **Programme** ziehen und die App per Rechtsklick → **Öffnen** starten. Die DMG ist nicht mit einem Apple-Developer-Zertifikat signiert und nicht notarisiert, deshalb blockiert macOS den allerersten Start.
 
-Die App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Liegt die App in **Programme**, lädt sie die neue DMG, prüft Prüfsumme und Signatur und ersetzt sich selbst; aus Xcode oder von der DMG gestartet bietet sie stattdessen den Download an. Manuell geht das über **Toolbox → Nach Updates suchen…** oder den Button in den Einstellungen; abschalten lässt sich die automatische Prüfung dort ebenfalls.
+Die Mac-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Liegt die App in **Programme**, lädt sie die neue DMG, prüft Prüfsumme und Signatur und ersetzt sich selbst; aus Xcode oder von der DMG gestartet bietet sie stattdessen den Download an. Manuell geht das über **Toolbox → Nach Updates suchen…** oder den Button in den Einstellungen; abschalten lässt sich die automatische Prüfung dort ebenfalls.
+
+### Windows
+
+Die Windows-App gibt es als Installer direkt von GitHub:
+
+[**Toolbox-Setup.exe herunterladen**](https://github.com/NHoart/Toolbox/releases/latest/download/Toolbox-Setup.exe)
+
+Windows 10/11 (64 Bit). Nach dem Download den Installer ausführen; die Installation läuft ohne Administratorrechte im Benutzerprofil. Der Installer ist nicht signiert, deshalb kann SmartScreen beim ersten Start warnen – über **Weitere Informationen → Trotzdem ausführen** startet die App trotzdem.
+
+Die wichtigsten Schritte für Installation und Drei-Geräte-Abgleich stehen in der [Checkliste](#checkliste-erster-start-und-drei-geräte-sync).
 
 ## Funktionen
 
@@ -24,6 +36,8 @@ Die App ist in Tabs aufgeteilt:
 | **Zähler** | Manueller Zähler mit Plus/Minus, Undo, Reset, Auto-Zählmodus (1–100 Schritte pro Sekunde), Haptik- und Ton-Feedback sowie benannten, gespeicherten Zählerständen in einer Seitenleiste. |
 | **Downloadzeit** | Geschätzte Downloaddauer aus Dateigröße und Geschwindigkeit (Mbit/s oder MB/s). |
 | **Stromverbrauch** | Energieverbrauch aus Leistung × Nutzungsdauer, optional mit Kostenberechnung zum eigenen kWh-Preis. |
+
+Die Windows-App enthält dieselben sechs Werkzeuge. Widget und Siri-Kurzbefehle gibt es nur in der Apple-Fassung.
 
 ### Widget
 
@@ -39,9 +53,16 @@ Die Größe von Glas und Flasche stammt dabei aus den Einstellungen der App.
 
 ## Voraussetzungen
 
+### Apple-App
+
 - Xcode mit iOS-/iPadOS-SDK 27.2 oder neuer (Projektformat `project.xcproj`)
 - Deployment-Target: iOS/iPadOS 27.2, macOS und visionOS
 - Ein eigenes Apple-Developer-Team für das Signieren
+
+### Windows-App
+
+- Windows 10/11 (64 Bit)
+- Node.js 22 oder neuer und npm (nur zum Bauen und Starten aus dem Quellcode)
 
 ## Bauen und Starten
 
@@ -52,6 +73,18 @@ Die Größe von Glas und Flasche stammt dabei aus den Einstellungen der App.
    ```
    `Config/Shared.xcconfig` bindet die Datei per `#include?` ein, ein frischer Clone baut also auch ohne sie (dann ohne automatisches Signieren).
 3. Das Schema `Toolbox` auswählen und auf einem Gerät, Simulator oder „My Mac (Designed for iPad)“ starten.
+
+### Windows-App bauen und starten
+
+```bash
+cd windows
+npm ci
+npm start          # App lokal starten
+npm test           # Protokoll-, Speicher- und Sync-Tests
+npm run dist       # Installer unter windows/dist/Toolbox-Setup.exe
+```
+
+Der Installer wird regulär im Workflow auf `windows-latest` gebaut. `npm run dist` funktioniert auch auf einem Mac, sofern die Windows-Build-Werkzeuge von electron-builder verfügbar sind.
 
 ### DMG lokal bauen
 
@@ -68,7 +101,9 @@ Der Workflow `.github/workflows/macos-dmg.yml` baut die DMG automatisch und hän
 - **Tag pushen**: `git tag v1.2.0 && git push origin v1.2.0` → Release `v1.2.0` mit `Toolbox.dmg`
 - **Actions → „macOS DMG“ → Run workflow** → Release `v<Version>` mit dem aktuellen Stand, erreichbar über den Download-Link oben
 
-Vor einem Release `MARKETING_VERSION` (und `CURRENT_PROJECT_VERSION`) im Projekt erhöhen – der Update-Check vergleicht diese Version mit dem Release-Tag.
+Der Workflow `.github/workflows/windows-exe.yml` baut zusätzlich `Toolbox-Setup.exe` auf `windows-latest`, führt die Tests aus und hängt den Installer an denselben Release. Ein Tag-Build erzeugt also beide Downloads; ein manueller Lauf von „macOS DMG“ stößt den Windows-Workflow für denselben Release automatisch mit an.
+
+Vor einem Release `MARKETING_VERSION` (und `CURRENT_PROJECT_VERSION`) im Projekt sowie `version` in `windows/package.json` erhöhen – der Update-Check und die Release-Tags vergleichen diese Versionen.
 
 ## Projektstruktur
 
@@ -84,27 +119,71 @@ Toolbox/                  App-Target (SwiftUI)
 
 ToolboxWidget/            WidgetKit-Extension (Wassertracker-Widget)
 Config/                   Shared.xcconfig + lokale, nicht versionierte Local.xcconfig
+windows/                  Windows-App (Electron, JavaScript)
+├── main.js               Hauptprozess, Fenster und IPC
+├── preload.js            Brücke zwischen Prozess und Oberfläche
+├── src/protocol.js       Apple-kompatibles Sync-Format (JSON + Zeitstempel)
+├── src/store.js          Lokale Daten in %APPDATA%\Toolbox\data.json
+├── src/sync.js           Bonjour + TCP, Mehrgeräte-Abgleich
+├── renderer/             Oberfläche (HTML/CSS/JS)
+└── test/                 Protokoll-, Speicher- und Sync-Tests
 ```
 
 ## Datenspeicherung
 
-Es gibt keinen eigenen Server. Alle Daten liegen lokal in `UserDefaults`; auf Wunsch gleicht die App sie direkt im lokalen WLAN mit dem anderen Gerät ab (`LocalSync`). Wassertracker und Widget teilen sich `UserDefaults` über eine App Group:
+Es gibt keinen eigenen Server. Alle Daten bleiben lokal; auf Wunsch gleicht die App sie direkt im lokalen WLAN mit den anderen Geräten ab (`LocalSync`). Wassertracker und Widget teilen sich `UserDefaults` über eine App Group:
 
 - Tagesmenge und Verlauf (max. 400 Tage) für den Wassertracker
 - Glas-/Flaschengröße und Tagesziel
 - Zählerstand, Auto-Zählrate und gespeicherte Zählerstände (im Standard-`UserDefaults`)
 
-Die App Group muss für App- und Widget-Target im Signing aktiviert sein, sonst erreicht das Widget die Daten nicht.
+Die App Group muss für App- und Widget-Target im Signing aktiviert sein, sonst erreicht das Widget die Daten nicht. Die Windows-App speichert denselben Stand in `%APPDATA%\Toolbox\data.json`.
 
-### Sync im lokalen WLAN
+### Sync im lokalen WLAN (Mac, iPhone, Windows)
 
-`LocalSync.swift` braucht weder Konto noch Developer-Account: Jedes Gerät bietet den Bonjour-Dienst `_toolboxsync._tcp` an und sucht gleichzeitig danach. Beim Verbindungsaufbau schicken beide Seiten ihren Stand samt Zeitstempel; pro Bereich gewinnt der zuletzt geänderte Stand, danach werden Änderungen an alle offenen Verbindungen verteilt. Der Abgleich läuft automatisch, solange die App auf beiden Geräten geöffnet ist und beide im selben WLAN sind (Peer-to-Peer/AWDL ist aktiviert).
+Alle Fassungen sprechen dasselbe Protokoll: Jedes Gerät bietet den Bonjour-Dienst `_toolboxsync._tcp` an und sucht gleichzeitig danach. Beim Verbindungsaufbau schicken beide Seiten ihren vollständigen Stand samt Zeitstempel; pro Bereich (Wasser und Zähler) gewinnt der zuletzt geänderte Stand. Übernommene Stände werden sofort an alle offenen Verbindungen weitergegeben – auch an Geräte, die mit dem Ursprung nicht direkt verbunden sind.
 
-Dafür nötig:
+Damit funktioniert auch die Kette über ein drittes Gerät:
 
-- `NSLocalNetworkUsageDescription` und `NSBonjourServices` in `Toolbox/Info.plist` (iOS fragt beim ersten Start nach der Freigabe)
-- `com.apple.security.network.client` und `com.apple.security.network.server` in `Toolbox/Toolbox.entitlements` (Mac-App ist sandboxed)
-- Freigabe in den Einstellungen des Wassertrackers unter „Lokales Netzwerk“, inklusive Status und „Jetzt suchen“
+1. **Mac ↔ iPhone**: Das iPhone übernimmt den aktuellen Mac-Stand.
+2. **Später iPhone ↔ Windows-PC**: Der Windows-PC bekommt denselben Stand – obwohl er mit dem Mac nie direkt verbunden war.
+
+Es gibt kein Gerätelimit: Mac, iPhone und Windows-PC können gleichzeitig verbunden sein. Der Abgleich läuft automatisch, solange Toolbox auf den Geräten geöffnet ist und alle im selben WLAN sind.
+
+Damit der Abgleich klappt:
+
+- gleiches WLAN, ohne Client-Isolation (Gäste-WLANs blockieren sich oft gegenseitig)
+- Toolbox auf allen Geräten geöffnet
+- iPhone/iPad: lokales Netzwerk erlauben (`NSLocalNetworkUsageDescription` und `NSBonjourServices` in `Toolbox/Info.plist`)
+- Mac: Netzwerk-Client/-Server in den Entitlements (bereits gesetzt: `com.apple.security.network.client`/`server`)
+- Windows: beim ersten Start die Firewall-Freigabe für **Private Netzwerke** erteilen; das Netzwerkprofil muss „Privat“ sein
+- Windows kann kein AWDL/Peer-to-Peer; ein gemeinsamer Router bzw. ein WLAN ist nötig
+- Die Geräte sollten ihre Uhrzeit automatisch synchronisieren (Standard bei macOS, iOS und Windows), weil der Abgleich Zeitstempel vergleicht
+
+In den Einstellungen zeigen alle Fassungen den Status und die verbundenen Geräte; „Jetzt suchen“ startet die Suche neu. Der Abgleich ist für das lokale Netz gedacht und nicht verschlüsselt – es werden keine Daten an Dritte gesendet.
+
+Umsetzung: `Toolbox/LocalSync.swift` (Apple) und `windows/src/sync.js` (Windows). Beide verwenden dasselbe Zeilen-JSON-Format mit Swift-Referenzzeitstempeln.
+
+## Checkliste: Erster Start und Drei-Geräte-Sync
+
+**Windows installieren**
+- [ ] `Toolbox-Setup.exe` aus `windows/dist` oder dem GitHub-Release starten.
+- [ ] SmartScreen gegebenenfalls über **Weitere Informationen → Trotzdem ausführen** bestätigen.
+- [ ] Beim ersten Start die Firewall-Freigabe für **Private Netzwerke** erlauben; das WLAN muss als „Privat“ eingestuft sein.
+- [ ] Toolbox öffnen und in den Einstellungen prüfen, dass „Sync im WLAN“ an ist.
+
+**Mac, iPhone und Windows verbinden**
+- [ ] Alle Geräte müssen im selben WLAN sein; Client-Isolation im Router ausschalten.
+- [ ] Toolbox auf allen Geräten öffnen; auf dem iPhone/iPad **Lokales Netzwerk** erlauben.
+- [ ] Auf allen Geräten **Jetzt suchen** wählen; die anderen Geräte werden als verbunden angezeigt.
+- [ ] Mac → iPhone: Wasser oder Zähler auf dem Mac ändern und den Stand auf dem iPhone prüfen.
+- [ ] Später iPhone → Windows: Toolbox auf dem PC öffnen/verbinden; der PC übernimmt den aktuellen Stand automatisch.
+- [ ] Drei Geräte gleichzeitig: Eine Änderung auf einem Gerät erscheint auf den beiden anderen.
+
+**Wenn nichts ankommt**
+- [ ] „Jetzt suchen“ erneut ausführen und Firewall sowie Netzwerkprofil prüfen.
+- [ ] Uhrzeit auf allen Geräten automatisch synchronisieren lassen.
+- [ ] Toolbox auf allen Geräten neu starten und die aktuelle Fassung installieren.
 
 ## Version
 
