@@ -31,9 +31,12 @@ struct ContentView: View {
             }
         }
         .onChange(of: scenePhase) { _, phase in
-            // Beim Öffnen der App das Widget nachziehen – nötig für Einträge,
-            // die im Hintergrund (z. B. per Siri) gemacht wurden.
-            if phase == .active { WidgetCenter.shared.reloadAllTimelines() }
+            // Beim Öffnen der App mit dem anderen Gerät abgleichen und das Widget nachziehen –
+            // nötig für Einträge, die im Hintergrund (z. B. per Siri oder Widget) gemacht wurden.
+            if phase == .active {
+                LocalSync.shared.syncNow()
+                WidgetCenter.shared.reloadAllTimelines()
+            }
         }
     }
 }

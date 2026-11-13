@@ -1,5 +1,6 @@
 import SwiftUI
 import Charts
+import Combine
 
 struct HistoryView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -62,6 +63,9 @@ struct HistoryView: View {
             .onAppear(perform: refresh)
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active { refresh() }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .syncDidApplyRemote)) { _ in
+                refresh()
             }
         }
     }

@@ -22,6 +22,7 @@ enum WaterStore {
         static let day = "totalDay"
         static let history = "historyML"
         static let recentAdds = "recentAddsML"
+        static let updatedAt = "sync.water.updatedAt"
     }
 
     /// Ein Tag im Verlauf (für HistoryView).
@@ -126,7 +127,7 @@ enum WaterStore {
         }
         history = h
 
-        WidgetCenter.shared.reloadAllTimelines()
+        markChanged()
     }
 
     private static func dayString(_ date: Date) -> String {
@@ -134,4 +135,83 @@ enum WaterStore {
         f.dateFormat = "yyyy-MM-dd"
         return f.string(from: date)
     }
+
+    // MARK: - Synchronisation mit anderen Geräten
+
+    /// Zeitpunkt der letzten lokalen Änderung (für den Abgleich).
+    static var updatedAt: Date? {
+        get { defaults.object(forKey: Key.updatedAt) as? Date }
+        set {
+            if let newValue {
+                defaults.set(newValue, forKey: Key.updatedAt)
+            } else {
+                defaults.removeObject(forKey: Key.updatedAt)
+            }
+        }
+    }
+
+    /// Gibt es überhaupt Daten, die sich zu synchronisieren lohnen?
+    static var hasData: Bool {
+        !history.isEmpty || defaults.integer(forKey: Key.total) != 0
+    }
+
+    /// Stand, der zwischen den Geräten ausgetauscht wird.
+    struct SyncSnapshot: Codable {
+        var history: [String: Int]
+        var recentAdds: [Int]
+        var day: String?
+        var total: Int
+        var glass: Int
+        var bottle: Int
+        var goal: Int
+        var updatedAt: Date
+    }
+
+    static func syncSnapshot() -> SyncSnapshot {
+        SyncSnapshot(
+            history: history,
+            recentAdds: defaults.array(forKey: Key.recentAdds) as? [Int] ?? [],
+            day: defaults.string(forKey: Key.day),
+            total: defaults.integer(forKey: Key.total),
+            glass: glassML,
+            bottle: bottleML,
+            goal: goalML,
+            updatedAt: updatedAt ?? Date()
+        )
+    }
+
+    /// Übernimmt einen fremden Stand, ohne ihn als neue lokale Änderung zu markieren.
+    static func applySync(_ snapshot: SyncSnapshot) {
+        var h = snapshot.history
+        if let cutoff = Calendar.current.date(byAdding: .day, value: -400, to: Date()) {
+            let cutoffKey = dayString(cutoff)
+            h = h.filter { $0.key >= cutoffKey }
+        }
+
+        defaults.set(h, forKey: Key.history)
+        defaults.set(snapshot.recentAdds, forKey: Key.recentAdds)
+        if let day = snapshot.day {
+            defaults.set(day, forKey: Key.day)
+        } else {
+            defaults.removeObject(forKey: Key.day)
+        }
+        defaults.set(snapshot.total, forKey: Key.total)
+        defaults.set(snapshot.glass, forKey: Key.glass)
+        defaults.set(snapshot.bottle, forKey: Key.bottle)
+        defaults.set(snapshot.goal, forKey: Key.goal)
+
+        updatedAt = snapshot.updatedAt
+    }
+
+    /// Merkt eine lokale Änderung vor, lädt das Widget nach und stößt den Abgleich an.
+    static func markChanged() {
+        updatedAt = Date()
+        WidgetCenter.shared.reloadAllTimelines()
+        NotificationCenter.default.post(name: .waterStoreDidChange, object: nil)
+    }
+}
+
+extension Notification.Name {
+    /// Lokale Wassertracker-Daten wurden geändert (LocalSync verteilt sie).
+    static let waterStoreDidChange = Notification.Name("Toolbox.waterStoreDidChange")
 }

@@ -23,12 +23,15 @@ final class CounterStore: ObservableObject {
     /// Wie oft der Zähler pro Sekunde automatisch hochzählt.
     @Published var incrementsPerSecond: Int {
         didSet {
+            // Beim Übernehmen eines fremden Stands nicht wieder hochladen.
+            guard !isApplyingRemote else { return }
             let clamped = min(Self.maxRate, max(Self.minRate, incrementsPerSecond))
             guard clamped == incrementsPerSecond else {
                 incrementsPerSecond = clamped
                 return
             }
-            UserDefaults.standard.set(clamped, forKey: rateKey)
+            UserDefaults.standard.set(clamped, forKey: Self.rateKey)
+            Self.markChanged()
         }
     }
 
@@ -38,11 +41,12 @@ final class CounterStore: ObservableObject {
     static let minRate = 1
     static let maxRate = 100
 
-    private var history: [Int] = []
+    private static let countKey = "counter_value"
+    private static let savedKey = "saved_counters"
+    private static let rateKey = "counter_rate"
+    private static let updatedKey = "sync.counter.updatedAt"
 
-    private let countKey = "counter_value"
-    private let savedKey = "saved_counters"
-    private let rateKey = "counter_rate"
+    private var history: [Int] = []
 
     private var autoTimer: Timer?
     private var autoRemainder: Double = 0
@@ -50,6 +54,10 @@ final class CounterStore: ObservableObject {
     private var lastAutoPersist = Date.distantPast
     private var lastAutoSound = Date.distantPast
     private let tickInterval: TimeInterval = 1.0 / 30.0
+
+    /// Wird gerade ein Stand von einem anderen Gerät eingespielt?
+    private var isApplyingRemote = false
+    private var remoteObserver: NSObjectProtocol?
 
     /// Damit der Ton bei hohen Raten nicht zum Dauerpiepen wird.
     private static let maxAutoSoundsPerSecond = 10.0
@@ -59,14 +67,22 @@ final class CounterStore: ObservableObject {
     }
 
     init() {
-        count = UserDefaults.standard.integer(forKey: countKey)
+        count = UserDefaults.standard.integer(forKey: Self.countKey)
 
-        let storedRate = UserDefaults.standard.integer(forKey: rateKey)
+        let storedRate = UserDefaults.standard.integer(forKey: Self.rateKey)
         incrementsPerSecond = storedRate > 0 ? min(Self.maxRate, storedRate) : 5
 
-        if let data = UserDefaults.standard.data(forKey: savedKey),
+        if let data = UserDefaults.standard.data(forKey: Self.savedKey),
            let decoded = try? JSONDecoder().decode([SavedCounter].self, from: data) {
             savedCounters = decoded
+        }
+
+        // Ein Stand von einem anderen Gerät wurde übernommen.
+        remoteObserver = NotificationCenter.default.addObserver(forName: .syncDidApplyRemote,
+                                                                object: nil,
+                                                                queue: .main) { [weak self] _ in
+            guard let self else { return }
+            Task { @MainActor in self.reloadFromDefaults() }
         }
     }
 
@@ -96,7 +112,8 @@ final class CounterStore: ObservableObject {
     func undo() {
         guard historyEnabled, let previous = history.popLast() else { return }
         count = previous
-        UserDefaults.standard.set(count, forKey: countKey)
+        UserDefaults.standard.set(count, forKey: Self.countKey)
+        Self.markChanged()
         HapticManager.shared.impactOccurred()
     }
 
@@ -106,7 +123,8 @@ final class CounterStore: ObservableObject {
             history.append(count)
         }
         count = newValue
-        UserDefaults.standard.set(count, forKey: countKey)
+        UserDefaults.standard.set(count, forKey: Self.countKey)
+        Self.markChanged()
     }
 
     // MARK: - Automatisches Zählen
@@ -138,7 +156,8 @@ final class CounterStore: ObservableObject {
         autoTimer?.invalidate()
         autoTimer = nil
         autoRemainder = 0
-        UserDefaults.standard.set(count, forKey: countKey)
+        UserDefaults.standard.set(count, forKey: Self.countKey)
+        Self.markChanged()
 
         // Undo macht den kompletten automatischen Lauf rückgängig.
         if count != countAtAutoStart, historyEnabled {
@@ -165,7 +184,7 @@ final class CounterStore: ObservableObject {
         let now = Date()
         if now.timeIntervalSince(lastAutoPersist) >= 0.5 {
             lastAutoPersist = now
-            UserDefaults.standard.set(count, forKey: countKey)
+            UserDefaults.standard.set(count, forKey: Self.countKey)
         }
     }
 
@@ -179,6 +198,9 @@ final class CounterStore: ObservableObject {
 
     deinit {
         autoTimer?.invalidate()
+        if let remoteObserver {
+            NotificationCenter.default.removeObserver(remoteObserver)
+        }
     }
 
     // MARK: - Gespeicherte Stände
@@ -207,7 +229,106 @@ final class CounterStore: ObservableObject {
 
     private func persistSaved() {
         if let data = try? JSONEncoder().encode(savedCounters) {
-            UserDefaults.standard.set(data, forKey: savedKey)
+            UserDefaults.standard.set(data, forKey: Self.savedKey)
+        }
+        Self.markChanged()
+    }
+
+    // MARK: - Synchronisation mit anderen Geräten
+
+    /// Zeitpunkt der letzten lokalen Änderung (für den Abgleich).
+    static var updatedAt: Date? {
+        get { UserDefaults.standard.object(forKey: updatedKey) as? Date }
+        set {
+            if let newValue {
+                UserDefaults.standard.set(newValue, forKey: updatedKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: updatedKey)
+            }
         }
     }
+
+    /// Gibt es überhaupt Daten, die sich zu synchronisieren lohnen?
+    static var hasData: Bool {
+        if UserDefaults.standard.integer(forKey: countKey) != 0 { return true }
+        guard let data = UserDefaults.standard.data(forKey: savedKey),
+              let decoded = try? JSONDecoder().decode([SavedCounter].self, from: data) else {
+            return false
+        }
+        return !decoded.isEmpty
+    }
+
+    /// Stand, der zwischen den Geräten ausgetauscht wird.
+    struct SyncSnapshot: Codable {
+        var count: Int
+        var savedCounters: [SavedCounter]
+        var rate: Int
+        var updatedAt: Date
+    }
+
+    static func syncSnapshot() -> SyncSnapshot {
+        let stored: [SavedCounter]
+        if let data = UserDefaults.standard.data(forKey: savedKey),
+           let decoded = try? JSONDecoder().decode([SavedCounter].self, from: data) {
+            stored = decoded
+        } else {
+            stored = []
+        }
+
+        let storedRate = UserDefaults.standard.integer(forKey: rateKey)
+
+        return SyncSnapshot(
+            count: UserDefaults.standard.integer(forKey: countKey),
+            savedCounters: stored,
+            rate: storedRate > 0 ? min(maxRate, storedRate) : 5,
+            updatedAt: updatedAt ?? Date()
+        )
+    }
+
+    /// Übernimmt einen fremden Stand, ohne ihn als neue lokale Änderung zu markieren.
+    static func applySync(_ snapshot: SyncSnapshot) {
+        let defaults = UserDefaults.standard
+        defaults.set(snapshot.count, forKey: countKey)
+        if let data = try? JSONEncoder().encode(snapshot.savedCounters) {
+            defaults.set(data, forKey: savedKey)
+        }
+        defaults.set(min(maxRate, max(minRate, snapshot.rate)), forKey: rateKey)
+        updatedAt = snapshot.updatedAt
+    }
+
+    /// Merkt die Änderung für den Abgleich im WLAN vor.
+    private static func markChanged() {
+        updatedAt = Date()
+        NotificationCenter.default.post(name: .counterStoreDidChange, object: nil)
+    }
+
+    /// Übernimmt geänderte Werte aus den UserDefaults in die veröffentlichten Eigenschaften.
+    private func reloadFromDefaults() {
+        // Laufenden Auto-Zähler anhalten, ohne den alten Stand erneut zu speichern.
+        if isAutoRunning {
+            isAutoRunning = false
+            autoTimer?.invalidate()
+            autoTimer = nil
+            autoRemainder = 0
+        }
+
+        isApplyingRemote = true
+        defer { isApplyingRemote = false }
+
+        count = UserDefaults.standard.integer(forKey: Self.countKey)
+        if let data = UserDefaults.standard.data(forKey: Self.savedKey),
+           let decoded = try? JSONDecoder().decode([SavedCounter].self, from: data) {
+            savedCounters = decoded
+        } else {
+            savedCounters = []
+        }
+
+        let storedRate = UserDefaults.standard.integer(forKey: Self.rateKey)
+        incrementsPerSecond = storedRate > 0 ? min(Self.maxRate, storedRate) : 5
+    }
+}
+
+extension Notification.Name {
+    /// Lokaler Zählerstand wurde geändert (LocalSync verteilt ihn).
+    static let counterStoreDidChange = Notification.Name("Toolbox.counterStoreDidChange")
 }

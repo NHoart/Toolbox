@@ -1,5 +1,6 @@
 import SwiftUI
 import WidgetKit
+import Combine
 
 struct WaterTodayView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -69,6 +70,9 @@ struct WaterTodayView: View {
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active { refresh() }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .syncDidApplyRemote)) { _ in
+                refresh()
             }
         }
     }

@@ -51,6 +51,8 @@ Toolbox/                  App-Target (SwiftUI)
 ├── ContentView.swift     TabView mit allen Werkzeugen
 ├── Water/                Wassertracker: Heute, Verlauf, Einstellungen, Siri-Intents
 ├── WaterStore.swift      Persistenz über die App Group (in App *und* Widget)
+├── LocalSync.swift       Abgleich im lokalen WLAN über Bonjour
+├── Info.plist            Lokale-Netzwerk-Nutzung + Bonjour-Dienst
 └── SmartCalc/            Umrechner, Downloadzeit, Stromverbrauch, Zähler
 
 ToolboxWidget/            WidgetKit-Extension (Wassertracker-Widget)
@@ -59,13 +61,23 @@ Config/                   Shared.xcconfig + lokale, nicht versionierte Local.xcc
 
 ## Datenspeicherung
 
-Alle Daten bleiben lokal auf dem Gerät – es gibt keinen Server und keine Netzwerkanfragen. Wassertracker und Widget teilen sich `UserDefaults` über eine App Group:
+Es gibt keinen eigenen Server. Alle Daten liegen lokal in `UserDefaults`; auf Wunsch gleicht die App sie direkt im lokalen WLAN mit dem anderen Gerät ab (`LocalSync`). Wassertracker und Widget teilen sich `UserDefaults` über eine App Group:
 
 - Tagesmenge und Verlauf (max. 400 Tage) für den Wassertracker
 - Glas-/Flaschengröße und Tagesziel
 - Zählerstand, Auto-Zählrate und gespeicherte Zählerstände (im Standard-`UserDefaults`)
 
 Die App Group muss für App- und Widget-Target im Signing aktiviert sein, sonst erreicht das Widget die Daten nicht.
+
+### Sync im lokalen WLAN
+
+`LocalSync.swift` braucht weder Konto noch Developer-Account: Jedes Gerät bietet den Bonjour-Dienst `_toolboxsync._tcp` an und sucht gleichzeitig danach. Beim Verbindungsaufbau schicken beide Seiten ihren Stand samt Zeitstempel; pro Bereich gewinnt der zuletzt geänderte Stand, danach werden Änderungen an alle offenen Verbindungen verteilt. Der Abgleich läuft automatisch, solange die App auf beiden Geräten geöffnet ist und beide im selben WLAN sind (Peer-to-Peer/AWDL ist aktiviert).
+
+Dafür nötig:
+
+- `NSLocalNetworkUsageDescription` und `NSBonjourServices` in `Toolbox/Info.plist` (iOS fragt beim ersten Start nach der Freigabe)
+- `com.apple.security.network.client` und `com.apple.security.network.server` in `Toolbox/Toolbox.entitlements` (Mac-App ist sandboxed)
+- Freigabe in den Einstellungen des Wassertrackers unter „Lokales Netzwerk“, inklusive Status und „Jetzt suchen“
 
 ## Version
 
