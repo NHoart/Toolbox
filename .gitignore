@@ -21,3 +21,6 @@ Carthage/Build/
 *.p12
 *.p8
 *.mobileprovision
+
+# Local repository backups
+*.bundle
