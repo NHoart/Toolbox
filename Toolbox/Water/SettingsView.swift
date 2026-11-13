@@ -2,7 +2,7 @@ import SwiftUI
 import WidgetKit
 
 struct SettingsView: View {
-    @AppStorage(WaterStore.Key.glass, store: WaterStore.defaults) private var glass = 250
+    @AppStorage(WaterStore.Key.glass, store: WaterStore.defaults) private var glass = 200
     @AppStorage(WaterStore.Key.bottle, store: WaterStore.defaults) private var bottle = 500
     @AppStorage(WaterStore.Key.goal, store: WaterStore.defaults) private var goal = 2000
 

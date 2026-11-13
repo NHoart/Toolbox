@@ -29,7 +29,7 @@ struct WaterEntry: TimelineEntry {
 
 struct WaterProvider: TimelineProvider {
     func placeholder(in context: Context) -> WaterEntry {
-        WaterEntry(date: .now, total: 1000, goal: 2000, glass: 250, bottle: 500)
+        WaterEntry(date: .now, total: 1000, goal: 2000, glass: 200, bottle: 500)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (WaterEntry) -> Void) {

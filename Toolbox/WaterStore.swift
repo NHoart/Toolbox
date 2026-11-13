@@ -33,7 +33,7 @@ enum WaterStore {
     }
 
     static var glassML: Int {
-        get { let v = defaults.integer(forKey: Key.glass); return v == 0 ? 250 : v }
+        get { let v = defaults.integer(forKey: Key.glass); return v == 0 ? 200 : v }
         set { defaults.set(newValue, forKey: Key.glass) }
     }
 
