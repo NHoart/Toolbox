@@ -81,7 +81,7 @@ Dafür nötig:
 
 ## Version
 
-Aktuell `1.0` (`MARKETING_VERSION` im Projekt).
+Aktuell `1.1.0` (`MARKETING_VERSION` im Projekt).
 
 ## Lizenz
 
