@@ -22,5 +22,8 @@ Carthage/Build/
 *.p8
 *.mobileprovision
 
+# Lokale Signing-Konfiguration (Developer-Team-ID)
+Config/Local.xcconfig
+
 # Local repository backups
 *.bundle

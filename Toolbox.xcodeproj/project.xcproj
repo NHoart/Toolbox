@@ -1,8 +1,8 @@
 {
   "default-configuration": "Release",
   "configurations": [
-    "Debug",
-    "Release",
+    { "name": "Debug", "file": "Config/Shared.xcconfig" },
+    { "name": "Release", "file": "Config/Shared.xcconfig" },
   ],
   "localizations": {
     "development": "de",
@@ -12,6 +12,13 @@
   },
   "files": [
     { "path": "ToolboxWidgetExtension.entitlements" },
+    {
+      "kind": "group",
+      "name": "Config",
+      "children": [
+        { "path": "Config/Shared.xcconfig" },
+      ],
+    },
     {
       "kind": "folder",
       "path": "Toolbox",

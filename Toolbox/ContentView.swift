@@ -1,6 +1,9 @@
 import SwiftUI
+import WidgetKit
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some View {
         TabView {
             Tab("Heute", systemImage: "drop.fill") {
@@ -26,6 +29,11 @@ struct ContentView: View {
             Tab("Stromverbrauch", systemImage: "bolt.fill") {
                 EnergyCostView()
             }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            // Beim Öffnen der App das Widget nachziehen – nötig für Einträge,
+            // die im Hintergrund (z. B. per Siri) gemacht wurden.
+            if phase == .active { WidgetCenter.shared.reloadAllTimelines() }
         }
     }
 }

@@ -37,9 +37,13 @@ struct WaterProvider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<WaterEntry>) -> Void) {
+        let now = Date()
         // Nächster Update um Mitternacht, damit der Tageszähler zurückspringt
-        let midnight = Calendar.current.startOfDay(for: Date().addingTimeInterval(86400))
-        completion(Timeline(entries: [current()], policy: .after(midnight)))
+        let midnight = Calendar.current.startOfDay(for: now.addingTimeInterval(86400))
+        // Zusätzlich regelmäßig neu laden: Im Hintergrund eingetragene Mengen (z. B. per Siri)
+        // kommen so auch dann an, wenn WidgetKit eine Reload-Anfrage gedrosselt hat.
+        let nextRefresh = min(now.addingTimeInterval(30 * 60), midnight)
+        completion(Timeline(entries: [current()], policy: .after(nextRefresh)))
     }
 
     private func current() -> WaterEntry {

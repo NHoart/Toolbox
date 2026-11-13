@@ -1,0 +1,4 @@
+// Basis-Konfiguration für alle Targets.
+// Die persönliche Developer-Team-ID steht in Local.xcconfig und wird nicht versioniert.
+// Fehlt die Datei (z. B. nach einem frischen Clone), wird sie einfach übersprungen.
+#include? "Local.xcconfig"
