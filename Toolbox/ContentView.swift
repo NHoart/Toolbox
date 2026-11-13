@@ -44,3 +44,38 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
+#if os(macOS)
+/// Zahnrad in der Toolbar, das die Einstellungen als Sheet öffnet – nur in der Mac-App.
+private struct MacSettingsToolbar: ViewModifier {
+    @State private var showSettings = false
+
+    func body(content: Content) -> some View {
+        content
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button { showSettings = true } label: {
+                        Image(systemName: "gearshape")
+                    }
+                    .help("Einstellungen")
+                }
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+            }
+    }
+}
+#endif
+
+extension View {
+    /// Zeigt das Einstellungen-Zahnrad neben der Tableiste. Nur die Mac-App bekommt es,
+    /// iPhone, iPad und Vision Pro bleiben unverändert.
+    @ViewBuilder
+    func macSettingsToolbar() -> some View {
+        #if os(macOS)
+        modifier(MacSettingsToolbar())
+        #else
+        self
+        #endif
+    }
+}

@@ -56,6 +56,7 @@ struct CounterView: View {
         .onDisappear {
             store.stopAutoCounting()
         }
+        .macSettingsToolbar()
     }
 
     // MARK: - Hauptansicht

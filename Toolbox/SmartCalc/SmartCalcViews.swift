@@ -48,6 +48,7 @@ struct UnitConverterView: View {
                     }
                 }
             }
+            .macSettingsToolbar()
         }
     }
 
@@ -137,6 +138,7 @@ struct DownloadTimeView: View {
                     }
                 }
             }
+            .macSettingsToolbar()
         }
     }
 
@@ -203,6 +205,7 @@ struct EnergyCostView: View {
                     }
                 }
             }
+            .macSettingsToolbar()
         }
     }
 

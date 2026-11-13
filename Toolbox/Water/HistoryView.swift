@@ -60,6 +60,7 @@ struct HistoryView: View {
                 }
             }
             .navigationTitle("Verlauf")
+            .macSettingsToolbar()
             .onAppear(perform: refresh)
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active { refresh() }
