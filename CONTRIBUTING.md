@@ -9,13 +9,21 @@ Open-Source-Projekt; die Nutzungsrechte regelt [`LICENSE`](LICENSE).
 1. **Issue aufmachen** (bei größeren Änderungen bitte vorher), damit klar ist,
    ob der Vorschlag in die App passt.
 2. **Forken** und auf einem eigenen Branch arbeiten – nicht direkt auf `main`.
+   (Für den Maintainer gilt das nicht: eigene Änderungen darf er direkt auf
+   `main` pushen.)
 3. **Pull Request** gegen `main` stellen. Kleine, thematisch geschlossene PRs
    lassen sich deutlich schneller prüfen als große Sammeländerungen.
 4. **Review abwarten.** Der Maintainer kann annehmen, ablehnen oder Änderungen
    verlangen. Ein PR ist ein Vorschlag, kein Anspruch auf Übernahme.
 
-`main` ist geschützt: Änderungen kommen nur per Pull Request und nur nach
-ausdrücklicher Freigabe hinein.
+`main` ist geschützt: Löschen und Force-Push sind gesperrt, und Änderungen
+kommen grundsätzlich nur per Pull Request und nur nach ausdrücklicher Freigabe
+hinein – auch das Mergen macht der Maintainer selbst.
+
+Für den Maintainer gilt eine Ausnahme: Als Repository-Admin steht er im
+Bypass des Rulesets `main schützen` und darf eigene Änderungen direkt auf
+`main` pushen, ohne Pull Request. Für alle anderen bleibt es bei Fork, Branch
+und Pull Request.
 
 ## Was gute PRs ausmacht
 
