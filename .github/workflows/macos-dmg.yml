@@ -21,7 +21,7 @@ concurrency:
 jobs:
   dmg:
     name: DMG bauen
-    runs-on: macos-latest
+    runs-on: xcode-27
     steps:
       - name: Repository auschecken
         uses: actions/checkout@v4
