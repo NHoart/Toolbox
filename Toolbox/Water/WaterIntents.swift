@@ -40,9 +40,9 @@ struct LogWaterIntent: AppIntent {
 
     func perform() async throws -> some IntentResult & ProvidesDialog {
         let ml = amount.milliliters
-        WaterStore.add(ml)
-        let total = WaterStore.todayML
-        let goal = WaterStore.goalML
+        await WaterStore.add(ml)
+        let total = await WaterStore.todayML
+        let goal = await WaterStore.goalML
         return .result(dialog: "\(ml) Milliliter eingetragen. Heute: \(total) von \(goal) Millilitern.")
     }
 }
