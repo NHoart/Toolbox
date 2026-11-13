@@ -1,0 +1,29 @@
+name: Swift-Windows-Sync-Interop
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  interop:
+    name: Echter Swift-Client gegen Windows-SyncClient
+    runs-on: macos-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Swift-Sync-Harness bauen
+        run: bash scripts/build-sync-harness.sh
+
+      - name: Swift↔Windows-Interop testen
+        run: node scripts/test-swift-windows-interop.js

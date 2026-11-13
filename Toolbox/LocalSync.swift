@@ -50,6 +50,10 @@ final class LocalSync: ObservableObject {
     }()
 
     private var listener: NWListener?
+
+    /// Port des lokalen Listeners – nur für den headless Interop-Test.
+    var listeningPort: UInt16? { listener?.port?.rawValue }
+
     private var browser: NWBrowser?
     /// Zuletzt gefundene Peers, um fehlende Verbindungen erneut aufzubauen.
     private var lastResults: Set<NWBrowser.Result> = []
@@ -84,6 +88,14 @@ final class LocalSync: ObservableObject {
         guard isEnabled else { return }
         if listener == nil { startListener() }
         if browser == nil { startBrowser() }
+        observeChanges()
+    }
+
+    /// Startet nur den TCP-Listener ohne Bonjour/Browser – für den headless
+    /// Interop-Test. Im normalen App-Betrieb bleibt `start()` unverändert.
+    func startInteropListener() {
+        guard isEnabled else { return }
+        if listener == nil { startListener(advertise: false) }
         observeChanges()
     }
 
@@ -138,10 +150,12 @@ final class LocalSync: ObservableObject {
 
     // MARK: - Bonjour
 
-    private func startListener() {
+    private func startListener(advertise: Bool = true) {
         do {
             let listener = try NWListener(using: parameters)
-            listener.service = NWListener.Service(name: deviceName, type: Self.serviceType)
+            if advertise {
+                listener.service = NWListener.Service(name: deviceName, type: Self.serviceType)
+            }
 
             listener.stateUpdateHandler = { [weak self] state in
                 guard let self else { return }

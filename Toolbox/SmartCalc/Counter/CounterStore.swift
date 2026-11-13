@@ -30,7 +30,7 @@ final class CounterStore: ObservableObject {
                 incrementsPerSecond = clamped
                 return
             }
-            UserDefaults.standard.set(clamped, forKey: Self.rateKey)
+            Self.defaults.set(clamped, forKey: Self.rateKey)
             Self.markChanged()
         }
     }
@@ -45,6 +45,15 @@ final class CounterStore: ObservableObject {
     private static let savedKey = "saved_counters"
     private static let rateKey = "counter_rate"
     private static let updatedKey = "sync.counter.updatedAt"
+
+    /// Der headless Interop-Test isoliert seine Daten über eine eigene Suite.
+    private static let defaults: UserDefaults = {
+        if let testSuite = ProcessInfo.processInfo.environment["TOOLBOX_DEFAULTS_SUITE"],
+           let suite = UserDefaults(suiteName: testSuite) {
+            return suite
+        }
+        return .standard
+    }()
 
     private var history: [Int] = []
 
@@ -63,16 +72,16 @@ final class CounterStore: ObservableObject {
     private static let maxAutoSoundsPerSecond = 10.0
 
     private var historyEnabled: Bool {
-        !UserDefaults.standard.bool(forKey: "disable_history")
+        !Self.defaults.bool(forKey: "disable_history")
     }
 
     init() {
-        count = UserDefaults.standard.integer(forKey: Self.countKey)
+        count = Self.defaults.integer(forKey: Self.countKey)
 
-        let storedRate = UserDefaults.standard.integer(forKey: Self.rateKey)
+        let storedRate = Self.defaults.integer(forKey: Self.rateKey)
         incrementsPerSecond = storedRate > 0 ? min(Self.maxRate, storedRate) : 5
 
-        if let data = UserDefaults.standard.data(forKey: Self.savedKey),
+        if let data = Self.defaults.data(forKey: Self.savedKey),
            let decoded = try? JSONDecoder().decode([SavedCounter].self, from: data) {
             savedCounters = decoded
         }
@@ -112,7 +121,7 @@ final class CounterStore: ObservableObject {
     func undo() {
         guard historyEnabled, let previous = history.popLast() else { return }
         count = previous
-        UserDefaults.standard.set(count, forKey: Self.countKey)
+        Self.defaults.set(count, forKey: Self.countKey)
         Self.markChanged()
         HapticManager.shared.impactOccurred()
     }
@@ -123,7 +132,7 @@ final class CounterStore: ObservableObject {
             history.append(count)
         }
         count = newValue
-        UserDefaults.standard.set(count, forKey: Self.countKey)
+        Self.defaults.set(count, forKey: Self.countKey)
         Self.markChanged()
     }
 
@@ -156,7 +165,7 @@ final class CounterStore: ObservableObject {
         autoTimer?.invalidate()
         autoTimer = nil
         autoRemainder = 0
-        UserDefaults.standard.set(count, forKey: Self.countKey)
+        Self.defaults.set(count, forKey: Self.countKey)
         Self.markChanged()
 
         // Undo macht den kompletten automatischen Lauf rückgängig.
@@ -184,7 +193,7 @@ final class CounterStore: ObservableObject {
         let now = Date()
         if now.timeIntervalSince(lastAutoPersist) >= 0.5 {
             lastAutoPersist = now
-            UserDefaults.standard.set(count, forKey: Self.countKey)
+            Self.defaults.set(count, forKey: Self.countKey)
         }
     }
 
@@ -229,7 +238,7 @@ final class CounterStore: ObservableObject {
 
     private func persistSaved() {
         if let data = try? JSONEncoder().encode(savedCounters) {
-            UserDefaults.standard.set(data, forKey: Self.savedKey)
+            Self.defaults.set(data, forKey: Self.savedKey)
         }
         Self.markChanged()
     }
@@ -238,20 +247,20 @@ final class CounterStore: ObservableObject {
 
     /// Zeitpunkt der letzten lokalen Änderung (für den Abgleich).
     static var updatedAt: Date? {
-        get { UserDefaults.standard.object(forKey: updatedKey) as? Date }
+        get { Self.defaults.object(forKey: updatedKey) as? Date }
         set {
             if let newValue {
-                UserDefaults.standard.set(newValue, forKey: updatedKey)
+                Self.defaults.set(newValue, forKey: updatedKey)
             } else {
-                UserDefaults.standard.removeObject(forKey: updatedKey)
+                Self.defaults.removeObject(forKey: updatedKey)
             }
         }
     }
 
     /// Gibt es überhaupt Daten, die sich zu synchronisieren lohnen?
     static var hasData: Bool {
-        if UserDefaults.standard.integer(forKey: countKey) != 0 { return true }
-        guard let data = UserDefaults.standard.data(forKey: savedKey),
+        if Self.defaults.integer(forKey: countKey) != 0 { return true }
+        guard let data = Self.defaults.data(forKey: savedKey),
               let decoded = try? JSONDecoder().decode([SavedCounter].self, from: data) else {
             return false
         }
@@ -268,17 +277,17 @@ final class CounterStore: ObservableObject {
 
     static func syncSnapshot() -> SyncSnapshot {
         let stored: [SavedCounter]
-        if let data = UserDefaults.standard.data(forKey: savedKey),
+        if let data = Self.defaults.data(forKey: savedKey),
            let decoded = try? JSONDecoder().decode([SavedCounter].self, from: data) {
             stored = decoded
         } else {
             stored = []
         }
 
-        let storedRate = UserDefaults.standard.integer(forKey: rateKey)
+        let storedRate = Self.defaults.integer(forKey: rateKey)
 
         return SyncSnapshot(
-            count: UserDefaults.standard.integer(forKey: countKey),
+            count: Self.defaults.integer(forKey: countKey),
             savedCounters: stored,
             rate: storedRate > 0 ? min(maxRate, storedRate) : 5,
             // Ohne Änderungszeit gilt der Stand als alt: Ein frisches Gerät
@@ -289,7 +298,7 @@ final class CounterStore: ObservableObject {
 
     /// Übernimmt einen fremden Stand, ohne ihn als neue lokale Änderung zu markieren.
     static func applySync(_ snapshot: SyncSnapshot) {
-        let defaults = UserDefaults.standard
+        let defaults = Self.defaults
         defaults.set(snapshot.count, forKey: countKey)
         if let data = try? JSONEncoder().encode(snapshot.savedCounters) {
             defaults.set(data, forKey: savedKey)
@@ -317,15 +326,15 @@ final class CounterStore: ObservableObject {
         isApplyingRemote = true
         defer { isApplyingRemote = false }
 
-        count = UserDefaults.standard.integer(forKey: Self.countKey)
-        if let data = UserDefaults.standard.data(forKey: Self.savedKey),
+        count = Self.defaults.integer(forKey: Self.countKey)
+        if let data = Self.defaults.data(forKey: Self.savedKey),
            let decoded = try? JSONDecoder().decode([SavedCounter].self, from: data) {
             savedCounters = decoded
         } else {
             savedCounters = []
         }
 
-        let storedRate = UserDefaults.standard.integer(forKey: Self.rateKey)
+        let storedRate = Self.defaults.integer(forKey: Self.rateKey)
         incrementsPerSecond = storedRate > 0 ? min(Self.maxRate, storedRate) : 5
     }
 }

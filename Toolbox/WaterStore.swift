@@ -7,6 +7,11 @@ enum WaterStore {
     static let appGroupID = "group.com.noahsapps.Wassertracker"
 
     static let defaults: UserDefaults = {
+        // Der headless Interop-Test isoliert seine Daten über eine eigene Suite.
+        if let testSuite = ProcessInfo.processInfo.environment["TOOLBOX_DEFAULTS_SUITE"],
+           let d = UserDefaults(suiteName: testSuite) {
+            return d
+        }
         guard let d = UserDefaults(suiteName: appGroupID) else {
             assertionFailure("App Group '\(appGroupID)' nicht verfügbar. Capability in App- UND Widget-Target prüfen!")
             return .standard

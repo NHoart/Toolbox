@@ -87,6 +87,17 @@ npm run dist       # Installer unter windows/dist/Toolbox-Setup.exe
 
 Der Installer wird regulär im Workflow auf `windows-latest` gebaut. `npm run dist` funktioniert auch auf einem Mac, sofern die Windows-Build-Werkzeuge von electron-builder verfügbar sind.
 
+### Echten Swift↔Windows-Sync testen
+
+Der Interop-Test kompiliert den echten Apple-Sync-Code (`Toolbox/LocalSync.swift`, `WaterStore` und `CounterStore`) als headless CLI und verbindet ihn über TCP mit dem echten Windows-`SyncService` aus `windows/src/sync.js`:
+
+```bash
+bash scripts/build-sync-harness.sh
+node scripts/test-swift-windows-interop.js
+```
+
+Der Test prüft Swift v1 → Windows, Swift v2 → Windows, die Rückrichtung Windows → Swift, die Zeitstempel und am Ende alle Felder der Wasser- und Zähler-Snapshots inklusive eines gespeicherten Zählerstands. Das Wire-Format wird direkt vom echten Swift-`LocalSync` erzeugt und vom echten Windows-Client gelesen – es gibt keine handgeschriebenen Fixtures. Haptik und Ton sind im Harness No-Ops; der Test-Listener läuft ohne Bonjour, damit keine echten Geräte im Netzwerk angezogen werden. In CI läuft er unter `.github/workflows/sync-interop.yml` auf `macos-latest`.
+
 ### DMG lokal bauen
 
 ```bash
@@ -128,6 +139,9 @@ windows/                  Windows-App (Electron, JavaScript)
 ├── src/sync.js           Bonjour + TCP, Mehrgeräte-Abgleich
 ├── renderer/             Oberfläche (HTML/CSS/JS)
 └── test/                 Protokoll-, Speicher- und Sync-Tests
+
+swift-sync-harness/       Headless-CLI für den echten Swift-Sync
+scripts/                  Build-Skripte und Swift↔Windows-Interop-Test
 ```
 
 ## Datenspeicherung
