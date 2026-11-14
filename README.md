@@ -155,7 +155,7 @@ Der Workflow `.github/workflows/macos-dmg.yml` baut die DMG automatisch und hän
 
 Der Workflow `.github/workflows/windows-exe.yml` baut zusätzlich `Toolbox-Setup.exe` auf `windows-latest`, führt die Tests aus und hängt den Installer samt `latest.yml` und Blockmap an denselben Release – diese beiden Dateien braucht der Windows-Auto-Updater. Außerdem erzeugt er aus dem gebauten Installer die winget-Manifeste, prüft sie mit `winget validate` und legt sie als Artefakt `Toolbox-winget` ab. Ein Tag-Build erzeugt also beide Downloads; ein manueller Lauf von „macOS DMG“ stößt den Windows-Workflow für denselben Release automatisch mit an. Beide Workflows prüfen nach dem Upload automatisch, dass `Toolbox.dmg`, `Toolbox-Setup.exe` und `latest.yml` am Release hängen; fehlt ein Asset, schlägt der Lauf fehl.
 
-Die Release-Notes (`.github/macos-release-notes.md` und `.github/windows-release-notes.md`) beginnen mit einer Download-Tabelle, damit die Assets ganz oben im Release stehen. Vor dem Anlegen des Releases ersetzt der jeweilige Workflow die Platzhalter `{{REPO}}` und `{{TAG}}` durch Repository und Tag.
+Die Release-Notes (`.github/macos-release-notes.md` und `.github/windows-release-notes.md`) beginnen mit einer Tabelle der Installationswege, damit die Downloads ganz oben im Release stehen. Vor dem Anlegen des Releases ersetzt der jeweilige Workflow die Platzhalter `{{REPO}}` und `{{TAG}}` durch Repository und Tag.
 
 Vor einem Release `MARKETING_VERSION` (und `CURRENT_PROJECT_VERSION`) im Projekt sowie `version` in `windows/package.json` erhöhen – der Update-Check und die Release-Tags vergleichen diese Versionen.
 

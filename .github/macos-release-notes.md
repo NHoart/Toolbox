@@ -1,10 +1,10 @@
-## Downloads
+## Installationswege
 
-| Plattform | Installation |
+| Weg | Installation |
 | --- | --- |
 | **macOS** 27.2 oder neuer (Apple Silicon) | [Toolbox.dmg](https://github.com/{{REPO}}/releases/download/{{TAG}}/Toolbox.dmg) |
 | **Windows** 10/11, 64 Bit | [Toolbox-Setup.exe](https://github.com/{{REPO}}/releases/download/{{TAG}}/Toolbox-Setup.exe) |
-| **Windows** 10/11, 64 Bit (winget) | `winget install --id NHoart.Toolbox -e` |
+| **winget** (Windows 10/11) | `winget install --id NHoart.Toolbox -e` |
 
 Dieselben Dateien hängen unten unter **Assets** am Release.
 
