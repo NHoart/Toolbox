@@ -6,7 +6,7 @@ zusätzlich `winget install --id NHoart.Toolbox -e`.
 
 ## Was hier liegt
 
-`manifests/` enthält den vorbereiteten Stand für 3.3.0 in genau der Struktur,
+`manifests/` enthält den vorbereiteten Stand für 3.3.1 in genau der Struktur,
 die das Community-Repository erwartet
 (`manifests/<Anfangsbuchstabe>/<Publisher>/<Paket>/<Version>/`).
 
@@ -36,7 +36,7 @@ npm run winget:manifest
 ## Einmalig veröffentlichen
 
 1. `microsoft/winget-pkgs` forken.
-2. Den Ordner `manifests/n/NHoart/Toolbox/3.3.0` unverändert in den Fork
+2. Den Ordner `manifests/n/NHoart/Toolbox/3.3.1` unverändert in den Fork
    übernehmen.
 3. Auf Windows mit `winget validate --manifest <Pfad>` prüfen.
 4. Pull Request gegen `microsoft/winget-pkgs` stellen. Beim ersten Beitrag wird
