@@ -18,13 +18,7 @@ Die Mac-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neue
 
 Für iPhone und iPad gibt es kein fertiges IPA im Release und keinen App-Store-Download – die iOS-App wird mit Xcode aus dem Quellcode direkt aufs Gerät gebaut. Nötig sind ein Mac mit Xcode 27.2 oder neuer und ein iPhone oder iPad mit iOS/iPadOS 27.2 oder neuer.
 
-1. Repository klonen und die eigene Team-ID hinterlegen:
-   ```bash
-   git clone https://github.com/NHoart/Toolbox.git
-   cd Toolbox
-   printf 'DEVELOPMENT_TEAM = XXXXXXXXXX\n' > Config/Local.xcconfig
-   ```
-   Die Team-ID steht in Xcode unter **Settings → Accounts** hinter dem angemeldeten Apple-Account. Für die App Group unten braucht es ein kostenpflichtiges Developer-Team.
+1. Repository klonen und die eigene Team-ID in `Config/Local.xcconfig` hinterlegen – den Befehl nennt [Bauen und Starten](#bauen-und-starten), die Team-ID steht in Xcode unter **Settings → Accounts** hinter dem angemeldeten Apple-Account. Für die App Group unten braucht es ein kostenpflichtiges Developer-Team.
 2. `Toolbox.xcodeproj` öffnen, das Schema `Toolbox` wählen und als Ziel das per Kabel oder WLAN verbundene iPhone bzw. iPad auswählen.
 3. Am Gerät den Entwicklermodus einschalten: **Einstellungen → Datenschutz & Sicherheit → Entwicklermodus**, das iPhone neu starten und den Modus nach dem Entsperren bestätigen. Ohne ihn startet die App nicht.
 4. **Run** (⌘R) drücken. Beim ersten Start fragt iOS nach der Freigabe für **Lokales Netzwerk** – erlauben, sonst findet der Abgleich im WLAN keine anderen Geräte.
@@ -48,11 +42,9 @@ winget install --id NHoart.Toolbox -e
 
 Die Manifeste dafür liegen unter [`windows/winget`](windows/winget).
 
-Die Windows-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Ist sie installiert, lädt sie den neuen Installer, prüft die im Release hinterlegte SHA-512-Prüfsumme und installiert das Update im Hintergrund; danach startet sie neu. Manuell geht das über **Einstellungen → Updates**; abschalten lässt sich die automatische Prüfung dort ebenfalls.
+Die Microsoft-Store-Fassung ist eine zusätzliche Installationsart und ersetzt weder Installer noch winget. Sobald sie veröffentlicht ist, steht der Store-Link in den Release-Notes neuer Releases; für das bereits veröffentlichte 3.3.1 wird er einmal manuell ergänzt. Einrichtung und Einreichung sind unter [`windows/store`](windows/store/README.md) beschrieben.
 
-**Einmalig von 3.1.x:** Die Windows-Versionen 3.1.0 und 3.1.1 enthalten den Updater noch nicht. Wer von dort kommt, lädt einmalig `Toolbox-Setup.exe` von der [Releases-Seite](https://github.com/NHoart/Toolbox/releases) und installiert sie über die bestehende Installation – Deinstallieren ist nicht nötig, die Daten bleiben erhalten. Da der Installer nicht signiert ist, kann der Defender SmartScreen dabei warnen – über **Weitere Informationen → Trotzdem ausführen** startet er trotzdem. Ab 3.2.0 übernimmt das Auto-Update.
-
-Die wichtigsten Schritte für Installation und Drei-Geräte-Abgleich stehen in der [Checkliste](#checkliste-erster-start-und-drei-geräte-sync).
+Die Windows-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Ist sie installiert, lädt sie den neuen Installer, prüft die im Release hinterlegte SHA-512-Prüfsumme und installiert das Update im Hintergrund; danach startet sie neu. Manuell geht das über **Einstellungen → Updates**; abschalten lässt sich die automatische Prüfung dort ebenfalls. Die Microsoft-Store-Fassung aktualisiert sich über den Store; die GitHub-Update-Prüfung ist dort deaktiviert.
 
 ## Funktionen
 
@@ -113,21 +105,22 @@ npm start          # App lokal starten
 npm test           # Protokoll-, Speicher- und Sync-Tests inkl. Drei-Client-Kette
 npm run smoke:sync # Headless-Smoke-Test des Sync-Clients
 npm run dist       # Installer unter windows/dist/Toolbox-Setup.exe
+npm run dist:store # AppX für den Microsoft Store (Windows/Parallels)
 npm run winget:manifest # winget-Manifeste unter windows/dist/winget
 ```
 
-Der Installer wird regulär im Workflow auf `windows-latest` gebaut. `npm run dist` funktioniert auch auf einem Mac, sofern die Windows-Build-Werkzeuge von electron-builder verfügbar sind.
+Der Installer wird regulär im Workflow auf `windows-latest` gebaut. `npm run dist` funktioniert auch auf einem Mac, sofern die Windows-Build-Werkzeuge von electron-builder verfügbar sind. `npm run dist:store` baut die Store-Fassung als AppX; die Identität steht in `windows/store/store.config.json`, und der NSIS-Installer bleibt davon unberührt. Details: [`windows/store/README.md`](windows/store/README.md).
 
-### Echten Drei-Geräte-Sync testen
+### Sync zwischen Swift und Windows testen
 
-Der Interop-Test kompiliert den echten Apple-Sync-Code (`Toolbox/LocalSync.swift`, `WaterStore` und `CounterStore`) als headless CLI. Zwei unabhängige Prozesse – A=Mac und B=iPhone, jeweils mit eigener Defaults-Suite – verbinden sich gleichzeitig mit dem echten Windows-`SyncService` aus `windows/src/sync.js`, der als Relay und Store dient:
+Der Interop-Test kompiliert den echten Apple-Sync-Code als headless CLI und verbindet zwei unabhängige Prozesse (Mac und iPhone) mit dem echten Windows-`SyncService` aus `windows/src/sync.js` als Relay und Store:
 
 ```bash
 bash scripts/build-sync-harness.sh
 node scripts/test-swift-windows-interop.js
 ```
 
-Der Test prüft: A legt v1 an, Windows und B erhalten sie; A ändert auf v2, Windows und B erhalten sie, ohne dass B selbst schreibt; Windows ändert auf 850 ml/Zähler 2, beide Swift-Clients erhalten den Stand. Danach wird die echte, zuvor von A erzeugte v2-Wire-Zeile verspätet an Windows und B geschickt und muss dort verworfen werden. Am Ende werden alle Snapshot-Felder verglichen, inklusive Verlauf, `recentAdds`, Tag, Größen und einem gespeicherten Zählerstand. Das Wire-Format wird direkt vom echten Swift-`LocalSync` erzeugt und vom echten Windows-Client gelesen – es gibt keine handgeschriebenen Fixtures. Haptik und Ton sind im Harness No-Ops; die Listener laufen ohne Bonjour, damit keine echten Geräte im Netzwerk angezogen werden. In CI läuft der Drei-Peer-Test unter `.github/workflows/sync-interop.yml` auf `macos-latest`. Der iOS-Build nutzt den `xcode-27`-Runner (Xcode 27.2), weil `macos-latest` derzeit Xcode 26.6 und damit das neue `project.xcproj`-Format nicht lesen kann.
+Der Test prüft, dass Änderungen von jedem Peer zu den anderen gelangen, verspätete alte Stände verworfen werden und am Ende alle Snapshot-Felder übereinstimmen. Das Wire-Format stammt direkt aus dem echten Swift-`LocalSync`; es gibt keine handgeschriebenen Fixtures. In CI läuft der Test unter `.github/workflows/sync-interop.yml` auf `macos-latest`.
 
 Der iOS-Build des App-Targets lässt sich mit folgendem Befehl prüfen:
 
@@ -136,25 +129,6 @@ xcodebuild -quiet -project Toolbox.xcodeproj -scheme Toolbox -configuration Debu
   -destination 'generic/platform=iOS' -derivedDataPath build/xcode-ios \
   CODE_SIGNING_ALLOWED=NO build
 ```
-
-### Release-Nachweis der Drei-Geräte-Kette (3.1.0)
-
-Der Test `scripts/test-release-sync-chain.js` prüft die Kette mit den veröffentlichten Artefakten statt mit Development-Builds:
-
-- **macOS 3.1.0** aus `Toolbox.dmg`
-- **iOS 3.1.0** aus dem Tag `v3.1.0`, für den Simulator gebaut (ein IPA ist nicht Teil des Releases)
-- **Windows 3.1.0** aus `Toolbox-Setup.exe`; der echte `ToolboxStore` und `SyncService` aus dem extrahierten `app.asar` laufen als Node-Peer
-
-Der Windows-Client läuft dabei als Prozess, weil Electron nicht nativ auf macOS läuft. Geprüft wird der veröffentlichte Store- und Sync-Code aus dem Installer, nicht die Windows-Oberfläche.
-
-```bash
-bash scripts/prepare-release-sync-test.sh
-node scripts/test-release-sync-chain.js
-```
-
-Das Vorbereitungsskript lädt fehlende Release-Dateien von GitHub, mountet die DMG, entpackt den Installer und baut die iOS-App aus dem Tag. Der Test prüft Mac→iPhone, anschließend iPhone→Windows ohne Mac, drei gleichzeitige Peers mit Updates von jedem Gerät sowie einen verspäteten alten Mac-Stand, der nicht gewinnen darf. Verlauf, Mengen, Größen und gespeicherte Zählerstände werden mitverglichen.
-
-Weiterhin nur auf echter Hardware prüfbar bleiben die native Windows-Oberfläche und Installation, SmartScreen/Firewall, die iOS-Freigabe „Lokales Netzwerk“ sowie echtes Bonjour/WLAN zwischen physischen Geräten.
 
 ### DMG lokal bauen
 
@@ -166,16 +140,9 @@ Das Skript baut die macOS-App (`Release`, Apple Silicon), signiert sie ad-hoc un
 
 ### Release veröffentlichen
 
-Der Workflow `.github/workflows/macos-dmg.yml` baut die DMG automatisch und hängt sie an ein GitHub-Release:
+`git tag v1.2.0 && git push origin v1.2.0` erzeugt ein Release `v1.2.0` mit DMG und Installer. Alternativ über **Actions → „macOS DMG“ → Run workflow** ein Release `v<Version>` aus dem aktuellen Stand bauen; der Windows-Workflow wird dabei automatisch mit angestoßen.
 
-- **Tag pushen**: `git tag v1.2.0 && git push origin v1.2.0` → Release `v1.2.0` mit `Toolbox.dmg`
-- **Actions → „macOS DMG“ → Run workflow** → Release `v<Version>` mit dem aktuellen Stand, erreichbar über den Download-Link oben
-
-Der Workflow `.github/workflows/windows-exe.yml` baut zusätzlich `Toolbox-Setup.exe` auf `windows-latest`, führt die Tests aus und hängt den Installer samt `latest.yml` und Blockmap an denselben Release – diese beiden Dateien braucht der Windows-Auto-Updater. Außerdem erzeugt er aus dem gebauten Installer die winget-Manifeste, prüft sie mit `winget validate` und legt sie als Artefakt `Toolbox-winget` ab. Ein Tag-Build erzeugt also beide Downloads; ein manueller Lauf von „macOS DMG“ stößt den Windows-Workflow für denselben Release automatisch mit an. Beide Workflows prüfen nach dem Upload automatisch, dass `Toolbox.dmg`, `Toolbox-Setup.exe` und `latest.yml` am Release hängen; fehlt ein Asset, schlägt der Lauf fehl.
-
-Die Release-Notes (`.github/macos-release-notes.md` und `.github/windows-release-notes.md`) beginnen mit einer Tabelle der Installationswege, damit die Downloads ganz oben im Release stehen. Vor dem Anlegen des Releases ersetzt der jeweilige Workflow die Platzhalter `{{REPO}}` und `{{TAG}}` durch Repository und Tag.
-
-Vor einem Release `MARKETING_VERSION` (und `CURRENT_PROJECT_VERSION`) im Projekt sowie `version` in `windows/package.json` erhöhen – der Update-Check und die Release-Tags vergleichen diese Versionen.
+Die Release-Notes (`.github/macos-release-notes.md` und `.github/windows-release-notes.md`) beginnen mit einer Tabelle der Installationswege. Der jeweilige Workflow ersetzt die Platzhalter `{{REPO}}`, `{{TAG}}` und `{{STORE_ROW}}`; `{{STORE_ROW}}` wird aus der Repository-Variable `STORE_URL` gesetzt und entfällt ohne URL. Vor einem Release `MARKETING_VERSION` (und `CURRENT_PROJECT_VERSION`) im Projekt sowie `version` in `windows/package.json` erhöhen – der Update-Check und die Release-Tags vergleichen diese Versionen.
 
 ## Projektstruktur
 
@@ -199,6 +166,7 @@ windows/                  Windows-App (Electron, JavaScript)
 ├── src/sync.js           Bonjour + TCP, Mehrgeräte-Abgleich
 ├── src/updater.js        Tägliche Update-Prüfung und Installation
 ├── renderer/             Oberfläche (HTML/CSS/JS)
+├── store/                Store-Identität und Einreichungs-Anleitung
 └── test/                 Protokoll-, Speicher- und Sync-Tests
 
 swift-sync-harness/       Headless-CLI für den echten Swift-Sync
@@ -213,7 +181,7 @@ Es gibt keinen eigenen Server. Alle Daten bleiben lokal; auf Wunsch gleicht die 
 - Glas-/Flaschengröße und Tagesziel
 - Zählerstand, Auto-Zählrate und gespeicherte Zählerstände (im Standard-`UserDefaults`)
 
-Die App Group muss für App- und Widget-Target im Signing aktiviert sein, sonst erreicht das Widget die Daten nicht. Die Windows-App speichert denselben Stand in `%APPDATA%\Toolbox\data.json`.
+Die Windows-App speichert denselben Stand in `%APPDATA%\Toolbox\data.json`. Bei der Microsoft-Store-Fassung liegt der userData-Pfad im paketierten AppData-Bereich; beim ersten Start wird eine vorhandene Datei aus `%APPDATA%\Toolbox\data.json` automatisch übernommen.
 
 ### Sync im lokalen WLAN (Mac, iPhone, Windows)
 
@@ -240,31 +208,10 @@ Trage in den Einstellungen unter **Lokales Netzwerk** auf allen Geräten denselb
 
 Umsetzung: `Toolbox/LocalSync.swift` (Apple) und `windows/src/sync.js` (Windows). Beide verwenden dasselbe Zeilen-JSON-Format mit Swift-Referenzzeitstempeln.
 
-## Checkliste: Erster Start und Drei-Geräte-Sync
+## Datenschutz
 
-**Windows installieren**
-- [ ] `Toolbox-Setup.exe` aus `windows/dist` oder dem GitHub-Release starten.
-- [ ] SmartScreen gegebenenfalls über **Weitere Informationen → Trotzdem ausführen** bestätigen.
-- [ ] Beim ersten Start die Firewall-Freigabe für **Private Netzwerke** erlauben; das WLAN muss als „Privat“ eingestuft sein.
-- [ ] Toolbox öffnen, unter **Einstellungen → Lokales Netzwerk** denselben Namen wie auf den anderen Geräten eintragen und prüfen, dass „Sync im WLAN“ an ist.
-
-**Mac, iPhone und Windows verbinden**
-- [ ] Alle Geräte müssen im selben WLAN sein; Client-Isolation im Router ausschalten.
-- [ ] Toolbox auf allen Geräten öffnen; auf dem iPhone/iPad **Lokales Netzwerk** erlauben.
-- [ ] Auf allen Geräten unter **Einstellungen → Lokales Netzwerk** denselben Namen eintragen.
-- [ ] Auf allen Geräten **Jetzt suchen** wählen; die anderen Geräte werden als verbunden angezeigt.
-- [ ] Mac → iPhone: Wasser oder Zähler auf dem Mac ändern und den Stand auf dem iPhone prüfen.
-- [ ] Später iPhone → Windows: Toolbox auf dem PC öffnen/verbinden; der PC übernimmt den aktuellen Stand automatisch.
-- [ ] Drei Geräte gleichzeitig: Eine Änderung auf einem Gerät erscheint auf den beiden anderen.
-
-**Wenn nichts ankommt**
-- [ ] „Jetzt suchen“ erneut ausführen und Firewall sowie Netzwerkprofil prüfen.
-- [ ] Uhrzeit auf allen Geräten automatisch synchronisieren lassen.
-- [ ] Toolbox auf allen Geräten neu starten und die aktuelle Fassung installieren.
-
-## Version
-
-Aktuell `3.3.1` (`MARKETING_VERSION` im Projekt).
+Toolbox speichert alle Daten lokal und gleicht sie nur im lokalen WLAN ab.
+Details: [`PRIVACY.md`](PRIVACY.md).
 
 ## Lizenz
 
