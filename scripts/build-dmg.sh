@@ -57,11 +57,19 @@ mkdir -p "$STAGING_DIR"
 cp -R "$APP_PATH" "$STAGING_DIR/"
 ln -s /Applications "$STAGING_DIR/Applications"
 
-hdiutil create \
-  -volname "$APP_NAME" \
-  -srcfolder "$STAGING_DIR" \
-  -ov \
-  -format UDZO \
-  "$DMG_PATH"
+if command -v diskutil >/dev/null 2>&1; then
+  diskutil image create from \
+    --format UDZO \
+    --volumeName "$APP_NAME" \
+    "$STAGING_DIR" \
+    "$DMG_PATH"
+else
+  hdiutil create \
+    -volname "$APP_NAME" \
+    -srcfolder "$STAGING_DIR" \
+    -ov \
+    -format UDZO \
+    "$DMG_PATH"
+fi
 
 echo "Fertig: $DMG_PATH"
