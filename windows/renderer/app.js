@@ -69,6 +69,8 @@ let sizeTimer = null
 let toastTimer = null
 let amountValue = null
 let lastRenderedWater = null
+let updateState = null
+let promptedUpdateVersion = null
 
 // ------------------------------------------------------------------ Start
 
@@ -89,6 +91,7 @@ async function init() {
   bindEnergy()
   bindCounter()
   bindSettings()
+  bindUpdates()
   bindModals()
   bindKeyboard()
   buildAmountPresets()
@@ -99,8 +102,10 @@ async function init() {
     state.counter.count = payload.count
     if (activeTab === 'counter') renderCounterValue()
   })
+  api.onUpdateChanged(next => applyUpdateState(next))
 
   await refresh()
+  await refreshUpdate()
   setTab('today')
 }
 
@@ -618,6 +623,25 @@ function bindSettings() {
   })
 }
 
+function bindUpdates() {
+  $('autoUpdateToggle').addEventListener('change', event => {
+    const enabled = event.target.checked
+    runUpdate(api.update.setAutomatic(enabled))
+    toast(enabled ? 'Automatische Update-Prüfung eingeschaltet' : 'Automatische Update-Prüfung ausgeschaltet')
+  })
+
+  $('checkUpdates').addEventListener('click', () => {
+    if (updateState && updateState.update) {
+      openModal('updateModal', $('checkUpdates'))
+      return
+    }
+    runUpdate(api.update.check())
+  })
+
+  $('updateLater').addEventListener('click', () => closeModal('updateModal'))
+  $('updateInstall').addEventListener('click', () => runUpdate(api.update.install()))
+}
+
 function openSettings() {
   settingsOpen = true
   renderSettings()
@@ -664,6 +688,7 @@ function renderSettings() {
   }
 
   $('versionText').textContent = `Version ${state.version || ''}`
+  renderUpdateSection()
 }
 
 function renderSettingsValues() {
@@ -793,7 +818,7 @@ function closeModal(id) {
 }
 
 function closeTopModal() {
-  const ids = ['settingsModal', 'amountModal', 'saveModal']
+  const ids = ['settingsModal', 'amountModal', 'saveModal', 'updateModal']
   for (const id of [...ids].reverse()) {
     if (!$(id).hidden) {
       closeModal(id)
@@ -889,6 +914,105 @@ function bindKeyboard() {
       if (!settingsOpen) openSettings()
     }
   })
+}
+
+// -------------------------------------------------------------------- Updates
+
+async function refreshUpdate() {
+  try {
+    const next = await api.update.getState()
+    if (next) applyUpdateState(next)
+  } catch (error) {
+    console.error('Update-Status konnte nicht geladen werden:', error)
+  }
+}
+
+function applyUpdateState(next) {
+  updateState = next
+  renderUpdateSection()
+  renderUpdateModal()
+
+  if (!next.update) {
+    if (!$('updateModal').hidden) closeModal('updateModal')
+    return
+  }
+
+  // Nur einmal pro gefundener Version automatisch öffnen; „Später“ bleibt so bestehen.
+  if (next.update.version !== promptedUpdateVersion) {
+    promptedUpdateVersion = next.update.version
+    if ($('updateModal').hidden) openModal('updateModal', $('checkUpdates'))
+  }
+}
+
+function renderUpdateSection() {
+  if (!updateState) return
+
+  const toggle = $('autoUpdateToggle')
+  toggle.checked = Boolean(updateState.automaticChecks)
+  toggle.disabled = Boolean(updateState.installing)
+
+  $('updateStatus').textContent = updateStatusText()
+
+  const error = $('updateError')
+  error.hidden = !updateState.error
+  error.textContent = updateState.error || ''
+
+  const button = $('checkUpdates')
+  button.textContent = updateState.update
+    ? `Update ${updateState.update.version} installieren`
+    : 'Jetzt nach Updates suchen'
+  button.disabled = Boolean(updateState.checking || updateState.installing)
+}
+
+function updateStatusText() {
+  if (updateState.installing) {
+    return typeof updateState.progress === 'number'
+      ? `Wird geladen … ${Math.round(updateState.progress * 100)} %`
+      : 'Wird installiert…'
+  }
+  if (updateState.checking) return 'Suche nach Updates…'
+  if (updateState.update) return `Version ${updateState.update.version} verfügbar`
+  if (updateState.error) return 'Prüfung fehlgeschlagen'
+  if (updateState.upToDate) return `Aktuell (Version ${updateState.currentVersion})`
+  return `Version ${updateState.currentVersion}`
+}
+
+function renderUpdateModal() {
+  const update = updateState && updateState.update
+  if (!update) return
+
+  $('updateSubtitle').textContent =
+    `Version ${update.version} ist verfügbar – du benutzt ${updateState.currentVersion}.`
+  $('updateNotes').textContent = (update.notes || '').trim() || 'Keine Versionshinweise angegeben.'
+
+  const error = $('updateInstallError')
+  error.hidden = !updateState.error
+  error.textContent = updateState.error || ''
+
+  const installing = Boolean(updateState.installing)
+  $('updateLater').disabled = installing
+  $('updateInstall').hidden = installing
+  $('updateProgress').hidden = !installing
+
+  if (!installing) return
+
+  const percent = typeof updateState.progress === 'number'
+    ? Math.round(updateState.progress * 100)
+    : 100
+  $('updateProgressBar').style.width = `${percent}%`
+  $('updateProgressText').textContent = percent < 100
+    ? `Wird geladen … ${percent} %`
+    : 'Wird installiert…'
+}
+
+async function runUpdate(promise) {
+  try {
+    const next = await promise
+    if (next) applyUpdateState(next)
+  } catch (error) {
+    console.error('Update-Aktion fehlgeschlagen:', error)
+    toast('Update-Aktion fehlgeschlagen')
+  }
 }
 
 // ------------------------------------------------------------------ Helfer

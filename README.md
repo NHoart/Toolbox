@@ -22,6 +22,8 @@ Die Windows-App gibt es als Installer direkt von GitHub:
 
 Windows 10/11 (64 Bit). Nach dem Download den Installer ausführen; die Installation läuft ohne Administratorrechte im Benutzerprofil. Der Installer ist nicht signiert, deshalb kann SmartScreen beim ersten Start warnen – über **Weitere Informationen → Trotzdem ausführen** startet die App trotzdem.
 
+Die Windows-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Ist sie installiert, lädt sie den neuen Installer, prüft die im Release hinterlegte SHA-512-Prüfsumme und installiert das Update im Hintergrund; danach startet sie neu. Manuell geht das über **Einstellungen → Updates**; abschalten lässt sich die automatische Prüfung dort ebenfalls.
+
 Die wichtigsten Schritte für Installation und Drei-Geräte-Abgleich stehen in der [Checkliste](#checkliste-erster-start-und-drei-geräte-sync).
 
 ## Funktionen
@@ -140,7 +142,7 @@ Der Workflow `.github/workflows/macos-dmg.yml` baut die DMG automatisch und hän
 - **Tag pushen**: `git tag v1.2.0 && git push origin v1.2.0` → Release `v1.2.0` mit `Toolbox.dmg`
 - **Actions → „macOS DMG“ → Run workflow** → Release `v<Version>` mit dem aktuellen Stand, erreichbar über den Download-Link oben
 
-Der Workflow `.github/workflows/windows-exe.yml` baut zusätzlich `Toolbox-Setup.exe` auf `windows-latest`, führt die Tests aus und hängt den Installer an denselben Release. Ein Tag-Build erzeugt also beide Downloads; ein manueller Lauf von „macOS DMG“ stößt den Windows-Workflow für denselben Release automatisch mit an. Beide Workflows prüfen nach dem Upload automatisch, dass `Toolbox.dmg` und `Toolbox-Setup.exe` am Release hängen; fehlt ein Asset, schlägt der Lauf fehl.
+Der Workflow `.github/workflows/windows-exe.yml` baut zusätzlich `Toolbox-Setup.exe` auf `windows-latest`, führt die Tests aus und hängt den Installer samt `latest.yml` und Blockmap an denselben Release – diese beiden Dateien braucht der Windows-Auto-Updater. Ein Tag-Build erzeugt also beide Downloads; ein manueller Lauf von „macOS DMG“ stößt den Windows-Workflow für denselben Release automatisch mit an. Beide Workflows prüfen nach dem Upload automatisch, dass `Toolbox.dmg`, `Toolbox-Setup.exe` und `latest.yml` am Release hängen; fehlt ein Asset, schlägt der Lauf fehl.
 
 Die Release-Notes (`.github/macos-release-notes.md` und `.github/windows-release-notes.md`) beginnen mit einer Download-Tabelle, damit die Assets ganz oben im Release stehen. Vor dem Anlegen des Releases ersetzt der jeweilige Workflow die Platzhalter `{{REPO}}` und `{{TAG}}` durch Repository und Tag.
 
@@ -166,6 +168,7 @@ windows/                  Windows-App (Electron, JavaScript)
 ├── src/protocol.js       Apple-kompatibles Sync-Format (JSON + Zeitstempel)
 ├── src/store.js          Lokale Daten in %APPDATA%\Toolbox\data.json
 ├── src/sync.js           Bonjour + TCP, Mehrgeräte-Abgleich
+├── src/updater.js        Tägliche Update-Prüfung und Installation
 ├── renderer/             Oberfläche (HTML/CSS/JS)
 └── test/                 Protokoll-, Speicher- und Sync-Tests
 
@@ -231,7 +234,7 @@ Umsetzung: `Toolbox/LocalSync.swift` (Apple) und `windows/src/sync.js` (Windows)
 
 ## Version
 
-Aktuell `3.1.1` (`MARKETING_VERSION` im Projekt).
+Aktuell `3.2.0` (`MARKETING_VERSION` im Projekt).
 
 ## Lizenz
 

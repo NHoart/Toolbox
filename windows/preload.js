@@ -36,4 +36,12 @@ contextBridge.exposeInMainWorld('toolbox', {
     setEnabled: enabled => ipcRenderer.invoke('sync:set-enabled', enabled),
     syncNow: () => ipcRenderer.invoke('sync:sync-now'),
   },
+
+  update: {
+    getState: () => ipcRenderer.invoke('update:state'),
+    check: () => ipcRenderer.invoke('update:check'),
+    install: () => ipcRenderer.invoke('update:install'),
+    setAutomatic: enabled => ipcRenderer.invoke('update:set-automatic', enabled),
+    onChanged: subscribe('update:changed'),
+  },
 })

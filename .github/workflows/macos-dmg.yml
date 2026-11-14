@@ -107,12 +107,13 @@ jobs:
           for attempt in $(seq 1 90); do
             names="$(gh release view "$tag" --json assets --jq '.assets[] | select(.state == "uploaded") | .name' 2>/dev/null || true)"
             if printf '%s\n' "$names" | grep -qx 'Toolbox.dmg' \
-              && printf '%s\n' "$names" | grep -qx 'Toolbox-Setup.exe'; then
-              echo "Beide Release-Assets vorhanden: Toolbox.dmg, Toolbox-Setup.exe"
+              && printf '%s\n' "$names" | grep -qx 'Toolbox-Setup.exe' \
+              && printf '%s\n' "$names" | grep -qx 'latest.yml'; then
+              echo "Alle Release-Assets vorhanden: Toolbox.dmg, Toolbox-Setup.exe, latest.yml"
               exit 0
             fi
             if [ "$attempt" -eq 90 ]; then
-              echo "::error::Release $tag enthält nicht beide Assets."
+              echo "::error::Release $tag enthält nicht alle Assets."
               gh release view "$tag" --json assets --jq '.assets[] | "\(.name) (\(.state))"' || true
               exit 1
             fi

@@ -88,8 +88,15 @@ jobs:
             Start-Sleep -Seconds 2
           }
 
+          # latest.yml und die Blockmap braucht electron-updater für Auto-Updates.
+          $assets = @(
+            "dist/Toolbox-Setup.exe",
+            "dist/Toolbox-Setup.exe.blockmap",
+            "dist/latest.yml"
+          )
+
           for ($attempt = 1; $attempt -le 5; $attempt++) {
-            gh release upload $tag "dist/Toolbox-Setup.exe" --clobber
+            gh release upload $tag $assets --clobber
             if ($LASTEXITCODE -eq 0) { break }
             if ($attempt -eq 5) { exit 1 }
             Start-Sleep -Seconds 4
@@ -111,12 +118,12 @@ jobs:
 
           for ($attempt = 1; $attempt -le 90; $attempt++) {
             $names = @(gh release view $tag --json assets --jq '.assets[] | select(.state == "uploaded") | .name' 2>$null)
-            if ($names -contains 'Toolbox.dmg' -and $names -contains 'Toolbox-Setup.exe') {
-              Write-Host "Beide Release-Assets vorhanden: Toolbox.dmg, Toolbox-Setup.exe"
+            if ($names -contains 'Toolbox.dmg' -and $names -contains 'Toolbox-Setup.exe' -and $names -contains 'latest.yml') {
+              Write-Host "Alle Release-Assets vorhanden: Toolbox.dmg, Toolbox-Setup.exe, latest.yml"
               exit 0
             }
             if ($attempt -eq 90) {
-              Write-Output "::error::Release $tag enthält nicht beide Assets."
+              Write-Output "::error::Release $tag enthält nicht alle Assets."
               gh release view $tag --json assets --jq '.assets[] | "\(.name) (\(.state))"'
               exit 1
             }

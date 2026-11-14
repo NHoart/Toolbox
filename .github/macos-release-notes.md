@@ -22,21 +22,21 @@ Lade oben `Toolbox.dmg` herunter.
      „Toolbox wurde blockiert“ auf **Dennoch öffnen** klicken, oder
    - im Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
-### Neu in 3.1.1
+### Neu in 3.2.0
 
-- **Downloads direkt oben:** Die Release-Notes beginnen mit einer Tabelle, die
-  `Toolbox.dmg` und `Toolbox-Setup.exe` direkt verlinkt.
-- **Release-Notes-Vorlagen:** Beide Workflows setzen vor dem Anlegen des
-  Releases die Platzhalter `{{REPO}}` und `{{TAG}}` ein, damit die
-  Download-Links auf das richtige Repository und Release zeigen.
-- **Keine Änderungen an der App:** Der Code entspricht 3.1.0; alle Funktionen
-  und Tests bleiben unverändert.
+- **Auto-Update für Windows:** Die Windows-App prüft beim Start höchstens
+  einmal pro Tag, ob auf GitHub eine neuere Version bereitsteht, zeigt die
+  Release-Notes und installiert das Update nach Bestätigung mit
+  Fortschrittsanzeige; danach startet sie neu. Abschalten lässt sich die
+  Prüfung in den Einstellungen.
+- **Release-Assets für den Updater:** Der Windows-Workflow veröffentlicht
+  zusätzlich `latest.yml` und die Blockmap, damit sich die Windows-App selbst
+  aktualisieren kann.
+- **Apple-Apps unverändert:** macOS, iOS und das Widget entsprechen 3.1.1.
 
 ### Geprüfter Release-Stand
 
-3.1.1 enthält keine Änderungen am App-Code; geprüft bleibt damit der Stand aus 3.1.0: macOS 3.1.0 aus `Toolbox.dmg`, iOS 3.1.0 aus dem Tag `v3.1.0` im Simulator und Windows 3.1.0 aus `Toolbox-Setup.exe` liefen als Kette. Mac→iPhone, anschließend iPhone→Windows ohne Mac sowie drei gleichzeitige Peers inklusive eines verspäteten alten Mac-Stands laufen grün (`scripts/test-release-sync-chain.js`).
-
-Nur auf echter Hardware geprüft werden können die native Windows-Oberfläche, SmartScreen/Firewall und echtes Bonjour/WLAN zwischen physischen Geräten.
+3.2.0 ändert nur die Windows-App und den Release-Workflow. Der Xcode-Build für macOS lief mit Xcode 27.2 fehlerfrei durch; die Windows-Tests (29, davon fünf neue für den Updater) und der Installer-Build samt `latest.yml` und `app-update.yml` sind grün. Ein echter Update-Lauf auf einem Windows-Rechner sowie die native Windows-Oberfläche konnten auf dem Mac nicht geprüft werden.
 
 ### Update von einer älteren Version
 

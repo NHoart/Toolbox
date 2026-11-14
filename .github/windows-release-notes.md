@@ -13,21 +13,21 @@ Windows 10/11, 64 Bit. `Toolbox-Setup.exe` oben herunterladen, ausführen und de
 
 Da der Installer nicht signiert ist, zeigt Windows SmartScreen beim ersten Start möglicherweise eine Warnung. Über **Weitere Informationen → Trotzdem ausführen** lässt sich die App starten.
 
-### Neu in 3.1.1
+### Neu in 3.2.0
 
-- **Downloads direkt oben:** Die Release-Notes beginnen mit einer Tabelle, die
-  `Toolbox-Setup.exe` und `Toolbox.dmg` direkt verlinkt.
-- **Release-Notes-Vorlagen:** Beide Workflows setzen vor dem Anlegen des
-  Releases die Platzhalter `{{REPO}}` und `{{TAG}}` ein, damit die
-  Download-Links auf das richtige Repository und Release zeigen.
-- **Keine Änderungen an der App:** Installer und Sync-Tests bleiben wie in
-  3.1.0 grün.
+- **Automatische Updates:** Toolbox prüft beim Start höchstens einmal pro Tag,
+  ob auf GitHub eine neuere Version liegt. Ist eine verfügbar, zeigt sie die
+  Release-Notes und installiert das Update nach Bestätigung mit
+  Fortschrittsanzeige; danach startet sie neu.
+- **Einstellungen:** Unter **Einstellungen → Updates** lässt sich die
+  automatische Prüfung abschalten und eine Suche manuell anstoßen.
+- **Geprüfte Downloads:** Vor der Installation kontrolliert der Updater die
+  im Release hinterlegte SHA-512-Prüfsumme.
+- **Apple-Apps unverändert:** macOS, iOS und das Widget entsprechen 3.1.1.
 
 ### Geprüfter Release-Stand
 
-3.1.1 enthält keine Änderungen am App-Code; geprüft bleibt damit der Stand aus 3.1.0: macOS 3.1.0 aus `Toolbox.dmg`, iOS 3.1.0 aus dem Tag `v3.1.0` im Simulator und Windows 3.1.0 aus `Toolbox-Setup.exe`. Der Windows-Client lief dabei als echter Store-/Sync-Peer aus dem extrahierten `app.asar`. Mac→iPhone, anschließend iPhone→Windows ohne Mac sowie drei gleichzeitige Peers inklusive eines verspäteten alten Mac-Stands laufen grün (`scripts/test-release-sync-chain.js`).
-
-Nur auf echter Hardware geprüft werden können die native Windows-Oberfläche und Installation, SmartScreen/Firewall sowie echtes Bonjour/WLAN zwischen physischen Geräten.
+Die Update-Logik ist durch 29 Windows-Tests abgedeckt, davon fünf neue für den Updater. Der Installer-Build erzeugt `latest.yml`, die Blockmap und `app-update.yml`; `electron-updater` liegt im gepackten `app.asar`. Ein echtes Update von 3.1.1 auf 3.2.0 sowie die native Windows-Oberfläche müssen nach dem Release auf einem Windows-Rechner geprüft werden.
 
 ### Sync mit Mac und iPhone
 

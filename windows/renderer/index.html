@@ -478,7 +478,7 @@
       <div class="modal-head">
         <div>
           <h2 id="settingsTitle">Einstellungen</h2>
-          <p>Wasser, Netzwerk und Anzeige</p>
+          <p>Wasser, Netzwerk, Updates und Anzeige</p>
         </div>
         <button class="ghost-icon small" data-close="settingsModal" aria-label="Schließen">
           <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
@@ -547,6 +547,28 @@
           <p class="hint error" id="syncError" hidden></p>
         </div>
 
+        <div class="card inset">
+          <div class="card-head"><span class="eyebrow mint">UPDATES</span></div>
+
+          <label class="switch-row">
+            <span>Automatisch prüfen</span>
+            <input type="checkbox" id="autoUpdateToggle">
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+
+          <div class="kv"><span>Status</span><span id="updateStatus">Version wird geladen…</span></div>
+
+          <div class="action-row">
+            <button class="btn" id="checkUpdates">Jetzt nach Updates suchen</button>
+          </div>
+
+          <p class="hint">
+            Prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version
+            bereitsteht. Ein Update ersetzt die installierte App und startet sie neu.
+          </p>
+          <p class="hint error" id="updateError" hidden></p>
+        </div>
+
         <div class="card inset row-between">
           <div>
             <strong>Heute zurücksetzen</strong>
@@ -557,8 +579,40 @@
       </div>
 
       <div class="modal-foot">
-        <span class="version" id="versionText">Version 3.1.1</span>
+        <span class="version" id="versionText">Version 3.2.0</span>
         <button class="btn primary" id="settingsDone">Fertig</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update -->
+  <div class="overlay" id="updateModal" hidden>
+    <div class="modal update-modal" role="dialog" aria-modal="true" aria-labelledby="updateTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="updateTitle">Update verfügbar</h2>
+          <p id="updateSubtitle">Eine neue Version steht bereit.</p>
+        </div>
+        <button class="ghost-icon small" data-close="updateModal" aria-label="Schließen">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="update-notes" id="updateNotes"></div>
+        <p class="hint error" id="updateInstallError" hidden></p>
+        <div class="update-progress" id="updateProgress" hidden>
+          <div class="progress"><div class="progress-value" id="updateProgressBar"></div></div>
+          <span id="updateProgressText">Wird geladen …</span>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <span></span>
+        <div class="foot-actions">
+          <button class="btn" id="updateLater">Später</button>
+          <button class="btn primary" id="updateInstall">Installieren und neu starten</button>
+        </div>
       </div>
     </div>
   </div>

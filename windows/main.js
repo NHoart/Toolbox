@@ -6,6 +6,7 @@ const { app, BrowserWindow, ipcMain, Menu, nativeTheme, powerMonitor } = require
 
 const { ToolboxStore } = require('./src/store')
 const { SyncService } = require('./src/sync')
+const { UpdateService } = require('./src/updater')
 
 app.setName('Toolbox')
 if (process.platform === 'win32') {
@@ -15,6 +16,7 @@ if (process.platform === 'win32') {
 let mainWindow = null
 let store = null
 let sync = null
+let updater = null
 let notifyTimer = null
 let dayRolloverTimer = null
 let lastTickSent = 0
@@ -38,6 +40,13 @@ function bootstrap() {
   const dataPath = path.join(app.getPath('userData'), 'data.json')
   store = new ToolboxStore({ filePath: dataPath })
 
+  updater = new UpdateService({
+    filePath: path.join(app.getPath('userData'), 'updates.json'),
+    currentVersion: app.getVersion(),
+    isPackaged: app.isPackaged,
+  })
+  updater.on('changed', () => sendUpdateState())
+
   sync = new SyncService({
     store,
     deviceName: os.hostname() || 'Windows-PC',
@@ -53,6 +62,9 @@ function bootstrap() {
 
   sync.start()
   scheduleDayRollover()
+
+  // Höchstens einmal pro Tag; Fehler bleiben im Hintergrund.
+  void updater.checkIfNeeded()
 
   powerMonitor.on('resume', () => sync.handleNetworkChange())
   powerMonitor.on('unlock-screen', () => sync.handleNetworkChange())
@@ -137,6 +149,11 @@ function notifyState(immediate) {
     notifyTimer = null
     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('state:changed')
   }, 60)
+}
+
+function sendUpdateState() {
+  if (!mainWindow || mainWindow.isDestroyed()) return
+  mainWindow.webContents.send('update:changed', updater.state())
 }
 
 function sendCounterTick() {
@@ -225,6 +242,11 @@ function registerIpc() {
     sync.syncNow()
     return statePayload()
   })
+
+  ipcMain.handle('update:state', () => updater.state())
+  ipcMain.handle('update:check', () => updater.check({ manual: true }))
+  ipcMain.handle('update:install', () => updater.install())
+  ipcMain.handle('update:set-automatic', (_event, enabled) => updater.setAutomatic(enabled))
 }
 
 app.on('window-all-closed', () => {
