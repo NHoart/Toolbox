@@ -57,19 +57,41 @@ mkdir -p "$STAGING_DIR"
 cp -R "$APP_PATH" "$STAGING_DIR/"
 ln -s /Applications "$STAGING_DIR/Applications"
 
-if command -v diskutil >/dev/null 2>&1; then
-  diskutil image create from \
-    --format UDZO \
-    --volumeName "$APP_NAME" \
-    "$STAGING_DIR" \
-    "$DMG_PATH"
-else
+# diskutil ersetzt hdiutil unter macOS 27, scheitert auf CI-Runnern aber
+# gelegentlich mit Fehler 153. Deshalb mehrere Versuche und der Rückfall auf
+# hdiutil, falls diskutil nicht vorhanden ist oder weiter fehlschlägt.
+create_dmg() {
+  if command -v diskutil >/dev/null 2>&1; then
+    if diskutil image create from \
+      --format UDZO \
+      --volumeName "$APP_NAME" \
+      "$STAGING_DIR" \
+      "$DMG_PATH"; then
+      return 0
+    fi
+    echo "Hinweis: diskutil konnte das Image nicht erstellen, versuche hdiutil." >&2
+    rm -f "$DMG_PATH"
+  fi
+
   hdiutil create \
     -volname "$APP_NAME" \
     -srcfolder "$STAGING_DIR" \
     -ov \
     -format UDZO \
     "$DMG_PATH"
-fi
+}
+
+for attempt in 1 2 3; do
+  if create_dmg; then
+    break
+  fi
+  rm -f "$DMG_PATH"
+  if [ "$attempt" -eq 3 ]; then
+    echo "Fehler: DMG konnte nicht erstellt werden." >&2
+    exit 1
+  fi
+  echo "Neuer Versuch in 5 Sekunden ($attempt/3)." >&2
+  sleep 5
+done
 
 echo "Fertig: $DMG_PATH"
