@@ -39,7 +39,9 @@ Lade oben `Toolbox.dmg` herunter.
 Windows-Versionen vor 3.2.0 enthalten den Updater noch nicht. Einmalig
 `Toolbox-Setup.exe` oben herunterladen, Toolbox schließen und den Installer über
 die bestehende Installation laufen lassen – Deinstallieren ist nicht nötig, die
-Daten bleiben erhalten. Ab 3.2.0 übernimmt das Auto-Update.
+Daten bleiben erhalten. Da der Installer nicht signiert ist, kann der Defender
+SmartScreen warnen – über **Weitere Informationen → Trotzdem ausführen** lässt
+er sich starten. Ab 3.2.0 übernimmt das Auto-Update.
 
 ### Geprüfter Release-Stand
 
