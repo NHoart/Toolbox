@@ -57,8 +57,11 @@ jobs:
           $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
           $manifestDir = (Resolve-Path "dist/winget/manifests/n/NHoart/Toolbox/$version").Path
           winget --version
-          winget validate --manifest $manifestDir --disable-interactivity
-          if ($LASTEXITCODE -ne 0) {
+          $validation = winget validate --manifest $manifestDir --disable-interactivity 2>&1 | Out-String
+          Write-Host $validation
+          # Ältere winget-Clients beenden die Prüfung bei reinen Schema-Warnungen
+          # mit Exit-Code 1. Strukturelle Fehler bleiben ein Fehlschlag.
+          if ($LASTEXITCODE -ne 0 -and $validation -notmatch 'validation succeeded with warnings') {
             throw "winget validate ist für $version fehlgeschlagen."
           }
 
