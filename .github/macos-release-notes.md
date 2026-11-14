@@ -13,18 +13,19 @@ Lade unten unter **Assets** die Datei `Toolbox.dmg` herunter.
      „Toolbox wurde blockiert“ auf **Dennoch öffnen** klicken, oder
    - im Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
-### Neu in 3.0.0
+### Neu in 3.1.0
 
-- Toolbox für Mac, iPhone und Windows: alle sechs Werkzeuge und der lokale
-  WLAN-Abgleich in einer gemeinsamen Version.
-- Mac, iPhone und Windows-PC können gleichzeitig verbunden sein. Änderungen
-  werden auch über ein drittes Gerät weitergegeben, sodass die Kette
-  Mac → iPhone → Windows den aktuellen Stand übernimmt.
-- Beide Release-Workflows prüfen automatisch, dass DMG und Windows-Installer
-  gemeinsam am Release hängen.
-- Die Checkliste für Installation und Drei-Geräte-Sync steht im README und in
-  den Windows-Release-Notes.
-- Der Fortschrittsring zeigt den Prozentwert ohne zusätzliches Prozentzeichen.
+- **Drei-Geräte-Sync mit echtem Swift-Code:** Zwei getrennte Apple-Clients
+  (Mac und iPhone) und der echte Windows-Client laufen als drei gleichzeitige
+  Peers. Der Windows-PC übernimmt den von Mac/iPhone erzeugten Stand und gibt
+  ihn an beide Apple-Clients zurück.
+- **Keine Datenverluste:** Der jeweils neuere Stand gewinnt. Ein verspäteter
+  älterer Stand wird sowohl am Windows-PC als auch am iPhone verworfen;
+  Verlauf, Mengen, Größen und gespeicherte Zählerstände bleiben erhalten.
+- **iOS:** Das iOS-App-Target kompiliert wieder; die macOS-only Update-Routine
+  ist jetzt korrekt gegen iOS abgegrenzt.
+- **Tests:** 24 Windows-Tests, der Headless-Sync-Smoke-Test und der
+  Drei-Peer-Interop laufen in CI.
 
 ### Update von einer älteren Version
 

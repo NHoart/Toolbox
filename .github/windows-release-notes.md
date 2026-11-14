@@ -4,11 +4,16 @@ Windows 10/11, 64 Bit. `Toolbox-Setup.exe` herunterladen, ausführen und den Anw
 
 Da der Installer nicht signiert ist, zeigt Windows SmartScreen beim ersten Start möglicherweise eine Warnung. Über **Weitere Informationen → Trotzdem ausführen** lässt sich die App starten.
 
-### Neu in 3.0.0
+### Neu in 3.1.0
 
-- Gemeinsame Version für Mac, iPhone und Windows mit allen sechs Werkzeugen.
-- Drei-Geräte-Sync über das lokale WLAN, auch über die Kette Mac → iPhone → Windows.
-- Automatische Release-Prüfung: DMG und Windows-Installer müssen gemeinsam am Release hängen.
+- **Drei-Geräte-Sync:** Zwei getrennte Apple-Clients (Mac und iPhone) und
+  der Windows-PC laufen als drei gleichzeitige Peers. Der Windows-PC übernimmt
+  den von Mac/iPhone erzeugten Stand und gibt ihn an beide Apple-Clients zurück.
+- **Keine Datenverluste:** Der neuere Stand gewinnt; ein verspäteter älterer
+  Stand wird am Windows-PC und am iPhone verworfen. Verlauf, Mengen, Größen
+  und gespeicherte Zählerstände bleiben erhalten.
+- **iOS:** Das iOS-App-Target kompiliert wieder.
+- **Windows:** Installer und Sync-Tests bleiben grün.
 
 ### Sync mit Mac und iPhone
 
