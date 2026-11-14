@@ -15,6 +15,12 @@ Da der Installer nicht signiert ist, zeigt Windows SmartScreen beim ersten Start
 - **iOS:** Das iOS-App-Target kompiliert wieder.
 - **Windows:** Installer und Sync-Tests bleiben grün.
 
+### Geprüfter Release-Stand
+
+Die veröffentlichten 3.1.0-Artefakte wurden als Kette getestet: macOS 3.1.0 aus `Toolbox.dmg`, iOS 3.1.0 aus dem Tag `v3.1.0` im Simulator und Windows 3.1.0 aus `Toolbox-Setup.exe`. Der Windows-Client lief dabei als echter Store-/Sync-Peer aus dem extrahierten `app.asar`. Mac→iPhone, anschließend iPhone→Windows ohne Mac sowie drei gleichzeitige Peers inklusive eines verspäteten alten Mac-Stands laufen grün (`scripts/test-release-sync-chain.js`).
+
+Nur auf echter Hardware geprüft werden können die native Windows-Oberfläche und Installation, SmartScreen/Firewall sowie echtes Bonjour/WLAN zwischen physischen Geräten.
+
 ### Sync mit Mac und iPhone
 
 Die Windows-App nutzt denselben Abgleich im lokalen WLAN wie die Apple-App. Mac, iPhone und Windows-PC können gleichzeitig verbunden sein; Änderungen werden auch über ein drittes Gerät weitergegeben, das gerade als Brücke dient.

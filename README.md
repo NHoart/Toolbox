@@ -106,6 +106,25 @@ xcodebuild -quiet -project Toolbox.xcodeproj -scheme Toolbox -configuration Debu
   CODE_SIGNING_ALLOWED=NO build
 ```
 
+### Release-Nachweis der Drei-Geräte-Kette (3.1.0)
+
+Der Test `scripts/test-release-sync-chain.js` prüft die Kette mit den veröffentlichten Artefakten statt mit Development-Builds:
+
+- **macOS 3.1.0** aus `Toolbox.dmg`
+- **iOS 3.1.0** aus dem Tag `v3.1.0`, für den Simulator gebaut (ein IPA ist nicht Teil des Releases)
+- **Windows 3.1.0** aus `Toolbox-Setup.exe`; der echte `ToolboxStore` und `SyncService` aus dem extrahierten `app.asar` laufen als Node-Peer
+
+Der Windows-Client läuft dabei als Prozess, weil Electron nicht nativ auf macOS läuft. Geprüft wird der veröffentlichte Store- und Sync-Code aus dem Installer, nicht die Windows-Oberfläche.
+
+```bash
+bash scripts/prepare-release-sync-test.sh
+node scripts/test-release-sync-chain.js
+```
+
+Das Vorbereitungsskript lädt fehlende Release-Dateien von GitHub, mountet die DMG, entpackt den Installer und baut die iOS-App aus dem Tag. Der Test prüft Mac→iPhone, anschließend iPhone→Windows ohne Mac, drei gleichzeitige Peers mit Updates von jedem Gerät sowie einen verspäteten alten Mac-Stand, der nicht gewinnen darf. Verlauf, Mengen, Größen und gespeicherte Zählerstände werden mitverglichen.
+
+Weiterhin nur auf echter Hardware prüfbar bleiben die native Windows-Oberfläche und Installation, SmartScreen/Firewall, die iOS-Freigabe „Lokales Netzwerk“ sowie echtes Bonjour/WLAN zwischen physischen Geräten.
+
 ### DMG lokal bauen
 
 ```bash

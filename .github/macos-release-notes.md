@@ -27,6 +27,12 @@ Lade unten unter **Assets** die Datei `Toolbox.dmg` herunter.
 - **Tests:** 24 Windows-Tests, der Headless-Sync-Smoke-Test und der
   Drei-Peer-Interop laufen in CI.
 
+### Geprüfter Release-Stand
+
+Die veröffentlichten 3.1.0-Artefakte wurden als Kette getestet: macOS 3.1.0 aus `Toolbox.dmg`, iOS 3.1.0 aus dem Tag `v3.1.0` im Simulator und Windows 3.1.0 aus `Toolbox-Setup.exe`. Mac→iPhone, anschließend iPhone→Windows ohne Mac sowie drei gleichzeitige Peers inklusive eines verspäteten alten Mac-Stands laufen grün (`scripts/test-release-sync-chain.js`).
+
+Nur auf echter Hardware geprüft werden können die native Windows-Oberfläche, SmartScreen/Firewall und echtes Bonjour/WLAN zwischen physischen Geräten.
+
 ### Update von einer älteren Version
 
 Versionen **vor 2.0.3** (zum Beispiel 1.3.0 oder 2.0.2) können dieses Update
