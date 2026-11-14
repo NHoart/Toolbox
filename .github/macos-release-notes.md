@@ -1,9 +1,10 @@
 ## Downloads
 
-| Plattform | Datei |
+| Plattform | Installation |
 | --- | --- |
 | **macOS** 27.2 oder neuer (Apple Silicon) | [Toolbox.dmg](https://github.com/{{REPO}}/releases/download/{{TAG}}/Toolbox.dmg) |
 | **Windows** 10/11, 64 Bit | [Toolbox-Setup.exe](https://github.com/{{REPO}}/releases/download/{{TAG}}/Toolbox-Setup.exe) |
+| **Windows** 10/11, 64 Bit (winget) | `winget install --id NHoart.Toolbox -e` |
 
 Dieselben Dateien hängen unten unter **Assets** am Release.
 
@@ -22,17 +23,18 @@ Lade oben `Toolbox.dmg` herunter.
      „Toolbox wurde blockiert“ auf **Dennoch öffnen** klicken, oder
    - im Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
-### Neu in 3.2.0
+### Neu in 3.3.0
 
-- **Auto-Update für Windows:** Die Windows-App prüft beim Start höchstens
-  einmal pro Tag, ob auf GitHub eine neuere Version bereitsteht, zeigt die
-  Release-Notes und installiert das Update nach Bestätigung mit
-  Fortschrittsanzeige; danach startet sie neu. Abschalten lässt sich die
-  Prüfung in den Einstellungen.
-- **Release-Assets für den Updater:** Der Windows-Workflow veröffentlicht
-  zusätzlich `latest.yml` und die Blockmap, damit sich die Windows-App selbst
-  aktualisieren kann.
-- **Apple-Apps unverändert:** macOS, iOS und das Widget entsprechen 3.1.1.
+- **Gemeinsamer Name für den WLAN-Sync:** Im Abschnitt **Lokales Netzwerk**
+  der Einstellungen gibt es jetzt oben ein Namensfeld. Ohne Namen läuft kein
+  Abgleich; der Status zeigt „Name fehlt“ und „Jetzt suchen“ ist deaktiviert.
+- **Nur passende Geräte verbinden sich:** Das Gerät sucht wie bisher im WLAN,
+  verbindet sich aber nur mit Geräten, die denselben Namen eingetragen haben.
+  Groß-/Kleinschreibung und überzählige Leerzeichen spielen keine Rolle.
+- **Mehrere Geräte:** Alle Geräte mit demselben Namen bilden weiterhin eine
+  Gruppe; Änderungen werden auch über ein drittes Gerät weitergegeben.
+- **Apple und Windows gemeinsam:** Namensfeld und Namensprüfung sind in macOS,
+  iOS und der Windows-App enthalten.
 
 ### Windows: Update von 3.1.x
 
@@ -41,11 +43,17 @@ Windows-Versionen vor 3.2.0 enthalten den Updater noch nicht. Einmalig
 die bestehende Installation laufen lassen – Deinstallieren ist nicht nötig, die
 Daten bleiben erhalten. Da der Installer nicht signiert ist, kann der Defender
 SmartScreen warnen – über **Weitere Informationen → Trotzdem ausführen** lässt
-er sich starten. Ab 3.2.0 übernimmt das Auto-Update.
+er sich starten. Ab 3.2.0 übernimmt das Auto-Update; 3.3.0 wird dort automatisch
+angeboten.
 
 ### Geprüfter Release-Stand
 
-3.2.0 ändert nur die Windows-App und den Release-Workflow. Der Xcode-Build für macOS lief mit Xcode 27.2 fehlerfrei durch; die Windows-Tests (29, davon fünf neue für den Updater) und der Installer-Build samt `latest.yml` und `app-update.yml` sind grün. Ein echter Update-Lauf auf einem Windows-Rechner sowie die native Windows-Oberfläche konnten auf dem Mac nicht geprüft werden.
+Die Xcode-Builds für macOS und iOS liefen mit Xcode 27.2 fehlerfrei durch. Die
+Windows-Tests (32) und der Headless-Sync-Smoke-Test sind grün; der
+Swift↔Windows-Interop-Test bestätigt den Abgleich mit Mac, iPhone und Windows
+sowie, dass ein Gerät mit anderem Namen weder Peer wird noch Daten erhält. Ein
+echter WLAN-Test zwischen physischen Geräten und die native Windows-Oberfläche
+konnten auf dem Mac nicht geprüft werden.
 
 ### Update von einer älteren Version
 

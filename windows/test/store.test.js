@@ -32,6 +32,7 @@ test('Frischer Stand hat Standardwerte und nichts zu synchronisieren', t => {
   assert.equal(state.counter.count, 0)
   assert.equal(state.counter.rate, 5)
   assert.equal(state.syncEnabled, true)
+  assert.equal(store.syncName, '')
   assert.equal(state.water.days.length, 30)
   assert.equal(store.waterSnapshot(), null)
   assert.equal(store.counterSnapshot(), null)
@@ -189,12 +190,14 @@ test('Stand überlebt einen Neustart der App', t => {
   store.setSizes({ glass: 300, bottle: 800, goal: 2600 })
   store.increment()
   store.saveCounter('Test')
+  store.setSyncName('Familie')
   store.flush()
 
   const reloaded = new ToolboxStore({ filePath, now: () => clock.value })
   t.after(() => reloaded.dispose())
 
   assert.equal(reloaded.deviceId, store.deviceId)
+  assert.equal(reloaded.syncName, 'Familie')
   assert.equal(reloaded.todayML(), 650)
   assert.deepEqual(reloaded.sizes, { glass: 300, bottle: 800, goal: 2600 })
   assert.equal(reloaded.count, 1)

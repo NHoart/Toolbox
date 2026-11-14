@@ -11,12 +11,13 @@ const { SyncService } = require('../src/sync')
 
 const silentLogger = { log() {}, warn() {}, error() {} }
 
-function createNode(t, name, clock) {
+function createNode(t, name, clock, syncName = 'Familie') {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'toolbox-sync-'))
   const store = new ToolboxStore({
     filePath: path.join(directory, 'data.json'),
     now: () => clock.value,
   })
+  store.setSyncName(syncName)
   const sync = new SyncService({
     store,
     deviceName: name,
@@ -46,6 +47,10 @@ async function waitFor(predicate, message, timeout = 6000) {
     await new Promise(resolve => setTimeout(resolve, 20))
   }
   throw new Error(`Zeitüberschreitung: ${message}`)
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 test('Mac und Windows gleichen Wasser und Zähler in beide Richtungen ab', async t => {
@@ -287,4 +292,57 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
   assert.equal(mac.store.todayML(), 850)
   assert.equal(mac.store.count, 2)
   assert.deepEqual(mac.store.sizes, { glass: 250, bottle: 600, goal: 2400 })
+})
+
+test('Ohne Namen startet kein Abgleich', async t => {
+  const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
+  const node = createNode(t, 'Mac', clock, '')
+
+  node.sync.start()
+  await delay(200)
+  assert.equal(node.sync.running, false)
+  assert.equal(node.sync.listening, false)
+  assert.equal(node.sync.getStatus().enabled, true)
+  assert.equal(node.sync.getStatus().syncName, '')
+
+  node.sync.setSyncName('Familie')
+  await waitFor(() => node.sync.listening, 'nach dem Namen sollte der Server starten')
+  assert.equal(node.sync.running, true)
+  assert.equal(node.sync.getStatus().syncName, 'Familie')
+})
+
+test('Nur Geräte mit demselben Namen gleichen sich ab', async t => {
+  const base = Date.UTC(2026, 10, 13, 9, 0, 0)
+  const clockMac = { value: base + 60_000 }
+  const clockWindows = { value: base }
+
+  const mac = createNode(t, 'Mac', clockMac, 'Familie')
+  const windows = createNode(t, 'Windows-PC', clockWindows, 'Büro')
+
+  mac.store.addWater(450)
+  mac.store.increment()
+  windows.store.addWater(250)
+
+  await startNode(mac)
+  await startNode(windows)
+  windows.sync.connectTo('127.0.0.1', mac.sync.port)
+
+  await delay(600)
+  assert.equal(mac.sync.peerCount, 0, 'fremder Name darf kein Peer werden')
+  assert.equal(windows.sync.peerCount, 0, 'fremder Name darf kein Peer werden')
+  assert.equal(mac.store.todayML(), 450, 'Mac behält den eigenen Stand')
+  assert.equal(windows.store.todayML(), 250, 'Windows behält den eigenen Stand')
+
+  // Erst mit passendem Namen darf der Abgleich laufen.
+  windows.sync.setSyncName(' familie ')
+  await waitFor(() => windows.sync.listening, 'Windows-Sync-Server startet nach Namensänderung')
+  windows.sync.connectTo('127.0.0.1', mac.sync.port)
+
+  await waitFor(
+    () => windows.store.todayML() === 450
+      && windows.store.count === 1
+      && windows.store.waterUpdatedAt() === mac.store.waterUpdatedAt(),
+    'nach gleichem Namen sollte der Mac-Stand ankommen'
+  )
+  assert.ok(mac.sync.peerCount === 1 && windows.sync.peerCount === 1)
 })

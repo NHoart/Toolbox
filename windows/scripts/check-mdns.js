@@ -17,6 +17,8 @@ const { SyncService } = require('../src/sync')
 const seconds = Number(process.argv[2] || 20)
 const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'toolbox-mdns-'))
 const store = new ToolboxStore({ filePath: path.join(directory, 'data.json') })
+// Muss mit dem Namen im Feld „Lokales Netzwerk“ der echten App übereinstimmen.
+store.setSyncName(process.env.TOOLBOX_SYNC_NAME || 'Familie')
 const sync = new SyncService({
   store,
   deviceName: `Windows-Test (${os.hostname()})`,

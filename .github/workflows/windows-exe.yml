@@ -48,6 +48,27 @@ jobs:
       - name: Installer bauen
         run: npm run dist -- --publish never
 
+      - name: winget-Manifeste erzeugen
+        run: npm run winget:manifest
+
+      - name: winget-Manifeste prüfen
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $manifestDir = (Resolve-Path "dist/winget/manifests/n/NHoart/Toolbox/$version").Path
+          winget --version
+          winget validate --manifest $manifestDir --disable-interactivity
+          if ($LASTEXITCODE -ne 0) {
+            throw "winget validate ist für $version fehlgeschlagen."
+          }
+
+      - name: winget-Manifeste als Workflow-Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: Toolbox-winget
+          path: windows/dist/winget/manifests/n/NHoart/Toolbox/*
+          if-no-files-found: error
+
       - name: Installer als Workflow-Artefakt hochladen
         uses: actions/upload-artifact@v4
         with:

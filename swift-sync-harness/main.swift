@@ -34,6 +34,11 @@ guard let suiteName = ProcessInfo.processInfo.environment["TOOLBOX_DEFAULTS_SUIT
 UserDefaults(suiteName: suiteName)?.removePersistentDomain(forName: suiteName)
 
 let counter = CounterStore()
+// Der Gruppennamen gehört zum Testaufbau; ohne ihn startet kein Listener.
+LocalSync.shared.setSyncName(
+    ProcessInfo.processInfo.environment["TOOLBOX_SYNC_NAME"] ?? "Interop",
+    restart: false
+)
 LocalSync.shared.startInteropListener()
 
 var waited = 0.0

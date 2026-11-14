@@ -66,6 +66,8 @@ let speedUnit = 'mbit'
 let settingsOpen = false
 let sizeDraft = {}
 let sizeTimer = null
+let syncNameTimer = null
+let pendingSyncName = null
 let toastTimer = null
 let amountValue = null
 let lastRenderedWater = null
@@ -612,6 +614,9 @@ function bindSettings() {
     toast(enabled ? 'Sync im WLAN eingeschaltet' : 'Sync im WLAN ausgeschaltet')
   })
 
+  $('syncName').addEventListener('input', event => scheduleSyncName(event.target.value))
+  $('syncName').addEventListener('change', event => scheduleSyncName(event.target.value, 0))
+
   $('syncNow').addEventListener('click', async () => {
     await run(api.sync.syncNow())
     toast('Suche nach Geräten im WLAN…')
@@ -654,9 +659,14 @@ function renderSettings() {
 
   const sync = state.sync
   $('syncToggle').checked = Boolean(sync.enabled)
+
+  // Während des Tippens nicht überschreiben; der Name wird entprellt gespeichert.
+  const nameInput = $('syncName')
+  if (document.activeElement !== nameInput) nameInput.value = sync.syncName || ''
+
   $('syncStatus').textContent = syncStatusText(sync)
   $('syncDeviceName').textContent = sync.deviceName || 'Windows-PC'
-  $('syncNow').disabled = !sync.enabled
+  $('syncNow').disabled = !sync.enabled || !String(sync.syncName || '').trim()
 
   const error = $('syncError')
   error.hidden = !sync.discoveryError
@@ -672,7 +682,7 @@ function renderSettings() {
   } else if (sync.peers.length === 0) {
     const hint = document.createElement('div')
     hint.className = 'hint'
-    hint.textContent = 'Noch kein Gerät verbunden. Öffne Toolbox auf Mac oder iPhone im selben WLAN.'
+    hint.textContent = 'Noch kein Gerät verbunden. Öffne Toolbox auf einem Gerät mit demselben Namen im selben WLAN.'
     peers.append(hint)
   } else {
     for (const peer of sync.peers) {
@@ -727,8 +737,24 @@ function flushSizeDraft() {
   run(api.water.setSizes(sizes))
 }
 
+function scheduleSyncName(value, delay = 400) {
+  pendingSyncName = value
+  clearTimeout(syncNameTimer)
+  syncNameTimer = setTimeout(flushSyncName, delay)
+}
+
+function flushSyncName() {
+  clearTimeout(syncNameTimer)
+  syncNameTimer = null
+  if (pendingSyncName === null) return
+  const name = pendingSyncName
+  pendingSyncName = null
+  run(api.sync.setName(name))
+}
+
 function syncStatusText(sync) {
   if (!sync.enabled) return 'Aus'
+  if (!String(sync.syncName || '').trim()) return 'Name fehlt'
   if (sync.peerCount === 1) return 'Verbunden mit 1 Gerät'
   if (sync.peerCount > 1) return `Verbunden mit ${sync.peerCount} Geräten`
   if (sync.discoveryError) return 'Netzwerk-Problem'
@@ -805,6 +831,7 @@ function closeModal(id) {
   if (id === 'settingsModal') {
     settingsOpen = false
     flushSizeDraft()
+    flushSyncName()
   }
 
   if (id === 'amountModal') {

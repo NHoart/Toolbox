@@ -524,6 +524,14 @@
         <div class="card inset">
           <div class="card-head"><span class="eyebrow cyan">LOKALES NETZWERK</span></div>
 
+          <label class="field">
+            <span>Name</span>
+            <div class="input-wrap">
+              <input id="syncName" type="text" maxlength="60" placeholder="z. B. Familie"
+                     autocomplete="off" spellcheck="false">
+            </div>
+          </label>
+
           <label class="switch-row">
             <span>Sync im WLAN</span>
             <input type="checkbox" id="syncToggle">
@@ -541,8 +549,10 @@
 
           <p class="hint" id="syncHint">
             Gleicht Wassertracker und Zähler direkt mit deinen Geräten im selben WLAN ab – ohne Server
-            und ohne Konto. Mac, iPhone und dieser PC können gleichzeitig verbunden sein; ein Gerät
-            gibt übernommene Änderungen automatisch an die anderen weiter.
+            und ohne Konto. Trage auf allen Geräten denselben Namen ein; nur Geräte mit diesem Namen
+            gleichen sich ab. Ohne Namen ist der Abgleich aus. Mac, iPhone und dieser PC können
+            gleichzeitig verbunden sein; ein Gerät gibt übernommene Änderungen automatisch an die
+            anderen weiter.
           </p>
           <p class="hint error" id="syncError" hidden></p>
         </div>
@@ -579,7 +589,7 @@
       </div>
 
       <div class="modal-foot">
-        <span class="version" id="versionText">Version 3.2.0</span>
+        <span class="version" id="versionText">Version 3.3.0</span>
         <button class="btn primary" id="settingsDone">Fertig</button>
       </div>
     </div>

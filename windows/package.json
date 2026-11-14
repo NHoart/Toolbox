@@ -1,7 +1,7 @@
 {
   "name": "toolbox-windows",
   "productName": "Toolbox",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Toolbox – Alltagswerkzeuge für Windows",
   "main": "main.js",
   "author": "Noah Hartmann",
@@ -12,7 +12,8 @@
     "test": "node --test",
     "smoke:sync": "node scripts/smoke-sync.js",
     "dist": "electron-builder --win",
-    "dist:dir": "electron-builder --win --dir"
+    "dist:dir": "electron-builder --win --dir",
+    "winget:manifest": "node scripts/generate-winget-manifest.js"
   },
   "dependencies": {
     "bonjour-service": "1.4.4",

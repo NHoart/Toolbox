@@ -8,6 +8,8 @@ const {
   decodeMessageLine,
   encodeMessage,
   isPeerBehind,
+  normalizeSyncName,
+  sameSyncName,
   shouldApply,
 } = require('./protocol')
 
@@ -22,7 +24,9 @@ const MAX_BUFFER_BYTES = 2 * 1024 * 1024
  *
  * Jedes Gerät öffnet einen TCP-Port, bietet ihn per Bonjour als
  * `_toolboxsync._tcp` an und sucht gleichzeitig nach anderen Geräten.
- * Beim Verbindungsaufbau schicken beide Seiten ihren vollständigen Stand;
+ * Angeboten und verbunden wird nur der gemeinsame Gruppenname (`syncName`);
+ * Geräte ohne passenden Namen tauschen keine Stände aus. Beim
+ * Verbindungsaufbau schicken beide Seiten ihren vollständigen Stand;
  * pro Bereich gewinnt der zuletzt geänderte Stand. Übernommene Stände werden
  * an die übrigen Verbindungen weitergegeben – so erreichen Änderungen auch
  * ein drittes Gerät, das mit dem Ursprung nicht direkt verbunden ist.
@@ -74,7 +78,7 @@ class SyncService extends EventEmitter {
 
   start() {
     if (this.running) return
-    if (!this.store.syncEnabled) {
+    if (!this.store.syncEnabled || !this.hasSyncName) {
       this.emitStatus()
       return
     }
@@ -133,9 +137,26 @@ class SyncService extends EventEmitter {
     this.emitStatus()
   }
 
+  /** Name geändert: neue Gruppe ankündigen und alte Verbindungen trennen. */
+  setSyncName(name) {
+    const value = String(name ?? '').slice(0, 60)
+    if (value === this.store.syncName) return
+    this.store.setSyncName(value)
+    this.emitStatus()
+    if (!this.store.syncEnabled) return
+    this.restart()
+  }
+
+  restart() {
+    if (this.running) this.stop()
+    if (!this.store.syncEnabled || !this.hasSyncName) return
+    this.start()
+    this.syncNow()
+  }
+
   /** Sucht erneut nach Geräten und schickt den aktuellen Stand an alle. */
   syncNow() {
-    if (!this.store.syncEnabled) return
+    if (!this.store.syncEnabled || !this.hasSyncName) return
     this.start()
     this.refreshDiscoveryIfNetworkChanged()
 
@@ -165,6 +186,15 @@ class SyncService extends EventEmitter {
     return this.peers.length
   }
 
+  /** Ohne Namen läuft kein Abgleich. */
+  get hasSyncName() {
+    return normalizeSyncName(this.store.syncName).length > 0
+  }
+
+  get serviceSyncName() {
+    return String(this.store.syncName || '').trim().slice(0, 60)
+  }
+
   getStatus() {
     return {
       enabled: this.store.syncEnabled,
@@ -174,6 +204,7 @@ class SyncService extends EventEmitter {
       peers: this.peers.map(peer => ({ ...peer })),
       lastSync: this.lastSync,
       deviceName: this.deviceName,
+      syncName: this.store.syncName,
       discoveryError: this.discoveryError,
     }
   }
@@ -316,6 +347,7 @@ class SyncService extends EventEmitter {
     const payload = encodeMessage({
       deviceID: this.store.deviceId,
       deviceName: this.deviceName,
+      syncName: this.store.syncName,
       water: this.store.waterSnapshot(),
       counter: this.store.counterSnapshot(),
     })
@@ -330,6 +362,13 @@ class SyncService extends EventEmitter {
   handleLine(conn, line) {
     const message = decodeMessageLine(line)
     if (!message) return
+
+    // Nur Geräte mit demselben Gruppennamen dürfen Daten austauschen.
+    // Geräte ohne Namen (ältere Stände) werden ebenfalls abgewiesen.
+    if (!sameSyncName(this.store.syncName, message.syncName)) {
+      this.drop(conn.id)
+      return
+    }
 
     // Eigene Ankündigung über den eigenen Listener ignorieren.
     if (message.deviceID === this.store.deviceId) {
@@ -465,7 +504,7 @@ class SyncService extends EventEmitter {
         protocol: 'tcp',
         port: this.port,
         host: this.mdnsHost(),
-        txt: { id: this.store.deviceId },
+        txt: { id: this.store.deviceId, syncname: this.serviceSyncName },
         disableIPv6: true,
         // Der Name gehört zu genau diesem Rechner; das erspart die 750-ms-Probe
         // und verhindert, dass ein veralteter Eintrag das Veröffentlichen blockiert.
@@ -524,6 +563,9 @@ class SyncService extends EventEmitter {
   onServiceUp(service) {
     if (!service || !service.port) return
 
+    // Nur Geräte derselben Gruppe werden überhaupt verbunden.
+    if (!sameSyncName(this.store.syncName, service.txt && service.txt.syncname)) return
+
     const announcedId = service.txt && service.txt.id
     if (typeof announcedId === 'string' && announcedId === this.store.deviceId) return
 
@@ -533,7 +575,8 @@ class SyncService extends EventEmitter {
   }
 
   connectToService(service) {
-    if (!this.store.syncEnabled || !this.running) return
+    if (!this.store.syncEnabled || !this.running || !this.hasSyncName) return
+    if (!sameSyncName(this.store.syncName, service.txt && service.txt.syncname)) return
     const address = this.pickAddress(service)
     if (!address) return
     this.connectTo(address, service.port)

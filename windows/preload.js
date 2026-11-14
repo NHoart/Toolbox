@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld('toolbox', {
 
   sync: {
     setEnabled: enabled => ipcRenderer.invoke('sync:set-enabled', enabled),
+    setName: name => ipcRenderer.invoke('sync:set-name', name),
     syncNow: () => ipcRenderer.invoke('sync:sync-now'),
   },
 

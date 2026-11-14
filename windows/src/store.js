@@ -54,6 +54,7 @@ class ToolboxStore extends EventEmitter {
       version: 1,
       deviceId: crypto.randomUUID(),
       syncEnabled: true,
+      syncName: '',
       water: {
         history: {},
         recentAdds: [],
@@ -105,6 +106,7 @@ class ToolboxStore extends EventEmitter {
       data.deviceId = raw.deviceId
     }
     data.syncEnabled = raw.syncEnabled !== false
+    if (typeof raw.syncName === 'string') data.syncName = raw.syncName.slice(0, 60)
 
     const water = normalizeWaterSnapshot(raw.water)
     if (water) {
@@ -176,6 +178,17 @@ class ToolboxStore extends EventEmitter {
     const value = Boolean(enabled)
     if (this.data.syncEnabled === value) return
     this.data.syncEnabled = value
+    this.persistSoon()
+  }
+
+  get syncName() {
+    return this.data.syncName
+  }
+
+  setSyncName(name) {
+    const value = String(name ?? '').slice(0, 60)
+    if (this.data.syncName === value) return
+    this.data.syncName = value
     this.persistSoon()
   }
 

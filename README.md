@@ -22,6 +22,14 @@ Die Windows-App gibt es als Installer direkt von GitHub:
 
 Windows 10/11 (64 Bit). Nach dem Download den Installer ausführen; die Installation läuft ohne Administratorrechte im Benutzerprofil. Der Installer ist nicht signiert, deshalb kann SmartScreen beim ersten Start warnen – über **Weitere Informationen → Trotzdem ausführen** startet die App trotzdem.
 
+Alternativ lässt sich Toolbox per winget installieren – ohne Browser-Download und damit in der Regel ohne SmartScreen-Warnung:
+
+```powershell
+winget install --id NHoart.Toolbox -e
+```
+
+Die Manifeste dafür liegen unter [`windows/winget`](windows/winget).
+
 Die Windows-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Ist sie installiert, lädt sie den neuen Installer, prüft die im Release hinterlegte SHA-512-Prüfsumme und installiert das Update im Hintergrund; danach startet sie neu. Manuell geht das über **Einstellungen → Updates**; abschalten lässt sich die automatische Prüfung dort ebenfalls.
 
 **Einmalig von 3.1.x:** Die Windows-Versionen 3.1.0 und 3.1.1 enthalten den Updater noch nicht. Wer von dort kommt, lädt einmalig `Toolbox-Setup.exe` von der [Releases-Seite](https://github.com/NHoart/Toolbox/releases) und installiert sie über die bestehende Installation – Deinstallieren ist nicht nötig, die Daten bleiben erhalten. Da der Installer nicht signiert ist, kann der Defender SmartScreen dabei warnen – über **Weitere Informationen → Trotzdem ausführen** startet er trotzdem. Ab 3.2.0 übernimmt das Auto-Update.
@@ -87,6 +95,7 @@ npm start          # App lokal starten
 npm test           # Protokoll-, Speicher- und Sync-Tests inkl. Drei-Client-Kette
 npm run smoke:sync # Headless-Smoke-Test des Sync-Clients
 npm run dist       # Installer unter windows/dist/Toolbox-Setup.exe
+npm run winget:manifest # winget-Manifeste unter windows/dist/winget
 ```
 
 Der Installer wird regulär im Workflow auf `windows-latest` gebaut. `npm run dist` funktioniert auch auf einem Mac, sofern die Windows-Build-Werkzeuge von electron-builder verfügbar sind.
@@ -144,7 +153,7 @@ Der Workflow `.github/workflows/macos-dmg.yml` baut die DMG automatisch und hän
 - **Tag pushen**: `git tag v1.2.0 && git push origin v1.2.0` → Release `v1.2.0` mit `Toolbox.dmg`
 - **Actions → „macOS DMG“ → Run workflow** → Release `v<Version>` mit dem aktuellen Stand, erreichbar über den Download-Link oben
 
-Der Workflow `.github/workflows/windows-exe.yml` baut zusätzlich `Toolbox-Setup.exe` auf `windows-latest`, führt die Tests aus und hängt den Installer samt `latest.yml` und Blockmap an denselben Release – diese beiden Dateien braucht der Windows-Auto-Updater. Ein Tag-Build erzeugt also beide Downloads; ein manueller Lauf von „macOS DMG“ stößt den Windows-Workflow für denselben Release automatisch mit an. Beide Workflows prüfen nach dem Upload automatisch, dass `Toolbox.dmg`, `Toolbox-Setup.exe` und `latest.yml` am Release hängen; fehlt ein Asset, schlägt der Lauf fehl.
+Der Workflow `.github/workflows/windows-exe.yml` baut zusätzlich `Toolbox-Setup.exe` auf `windows-latest`, führt die Tests aus und hängt den Installer samt `latest.yml` und Blockmap an denselben Release – diese beiden Dateien braucht der Windows-Auto-Updater. Außerdem erzeugt er aus dem gebauten Installer die winget-Manifeste, prüft sie mit `winget validate` und legt sie als Artefakt `Toolbox-winget` ab. Ein Tag-Build erzeugt also beide Downloads; ein manueller Lauf von „macOS DMG“ stößt den Windows-Workflow für denselben Release automatisch mit an. Beide Workflows prüfen nach dem Upload automatisch, dass `Toolbox.dmg`, `Toolbox-Setup.exe` und `latest.yml` am Release hängen; fehlt ein Asset, schlägt der Lauf fehl.
 
 Die Release-Notes (`.github/macos-release-notes.md` und `.github/windows-release-notes.md`) beginnen mit einer Download-Tabelle, damit die Assets ganz oben im Release stehen. Vor dem Anlegen des Releases ersetzt der jeweilige Workflow die Platzhalter `{{REPO}}` und `{{TAG}}` durch Repository und Tag.
 
@@ -209,7 +218,7 @@ Damit der Abgleich klappt:
 - Windows kann kein AWDL/Peer-to-Peer; ein gemeinsamer Router bzw. ein WLAN ist nötig
 - Die Geräte sollten ihre Uhrzeit automatisch synchronisieren (Standard bei macOS, iOS und Windows), weil der Abgleich Zeitstempel vergleicht
 
-In den Einstellungen zeigen alle Fassungen den Status und die verbundenen Geräte; „Jetzt suchen“ startet die Suche neu. Der Abgleich ist für das lokale Netz gedacht und nicht verschlüsselt – es werden keine Daten an Dritte gesendet.
+Trage in den Einstellungen unter **Lokales Netzwerk** auf allen Geräten denselben Namen ein. Nur Geräte mit diesem Namen verbinden sich und gleichen sich ab; Groß-/Kleinschreibung und überzählige Leerzeichen spielen keine Rolle. Ohne Namen läuft kein Abgleich. In den Einstellungen zeigen alle Fassungen außerdem den Status und die verbundenen Geräte; „Jetzt suchen“ startet die Suche neu. Der Abgleich ist für das lokale Netz gedacht und nicht verschlüsselt – es werden keine Daten an Dritte gesendet.
 
 Umsetzung: `Toolbox/LocalSync.swift` (Apple) und `windows/src/sync.js` (Windows). Beide verwenden dasselbe Zeilen-JSON-Format mit Swift-Referenzzeitstempeln.
 
@@ -219,11 +228,12 @@ Umsetzung: `Toolbox/LocalSync.swift` (Apple) und `windows/src/sync.js` (Windows)
 - [ ] `Toolbox-Setup.exe` aus `windows/dist` oder dem GitHub-Release starten.
 - [ ] SmartScreen gegebenenfalls über **Weitere Informationen → Trotzdem ausführen** bestätigen.
 - [ ] Beim ersten Start die Firewall-Freigabe für **Private Netzwerke** erlauben; das WLAN muss als „Privat“ eingestuft sein.
-- [ ] Toolbox öffnen und in den Einstellungen prüfen, dass „Sync im WLAN“ an ist.
+- [ ] Toolbox öffnen, unter **Einstellungen → Lokales Netzwerk** denselben Namen wie auf den anderen Geräten eintragen und prüfen, dass „Sync im WLAN“ an ist.
 
 **Mac, iPhone und Windows verbinden**
 - [ ] Alle Geräte müssen im selben WLAN sein; Client-Isolation im Router ausschalten.
 - [ ] Toolbox auf allen Geräten öffnen; auf dem iPhone/iPad **Lokales Netzwerk** erlauben.
+- [ ] Auf allen Geräten unter **Einstellungen → Lokales Netzwerk** denselben Namen eintragen.
 - [ ] Auf allen Geräten **Jetzt suchen** wählen; die anderen Geräte werden als verbunden angezeigt.
 - [ ] Mac → iPhone: Wasser oder Zähler auf dem Mac ändern und den Stand auf dem iPhone prüfen.
 - [ ] Später iPhone → Windows: Toolbox auf dem PC öffnen/verbinden; der PC übernimmt den aktuellen Stand automatisch.
@@ -236,7 +246,7 @@ Umsetzung: `Toolbox/LocalSync.swift` (Apple) und `windows/src/sync.js` (Windows)
 
 ## Version
 
-Aktuell `3.2.0` (`MARKETING_VERSION` im Projekt).
+Aktuell `3.3.0` (`MARKETING_VERSION` im Projekt).
 
 ## Lizenz
 

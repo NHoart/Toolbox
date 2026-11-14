@@ -242,6 +242,10 @@ function registerIpc() {
     sync.syncNow()
     return statePayload()
   })
+  ipcMain.handle('sync:set-name', (_event, name) => {
+    sync.setSyncName(name)
+    return statePayload()
+  })
 
   ipcMain.handle('update:state', () => updater.state())
   ipcMain.handle('update:check', () => updater.check({ manual: true }))

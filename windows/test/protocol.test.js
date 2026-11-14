@@ -10,8 +10,10 @@ const {
   fromAppleTime,
   isPeerBehind,
   normalizeCounterSnapshot,
+  normalizeSyncName,
   normalizeWaterSnapshot,
   parseAppleTime,
+  sameSyncName,
   pruneHistory,
   shouldApply,
   toAppleTime,
@@ -91,6 +93,7 @@ test('Nachricht entspricht dem Swift-Format (eine Zeile, nil-Felder fehlen)', ()
   const line = encodeMessage({
     deviceID: 'windows-1',
     deviceName: 'Noahs-PC',
+    syncName: 'Familie',
     water: {
       history: { '2026-11-13': 750 },
       recentAdds: [250, 500],
@@ -108,15 +111,25 @@ test('Nachricht entspricht dem Swift-Format (eine Zeile, nil-Felder fehlen)', ()
   assert.equal(line.indexOf('\n'), line.length - 1)
 
   const parsed = JSON.parse(line)
-  assert.deepEqual(Object.keys(parsed), ['deviceID', 'deviceName', 'water'])
+  assert.deepEqual(Object.keys(parsed), ['deviceID', 'deviceName', 'syncName', 'water'])
+  assert.equal(parsed.syncName, 'Familie')
   assert.equal(parsed.water.total, 750)
   assert.equal(parsed.water.updatedAt, 100)
+})
+
+test('Gruppenname wird ohne Leerraum und Groß-/Kleinschreibung verglichen', () => {
+  assert.equal(normalizeSyncName('  Familie   Noah '), 'familie noah')
+  assert.equal(sameSyncName('Familie Noah', ' familie  noah '), true)
+  assert.equal(sameSyncName('Familie', 'Büro'), false)
+  assert.equal(sameSyncName('', ''), false)
+  assert.equal(sameSyncName('   ', '   '), false)
 })
 
 test('Swift-Nachricht mit Zahlendaten wird dekodiert', () => {
   const line = JSON.stringify({
     deviceID: 'mac-1',
     deviceName: 'Noahs-MacBook-Air',
+    syncName: 'Familie',
     water: {
       history: { '2026-11-13': 1250 },
       recentAdds: [250],
@@ -138,6 +151,7 @@ test('Swift-Nachricht mit Zahlendaten wird dekodiert', () => {
   const message = decodeMessageLine(line)
   assert.equal(message.deviceID, 'mac-1')
   assert.equal(message.deviceName, 'Noahs-MacBook-Air')
+  assert.equal(message.syncName, 'Familie')
   assert.equal(message.water.total, 1250)
   assert.equal(message.water.updatedAt, 812_345_678.5)
   assert.equal(message.counter.count, 3)

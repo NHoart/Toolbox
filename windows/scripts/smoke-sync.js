@@ -16,6 +16,7 @@ function createNode(name, clock) {
     filePath: path.join(directory, 'data.json'),
     now: () => clock.value,
   })
+  store.setSyncName('Familie')
   const sync = new SyncService({
     store,
     deviceName: name,

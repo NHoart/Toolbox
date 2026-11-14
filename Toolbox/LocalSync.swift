@@ -24,7 +24,14 @@ final class LocalSync: ObservableObject {
 
     static let serviceType = "_toolboxsync._tcp"
 
+    /// TXT-Schlüssel, über den Geräte ihren Gruppennamen ankündigen, bevor
+    /// eine Verbindung aufgebaut wird.
+    static let syncNameTXTKey = "syncname"
+
     @Published private(set) var isEnabled: Bool
+    /// Gemeinsamer Name der Sync-Gruppe. Nur Geräte mit demselben Namen
+    /// gleichen sich ab; ohne Namen läuft kein Abgleich.
+    @Published private(set) var syncName: String
     @Published private(set) var peerCount = 0
     @Published private(set) var lastSync: Date?
     @Published private(set) var isSearching = false
@@ -32,12 +39,14 @@ final class LocalSync: ObservableObject {
     private struct Message: Codable {
         var deviceID: String
         var deviceName: String
+        var syncName: String?
         var water: WaterStore.SyncSnapshot?
         var counter: CounterStore.SyncSnapshot?
     }
 
     private enum DefaultsKey {
         static let deviceID = "lan_sync_device_id"
+        static let name = "lan_sync_name"
         static let lastSync = "lan_sync_lastSync"
     }
 
@@ -74,6 +83,8 @@ final class LocalSync: ObservableObject {
     private var usedEndpoints: [String: UUID] = [:]
     private var observerTokens: [NSObjectProtocol] = []
     private var pendingBroadcast: DispatchWorkItem?
+    /// Entprellt den Neustart, während der Name getippt wird.
+    private var nameRestart: DispatchWorkItem?
 
     private let deviceID: String
     private let deviceName: String
@@ -81,6 +92,7 @@ final class LocalSync: ObservableObject {
     private init() {
         isEnabled = Self.defaults.object(forKey: Self.enabledKey) as? Bool ?? true
         lastSync = Self.defaults.object(forKey: DefaultsKey.lastSync) as? Date
+        syncName = String((Self.defaults.string(forKey: DefaultsKey.name) ?? "").prefix(60))
         deviceName = ProcessInfo.processInfo.hostName
 
         if let stored = Self.defaults.string(forKey: DefaultsKey.deviceID) {
@@ -94,8 +106,11 @@ final class LocalSync: ObservableObject {
 
     // MARK: - Steuerung
 
+    /// Ohne Namen ist der Abgleich aus.
+    var hasSyncName: Bool { !Self.trimmedName(syncName).isEmpty }
+
     func start() {
-        guard isEnabled else { return }
+        guard isEnabled, hasSyncName else { return }
         if listener == nil { startListener() }
         if browser == nil { startBrowser() }
         observeChanges()
@@ -104,7 +119,7 @@ final class LocalSync: ObservableObject {
     /// Startet nur den TCP-Listener ohne Bonjour/Browser – für den headless
     /// Interop-Test. Im normalen App-Betrieb bleibt `start()` unverändert.
     func startInteropListener() {
-        guard isEnabled else { return }
+        guard isEnabled, hasSyncName else { return }
         if listener == nil { startListener(advertise: false) }
         observeChanges()
     }
@@ -116,15 +131,52 @@ final class LocalSync: ObservableObject {
 
         if enabled {
             start()
-            scheduleBroadcast()
+            if hasSyncName { scheduleBroadcast() }
         } else {
             stop()
         }
     }
 
+    /// Setzt den gemeinsamen Namen der Sync-Gruppe. Änderungen werden kurz
+    /// entprellt, damit nicht jeder Tastendruck die Suche neu startet.
+    /// `restart: false` nur für den headless Interop-Test, der den Listener
+    /// selbst und ohne Bonjour startet.
+    func setSyncName(_ name: String, restart: Bool = true) {
+        let value = String(name.prefix(60))
+        guard value != syncName else { return }
+        syncName = value
+        Self.defaults.set(value, forKey: DefaultsKey.name)
+
+        nameRestart?.cancel()
+        nameRestart = nil
+
+        guard restart, isEnabled else { return }
+
+        if !hasSyncName {
+            // Ohne Namen darf keine Verbindung bestehen bleiben.
+            stop()
+            return
+        }
+
+        let item = DispatchWorkItem { [weak self] in
+            Task { @MainActor in self?.restartAfterNameChange() }
+        }
+        nameRestart = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: item)
+    }
+
+    private func restartAfterNameChange() {
+        nameRestart = nil
+        guard isEnabled, hasSyncName else { return }
+        // Beim ersten Eintragen des Namens läuft noch nichts – dann direkt starten.
+        if listener != nil || browser != nil { stop() }
+        start()
+        broadcast()
+    }
+
     /// Sucht erneut nach Geräten und schickt den aktuellen Stand an offene Verbindungen.
     func syncNow() {
-        guard isEnabled else { return }
+        guard isEnabled, hasSyncName else { return }
         start()
 
         // Immer frisch suchen: Bei mehreren Geräten kann die alte Suche einen
@@ -153,6 +205,8 @@ final class LocalSync: ObservableObject {
 
         pendingBroadcast?.cancel()
         pendingBroadcast = nil
+        nameRestart?.cancel()
+        nameRestart = nil
         lastResults = []
         peerCount = 0
         isSearching = false
@@ -164,7 +218,13 @@ final class LocalSync: ObservableObject {
         do {
             let listener = try NWListener(using: parameters)
             if advertise {
-                listener.service = NWListener.Service(name: deviceName, type: Self.serviceType)
+                var txt = NWTXTRecord()
+                txt[Self.syncNameTXTKey] = Self.trimmedName(syncName)
+                listener.service = NWListener.Service(
+                    name: deviceName,
+                    type: Self.serviceType,
+                    txtRecord: txt
+                )
             }
 
             listener.stateUpdateHandler = { [weak self] state in
@@ -218,8 +278,10 @@ final class LocalSync: ObservableObject {
             Task { @MainActor in
                 // Ergebnisse einer alten, bereits ersetzten Suche ignorieren.
                 guard self.browser === browser else { return }
-                self.lastResults = results
-                self.connect(to: results)
+                // Nur Geräte mit demselben Gruppennamen werden verbunden.
+                let matching = results.filter { Self.result($0, matches: self.syncName) }
+                self.lastResults = matching
+                self.connect(to: matching)
             }
         }
 
@@ -230,7 +292,7 @@ final class LocalSync: ObservableObject {
     private func connect(to results: Set<NWBrowser.Result>) {
         guard isEnabled else { return }
 
-        for result in results {
+        for result in results where Self.result(result, matches: syncName) {
             let key = "\(result.endpoint)"
             guard usedEndpoints[key] == nil else { continue }
 
@@ -315,6 +377,7 @@ final class LocalSync: ObservableObject {
         let message = Message(
             deviceID: deviceID,
             deviceName: deviceName,
+            syncName: Self.trimmedName(syncName),
             water: water,
             counter: counter
         )
@@ -326,6 +389,13 @@ final class LocalSync: ObservableObject {
 
     private func handle(_ data: Data, from id: UUID) {
         guard let message = try? JSONDecoder().decode(Message.self, from: data) else { return }
+
+        // Nur Geräte mit demselben Gruppennamen dürfen Daten austauschen.
+        // Geräte ohne Namen (ältere Stände) werden ebenfalls abgewiesen.
+        guard let remoteName = message.syncName, Self.sameName(remoteName, syncName) else {
+            drop(id)
+            return
+        }
 
         // Eigene Ankündigung über den eigenen Listener ignorieren.
         guard message.deviceID != deviceID else {
@@ -417,6 +487,34 @@ final class LocalSync: ObservableObject {
         let now = Date()
         lastSync = now
         Self.defaults.set(now, forKey: DefaultsKey.lastSync)
+    }
+
+    // MARK: - Namensvergleich
+
+    /// Vergleichsform des Gruppennamens: Leerraum und Groß-/Kleinschreibung
+    /// spielen keine Rolle, damit „Familie“ auf allen Geräten gleich zählt.
+    private static func normalizedName(_ name: String) -> String {
+        name.split(whereSeparator: { $0.isWhitespace })
+            .joined(separator: " ")
+            .lowercased()
+    }
+
+    private static func sameName(_ lhs: String, _ rhs: String) -> Bool {
+        let left = normalizedName(lhs)
+        return !left.isEmpty && left == normalizedName(rhs)
+    }
+
+    private static func trimmedName(_ name: String) -> String {
+        name.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// Prüft die Bonjour-Ankündigung, bevor eine Verbindung aufgebaut wird.
+    private static func result(_ result: NWBrowser.Result, matches name: String) -> Bool {
+        guard case let .bonjour(txt) = result.metadata,
+              let advertised = txt[syncNameTXTKey] else {
+            return false
+        }
+        return sameName(advertised, name)
     }
 }
 

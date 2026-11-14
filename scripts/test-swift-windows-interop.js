@@ -98,11 +98,16 @@ async function waitForStatus(harness, predicate, message, timeout = 15_000) {
   throw new Error(`${message}; letzter Status: ${JSON.stringify(last)}`)
 }
 
-function createSwiftClient(name, suite, home) {
+function createSwiftClient(name, suite, home, syncName = 'Interop') {
   let stderr = ''
   const child = spawn(HARNESS, [], {
     cwd: ROOT,
-    env: { ...process.env, TOOLBOX_DEFAULTS_SUITE: suite, HOME: home },
+    env: {
+      ...process.env,
+      TOOLBOX_DEFAULTS_SUITE: suite,
+      TOOLBOX_SYNC_NAME: syncName,
+      HOME: home,
+    },
     stdio: ['pipe', 'pipe', 'pipe'],
   })
   child.stderr.on('data', chunk => {
@@ -246,15 +251,24 @@ async function main() {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'toolbox-interop-'))
   const homeMac = path.join(temp, 'home-mac')
   const homeIPhone = path.join(temp, 'home-iphone')
+  const homeOther = path.join(temp, 'home-other')
   fs.mkdirSync(homeMac, { recursive: true })
   fs.mkdirSync(homeIPhone, { recursive: true })
+  fs.mkdirSync(homeOther, { recursive: true })
 
   const nonce = `${process.pid}-${Date.now()}`
   const mac = createSwiftClient('Mac', `toolbox-interop-mac-${nonce}`, homeMac)
   const iphone = createSwiftClient('iPhone', `toolbox-interop-iphone-${nonce}`, homeIPhone)
-  const clients = [mac, iphone]
+  const outsider = createSwiftClient(
+    'Andere Gruppe',
+    `toolbox-interop-other-${nonce}`,
+    homeOther,
+    'Andere Gruppe'
+  )
+  const clients = [mac, iphone, outsider]
 
   const windows = new ToolboxStore({ filePath: path.join(temp, 'windows.json') })
+  windows.setSyncName('Interop')
   const sync = new SyncService({
     store: windows,
     deviceName: 'Windows-PC',
@@ -278,7 +292,11 @@ async function main() {
   }
 
   try {
-    const [macPort, iphonePort] = await Promise.all([mac.harness.ready, iphone.harness.ready])
+    const [macPort, iphonePort, outsiderPort] = await Promise.all([
+      mac.harness.ready,
+      iphone.harness.ready,
+      outsider.harness.ready,
+    ])
     proxy = await createCaptureProxy(macPort)
 
     sync.start()
@@ -418,6 +436,17 @@ async function main() {
 
     assertSnapshot('Mac', macSnapshot, winWaterSnapshot, winCounterSnapshot)
     assertSnapshot('iPhone', iphoneSnapshot, winWaterSnapshot, winCounterSnapshot)
+
+    // Ein Gerät mit anderem Gruppennamen bleibt außen vor, auch wenn es
+    // direkt erreichbar ist und wir bereits Daten haben.
+    sync.connectTo('127.0.0.1', outsiderPort)
+    await delay(800)
+    const outsiderStatus = await outsider.harness.status()
+    assert.equal(outsiderStatus.peers, 0, 'fremder Name darf kein Peer werden')
+    assert.equal(outsiderStatus.water, 0, 'fremder Name darf keine Daten bekommen')
+    const outsiderSnapshot = await outsider.harness.snapshot()
+    assert.equal(outsiderSnapshot.water.total, 0, 'fremder Name darf keinen Verlauf bekommen')
+    assert.equal(windows.todayML(), 850, 'fremder Name darf Windows nicht verändern')
 
     console.log(
       'Drei echte Peers erfolgreich: A=Mac, B=iPhone, Windows; '

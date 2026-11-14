@@ -25,6 +25,18 @@ struct SettingsView: View {
                     Stepper("Ziel: \(goal) ml", value: $goal, in: 500...6000, step: 250)
                 }
                 Section {
+                    HStack {
+                        Text("Name")
+                        Spacer()
+                        TextField("z. B. Familie", text: syncNameBinding)
+                            .multilineTextAlignment(.trailing)
+                            .autocorrectionDisabled()
+                    }
+                    if lanEnabled && !lan.hasSyncName {
+                        Text("Ohne Namen ist der Abgleich aus.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
                     Toggle("Sync im WLAN", isOn: $lanEnabled)
                     if lanEnabled {
                         HStack {
@@ -34,11 +46,12 @@ struct SettingsView: View {
                                 .foregroundStyle(.secondary)
                         }
                         Button("Jetzt suchen") { LocalSync.shared.syncNow() }
+                            .disabled(!lan.hasSyncName)
                     }
                 } header: {
                     Text("Lokales Netzwerk")
                 } footer: {
-                    Text("Gleicht Wassertracker und Zähler direkt mit deinem anderen Gerät im selben WLAN ab – ohne Server. Öffne die App auf beiden Geräten, sie finden sich automatisch.")
+                    Text("Gleicht Wassertracker und Zähler direkt mit deinen anderen Geräten im selben WLAN ab – ohne Server. Trage auf allen Geräten denselben Namen ein; nur Geräte mit diesem Namen gleichen sich ab.")
                 }
                 #if os(macOS)
                 Section {
@@ -94,8 +107,13 @@ struct SettingsView: View {
         }
     }
 
+    private var syncNameBinding: Binding<String> {
+        Binding(get: { lan.syncName }, set: { LocalSync.shared.setSyncName($0) })
+    }
+
     private var lanStatus: String {
         guard lanEnabled else { return "Aus" }
+        guard lan.hasSyncName else { return "Name fehlt" }
         if lan.peerCount == 1 { return "Verbunden mit 1 Gerät" }
         if lan.peerCount > 1 { return "Verbunden mit \(lan.peerCount) Geräten" }
         if let date = lan.lastSync {

@@ -3,7 +3,9 @@
 // Wire-Format des Toolbox-Abgleichs.
 //
 // Die Apple-App (macOS/iOS) verschickt pro Zeile ein JSON-Objekt:
-//   { "deviceID": "...", "deviceName": "...", "water": {...}, "counter": {...} }
+//   { "deviceID": "...", "deviceName": "...", "syncName": "...", "water": {...}, "counter": {...} }
+// `syncName` ist der gemeinsame Name der Sync-Gruppe. Geräte ohne passenden
+// Namen tauschen keine Stände aus.
 //
 // Swift kodiert `Date` als Double in Sekunden seit dem 01.01.2001
 // (timeIntervalSinceReferenceDate). Die Windows-App muss exakt dasselbe
@@ -64,6 +66,19 @@ function toInteger(value, fallback = 0) {
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value))
+}
+
+/** Vergleichsform des Gruppennamens: Leerraum und Groß-/Kleinschreibung egal. */
+function normalizeSyncName(name) {
+  return String(name ?? '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase()
+}
+
+function sameSyncName(a, b) {
+  const left = normalizeSyncName(a)
+  return left.length > 0 && left === normalizeSyncName(b)
 }
 
 /** Entfernt Einträge, die älter als 400 Tage sind – wie WaterStore.setToday. */
@@ -132,8 +147,8 @@ function normalizeCounterSnapshot(raw) {
 }
 
 /** Baut die Nachricht, die über TCP geht (eine Zeile, wie bei den Apple-Clients). */
-function encodeMessage({ deviceID, deviceName, water, counter }) {
-  const message = { deviceID, deviceName }
+function encodeMessage({ deviceID, deviceName, syncName, water, counter }) {
+  const message = { deviceID, deviceName, syncName: syncName || '' }
   // Swift lässt `nil`-Felder beim Kodieren weg.
   if (water) message.water = water
   if (counter) message.counter = counter
@@ -154,6 +169,7 @@ function decodeMessageLine(line) {
   return {
     deviceID: message.deviceID,
     deviceName: typeof message.deviceName === 'string' ? message.deviceName : 'Gerät',
+    syncName: typeof message.syncName === 'string' ? message.syncName : '',
     water: normalizeWaterSnapshot(message.water),
     counter: normalizeCounterSnapshot(message.counter),
   }
@@ -193,6 +209,8 @@ module.exports = {
   normalizeWaterSnapshot,
   normalizeCounterSnapshot,
   normalizeSavedCounters,
+  normalizeSyncName,
+  sameSyncName,
   encodeMessage,
   decodeMessageLine,
   shouldApply,
