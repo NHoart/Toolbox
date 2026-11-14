@@ -14,18 +14,14 @@ Windows 10/11, 64 Bit. `Toolbox-Setup.exe` oben herunterladen, ausführen und de
 
 Da der Installer nicht signiert ist, zeigt Windows SmartScreen beim ersten Start möglicherweise eine Warnung. Über **Weitere Informationen → Trotzdem ausführen** lässt sich die App starten. Wer den Browser-Download vermeiden will, installiert stattdessen per winget (siehe Tabelle oben).
 
-### Neu in 3.3.0
+### Neu in 3.3.1
 
-- **Name für den WLAN-Sync:** Im Abschnitt **Lokales Netzwerk** der
-  Einstellungen gibt es jetzt oben ein Namensfeld. Ohne Namen läuft kein
-  Abgleich; der Status zeigt „Name fehlt“ und „Jetzt suchen“ ist deaktiviert.
-- **Nur gleiche Namen verbinden sich:** Toolbox sucht wie bisher im WLAN,
-  verbindet sich aber nur mit Geräten, die denselben Namen eingetragen haben.
-  Groß-/Kleinschreibung und überzählige Leerzeichen spielen keine Rolle.
-- **Mehrere Geräte:** Alle Geräte mit demselben Namen bilden weiterhin eine
-  Gruppe; Änderungen werden auch über ein drittes Gerät weitergegeben.
-- **Apple und Windows gemeinsam:** Namensfeld und Namensprüfung sind in macOS,
-  iOS und der Windows-App enthalten.
+- **Apple-Geräte verbinden sich wieder direkt:** In 3.3.0 suchten Mac und
+  iPhone wegen fehlender TXT-Daten im Bonjour-Browser selbst keine Geräte
+  mehr; der Abgleich lief nur über den Windows-PC als Brücke. 3.3.1 behebt das
+  in der Apple-App.
+- **Windows ohne funktionale Änderung:** Die Windows-App entspricht 3.3.0; der
+  Fix betrifft nur den Apple-Bonjour-Browser.
 
 ### Windows: Update von 3.1.x
 
@@ -34,17 +30,17 @@ Windows-Versionen vor 3.2.0 enthalten den Updater noch nicht. Einmalig
 die bestehende Installation laufen lassen – Deinstallieren ist nicht nötig, die
 Daten bleiben erhalten. Da der Installer nicht signiert ist, kann der Defender
 SmartScreen warnen – über **Weitere Informationen → Trotzdem ausführen** lässt
-er sich starten. Ab 3.2.0 übernimmt das Auto-Update; 3.3.0 wird dort automatisch
+er sich starten. Ab 3.2.0 übernimmt das Auto-Update; 3.3.1 wird dort automatisch
 angeboten.
 
 ### Geprüfter Release-Stand
 
 Die Windows-Tests (32) und der Headless-Sync-Smoke-Test sind grün. Der
 Swift↔Windows-Interop-Test bestätigt den Abgleich mit Mac, iPhone und Windows
-sowie, dass ein Gerät mit anderem Namen weder Peer wird noch Daten erhält. Die
-Xcode-Builds für macOS und iOS liefen fehlerfrei durch. Ein echter WLAN-Test
-zwischen physischen Geräten, ein Update-Lauf und die native Windows-Oberfläche
-müssen nach dem Release auf den Zielgeräten geprüft werden.
+sowie die Namensfilterung. Die Xcode-Builds für macOS und iOS (3.3.1) liefen
+fehlerfrei durch; der direkte Apple-Verbindungsaufbau wurde headless mit zwei
+Instanzen geprüft. Ein Test auf physischen Geräten mit 3.3.1, ein echter
+WLAN-Test, ein Update-Lauf und die native Windows-Oberfläche stehen noch aus.
 
 ### Sync mit Mac und iPhone
 

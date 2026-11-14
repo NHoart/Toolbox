@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.28.0.schema.json
 
 PackageIdentifier: NHoart.Toolbox
-PackageVersion: 3.2.0
+PackageVersion: 3.3.0
 PackageLocale: de-DE
 Publisher: Noah Hartmann
 PublisherUrl: https://github.com/NHoart
@@ -25,6 +25,6 @@ Tags:
   - downloadzeit
   - stromverbrauch
   - sync
-ReleaseNotesUrl: https://github.com/NHoart/Toolbox/releases/tag/v3.2.0
+ReleaseNotesUrl: https://github.com/NHoart/Toolbox/releases/tag/v3.3.0
 ManifestType: defaultLocale
 ManifestVersion: 1.28.0

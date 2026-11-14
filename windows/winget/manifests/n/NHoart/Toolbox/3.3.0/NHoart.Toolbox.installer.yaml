@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.28.0.schema.json
 
 PackageIdentifier: NHoart.Toolbox
-PackageVersion: 3.2.0
+PackageVersion: 3.3.0
 Platform:
   - Windows.Desktop
 MinimumOSVersion: 10.0.17763.0
@@ -14,7 +14,7 @@ UpgradeBehavior: install
 ReleaseDate: 2026-11-14
 Installers:
   - Architecture: x64
-    InstallerUrl: https://github.com/NHoart/Toolbox/releases/download/v3.2.0/Toolbox-Setup.exe
-    InstallerSha256: 405BBFCB2350EEC9F284CA68554A7959A6D15DBE753754ACB42AFD716E49510E
+    InstallerUrl: https://github.com/NHoart/Toolbox/releases/download/v3.3.0/Toolbox-Setup.exe
+    InstallerSha256: 1089B85B041364B59779F4E46DE84B7C38BF413572FD626EA570598AFCEB176A
 ManifestType: installer
 ManifestVersion: 1.28.0

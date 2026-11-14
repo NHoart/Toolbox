@@ -254,7 +254,13 @@ final class LocalSync: ObservableObject {
     }
 
     private func startBrowser() {
-        let browser = NWBrowser(for: .bonjour(type: Self.serviceType, domain: nil), using: parameters)
+        // Nur mit `bonjourWithTXTRecord` liefert Network.framework die
+        // TXT-Daten. Mit `.bonjour` wäre `result.metadata` immer `.none`,
+        // wodurch der Namensfilter alle Geräte verwerfen würde.
+        let browser = NWBrowser(
+            for: .bonjourWithTXTRecord(type: Self.serviceType, domain: nil),
+            using: parameters
+        )
 
         browser.stateUpdateHandler = { [weak self, weak browser] state in
             guard let self, let browser else { return }
