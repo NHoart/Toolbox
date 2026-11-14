@@ -14,6 +14,24 @@ Alle Versionen stehen auf der [Releases-Seite](https://github.com/NHoart/Toolbox
 
 Die Mac-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Liegt die App in **Programme**, lädt sie die neue DMG, prüft Prüfsumme und Signatur und ersetzt sich selbst; aus Xcode oder von der DMG gestartet bietet sie stattdessen den Download an. Manuell geht das über **Toolbox → Nach Updates suchen…** oder den Button in den Einstellungen; abschalten lässt sich die automatische Prüfung dort ebenfalls.
 
+### iPhone und iPad
+
+Für iPhone und iPad gibt es kein fertiges IPA im Release und keinen App-Store-Download – die iOS-App wird mit Xcode aus dem Quellcode direkt aufs Gerät gebaut. Nötig sind ein Mac mit Xcode 27.2 oder neuer und ein iPhone oder iPad mit iOS/iPadOS 27.2 oder neuer.
+
+1. Repository klonen und die eigene Team-ID hinterlegen:
+   ```bash
+   git clone https://github.com/NHoart/Toolbox.git
+   cd Toolbox
+   printf 'DEVELOPMENT_TEAM = XXXXXXXXXX\n' > Config/Local.xcconfig
+   ```
+   Die Team-ID steht in Xcode unter **Settings → Accounts** hinter dem angemeldeten Apple-Account. Für die App Group unten braucht es ein kostenpflichtiges Developer-Team.
+2. `Toolbox.xcodeproj` öffnen, das Schema `Toolbox` wählen und als Ziel das per Kabel oder WLAN verbundene iPhone bzw. iPad auswählen.
+3. Am Gerät den Entwicklermodus einschalten: **Einstellungen → Datenschutz & Sicherheit → Entwicklermodus**, das iPhone neu starten und den Modus nach dem Entsperren bestätigen. Ohne ihn startet die App nicht.
+4. **Run** (⌘R) drücken. Beim ersten Start fragt iOS nach der Freigabe für **Lokales Netzwerk** – erlauben, sonst findet der Abgleich im WLAN keine anderen Geräte.
+5. Meldet iOS, dass der Entwickler nicht verifiziert ist, unter **Einstellungen → Allgemein → VPN & Geräteverwaltung** den Eintrag **Apple Development: …** öffnen und **Vertrauen** wählen.
+
+Für Widget und die gemeinsamen Daten von App und Widget muss in beiden Targets unter **Signing & Capabilities** die App Group `group.com.noahsapps.Wassertracker` aktiv sein; fehlt sie, bricht der Debug-Build beim ersten Zugriff auf den Wassertracker ab. Mit einem kostenlosen Apple-Account läuft die installierte App außerdem nur sieben Tage, danach ist in Xcode erneut **Run** nötig. Eine neue Version kommt nicht automatisch aufs Gerät: `git pull` und erneut aus Xcode installieren.
+
 ### Windows
 
 Die Windows-App gibt es als Installer direkt von GitHub:
