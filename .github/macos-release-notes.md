@@ -34,6 +34,13 @@ Lade oben `Toolbox.dmg` herunter.
   aktualisieren kann.
 - **Apple-Apps unverändert:** macOS, iOS und das Widget entsprechen 3.1.1.
 
+### Windows: Update von 3.1.x
+
+Windows-Versionen vor 3.2.0 enthalten den Updater noch nicht. Einmalig
+`Toolbox-Setup.exe` oben herunterladen, Toolbox schließen und den Installer über
+die bestehende Installation laufen lassen – Deinstallieren ist nicht nötig, die
+Daten bleiben erhalten. Ab 3.2.0 übernimmt das Auto-Update.
+
 ### Geprüfter Release-Stand
 
 3.2.0 ändert nur die Windows-App und den Release-Workflow. Der Xcode-Build für macOS lief mit Xcode 27.2 fehlerfrei durch; die Windows-Tests (29, davon fünf neue für den Updater) und der Installer-Build samt `latest.yml` und `app-update.yml` sind grün. Ein echter Update-Lauf auf einem Windows-Rechner sowie die native Windows-Oberfläche konnten auf dem Mac nicht geprüft werden.

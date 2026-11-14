@@ -25,6 +25,13 @@ Da der Installer nicht signiert ist, zeigt Windows SmartScreen beim ersten Start
   im Release hinterlegte SHA-512-Prüfsumme.
 - **Apple-Apps unverändert:** macOS, iOS und das Widget entsprechen 3.1.1.
 
+### Windows: Update von 3.1.x
+
+Windows-Versionen vor 3.2.0 enthalten den Updater noch nicht. Einmalig
+`Toolbox-Setup.exe` oben herunterladen, Toolbox schließen und den Installer über
+die bestehende Installation laufen lassen – Deinstallieren ist nicht nötig, die
+Daten bleiben erhalten. Ab 3.2.0 übernimmt das Auto-Update.
+
 ### Geprüfter Release-Stand
 
 Die Update-Logik ist durch 29 Windows-Tests abgedeckt, davon fünf neue für den Updater. Der Installer-Build erzeugt `latest.yml`, die Blockmap und `app-update.yml`; `electron-updater` liegt im gepackten `app.asar`. Ein echtes Update von 3.1.1 auf 3.2.0 sowie die native Windows-Oberfläche müssen nach dem Release auf einem Windows-Rechner geprüft werden.

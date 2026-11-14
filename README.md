@@ -24,6 +24,8 @@ Windows 10/11 (64 Bit). Nach dem Download den Installer ausführen; die Installa
 
 Die Windows-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Ist sie installiert, lädt sie den neuen Installer, prüft die im Release hinterlegte SHA-512-Prüfsumme und installiert das Update im Hintergrund; danach startet sie neu. Manuell geht das über **Einstellungen → Updates**; abschalten lässt sich die automatische Prüfung dort ebenfalls.
 
+**Einmalig von 3.1.x:** Die Windows-Versionen 3.1.0 und 3.1.1 enthalten den Updater noch nicht. Wer von dort kommt, lädt einmalig `Toolbox-Setup.exe` von der [Releases-Seite](https://github.com/NHoart/Toolbox/releases) und installiert sie über die bestehende Installation – Deinstallieren ist nicht nötig, die Daten bleiben erhalten. Ab 3.2.0 übernimmt das Auto-Update.
+
 Die wichtigsten Schritte für Installation und Drei-Geräte-Abgleich stehen in der [Checkliste](#checkliste-erster-start-und-drei-geräte-sync).
 
 ## Funktionen
