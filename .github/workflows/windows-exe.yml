@@ -64,6 +64,9 @@ jobs:
           if ($LASTEXITCODE -ne 0 -and $validation -notmatch 'validation succeeded with warnings') {
             throw "winget validate ist für $version fehlgeschlagen."
           }
+          # GitHub Actions beendet pwsh-Schritte mit dem letzten nativen
+          # Exit-Code; nach akzeptierten Warnungen wieder auf 0 setzen.
+          $LASTEXITCODE = 0
 
       - name: winget-Manifeste als Workflow-Artefakt hochladen
         uses: actions/upload-artifact@v4
