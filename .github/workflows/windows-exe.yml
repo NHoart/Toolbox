@@ -69,7 +69,16 @@ jobs:
             $tag = "v$version"
           }
 
-          $notes = Join-Path $env:GITHUB_WORKSPACE ".github/windows-release-notes.md"
+          # Die Download-Tabelle steht ganz oben in den Release-Notes; dafür
+          # Repository und Tag in die Vorlage einsetzen.
+          $repo = $env:GITHUB_REPOSITORY
+          if (-not $repo) {
+            $repo = (gh repo view --json nameWithOwner --jq .nameWithOwner)
+          }
+          $notesTemplate = Join-Path $env:GITHUB_WORKSPACE ".github/windows-release-notes.md"
+          $notes = Join-Path $env:RUNNER_TEMP "windows-release-notes.md"
+          (Get-Content $notesTemplate -Raw).Replace('{{REPO}}', $repo).Replace('{{TAG}}', $tag) |
+            Set-Content -Path $notes -Encoding utf8
 
           gh release view $tag *> $null
           if ($LASTEXITCODE -ne 0) {

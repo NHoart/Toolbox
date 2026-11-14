@@ -63,13 +63,20 @@ jobs:
             tag="v$version"
           fi
 
+          # Die Download-Tabelle steht ganz oben in den Release-Notes; dafür
+          # Repository und Tag in die Vorlage einsetzen.
+          repo="${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"
+          notes="$(mktemp)"
+          sed -e "s|{{REPO}}|$repo|g" -e "s|{{TAG}}|$tag|g" \
+            .github/macos-release-notes.md > "$notes"
+
           if gh release view "$tag" > /dev/null 2>&1; then
             gh release upload "$tag" dist/Toolbox.dmg --clobber
           else
             # Der Windows-Workflow kann denselben Release gleichzeitig anlegen.
             if ! gh release create "$tag" dist/Toolbox.dmg \
               --title "Toolbox $version" \
-              --notes-file .github/macos-release-notes.md; then
+              --notes-file "$notes"; then
               gh release upload "$tag" dist/Toolbox.dmg --clobber
             fi
           fi
