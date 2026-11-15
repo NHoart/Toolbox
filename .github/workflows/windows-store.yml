@@ -2,6 +2,8 @@ name: Microsoft Store (AppX)
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*"
   workflow_dispatch:
@@ -75,6 +77,8 @@ jobs:
           if ($exitCode -ne 0) {
             "### AppX-Build fehlgeschlagen" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
             Get-Content store-build.log -Tail 120 | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+            $details = ((Get-Content store-build.log -Tail 12 | Where-Object { $_.Trim() }) -join ' | ') -replace '%', '%25'
+            Write-Output "::error title=AppX-Build fehlgeschlagen::$details"
             exit $exitCode
           }
 
