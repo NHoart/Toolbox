@@ -116,6 +116,9 @@ async function run() {
   await build({
     targets: Platform.WINDOWS.createTarget('appx', Arch.x64),
     config,
+    // Der Store-Build wird ausschließlich als Workflow-Artefakt hochgeladen;
+    // electron-builder darf nicht selbst veröffentlichen.
+    publish: 'never',
   })
   console.log('AppX fertig. Die Datei liegt unter windows/dist/.')
 }
