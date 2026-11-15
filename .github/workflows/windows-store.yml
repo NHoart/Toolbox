@@ -45,7 +45,7 @@ jobs:
       - name: Headless-Sync-Smoke-Test
         run: npm run smoke:sync
 
-      - name: Store-Konfiguration prüfen
+      - name: Store-Identität prüfen
         id: store
         shell: pwsh
         run: |
@@ -58,6 +58,11 @@ jobs:
           } else {
             "build=true" >> $env:GITHUB_OUTPUT
           }
+
+      - name: Store-Konfiguration prüfen
+        env:
+          ALLOW_STORE_PLACEHOLDER: ${{ inputs.test_build && '1' || '' }}
+        run: npm run dist:store -- --check
 
       - name: AppX bauen
         if: steps.store.outputs.build == 'true'

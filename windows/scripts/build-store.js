@@ -3,6 +3,7 @@
 const fs = require('node:fs')
 const path = require('node:path')
 const { build, Platform, Arch } = require('electron-builder')
+const { validateConfiguration } = require('app-builder-lib/out/util/config/config')
 
 const root = path.join(__dirname, '..')
 const configPath = path.join(root, 'store', 'store.config.json')
@@ -87,31 +88,39 @@ const config = {
   },
 }
 
-if (checkOnly) {
-  console.log('Store-Konfiguration OK.')
-  console.log(`  identityName: ${identityName}`)
-  console.log(`  publisher: ${publisher}`)
-  console.log(`  publisherDisplayName: ${publisherDisplayName}`)
-  console.log(`  displayName: ${displayName}`)
-  console.log(`  applicationId: ${applicationId}`)
-  console.log(`  capabilities: ${(config.appx.capabilities || []).join(', ')}`)
-  console.log(`  winCodeSign: ${config.toolsets.winCodeSign}`)
-  if (placeholder) console.log('  Hinweis: Platzhalter-Identität (Testbau).')
-  process.exit(0)
+// Der Store-Build veröffentlicht nicht über electron-builder. Die aus dem
+// NSIS-Build geerbte publish-Konfiguration ist hier unnötig und wird von der
+// electron-builder-JS-API nicht als gültiges Schema akzeptiert.
+delete config.publish
+
+async function run() {
+  if (checkOnly) {
+    await validateConfiguration(config, { isEnabled: false, add() {} })
+    console.log('Store-Konfiguration OK.')
+    console.log(`  identityName: ${identityName}`)
+    console.log(`  publisher: ${publisher}`)
+    console.log(`  publisherDisplayName: ${publisherDisplayName}`)
+    console.log(`  displayName: ${displayName}`)
+    console.log(`  applicationId: ${applicationId}`)
+    console.log(`  capabilities: ${(config.appx.capabilities || []).join(', ')}`)
+    console.log(`  winCodeSign: ${config.toolsets.winCodeSign}`)
+    if (placeholder) console.log('  Hinweis: Platzhalter-Identität (Testbau).')
+    return
+  }
+
+  // Der Store signiert das Paket beim Einreichen neu. Ein lokales Zertifikat
+  // würde nur einen falschen Publisher in das Manifest schreiben.
+  process.env.CSC_IDENTITY_AUTO_DISCOVERY = 'false'
+
+  console.log(`Baue AppX für ${identityName} …`)
+  await build({
+    targets: Platform.WINDOWS.createTarget('appx', Arch.x64),
+    config,
+  })
+  console.log('AppX fertig. Die Datei liegt unter windows/dist/.')
 }
 
-// Der Store signiert das Paket beim Einreichen neu. Ein lokales Zertifikat
-// würde nur einen falschen Publisher in das Manifest schreiben.
-process.env.CSC_IDENTITY_AUTO_DISCOVERY = 'false'
-
-console.log(`Baue AppX für ${identityName} …`)
-build({
-  targets: Platform.WINDOWS.createTarget('appx', Arch.x64),
-  config,
-  publish: 'never',
-}).then(() => {
-  console.log('AppX fertig. Die Datei liegt unter windows/dist/.')
-}).catch(error => {
-  console.error('AppX-Build fehlgeschlagen:', error)
+run().catch(error => {
+  console.error(checkOnly ? 'Store-Konfiguration ungültig:' : 'AppX-Build fehlgeschlagen:', error)
   process.exit(1)
 })
