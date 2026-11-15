@@ -65,6 +65,13 @@ if (placeholder) {
 
 const config = {
   ...pkg.build,
+  // Die alte winCodeSign-2.6.0-Toolchain ist für AppX auf aktuellen
+  // Windows-Runnern nicht mehr zuverlässig. Windows Kits 10.0.26100.0
+  // verwenden; der NSIS-Build bleibt unberührt.
+  toolsets: {
+    ...(pkg.build.toolsets || {}),
+    winCodeSign: '1.1.0',
+  },
   win: {
     ...pkg.build.win,
     target: [{ target: 'appx', arch: ['x64'] }],
@@ -88,6 +95,7 @@ if (checkOnly) {
   console.log(`  displayName: ${displayName}`)
   console.log(`  applicationId: ${applicationId}`)
   console.log(`  capabilities: ${(config.appx.capabilities || []).join(', ')}`)
+  console.log(`  winCodeSign: ${config.toolsets.winCodeSign}`)
   if (placeholder) console.log('  Hinweis: Platzhalter-Identität (Testbau).')
   process.exit(0)
 }

@@ -42,7 +42,11 @@ Store neu signiert; ein eigenes Zertifikat ist nicht nötig.
 
 Der Workflow **Microsoft Store (AppX)** baut das Paket auf `windows-latest`.
 Er läuft bei jedem Tag `v*` und manuell über **Actions → Microsoft Store
-(AppX) → Run workflow**.
+(AppX) → Run workflow**. Der Store-Build pinnt `toolsets.winCodeSign` auf
+`1.1.0` (Windows Kits 10.0.26100.0); die alte `winCodeSign-2.6.0`-Toolchain
+ist auf aktuellen Windows-Runnern für AppX nicht mehr zuverlässig. Bei einem
+Fehler schreibt der Workflow die letzten Zeilen des Build-Logs in die
+Job-Zusammenfassung.
 
 - Vor dem Eintragen der echten Identität kann mit **Testbau mit
   Platzhalter-Identität** die Paketierung geprüft werden. Dieses Paket ist

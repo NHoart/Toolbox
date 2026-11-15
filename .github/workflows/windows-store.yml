@@ -61,9 +61,17 @@ jobs:
 
       - name: AppX bauen
         if: steps.store.outputs.build == 'true'
+        shell: pwsh
         env:
           ALLOW_STORE_PLACEHOLDER: ${{ inputs.test_build && '1' || '' }}
-        run: npm run dist:store
+        run: |
+          npm run dist:store 2>&1 | Tee-Object -FilePath store-build.log
+          $exitCode = $LASTEXITCODE
+          if ($exitCode -ne 0) {
+            "### AppX-Build fehlgeschlagen" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+            Get-Content store-build.log -Tail 120 | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+            exit $exitCode
+          }
 
       - name: AppX als Workflow-Artefakt hochladen
         if: steps.store.outputs.build == 'true'
