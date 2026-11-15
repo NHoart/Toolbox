@@ -87,6 +87,7 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          STORE_URL: ${{ vars.STORE_URL }}
         run: |
           $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
 
@@ -104,7 +105,13 @@ jobs:
           }
           $notesTemplate = Join-Path $env:GITHUB_WORKSPACE ".github/windows-release-notes.md"
           $notes = Join-Path $env:RUNNER_TEMP "windows-release-notes.md"
-          (Get-Content $notesTemplate -Raw).Replace('{{REPO}}', $repo).Replace('{{TAG}}', $tag) |
+          $storeUrl = $env:STORE_URL
+          if ($storeUrl) {
+            $storeRow = "| **Microsoft Store** (Windows 10/11) | [Toolbox for Windows im Microsoft Store]($storeUrl) |"
+          } else {
+            $storeRow = ""
+          }
+          (Get-Content $notesTemplate -Raw).Replace('{{REPO}}', $repo).Replace('{{TAG}}', $tag).Replace('{{STORE_ROW}}', $storeRow) |
             Set-Content -Path $notes -Encoding utf8
 
           gh release view $tag *> $null

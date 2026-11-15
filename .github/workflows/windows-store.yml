@@ -1,0 +1,77 @@
+name: Microsoft Store (AppX)
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      test_build:
+        description: "Testbau mit Platzhalter-Identität (nicht im Store einreichbar)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-store-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  appx:
+    name: AppX bauen
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: windows
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Tests
+        run: npm test
+
+      - name: Headless-Sync-Smoke-Test
+        run: npm run smoke:sync
+
+      - name: Store-Konfiguration prüfen
+        id: store
+        shell: pwsh
+        run: |
+          $config = Get-Content store/store.config.json -Raw | ConvertFrom-Json
+          $placeholder = (-not $config.identityName) -or $config.identityName.StartsWith('TODO') -or (-not $config.publisher) -or $config.publisher.StartsWith('CN=TODO')
+          $testBuild = "${{ inputs.test_build }}" -eq "true"
+          if ($placeholder -and -not $testBuild) {
+            Write-Host "::warning::Microsoft-Store-Identität noch nicht konfiguriert. Trage windows/store/store.config.json aus Partner Center ein; der AppX-Build wird übersprungen."
+            "build=false" >> $env:GITHUB_OUTPUT
+          } else {
+            "build=true" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: AppX bauen
+        if: steps.store.outputs.build == 'true'
+        env:
+          ALLOW_STORE_PLACEHOLDER: ${{ inputs.test_build && '1' || '' }}
+        run: npm run dist:store
+
+      - name: AppX als Workflow-Artefakt hochladen
+        if: steps.store.outputs.build == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.test_build && 'Toolbox-appx-test' || 'Toolbox-appx' }}
+          path: |
+            windows/dist/*.appx
+            windows/dist/*.appxbundle
+          if-no-files-found: error
+          retention-days: 30

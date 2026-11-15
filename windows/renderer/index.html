@@ -560,7 +560,7 @@
         <div class="card inset">
           <div class="card-head"><span class="eyebrow mint">UPDATES</span></div>
 
-          <label class="switch-row">
+          <label class="switch-row" id="autoUpdateRow">
             <span>Automatisch prüfen</span>
             <input type="checkbox" id="autoUpdateToggle">
             <span class="switch" aria-hidden="true"></span>
@@ -568,13 +568,17 @@
 
           <div class="kv"><span>Status</span><span id="updateStatus">Version wird geladen…</span></div>
 
-          <div class="action-row">
+          <div class="action-row" id="checkUpdateRow">
             <button class="btn" id="checkUpdates">Jetzt nach Updates suchen</button>
           </div>
 
-          <p class="hint">
+          <p class="hint" id="updateHint">
             Prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version
             bereitsteht. Ein Update ersetzt die installierte App und startet sie neu.
+          </p>
+          <p class="hint" id="updateStoreHint" hidden>
+            Updates werden über den Microsoft Store verwaltet. Der Store hält Toolbox
+            automatisch aktuell; die GitHub-Update-Prüfung ist in dieser Fassung aus.
           </p>
           <p class="hint error" id="updateError" hidden></p>
         </div>

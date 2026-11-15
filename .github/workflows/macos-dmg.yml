@@ -50,6 +50,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
         env:
           GH_TOKEN: ${{ github.token }}
+          STORE_URL: ${{ vars.STORE_URL }}
         run: |
           set -euo pipefail
 
@@ -67,8 +68,13 @@ jobs:
           # Repository und Tag in die Vorlage einsetzen.
           repo="${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"
           notes="$(mktemp)"
+          store_row=""
+          if [ -n "${STORE_URL:-}" ]; then
+            store_row="| **Microsoft Store** (Windows 10/11) | [Toolbox for Windows im Microsoft Store]($STORE_URL) |"
+          fi
           sed -e "s|{{REPO}}|$repo|g" -e "s|{{TAG}}|$tag|g" \
-            .github/macos-release-notes.md > "$notes"
+            .github/macos-release-notes.md \
+            | STORE_ROW="$store_row" perl -pe 's/\{\{STORE_ROW\}\}/$ENV{STORE_ROW}/g' > "$notes"
 
           if gh release view "$tag" > /dev/null 2>&1; then
             gh release upload "$tag" dist/Toolbox.dmg --clobber

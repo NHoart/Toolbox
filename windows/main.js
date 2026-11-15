@@ -2,6 +2,7 @@
 
 const path = require('node:path')
 const os = require('node:os')
+const fs = require('node:fs')
 const { app, BrowserWindow, ipcMain, Menu, nativeTheme, powerMonitor } = require('electron')
 
 const { ToolboxStore } = require('./src/store')
@@ -37,6 +38,9 @@ if (!gotSingleInstanceLock) {
 function bootstrap() {
   if (process.platform === 'win32') Menu.setApplicationMenu(null)
 
+  migrateLegacyStoreData()
+  const storeManaged = Boolean(process.windowsStore)
+
   const dataPath = path.join(app.getPath('userData'), 'data.json')
   store = new ToolboxStore({ filePath: dataPath })
 
@@ -44,6 +48,7 @@ function bootstrap() {
     filePath: path.join(app.getPath('userData'), 'updates.json'),
     currentVersion: app.getVersion(),
     isPackaged: app.isPackaged,
+    storeManaged,
   })
   updater.on('changed', () => sendUpdateState())
 
@@ -63,8 +68,9 @@ function bootstrap() {
   sync.start()
   scheduleDayRollover()
 
-  // Höchstens einmal pro Tag; Fehler bleiben im Hintergrund.
-  void updater.checkIfNeeded()
+  // Höchstens einmal pro Tag; Fehler bleiben im Hintergrund. Die Store-Fassung
+  // wird vom Microsoft Store aktualisiert und darf electron-updater nicht nutzen.
+  if (!storeManaged) void updater.checkIfNeeded()
 
   powerMonitor.on('resume', () => sync.handleNetworkChange())
   powerMonitor.on('unlock-screen', () => sync.handleNetworkChange())
@@ -73,6 +79,30 @@ function bootstrap() {
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+}
+
+/// Beim ersten Start der Store-Fassung den Stand der EXE-Installation
+/// übernehmen. Die Paketierung ändert den userData-Pfad; ohne diese Kopie
+/// würde die Store-App mit leeren Daten beginnen.
+function migrateLegacyStoreData() {
+  if (!process.windowsStore) return
+
+  const target = path.join(app.getPath('userData'), 'data.json')
+  if (fs.existsSync(target)) return
+
+  const candidates = [
+    process.env.APPDATA && path.join(process.env.APPDATA, 'Toolbox', 'data.json'),
+    path.join(os.homedir(), 'AppData', 'Roaming', 'Toolbox', 'data.json'),
+  ].filter(Boolean)
+  const source = candidates.find(candidate => fs.existsSync(candidate))
+  if (!source) return
+
+  try {
+    fs.mkdirSync(path.dirname(target), { recursive: true })
+    fs.copyFileSync(source, target)
+  } catch (error) {
+    console.error('Toolbox-Daten konnten nicht aus der EXE-Installation übernommen werden:', error)
+  }
 }
 
 function createWindow() {

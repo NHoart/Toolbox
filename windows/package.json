@@ -13,6 +13,7 @@
     "smoke:sync": "node scripts/smoke-sync.js",
     "dist": "electron-builder --win",
     "dist:dir": "electron-builder --win --dir",
+    "dist:store": "node scripts/build-store.js",
     "winget:manifest": "node scripts/generate-winget-manifest.js"
   },
   "dependencies": {
@@ -66,6 +67,23 @@
       "createStartMenuShortcut": true,
       "shortcutName": "Toolbox",
       "uninstallDisplayName": "Toolbox"
+    },
+    "appx": {
+      "applicationId": "Toolbox",
+      "displayName": "Toolbox for Windows",
+      "publisherDisplayName": "NHoartApps",
+      "languages": [
+        "de-DE"
+      ],
+      "capabilities": [
+        "runFullTrust",
+        "privateNetworkClientServer"
+      ],
+      "backgroundColor": "#080b13",
+      "showNameOnTiles": true,
+      "minVersion": "10.0.17763.0",
+      "maxVersionTested": "10.0.22621.0",
+      "artifactName": "Toolbox-${version}.${ext}"
     }
   }
 }

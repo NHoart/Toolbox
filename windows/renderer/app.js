@@ -630,12 +630,14 @@ function bindSettings() {
 
 function bindUpdates() {
   $('autoUpdateToggle').addEventListener('change', event => {
+    if (updateState && updateState.storeManaged) return
     const enabled = event.target.checked
     runUpdate(api.update.setAutomatic(enabled))
     toast(enabled ? 'Automatische Update-Prüfung eingeschaltet' : 'Automatische Update-Prüfung ausgeschaltet')
   })
 
   $('checkUpdates').addEventListener('click', () => {
+    if (updateState && updateState.storeManaged) return
     if (updateState && updateState.update) {
       openModal('updateModal', $('checkUpdates'))
       return
@@ -974,9 +976,15 @@ function applyUpdateState(next) {
 function renderUpdateSection() {
   if (!updateState) return
 
+  const storeManaged = Boolean(updateState.storeManaged)
   const toggle = $('autoUpdateToggle')
   toggle.checked = Boolean(updateState.automaticChecks)
-  toggle.disabled = Boolean(updateState.installing)
+  toggle.disabled = storeManaged || Boolean(updateState.installing)
+
+  $('autoUpdateRow').hidden = storeManaged
+  $('checkUpdateRow').hidden = storeManaged
+  $('updateHint').hidden = storeManaged
+  $('updateStoreHint').hidden = !storeManaged
 
   $('updateStatus').textContent = updateStatusText()
 
@@ -988,10 +996,11 @@ function renderUpdateSection() {
   button.textContent = updateState.update
     ? `Update ${updateState.update.version} installieren`
     : 'Jetzt nach Updates suchen'
-  button.disabled = Boolean(updateState.checking || updateState.installing)
+  button.disabled = storeManaged || Boolean(updateState.checking || updateState.installing)
 }
 
 function updateStatusText() {
+  if (updateState.storeManaged) return 'Updates über den Microsoft Store'
   if (updateState.installing) {
     return typeof updateState.progress === 'number'
       ? `Wird geladen … ${Math.round(updateState.progress * 100)} %`

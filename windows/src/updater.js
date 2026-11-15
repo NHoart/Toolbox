@@ -10,11 +10,12 @@ const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000
 /// auf Wunsch. Die eigentliche Arbeit übernimmt electron-updater; dieser
 /// Dienst hält Status, Einstellungen und die deutschen Meldungen zusammen.
 class UpdateService extends EventEmitter {
-  constructor({ filePath, currentVersion, isPackaged = false, updater = null, now = () => Date.now() } = {}) {
+  constructor({ filePath, currentVersion, isPackaged = false, storeManaged = false, updater = null, now = () => Date.now() } = {}) {
     super()
     this.filePath = filePath
     this.currentVersion = currentVersion || '0'
     this.isPackaged = Boolean(isPackaged)
+    this.storeManaged = Boolean(storeManaged)
     this.now = now
     this.checking = false
     this.installing = false
@@ -27,11 +28,16 @@ class UpdateService extends EventEmitter {
 
     // In der Entwicklung gibt es keine app-update.yml und damit keinen Feed;
     // dort wird gar nicht erst geprüft. Der Updater lässt sich für Tests
-    // einsetzen, ohne electron-updater zu laden.
-    this.updater = updater || require('electron-updater').autoUpdater
-    this.updater.autoDownload = false
-    this.updater.autoInstallOnAppQuit = false
-    this.bindUpdater()
+    // einsetzen, ohne electron-updater zu laden. In der Store-Fassung
+    // aktualisiert der Microsoft Store die App; electron-updater bleibt aus.
+    this.updater = this.storeManaged
+      ? null
+      : updater || require('electron-updater').autoUpdater
+    if (this.updater) {
+      this.updater.autoDownload = false
+      this.updater.autoInstallOnAppQuit = false
+      this.bindUpdater()
+    }
   }
 
   // MARK: - Persistenz
@@ -70,7 +76,8 @@ class UpdateService extends EventEmitter {
       update: this.update,
       upToDate: this.upToDate,
       error: this.error,
-      canInstall: this.isPackaged,
+      canInstall: this.isPackaged && !this.storeManaged,
+      storeManaged: this.storeManaged,
     }
   }
 
@@ -79,6 +86,8 @@ class UpdateService extends EventEmitter {
   }
 
   setAutomatic(enabled) {
+    if (this.storeManaged) return this.state()
+
     this.settings.automaticChecks = Boolean(enabled)
     this.saveSettings()
     this.emitChange()
@@ -89,7 +98,7 @@ class UpdateService extends EventEmitter {
 
   /// Prüft beim Start, aber höchstens einmal pro Tag und ohne Fehlermeldung.
   async checkIfNeeded() {
-    if (!this.isPackaged || !this.settings.automaticChecks) return this.state()
+    if (this.storeManaged || !this.isPackaged || !this.settings.automaticChecks) return this.state()
     if (this.settings.lastCheck > 0 && this.now() - this.settings.lastCheck < CHECK_INTERVAL_MS) {
       return this.state()
     }
@@ -97,7 +106,7 @@ class UpdateService extends EventEmitter {
   }
 
   async check({ manual = true } = {}) {
-    if (this.checking || this.installing) return this.state()
+    if (this.storeManaged || this.checking || this.installing) return this.state()
 
     if (!this.isPackaged) {
       if (manual) {
@@ -130,7 +139,7 @@ class UpdateService extends EventEmitter {
 
   /// Lädt das gefundene Update und startet die App damit neu.
   async install() {
-    if (!this.update || this.installing) return this.state()
+    if (this.storeManaged || !this.update || this.installing) return this.state()
 
     if (!this.isPackaged) {
       this.announceErrors = true

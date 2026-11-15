@@ -125,3 +125,27 @@ test('prüft im Entwicklungsmodus nicht und meldet den Grund', async () => {
   assert.equal(updater.checkCalls, 0)
   assert.match(state.error, /installierten App/)
 })
+
+test('deaktiviert electron-updater in der Microsoft-Store-Fassung', async () => {
+  const updater = new FakeUpdater()
+  const service = new UpdateService({
+    filePath: createFile(),
+    currentVersion: '3.3.1',
+    isPackaged: true,
+    storeManaged: true,
+    updater,
+  })
+
+  assert.equal(service.state().storeManaged, true)
+  assert.equal(service.state().canInstall, false)
+
+  await service.check()
+  await service.checkIfNeeded()
+  await service.install()
+  service.setAutomatic(false)
+
+  assert.equal(updater.checkCalls, 0)
+  assert.equal(updater.downloadCalls, 0)
+  assert.equal(service.state().automaticChecks, true)
+  assert.equal(service.state().error, null)
+})
