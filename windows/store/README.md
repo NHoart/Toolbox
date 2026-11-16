@@ -93,7 +93,7 @@ wird **nicht** als GitHub-Release-Asset veröffentlicht.
 3. **Datei prüfen:** Auf Windows die Prüfsumme vergleichen:
 
    ```powershell
-   Get-FileHash .\Toolbox-3.3.1.appx -Algorithm SHA256
+   Get-FileHash .\Toolbox-3.3.2.appx -Algorithm SHA256
    Get-Content .\SHA256SUMS.txt
    ```
 
@@ -101,7 +101,7 @@ wird **nicht** als GitHub-Release-Asset veröffentlicht.
    prüfen (im Repository unter `windows`):
 
    ```powershell
-   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-appx.ps1 -Path .\Toolbox-3.3.1.appx
+   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-appx.ps1 -Path .\Toolbox-3.3.2.appx
    ```
 
 4. **Partner Center öffnen:** **Apps and games → Toolbox for Windows →
