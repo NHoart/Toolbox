@@ -73,7 +73,10 @@
       "displayName": "Toolbox for Windows",
       "publisherDisplayName": "NHoartApps",
       "languages": [
-        "de-DE"
+        "de-DE",
+        "en-US",
+        "es-ES",
+        "fr-FR"
       ],
       "capabilities": [
         "runFullTrust",

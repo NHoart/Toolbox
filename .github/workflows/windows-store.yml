@@ -60,6 +60,7 @@ jobs:
           }
 
       - name: Store-Konfiguration prüfen
+        if: steps.store.outputs.build == 'true'
         env:
           ALLOW_STORE_PLACEHOLDER: ${{ inputs.test_build && '1' || '' }}
         run: npm run dist:store -- --check
@@ -80,6 +81,23 @@ jobs:
             exit $exitCode
           }
 
+      - name: AppX-Manifest prüfen
+        if: steps.store.outputs.build == 'true'
+        shell: pwsh
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/verify-appx.ps1
+
+      - name: SHA256-Prüfsumme erzeugen
+        if: steps.store.outputs.build == 'true'
+        shell: pwsh
+        run: |
+          $appx = @(Get-ChildItem -LiteralPath dist -Filter '*.appx' -File)
+          if ($appx.Count -ne 1) {
+            throw "Genau eine .appx in dist erwartet, gefunden: $($appx.Count)."
+          }
+          $hash = (Get-FileHash -LiteralPath $appx[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $($appx[0].Name)" | Set-Content -LiteralPath (Join-Path 'dist' 'SHA256SUMS.txt') -Encoding ascii
+          Write-Host "SHA256: $hash"
+
       - name: AppX als Workflow-Artefakt hochladen
         if: steps.store.outputs.build == 'true'
         uses: actions/upload-artifact@v4
@@ -87,6 +105,6 @@ jobs:
           name: ${{ inputs.test_build && 'Toolbox-appx-test' || 'Toolbox-appx' }}
           path: |
             windows/dist/*.appx
-            windows/dist/*.appxbundle
+            windows/dist/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30

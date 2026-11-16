@@ -2,6 +2,9 @@
 
 const api = window.toolbox
 const $ = id => document.getElementById(id)
+const I18N = window.ToolboxI18n
+const T = (text, variables) => (I18N ? I18N.t(text, variables) : text)
+const localeTag = I18N ? I18N.localeTag : 'de-DE'
 
 const APPLE_EPOCH_OFFSET_SECONDS = 978_307_200
 const RING_CIRCUMFERENCE = 2 * Math.PI * 92
@@ -80,9 +83,10 @@ document.addEventListener('DOMContentLoaded', init)
 
 async function init() {
   document.body.dataset.platform = 'win32'
+  if (I18N) I18N.localizeDom()
 
   if (!api) {
-    toast('Toolbox konnte die Windows-Schnittstelle nicht laden.')
+    toast(T('Toolbox konnte die Windows-Schnittstelle nicht laden.'))
     return
   }
 
@@ -104,7 +108,7 @@ async function init() {
     state.counter.count = payload.count
     if (activeTab === 'counter') renderCounterValue()
   })
-  api.onUpdateChanged(next => applyUpdateState(next))
+  api.update.onChanged(next => applyUpdateState(next))
 
   await refresh()
   await refreshUpdate()
@@ -160,8 +164,8 @@ function setTab(tab) {
     page.hidden = page.dataset.page !== tab
   })
 
-  $('pageTitle').textContent = PAGES[tab].title
-  $('pageSubtitle').textContent = PAGES[tab].subtitle
+  $('pageTitle').textContent = T(PAGES[tab].title)
+  $('pageSubtitle').textContent = T(PAGES[tab].subtitle)
   $('pageScroll').scrollTop = 0
 
   if (tab === 'today') renderToday()
@@ -209,8 +213,11 @@ function renderToday() {
   $('ringValue').setAttribute('r', String(RING_RADIUS))
 
   $('todaySub').textContent = remaining === 0
-    ? `Tagesziel erreicht – ${formatInteger(water.goal)} ml geschafft.`
-    : `von ${formatInteger(water.goal)} ml Ziel · noch ${formatInteger(remaining)} ml offen`
+    ? T('Tagesziel erreicht – {goal} ml geschafft.', { goal: formatInteger(water.goal) })
+    : T('von {goal} ml Ziel · noch {remaining} ml offen', {
+      goal: formatInteger(water.goal),
+      remaining: formatInteger(remaining),
+    })
 
   $('todayBar').style.width = `${(progress * 100).toFixed(2)}%`
 
@@ -220,8 +227,8 @@ function renderToday() {
   const undoButton = $('undoWater')
   undoButton.disabled = water.lastAdded === null
   $('undoLabel').textContent = water.lastAdded === null
-    ? 'Rückgängig'
-    : `Rückgängig (${formatInteger(water.lastAdded)} ml)`
+    ? T('Rückgängig')
+    : T('Rückgängig ({amount} ml)', { amount: formatInteger(water.lastAdded) })
 
   $('tileGlass').textContent = `${formatInteger(water.glass)} ml`
   $('tileBottle').textContent = `${formatInteger(water.bottle)} ml`
@@ -239,7 +246,10 @@ function renderHistory() {
   const total = days.reduce((sum, day) => sum + day.ml, 0)
 
   $('histAvg').textContent = `${formatInteger(Math.round(total / Math.max(days.length, 1)))} ml`
-  $('histReached').textContent = `${days.filter(day => day.ml >= goal).length} von ${days.length}`
+  $('histReached').textContent = T('{reached} von {total}', {
+    reached: days.filter(day => day.ml >= goal).length,
+    total: days.length,
+  })
   $('histBest').textContent = `${formatInteger(Math.max(0, ...days.map(day => day.ml)))} ml`
 
   renderDayList(days, goal)
@@ -374,7 +384,7 @@ function drawChart() {
 
   ctx.fillStyle = 'rgba(161, 132, 255, 1)'
   ctx.textAlign = 'right'
-  ctx.fillText(`Ziel: ${formatInteger(goal)} ml`, width - padding.right, Math.max(10, goalY - 10))
+  ctx.fillText(T('Ziel: {goal} ml', { goal: formatInteger(goal) }), width - padding.right, Math.max(10, goalY - 10))
 }
 
 // ----------------------------------------------------------------- Einheiten
@@ -401,7 +411,7 @@ function bindUnits() {
 
 function renderUnitMode() {
   const mode = UNIT_MODES[unitMode]
-  $('unitFieldLabel').textContent = mode.field
+  $('unitFieldLabel').textContent = T(mode.field)
   $('unitSuffix').textContent = mode.suffix
   computeUnits()
 }
@@ -414,13 +424,13 @@ function computeUnits() {
   if (value === null) {
     result.textContent = '—'
     result.classList.add('empty')
-    $('unitResultSub').textContent = 'Wert eingeben'
+    $('unitResultSub').textContent = T('Wert eingeben')
     return
   }
 
   result.textContent = formatDecimal(mode.convert(value))
   result.classList.remove('empty')
-  $('unitResultSub').textContent = `Ergebnis in ${mode.result}`
+  $('unitResultSub').textContent = T('Ergebnis in {unit}', { unit: mode.result })
 }
 
 // -------------------------------------------------------------- Downloadzeit
@@ -456,7 +466,7 @@ function computeDownload() {
   if (size === null || speed === null || speed <= 0) {
     result.textContent = '—'
     result.classList.add('empty')
-    $('downloadResultSub').textContent = 'Dateigröße und Geschwindigkeit eingeben'
+    $('downloadResultSub').textContent = T('Dateigröße und Geschwindigkeit eingeben')
     return
   }
 
@@ -466,7 +476,7 @@ function computeDownload() {
 
   result.textContent = formatDuration(seconds)
   result.classList.remove('empty')
-  $('downloadResultSub').textContent = 'Berechnet ohne zusätzliche Verzögerungen'
+  $('downloadResultSub').textContent = T('Berechnet ohne zusätzliche Verzögerungen')
 }
 
 // ------------------------------------------------------------ Stromverbrauch
@@ -493,7 +503,7 @@ function computeEnergy() {
   if (power === null || hours === null) {
     result.textContent = '—'
     result.classList.add('empty')
-    $('energyCost').textContent = 'Kosten: Kein Strompreis angegeben'
+    $('energyCost').textContent = T('Kosten: Kein Strompreis angegeben')
     return
   }
 
@@ -502,8 +512,8 @@ function computeEnergy() {
   result.classList.remove('empty')
 
   $('energyCost').textContent = price === null
-    ? 'Kosten: Kein Strompreis angegeben'
-    : `Kosten: ${formatCurrency(energy * price)}`
+    ? T('Kosten: Kein Strompreis angegeben')
+    : T('Kosten: {cost}', { cost: formatCurrency(energy * price) })
 }
 
 // ------------------------------------------------------------------- Zähler
@@ -529,13 +539,13 @@ function renderCounter() {
 
   renderCounterValue()
   $('autoBadge').hidden = !counter.autoRunning
-  $('autoRate').textContent = `${counter.rate}× pro Sekunde`
+  $('autoRate').textContent = T('{rate}× pro Sekunde', { rate: counter.rate })
   $('rateDown').disabled = counter.rate <= 1
   $('rateUp').disabled = counter.rate >= 100
 
   const toggle = $('autoToggle')
   toggle.className = counter.autoRunning ? 'btn danger' : 'btn primary'
-  toggle.innerHTML = `${counter.autoRunning ? ICONS.stop : ICONS.play}${counter.autoRunning ? 'Stopp' : 'Start'}`
+  toggle.innerHTML = `${counter.autoRunning ? ICONS.stop : ICONS.play}${counter.autoRunning ? T('Stopp') : T('Start')}`
 
   renderSavedCounters(counter.savedCounters)
 }
@@ -552,7 +562,7 @@ function renderSavedCounters(counters) {
   if (counters.length === 0) {
     const empty = document.createElement('div')
     empty.className = 'saved-empty'
-    empty.innerHTML = `${ICONS.bookmark}<strong>Noch nichts gespeichert</strong><small>Speichere den aktuellen Stand über das Lesezeichen oben.</small>`
+    empty.innerHTML = `${ICONS.bookmark}<strong>${T('Noch nichts gespeichert')}</strong><small>${T('Speichere den aktuellen Stand über das Lesezeichen oben.')}</small>`
     list.append(empty)
     return
   }
@@ -560,7 +570,7 @@ function renderSavedCounters(counters) {
   for (const item of counters) {
     const row = document.createElement('div')
     row.className = 'saved-row'
-    row.title = 'Stand laden'
+    row.title = T('Stand laden')
 
     const copy = document.createElement('div')
     copy.className = 'saved-copy'
@@ -581,8 +591,8 @@ function renderSavedCounters(counters) {
 
     const remove = document.createElement('button')
     remove.className = 'saved-delete'
-    remove.title = 'Stand löschen'
-    remove.setAttribute('aria-label', 'Stand löschen')
+    remove.title = T('Stand löschen')
+    remove.setAttribute('aria-label', T('Stand löschen'))
     remove.innerHTML = ICONS.trash
     remove.addEventListener('click', event => {
       event.stopPropagation()
@@ -611,7 +621,7 @@ function bindSettings() {
   $('syncToggle').addEventListener('change', async event => {
     const enabled = event.target.checked
     await run(api.sync.setEnabled(enabled))
-    toast(enabled ? 'Sync im WLAN eingeschaltet' : 'Sync im WLAN ausgeschaltet')
+    toast(enabled ? T('Sync im WLAN eingeschaltet') : T('Sync im WLAN ausgeschaltet'))
   })
 
   $('syncName').addEventListener('input', event => scheduleSyncName(event.target.value))
@@ -619,12 +629,12 @@ function bindSettings() {
 
   $('syncNow').addEventListener('click', async () => {
     await run(api.sync.syncNow())
-    toast('Suche nach Geräten im WLAN…')
+    toast(T('Suche nach Geräten im WLAN…'))
   })
 
   $('resetWater').addEventListener('click', async () => {
     await run(api.water.reset())
-    toast('Heutige Trinkmenge zurückgesetzt')
+    toast(T('Heutige Trinkmenge zurückgesetzt'))
   })
 }
 
@@ -633,7 +643,7 @@ function bindUpdates() {
     if (updateState && updateState.storeManaged) return
     const enabled = event.target.checked
     runUpdate(api.update.setAutomatic(enabled))
-    toast(enabled ? 'Automatische Update-Prüfung eingeschaltet' : 'Automatische Update-Prüfung ausgeschaltet')
+    toast(enabled ? T('Automatische Update-Prüfung eingeschaltet') : T('Automatische Update-Prüfung ausgeschaltet'))
   })
 
   $('checkUpdates').addEventListener('click', () => {
@@ -667,24 +677,24 @@ function renderSettings() {
   if (document.activeElement !== nameInput) nameInput.value = sync.syncName || ''
 
   $('syncStatus').textContent = syncStatusText(sync)
-  $('syncDeviceName').textContent = sync.deviceName || 'Windows-PC'
+  $('syncDeviceName').textContent = sync.deviceName || T('Windows-PC')
   $('syncNow').disabled = !sync.enabled || !String(sync.syncName || '').trim()
 
   const error = $('syncError')
   error.hidden = !sync.discoveryError
-  error.textContent = sync.discoveryError || ''
+  error.textContent = translateBackendMessage(sync.discoveryError)
 
   const peers = $('peerList')
   peers.replaceChildren()
   if (!sync.enabled) {
     const hint = document.createElement('div')
     hint.className = 'hint'
-    hint.textContent = 'Der Abgleich ist ausgeschaltet.'
+    hint.textContent = T('Der Abgleich ist ausgeschaltet.')
     peers.append(hint)
   } else if (sync.peers.length === 0) {
     const hint = document.createElement('div')
     hint.className = 'hint'
-    hint.textContent = 'Noch kein Gerät verbunden. Öffne Toolbox auf einem Gerät mit demselben Namen im selben WLAN.'
+    hint.textContent = T('Noch kein Gerät verbunden. Öffne Toolbox auf einem Gerät mit demselben Namen im selben WLAN.')
     peers.append(hint)
   } else {
     for (const peer of sync.peers) {
@@ -693,13 +703,13 @@ function renderSettings() {
       const dot = document.createElement('span')
       dot.className = 'peer-dot'
       const name = document.createElement('span')
-      name.textContent = peer.name || 'Gerät'
+      name.textContent = peer.name || T('Gerät')
       row.append(dot, name)
       peers.append(row)
     }
   }
 
-  $('versionText').textContent = `Version ${state.version || ''}`
+  $('versionText').textContent = T('Version {version}', { version: state.version || '' })
   renderUpdateSection()
 }
 
@@ -755,20 +765,42 @@ function flushSyncName() {
 }
 
 function syncStatusText(sync) {
-  if (!sync.enabled) return 'Aus'
-  if (!String(sync.syncName || '').trim()) return 'Name fehlt'
-  if (sync.peerCount === 1) return 'Verbunden mit 1 Gerät'
-  if (sync.peerCount > 1) return `Verbunden mit ${sync.peerCount} Geräten`
-  if (sync.discoveryError) return 'Netzwerk-Problem'
-  if (sync.lastSync) return `Zuletzt ${formatTime(sync.lastSync)}`
-  return sync.isSearching ? 'Suche im WLAN…' : 'Kein Gerät gefunden'
+  if (!sync.enabled) return T('Aus')
+  if (!String(sync.syncName || '').trim()) return T('Name fehlt')
+  if (sync.peerCount === 1) return T('Verbunden mit 1 Gerät')
+  if (sync.peerCount > 1) return T('Verbunden mit {count} Geräten', { count: sync.peerCount })
+  if (sync.discoveryError) return T('Netzwerk-Problem')
+  if (sync.lastSync) return T('Zuletzt {time}', { time: formatTime(sync.lastSync) })
+  return sync.isSearching ? T('Suche im WLAN…') : T('Kein Gerät gefunden')
+}
+
+function translateBackendMessage(message) {
+  if (!message) return ''
+  const prefixes = [
+    'Netzwerk-Port:',
+    'Bonjour:',
+    'Bonjour konnte nicht gestartet werden:',
+    'Suche im WLAN fehlgeschlagen:',
+    'Ankündigung im WLAN:',
+    'Ankündigung im WLAN fehlgeschlagen:',
+    'Die Update-Prüfung ist nur in der installierten App verfügbar.',
+    'Das Update kann nur in der installierten App installiert werden.',
+    'Die Update-Prüfung ist fehlgeschlagen. Bitte später erneut versuchen.',
+    'Das Update konnte nicht installiert werden. Bitte später erneut versuchen.',
+  ]
+  for (const prefix of prefixes) {
+    if (message.startsWith(prefix)) {
+      return T(prefix) + message.slice(prefix.length)
+    }
+  }
+  return message
 }
 
 function renderSyncChip() {
   if (!state) return
   const sync = state.sync
 
-  $('syncChipTitle').textContent = sync.enabled ? 'Sync im WLAN' : 'Sync aus'
+  $('syncChipTitle').textContent = sync.enabled ? T('Sync im WLAN') : T('Sync aus')
   $('syncChipSub').textContent = syncStatusText(sync)
 
   const dot = $('syncDot')
@@ -908,7 +940,9 @@ function saveAmount() {
 
 function openSaveModal() {
   if (!state) return
-  $('saveSubtitle').textContent = `Aktueller Stand: ${formatInteger(state.counter.count)}`
+  $('saveSubtitle').textContent = T('Aktueller Stand: {count}', {
+    count: formatInteger(state.counter.count),
+  })
   $('saveNameInput').value = ''
   openModal('saveModal', $('saveCounter'))
 }
@@ -990,40 +1024,42 @@ function renderUpdateSection() {
 
   const error = $('updateError')
   error.hidden = !updateState.error
-  error.textContent = updateState.error || ''
+  error.textContent = translateBackendMessage(updateState.error)
 
   const button = $('checkUpdates')
   button.textContent = updateState.update
-    ? `Update ${updateState.update.version} installieren`
-    : 'Jetzt nach Updates suchen'
+    ? T('Update {version} installieren', { version: updateState.update.version })
+    : T('Jetzt nach Updates suchen')
   button.disabled = storeManaged || Boolean(updateState.checking || updateState.installing)
 }
 
 function updateStatusText() {
-  if (updateState.storeManaged) return 'Updates über den Microsoft Store'
+  if (updateState.storeManaged) return T('Updates über den Microsoft Store')
   if (updateState.installing) {
     return typeof updateState.progress === 'number'
-      ? `Wird geladen … ${Math.round(updateState.progress * 100)} %`
-      : 'Wird installiert…'
+      ? T('Wird geladen … {percent} %', { percent: Math.round(updateState.progress * 100) })
+      : T('Wird installiert…')
   }
-  if (updateState.checking) return 'Suche nach Updates…'
-  if (updateState.update) return `Version ${updateState.update.version} verfügbar`
-  if (updateState.error) return 'Prüfung fehlgeschlagen'
-  if (updateState.upToDate) return `Aktuell (Version ${updateState.currentVersion})`
-  return `Version ${updateState.currentVersion}`
+  if (updateState.checking) return T('Suche nach Updates…')
+  if (updateState.update) return T('Version {version} verfügbar', { version: updateState.update.version })
+  if (updateState.error) return T('Prüfung fehlgeschlagen')
+  if (updateState.upToDate) return T('Aktuell (Version {version})', { version: updateState.currentVersion })
+  return T('Version {version}', { version: updateState.currentVersion })
 }
 
 function renderUpdateModal() {
   const update = updateState && updateState.update
   if (!update) return
 
-  $('updateSubtitle').textContent =
-    `Version ${update.version} ist verfügbar – du benutzt ${updateState.currentVersion}.`
-  $('updateNotes').textContent = (update.notes || '').trim() || 'Keine Versionshinweise angegeben.'
+  $('updateSubtitle').textContent = T('Version {version} ist verfügbar – du benutzt {current}.', {
+    version: update.version,
+    current: updateState.currentVersion,
+  })
+  $('updateNotes').textContent = (update.notes || '').trim() || T('Keine Versionshinweise angegeben.')
 
   const error = $('updateInstallError')
   error.hidden = !updateState.error
-  error.textContent = updateState.error || ''
+  error.textContent = translateBackendMessage(updateState.error)
 
   const installing = Boolean(updateState.installing)
   $('updateLater').disabled = installing
@@ -1037,8 +1073,8 @@ function renderUpdateModal() {
     : 100
   $('updateProgressBar').style.width = `${percent}%`
   $('updateProgressText').textContent = percent < 100
-    ? `Wird geladen … ${percent} %`
-    : 'Wird installiert…'
+    ? T('Wird geladen … {percent} %', { percent })
+    : T('Wird installiert…')
 }
 
 async function runUpdate(promise) {
@@ -1047,7 +1083,7 @@ async function runUpdate(promise) {
     if (next) applyUpdateState(next)
   } catch (error) {
     console.error('Update-Aktion fehlgeschlagen:', error)
-    toast('Update-Aktion fehlgeschlagen')
+    toast(T('Update-Aktion fehlgeschlagen'))
   }
 }
 
@@ -1059,7 +1095,7 @@ async function run(promise) {
     if (payload) applyState(payload)
   } catch (error) {
     console.error('Aktion fehlgeschlagen:', error)
-    toast('Aktion fehlgeschlagen')
+    toast(T('Aktion fehlgeschlagen'))
   }
 }
 
@@ -1077,9 +1113,19 @@ function toast(message) {
 function parseDecimal(text) {
   let cleaned = String(text).trim().replace(/\s/g, '')
   if (cleaned === '') return null
-  if (cleaned.includes(',')) {
-    cleaned = cleaned.replace(/\./g, '').replace(',', '.')
-  } else if (/^\d{1,3}(\.\d{3})+$/.test(cleaned)) {
+  const lastComma = cleaned.lastIndexOf(',')
+  const lastDot = cleaned.lastIndexOf('.')
+  if (lastComma >= 0 && lastDot >= 0) {
+    const decimal = lastComma > lastDot ? ',' : '.'
+    const group = decimal === ',' ? '.' : ','
+    cleaned = cleaned.split(group).join('').replace(decimal, '.')
+  } else if (lastComma >= 0) {
+    if (localeTag === 'en-US' && /^\d{1,3}(,\d{3})+$/.test(cleaned)) {
+      cleaned = cleaned.replace(/,/g, '')
+    } else {
+      cleaned = cleaned.replace(/,/g, '.')
+    }
+  } else if (lastDot >= 0 && localeTag === 'de-DE' && /^\d{1,3}(\.\d{3})+$/.test(cleaned)) {
     // Deutsche Tausendertrennung: 1.000 = eintausend.
     cleaned = cleaned.replace(/\./g, '')
   }
@@ -1094,36 +1140,38 @@ function parseInteger(text) {
 }
 
 function formatInteger(value) {
-  return Math.round(Number(value) || 0).toLocaleString('de-DE')
+  return Math.round(Number(value) || 0).toLocaleString(localeTag)
 }
 
 function formatDecimal(value) {
   if (!Number.isFinite(value)) return '—'
-  return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 3 }).format(value)
+  return new Intl.NumberFormat(localeTag, { maximumFractionDigits: 3 }).format(value)
 }
 
 function formatCurrency(value) {
-  return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value)
+  return new Intl.NumberFormat(localeTag, { style: 'currency', currency: 'EUR' }).format(value)
 }
 
 function formatTime(timestamp) {
-  return new Date(timestamp).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+  return new Date(timestamp).toLocaleTimeString(localeTag, { hour: '2-digit', minute: '2-digit' })
 }
 
 function formatDayLabel(day) {
   const date = new Date(`${day}T12:00:00`)
   if (Number.isNaN(date.getTime())) return day
-  return date.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: 'short' })
+  return date.toLocaleDateString(localeTag, { weekday: 'short', day: '2-digit', month: 'short' })
 }
 
 function formatShortDate(day) {
-  return `${day.slice(8, 10)}.${day.slice(5, 7)}.`
+  const date = new Date(`${day}T12:00:00`)
+  if (Number.isNaN(date.getTime())) return day
+  return new Intl.DateTimeFormat(localeTag, { day: '2-digit', month: '2-digit' }).format(date)
 }
 
 function formatSavedDate(appleSeconds) {
   const date = new Date((Number(appleSeconds) + APPLE_EPOCH_OFFSET_SECONDS) * 1000)
   if (Number.isNaN(date.getTime())) return ''
-  return date.toLocaleString('de-DE', {
+  return date.toLocaleString(localeTag, {
     day: '2-digit',
     month: '2-digit',
     year: '2-digit',
@@ -1138,9 +1186,9 @@ function formatDuration(seconds) {
   const minutes = Math.floor((total % 3600) / 60)
   const remaining = total % 60
 
-  if (hours > 0) return `${hours} Std. ${minutes} Min. ${remaining} Sek.`
-  if (minutes > 0) return `${minutes} Min. ${remaining} Sek.`
-  return `${remaining} Sek.`
+  if (hours > 0) return `${hours} ${T('Std.')} ${minutes} ${T('Min.')} ${remaining} ${T('Sek.')}`
+  if (minutes > 0) return `${minutes} ${T('Min.')} ${remaining} ${T('Sek.')}`
+  return `${remaining} ${T('Sek.')}`
 }
 
 // Beim Wechsel von Hell/Dunkel die Canvas-Farben nachziehen.

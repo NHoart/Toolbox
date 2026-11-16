@@ -4,6 +4,7 @@ const fs = require('node:fs')
 const path = require('node:path')
 const { build, Platform, Arch } = require('electron-builder')
 const { validateConfiguration } = require('app-builder-lib/out/util/config/config')
+const { APPX_LANGUAGES } = require('./appx-languages')
 
 const root = path.join(__dirname, '..')
 const configPath = path.join(root, 'store', 'store.config.json')
@@ -60,6 +61,17 @@ if (!/^[A-Za-z][A-Za-z0-9.]*$/.test(applicationId)) {
 if (!displayName) fail('displayName darf nicht leer sein.')
 if (!publisherDisplayName) fail('publisherDisplayName darf nicht leer sein.')
 
+const configuredLanguages = Array.isArray(pkg.build && pkg.build.appx && pkg.build.appx.languages)
+  ? pkg.build.appx.languages.map(language => String(language).trim())
+  : []
+if (configuredLanguages.join(',') !== APPX_LANGUAGES.join(',')) {
+  fail([
+    'Die AppX-Sprachen in windows/package.json sind nicht vollständig.',
+    `Erwartet: ${APPX_LANGUAGES.join(', ')}`,
+    `Gefunden: ${configuredLanguages.length ? configuredLanguages.join(', ') : '(keine)'}`,
+  ].join('\n'))
+}
+
 if (placeholder) {
   console.warn('WARNUNG: Testbau mit Platzhalter-Identität. Dieses Paket kann nicht im Microsoft Store eingereicht werden.')
 }
@@ -85,6 +97,10 @@ const config = {
     displayName,
     applicationId,
     artifactName: 'Toolbox-${version}.${ext}',
+    // Immer die vier unterstützten Sprachen in das Manifest schreiben, auch
+    // wenn package.json versehentlich verändert wird. Die Prüfung oben
+    // verhindert, dass beide Listen stillschweigend auseinanderlaufen.
+    languages: [...APPX_LANGUAGES],
   },
 }
 
@@ -102,6 +118,7 @@ async function run() {
     console.log(`  publisherDisplayName: ${publisherDisplayName}`)
     console.log(`  displayName: ${displayName}`)
     console.log(`  applicationId: ${applicationId}`)
+    console.log(`  languages: ${config.appx.languages.join(', ')}`)
     console.log(`  capabilities: ${(config.appx.capabilities || []).join(', ')}`)
     console.log(`  winCodeSign: ${config.toolsets.winCodeSign}`)
     if (placeholder) console.log('  Hinweis: Platzhalter-Identität (Testbau).')
@@ -112,7 +129,7 @@ async function run() {
   // würde nur einen falschen Publisher in das Manifest schreiben.
   process.env.CSC_IDENTITY_AUTO_DISCOVERY = 'false'
 
-  console.log(`Baue AppX für ${identityName} …`)
+  console.log(`Baue AppX für ${identityName} mit ${APPX_LANGUAGES.join(', ')} …`)
   await build({
     targets: Platform.WINDOWS.createTarget('appx', Arch.x64),
     config,
@@ -121,6 +138,7 @@ async function run() {
     publish: 'never',
   })
   console.log('AppX fertig. Die Datei liegt unter windows/dist/.')
+  console.log('Manifest prüfen (Windows): powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-appx.ps1')
 }
 
 run().catch(error => {
