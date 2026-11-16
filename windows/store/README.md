@@ -174,7 +174,9 @@ Client-Secret benötigt; diese Zugangsdaten gehören nicht ins Repository.
 Alle Werte für die erste Submission, in der Reihenfolge des Partner Centers.
 Das AppX deklariert `de-DE`, `en-US`, `es-ES` und `fr-FR`; die App-Oberfläche
 richtet sich nach der Windows-Sprache und fällt bei anderen Sprachen auf
-Deutsch zurück. Die Store-Einträge gibt es zusätzlich auf Englisch (USA),
+Deutsch zurück. In den Einstellungen lässt sich die Sprache zusätzlich manuell
+auf Deutsch, Englisch, Spanisch oder Französisch stellen; **Systemsprache**
+folgt weiterhin Windows. Die Store-Einträge gibt es zusätzlich auf Englisch (USA),
 Spanisch (Spanien) und Französisch (Frankreich). Produkt-ID: `9P4FPTHZHVJD`.
 
 > **Wichtig:** Das derzeit im Partner Center validierte Paket
@@ -242,24 +244,24 @@ Spanisch (Spanien) und Französisch (Frankreich). Produkt-ID: `9P4FPTHZHVJD`.
 Quellcode ist öffentlich einsehbar; Nutzung und Weitergabe richten sich nach
 der LICENSE im Repository: <https://github.com/NHoart/Toolbox/blob/main/LICENSE>  
 **Store-Logo:** `windows/store/StoreListingIcon.png` (300 × 300, 1:1)  
-**Screenshots:** fünf PNGs (2464 × 1648) im Store-Eintrag hochgeladen; die
-Dateien liegen unter `windows/store/screenshots/`. Ein sechstes Motiv aus dem
-Chat war nicht als Datei vorhanden, ist aber nicht erforderlich.  
+**Screenshots:** je fünf PNGs (2464 × 1648) pro Sprache im Store-Eintrag
+hochgeladen. Die Dateien liegen unter
+`windows/store/screenshots/<sprache>/` (`de`, `en`, `es`, `fr`); Motive:
+Verlauf, Einheiten, Zähler, Downloadzeit und Stromverbrauch.
 **Was ist neu in dieser Version:** bei der ersten Einreichung leer lassen.
 
 ### Zusätzliche Store-Einträge (en-US, es-ES, fr-FR)
 
 Die Store-Einträge **Englisch (Vereinigte Staaten)**, **Spanisch (Spanien)**
-und **Französisch (Frankreich)** sind vollständig angelegt und mit denselben
-fünf Screenshots versehen. Beschreibungen, Kurzbeschreibungen, je acht
+und **Französisch (Frankreich)** sind vollständig angelegt und mit je fünf
+sprachspezifischen Screenshots versehen. Beschreibungen, Kurzbeschreibungen, je acht
 Features, je sieben Keywords sowie Copyright-, Lizenz- und Entwicklerangaben
 sind übersetzt. Die früheren Hinweise auf eine rein deutsche Oberfläche wurden
 entfernt, nachdem die App de/en/es/fr lokalisiert wurde.
 
-Die fünf Screenshots zeigen weiterhin die deutsche Oberfläche. Die App ist
-inzwischen lokalisiert; für eine optimale Darstellung sollten die Aufnahmen je
-Store-Sprache durch Bilder der jeweiligen UI ersetzt werden. Das ist kein
-Pflichtfeld und blockiert die Einreichung nicht.
+Die Screenshots zeigen die Oberfläche in der jeweiligen Store-Sprache. Die
+Aufnahmen wurden mit der lokalisierten App erzeugt; der deutsche Eintrag
+verwendet weiterhin die deutschen Bilder.
 
 Die **Paketsprachen** sind in `windows/package.json` auf `de-DE`, `en-US`,
 `es-ES` und `fr-FR` erweitert. Das bereits hochgeladene AppX enthält diese
@@ -346,7 +348,7 @@ wurden dabei akzeptiert.
 
 ### Vor dem Einreichen
 
-- [x] Screenshots hochladen (fünf unter `windows/store/screenshots/`)
+- [x] Screenshots hochladen (je fünf unter `windows/store/screenshots/<sprache>/`)
 - [x] IARC-Fragebogen vollständig beantworten und Altersfreigaben speichern
 - [x] Preise und Verfügbarkeit, Eigenschaften, Store-Eintrag und Übermittlungsoptionen ausfüllen
 - [x] AppX hochgeladen und validiert (`Toolbox-3.3.1.appx`)
@@ -354,8 +356,7 @@ wurden dabei akzeptiert.
 - [x] App-Lokalisierung de/en/es/fr im Renderer eingebaut
 - [x] Zusätzlicher Store-Eintrag fr-FR vollständig ausgefüllt
 - [x] Store-Build deklariert und prüft `de-DE`, `en-US`, `es-ES`, `fr-FR`
-- [ ] Screenshots je Sprache durch Aufnahmen der lokalisierten UI ersetzen
-      (aktuell dieselben fünf deutschen Aufnahmen; nicht pflichtig)
+- [x] Screenshots je Sprache durch Aufnahmen der lokalisierten UI ersetzt
 - [ ] Neues AppX mit de/en/es/fr bauen und im Partner Center hochladen
       (Windows oder GitHub-Actions-Workflow erforderlich)
 - [ ] Einreichung „Zur Zertifizierung übermitteln“ absenden (noch nicht abgesendet)

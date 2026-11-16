@@ -608,6 +608,21 @@ function renderSavedCounters(counters) {
 // ------------------------------------------------------------------ Einstellungen
 
 function bindSettings() {
+  $('languageSelect').addEventListener('change', event => {
+    const value = event.target.value
+    if (!I18N || !I18N.setLocalePreference(value)) {
+      event.target.value = I18N ? I18N.preference : 'system'
+      toast(T('Sprache konnte nicht gespeichert werden.'))
+      return
+    }
+
+    if (api && typeof api.reload === 'function') {
+      api.reload()
+    } else {
+      window.location.reload()
+    }
+  })
+
   $('openSettings').addEventListener('click', openSettings)
   $('syncChip').addEventListener('click', openSettings)
   $('settingsDone').addEventListener('click', () => closeModal('settingsModal'))
@@ -668,6 +683,7 @@ function openSettings() {
 function renderSettings() {
   if (!state) return
   renderSettingsValues()
+  if (I18N) $('languageSelect').value = I18N.preference
 
   const sync = state.sync
   $('syncToggle').checked = Boolean(sync.enabled)

@@ -488,6 +488,26 @@
 
       <div class="modal-body">
         <div class="card inset">
+          <div class="card-head"><span class="eyebrow violet">SPRACHE</span></div>
+
+          <div class="setting-row">
+            <span>Sprache</span>
+            <div class="select-wrap">
+              <select id="languageSelect" aria-label="Sprache">
+                <option value="system">Systemsprache</option>
+                <option value="de">Deutsch</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+              </select>
+              <svg class="i select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg>
+            </div>
+          </div>
+
+          <p class="hint">Die App startet nach dem Wechsel neu.</p>
+        </div>
+
+        <div class="card inset">
           <div class="card-head"><span class="eyebrow blue">MENGEN</span></div>
 
           <div class="setting-row">
@@ -594,7 +614,7 @@
       </div>
 
       <div class="modal-foot">
-        <span class="version" id="versionText">Version 3.3.2</span>
+        <span class="version" id="versionText">Version 3.4.0</span>
         <button class="btn primary" id="settingsDone">Fertig</button>
       </div>
     </div>

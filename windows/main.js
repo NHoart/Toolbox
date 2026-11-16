@@ -210,6 +210,10 @@ function scheduleDayRollover() {
 function registerIpc() {
   ipcMain.handle('app:state', () => statePayload())
 
+  ipcMain.handle('app:reload', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.reload()
+  })
+
   ipcMain.handle('water:add', (_event, ml) => {
     store.addWater(ml)
     return statePayload()

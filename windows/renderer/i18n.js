@@ -72,6 +72,11 @@
       'Speichern': 'Save',
       'Einstellungen': 'Settings',
       'Wasser, Netzwerk, Updates und Anzeige': 'Water, network, updates, and display',
+      'SPRACHE': 'LANGUAGE',
+      'Sprache': 'Language',
+      'Systemsprache': 'System language',
+      'Die App startet nach dem Wechsel neu.': 'The app will restart after switching.',
+      'Sprache konnte nicht gespeichert werden.': 'The language could not be saved.',
       'MENGEN': 'AMOUNTS',
       'LOKALES NETZWERK': 'LOCAL NETWORK',
       'Status': 'Status',
@@ -243,6 +248,11 @@
       'Speichern': 'Guardar',
       'Einstellungen': 'Ajustes',
       'Wasser, Netzwerk, Updates und Anzeige': 'Agua, red, actualizaciones y pantalla',
+      'SPRACHE': 'IDIOMA',
+      'Sprache': 'Idioma',
+      'Systemsprache': 'Idioma del sistema',
+      'Die App startet nach dem Wechsel neu.': 'La app se reiniciará después del cambio.',
+      'Sprache konnte nicht gespeichert werden.': 'No se pudo guardar el idioma.',
       'MENGEN': 'CANTIDADES',
       'LOKALES NETZWERK': 'RED LOCAL',
       'Status': 'Estado',
@@ -414,6 +424,11 @@
       'Speichern': 'Enregistrer',
       'Einstellungen': 'Paramètres',
       'Wasser, Netzwerk, Updates und Anzeige': 'Eau, réseau, mises à jour et affichage',
+      'SPRACHE': 'LANGUE',
+      'Sprache': 'Langue',
+      'Systemsprache': 'Langue du système',
+      'Die App startet nach dem Wechsel neu.': "L'app redémarrera après le changement.",
+      'Sprache konnte nicht gespeichert werden.': "Impossible d'enregistrer la langue.",
       'MENGEN': 'QUANTITÉS',
       'LOKALES NETZWERK': 'RÉSEAU LOCAL',
       'Status': 'État',
@@ -522,12 +537,40 @@
 
   const supported = ['de', 'en', 'es', 'fr']
   const localeTags = { de: 'de-DE', en: 'en-US', es: 'es-ES', fr: 'fr-FR' }
+  const STORAGE_KEY = 'toolbox.locale'
+
+  function readStoredPreference() {
+    if (typeof localStorage === 'undefined') return null
+    try {
+      const language = String(localStorage.getItem(STORAGE_KEY) || '').toLowerCase().split('-')[0]
+      return supported.includes(language) ? language : null
+    } catch {
+      return null
+    }
+  }
+
+  function setLocalePreference(value) {
+    if (typeof localStorage === 'undefined') return false
+    const language = String(value || '').toLowerCase().split('-')[0]
+    try {
+      if (supported.includes(language)) {
+        localStorage.setItem(STORAGE_KEY, language)
+      } else {
+        localStorage.removeItem(STORAGE_KEY)
+      }
+      return true
+    } catch {
+      return false
+    }
+  }
 
   function detectLocale() {
     if (typeof window !== 'undefined' && window.__toolboxLocale) {
       const forced = String(window.__toolboxLocale).toLowerCase().split('-')[0]
       if (supported.includes(forced)) return forced
     }
+    const stored = readStoredPreference()
+    if (stored) return stored
     if (typeof navigator === 'undefined') return 'de'
     const raw = (navigator.languages && navigator.languages[0]) || navigator.language || 'de'
     const language = String(raw).toLowerCase().split('-')[0]
@@ -535,6 +578,7 @@
   }
 
   const locale = detectLocale()
+  const preference = readStoredPreference() || 'system'
 
   function interpolate(template, variables) {
     return String(template).replace(/\{(\w+)\}/g, (match, key) => {
@@ -603,8 +647,10 @@
     dictionaries,
     supported,
     locale,
+    preference,
     localeTag: localeTags[locale],
     localeTags,
+    setLocalePreference,
     t,
     translateFor,
     localizeDom,

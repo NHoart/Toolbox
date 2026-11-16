@@ -10,6 +10,7 @@ const subscribe = channel => callback => {
 
 contextBridge.exposeInMainWorld('toolbox', {
   getState: () => ipcRenderer.invoke('app:state'),
+  reload: () => ipcRenderer.invoke('app:reload'),
   onStateChanged: subscribe('state:changed'),
   onCounterTick: subscribe('counter:tick'),
 

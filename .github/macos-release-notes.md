@@ -24,17 +24,13 @@ Lade oben `Toolbox.dmg` herunter.
      „Toolbox wurde blockiert“ auf **Dennoch öffnen** klicken, oder
    - im Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
-### Neu in 3.3.1
+### Neu in 3.4.0
 
-- **Direkter Abgleich zwischen Apple-Geräten wiederhergestellt:** In 3.3.0
-  lieferte der Bonjour-Browser auf Mac und iPhone keine TXT-Daten, sodass der
-  Namensfilter alle Peers verworfen hat. Die Apple-Geräte nahmen zwar
-  Verbindungen an, suchten aber selbst keine Geräte mehr. 3.3.1 nutzt den
-  passenden Browser-Descriptor und behebt das.
-- **Alle Geräte zeigen die direkten Peers:** Mit drei Geräten im selben Namen
-  zeigt jedes Gerät „Verbunden mit 2 Geräten“ statt nur der Windows-PC.
-- **Windows ohne funktionale Änderung:** Die Windows-App entspricht 3.3.0; der
-  Fix betrifft nur den Apple-Bonjour-Browser.
+- **Sprache in der Windows-App wählbar:** In den Einstellungen lässt sich die
+  Oberfläche auf Deutsch, Englisch, Spanisch oder Französisch stellen.
+  **Systemsprache** folgt weiterhin Windows; die Auswahl bleibt nach einem
+  Neustart erhalten.
+- **macOS und iOS unverändert:** Die Apple-App entspricht 3.3.1.
 
 ### Windows: Update von 3.1.x
 
@@ -43,16 +39,16 @@ Windows-Versionen vor 3.2.0 enthalten den Updater noch nicht. Einmalig
 die bestehende Installation laufen lassen – Deinstallieren ist nicht nötig, die
 Daten bleiben erhalten. Da der Installer nicht signiert ist, kann der Defender
 SmartScreen warnen – über **Weitere Informationen → Trotzdem ausführen** lässt
-er sich starten. Ab 3.2.0 übernimmt das Auto-Update; 3.3.1 wird dort automatisch
+er sich starten. Ab 3.2.0 übernimmt das Auto-Update; 3.4.0 wird dort automatisch
 angeboten.
 
 ### Geprüfter Release-Stand
 
-Die Xcode-Builds für macOS und iOS (3.3.1) liefen mit Xcode 27.2 fehlerfrei
-durch. Die Windows-Tests (32) und der Headless-Sync-Smoke-Test sind grün; der
+Die Xcode-Builds für macOS und iOS (3.4.0) liefen mit Xcode 27.2 fehlerfrei
+durch. Die Windows-Tests (35) und der Headless-Sync-Smoke-Test sind grün; der
 Swift↔Windows-Interop-Test bestätigt den Abgleich mit Mac, iPhone und Windows
 sowie die Namensfilterung. Zusätzlich wurde der direkte Apple-Verbindungsaufbau
-headless mit zwei Instanzen geprüft. Ein Test auf physischen Geräten mit 3.3.1,
+headless mit zwei Instanzen geprüft. Ein Test auf physischen Geräten mit 3.4.0,
 ein echter WLAN-Test und die native Windows-Oberfläche stehen noch aus.
 
 ### Update von einer älteren Version

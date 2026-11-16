@@ -15,14 +15,14 @@ Windows 10/11, 64 Bit. `Toolbox-Setup.exe` oben herunterladen, ausführen und de
 
 Da der Installer nicht signiert ist, zeigt Windows SmartScreen beim ersten Start möglicherweise eine Warnung. Über **Weitere Informationen → Trotzdem ausführen** lässt sich die App starten. Wer den Browser-Download vermeiden will, installiert stattdessen per winget (siehe Tabelle oben).
 
-### Neu in 3.3.1
+### Neu in 3.4.0
 
-- **Apple-Geräte verbinden sich wieder direkt:** In 3.3.0 suchten Mac und
-  iPhone wegen fehlender TXT-Daten im Bonjour-Browser selbst keine Geräte
-  mehr; der Abgleich lief nur über den Windows-PC als Brücke. 3.3.1 behebt das
-  in der Apple-App.
-- **Windows ohne funktionale Änderung:** Die Windows-App entspricht 3.3.0; der
-  Fix betrifft nur den Apple-Bonjour-Browser.
+- **Sprache direkt in der App wählen:** In den Einstellungen lässt sich die
+  Oberfläche auf Deutsch, Englisch, Spanisch oder Französisch stellen.
+  **Systemsprache** folgt weiterhin Windows; die Auswahl bleibt nach einem
+  Neustart erhalten.
+- **Sofort angewendet:** Nach dem Wechsel lädt die App die Oberfläche mit der
+  neuen Sprache neu.
 
 ### Windows: Update von 3.1.x
 
@@ -31,16 +31,16 @@ Windows-Versionen vor 3.2.0 enthalten den Updater noch nicht. Einmalig
 die bestehende Installation laufen lassen – Deinstallieren ist nicht nötig, die
 Daten bleiben erhalten. Da der Installer nicht signiert ist, kann der Defender
 SmartScreen warnen – über **Weitere Informationen → Trotzdem ausführen** lässt
-er sich starten. Ab 3.2.0 übernimmt das Auto-Update; 3.3.1 wird dort automatisch
+er sich starten. Ab 3.2.0 übernimmt das Auto-Update; 3.4.0 wird dort automatisch
 angeboten.
 
 ### Geprüfter Release-Stand
 
-Die Windows-Tests (32) und der Headless-Sync-Smoke-Test sind grün. Der
+Die Windows-Tests (35) und der Headless-Sync-Smoke-Test sind grün. Der
 Swift↔Windows-Interop-Test bestätigt den Abgleich mit Mac, iPhone und Windows
-sowie die Namensfilterung. Die Xcode-Builds für macOS und iOS (3.3.1) liefen
+sowie die Namensfilterung. Die Xcode-Builds für macOS und iOS (3.4.0) liefen
 fehlerfrei durch; der direkte Apple-Verbindungsaufbau wurde headless mit zwei
-Instanzen geprüft. Ein Test auf physischen Geräten mit 3.3.1, ein echter
+Instanzen geprüft. Ein Test auf physischen Geräten mit 3.4.0, ein echter
 WLAN-Test, ein Update-Lauf und die native Windows-Oberfläche stehen noch aus.
 
 ### Sync mit Mac und iPhone

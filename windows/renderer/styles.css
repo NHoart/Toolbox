@@ -110,9 +110,13 @@ button {
   color: inherit;
 }
 
-input {
+input,
+select {
   font-family: inherit;
   color: inherit;
+}
+
+input {
   user-select: text;
 }
 
@@ -1246,6 +1250,57 @@ body[data-platform="darwin"] .titlebar {
 .settings-modal {
   width: 560px;
   height: min(720px, calc(100vh - 48px));
+}
+
+.select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select-wrap select {
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 178px;
+  height: 36px;
+  padding: 0 34px 0 12px;
+  border: 1px solid var(--stroke-soft);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.select-wrap select:hover {
+  border-color: var(--stroke);
+}
+
+.select-wrap select:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.select-wrap .select-chevron {
+  position: absolute;
+  right: 10px;
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.select-wrap option {
+  background: #151b28;
+  color: #eef2fb;
+}
+
+@media (prefers-color-scheme: light) {
+  .select-wrap option {
+    background: #ffffff;
+    color: #131a28;
+  }
 }
 
 .setting-row {
