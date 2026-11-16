@@ -4,7 +4,6 @@
 | --- | --- |
 | **macOS** 27.2 oder neuer (Apple Silicon) | [Toolbox.dmg](https://github.com/{{REPO}}/releases/download/{{TAG}}/Toolbox.dmg) |
 | **Windows** 10/11, 64 Bit | [Toolbox-Setup.exe](https://github.com/{{REPO}}/releases/download/{{TAG}}/Toolbox-Setup.exe) |
-| **winget** (Windows 10/11) | `winget install --id NHoart.Toolbox -e` |
 {{STORE_ROW}}
 
 Dieselben Dateien hängen unten unter **Assets** am Release.
@@ -13,7 +12,7 @@ Dieselben Dateien hängen unten unter **Assets** am Release.
 
 Windows 10/11, 64 Bit. `Toolbox-Setup.exe` oben herunterladen, ausführen und den Anweisungen folgen – die Installation läuft ohne Administratorrechte im Benutzerprofil.
 
-Da der Installer nicht signiert ist, zeigt Windows SmartScreen beim ersten Start möglicherweise eine Warnung. Über **Weitere Informationen → Trotzdem ausführen** lässt sich die App starten. Wer den Browser-Download vermeiden will, installiert stattdessen per winget (siehe Tabelle oben).
+Da der Installer nicht signiert ist, zeigt Windows SmartScreen beim ersten Start möglicherweise eine Warnung. Über **Weitere Informationen → Trotzdem ausführen** lässt sich die App starten.
 
 ### Neu in 3.4.0
 

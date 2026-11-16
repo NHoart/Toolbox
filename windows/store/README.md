@@ -1,7 +1,6 @@
 # Microsoft Store
 
-Die Store-Fassung ist eine **zusätzliche** Installationsart. DMG, EXE und
-winget bleiben unverändert; die Store-Version nutzt dieselbe Sync-Engine und
+Die Store-Fassung ist eine **zusätzliche** Installationsart. DMG und EXE bleiben unverändert; die Store-Version nutzt dieselbe Sync-Engine und
 dieselben lokalen Daten.
 
 ## Einmalige Einrichtung

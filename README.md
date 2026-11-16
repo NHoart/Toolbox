@@ -34,15 +34,7 @@ Die Windows-App gibt es als Installer direkt von GitHub:
 
 Windows 10/11 (64 Bit). Nach dem Download den Installer ausführen; die Installation läuft ohne Administratorrechte im Benutzerprofil. Der Installer ist nicht signiert, deshalb kann SmartScreen beim ersten Start warnen – über **Weitere Informationen → Trotzdem ausführen** startet die App trotzdem.
 
-Alternativ lässt sich Toolbox per winget installieren – ohne Browser-Download und damit in der Regel ohne SmartScreen-Warnung:
-
-```powershell
-winget install --id NHoart.Toolbox -e
-```
-
-Die Manifeste dafür liegen unter [`windows/winget`](windows/winget).
-
-Die Microsoft-Store-Fassung ist eine zusätzliche Installationsart und ersetzt weder Installer noch winget. Sobald sie veröffentlicht ist, steht der Store-Link in den Release-Notes neuer Releases; für das bereits veröffentlichte 3.3.1 wird er einmal manuell ergänzt. Einrichtung und Einreichung sind unter [`windows/store`](windows/store/README.md) beschrieben.
+Die Microsoft-Store-Fassung ist eine zusätzliche Installationsart und ersetzt den Installer nicht. Sobald sie veröffentlicht ist, steht der Store-Link in den Release-Notes neuer Releases; für das bereits veröffentlichte 3.3.1 wird er einmal manuell ergänzt. Einrichtung und Einreichung sind unter [`windows/store`](windows/store/README.md) beschrieben.
 
 Die Windows-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Ist sie installiert, lädt sie den neuen Installer, prüft die im Release hinterlegte SHA-512-Prüfsumme und installiert das Update im Hintergrund; danach startet sie neu. Manuell geht das über **Einstellungen → Updates**; abschalten lässt sich die automatische Prüfung dort ebenfalls. Die Microsoft-Store-Fassung aktualisiert sich über den Store; die GitHub-Update-Prüfung ist dort deaktiviert.
 
@@ -106,7 +98,6 @@ npm test           # Protokoll-, Speicher- und Sync-Tests inkl. Drei-Client-Kett
 npm run smoke:sync # Headless-Smoke-Test des Sync-Clients
 npm run dist       # Installer unter windows/dist/Toolbox-Setup.exe
 npm run dist:store # AppX für den Microsoft Store (Windows/Parallels)
-npm run winget:manifest # winget-Manifeste unter windows/dist/winget
 ```
 
 Der Installer wird regulär im Workflow auf `windows-latest` gebaut. `npm run dist` funktioniert auch auf einem Mac, sofern die Windows-Build-Werkzeuge von electron-builder verfügbar sind. `npm run dist:store` baut die Store-Fassung als AppX; die Identität steht in `windows/store/store.config.json`, und der NSIS-Installer bleibt davon unberührt. Details: [`windows/store/README.md`](windows/store/README.md).
