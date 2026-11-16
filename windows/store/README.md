@@ -82,6 +82,11 @@ wird **nicht** als GitHub-Release-Asset veröffentlicht.
 
 ### 4. AppX im Partner Center hochladen
 
+Aktueller Stand (16.11.2026): `Toolbox-3.4.0.appx` ist im Partner Center
+**Validated** und das einzige Paket der Submission; 3.3.2 wurde entfernt. Die
+Submission wurde am 16.11.2026 zur Zertifizierung übermittelt, die Zertifizierung
+läuft.
+
 1. **Workflow starten:** **Actions → Microsoft Store (AppX) → Run workflow**.
    Bei einem Release reicht auch ein Tag `v<version>`; der Workflow läuft dann
    automatisch. Warte, bis der Lauf grün ist und der Schritt
@@ -92,25 +97,27 @@ wird **nicht** als GitHub-Release-Asset veröffentlicht.
 3. **Datei prüfen:** Auf Windows die Prüfsumme vergleichen:
 
    ```powershell
-   Get-FileHash .\Toolbox-3.3.2.appx -Algorithm SHA256
+   Get-FileHash (Get-ChildItem .\Toolbox-*.appx).FullName -Algorithm SHA256
    Get-Content .\SHA256SUMS.txt
    ```
 
-   Beide SHA256-Werte müssen übereinstimmen. Optional das Manifest erneut
-   prüfen (im Repository unter `windows`):
+   Im Ordner sollte nur das heruntergeladene AppX liegen. Beide SHA256-Werte
+   müssen übereinstimmen. Optional das Manifest erneut prüfen (im Repository
+   unter `windows`):
 
    ```powershell
-   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-appx.ps1 -Path .\Toolbox-3.3.2.appx
+   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-appx.ps1 -Path (Get-ChildItem .\Toolbox-*.appx).FullName
    ```
 
 4. **Partner Center öffnen:** **Apps and games → Toolbox for Windows →
    Submission → Packages**.
-5. **Altes Paket ersetzen:** Falls dort noch die alte
-   `Toolbox-3.3.1.appx` ohne die vier Sprachen steht, entferne sie zuerst über
-   die Paketaktionen. Warte, bis das Paket nicht mehr gelistet ist.
-6. **Neues Paket hochladen:** **Upload package** wählen und die neue
-   `.appx` auswählen. Lade **kein** Zertifikat hoch; der Store signiert das
-   Paket beim Einreichen selbst. Warte, bis der Status **Validated** lautet.
+5. **Validiertes 3.3.2 ersetzen:** Im Partner Center ist derzeit
+   `Toolbox-3.3.2.appx` validiert. Entferne dieses Paket über die
+   Paketaktionen und warte, bis es nicht mehr gelistet ist.
+6. **Neues Paket 3.4.0 hochladen:** **Upload package** wählen und
+   `Toolbox-3.4.0.appx` auswählen. Lade **kein** Zertifikat hoch; der Store
+   signiert das Paket beim Einreichen selbst. Warte, bis der Status
+   **Validated** lautet.
 7. **Sprachen kontrollieren:** Unter **In Paketen unterstützte Sprachen**
    müssen **Deutsch, Englisch, Spanisch und Französisch** stehen. Fehlt eine
    Sprache, nicht einreichen: Artefakt und Workflow-Log prüfen und den Build
@@ -137,8 +144,7 @@ Nach der Veröffentlichung die Store-URL
 `https://apps.microsoft.com/detail/<StoreId>` als Repository-Variable
 **`STORE_URL`** hinterlegen (Settings → Secrets and variables → Actions →
 Variables). Die Release-Notes neuer Releases nehmen dann automatisch eine Store-Zeile in die
-Installationstabelle auf. Für das bereits veröffentlichte 3.3.1 die Zeile einmal
-manuell ergänzen. Ohne `STORE_URL` bleibt die Zeile leer.
+Installationstabelle auf. Ohne `STORE_URL` bleibt die Zeile leer.
 
 ### 6. Spätere Updates
 
@@ -178,11 +184,11 @@ auf Deutsch, Englisch, Spanisch oder Französisch stellen; **Systemsprache**
 folgt weiterhin Windows. Die Store-Einträge gibt es zusätzlich auf Englisch (USA),
 Spanisch (Spanien) und Französisch (Frankreich). Produkt-ID: `9P4FPTHZHVJD`.
 
-> **Wichtig:** Das derzeit im Partner Center validierte Paket
-> `Toolbox-3.3.1.appx` wurde vor der Lokalisierung gebaut. Für die
-> ausgelieferte Store-App müssen ein neues AppX mit den vier Sprachen gebaut
-> und die Submission aktualisiert werden. Der Build läuft auf Windows oder
-> über den Workflow **Microsoft Store (AppX)**; auf macOS ist er nicht möglich.
+> **Wichtig:** `Toolbox-3.4.0.appx` ist im Partner Center mit den vier Sprachen
+> validiert und enthält die manuelle Sprachwahl. 3.3.2 wurde aus der Submission
+> entfernt. Die Submission wurde am 16.11.2026 zur Zertifizierung übermittelt;
+> die Zertifizierung läuft. Der Build läuft auf Windows oder über den Workflow
+> **Microsoft Store (AppX)**; auf macOS ist er nicht möglich.
 
 ### Store-Eintrag (de-DE)
 
@@ -262,10 +268,9 @@ Die Screenshots zeigen die Oberfläche in der jeweiligen Store-Sprache. Die
 Aufnahmen wurden mit der lokalisierten App erzeugt; der deutsche Eintrag
 verwendet weiterhin die deutschen Bilder.
 
-Die **Paketsprachen** sind in `windows/package.json` auf `de-DE`, `en-US`,
-`es-ES` und `fr-FR` erweitert. Das bereits hochgeladene AppX enthält diese
-Erweiterung noch nicht; nach einem Neubau auf Windows muss es im Partner Center
-erneut hochgeladen und die Submission aktualisiert werden.
+Die **Paketsprachen** in `windows/package.json` sind `de-DE`, `en-US`, `es-ES`
+und `fr-FR`. Das im Partner Center validierte AppX `Toolbox-3.4.0.appx` enthält
+diese vier Sprachen und ergänzt die manuelle Sprachwahl.
 
 ### Preise und Verfügbarkeit
 
@@ -350,14 +355,16 @@ wurden dabei akzeptiert.
 - [x] Screenshots hochladen (je fünf unter `windows/store/screenshots/<sprache>/`)
 - [x] IARC-Fragebogen vollständig beantworten und Altersfreigaben speichern
 - [x] Preise und Verfügbarkeit, Eigenschaften, Store-Eintrag und Übermittlungsoptionen ausfüllen
-- [x] AppX hochgeladen und validiert (`Toolbox-3.3.1.appx`)
+- [x] AppX 3.3.2 hochgeladen und validiert (`Toolbox-3.3.2.appx`)
+- [x] 3.3.2 aus der Submission entfernt; 3.4.0 bleibt als einziges Paket
 - [x] Zusätzliche Store-Einträge en-US und es-ES vollständig ausgefüllt
 - [x] App-Lokalisierung de/en/es/fr im Renderer eingebaut
 - [x] Zusätzlicher Store-Eintrag fr-FR vollständig ausgefüllt
 - [x] Store-Build deklariert und prüft `de-DE`, `en-US`, `es-ES`, `fr-FR`
 - [x] Screenshots je Sprache durch Aufnahmen der lokalisierten UI ersetzt
-- [ ] Neues AppX mit de/en/es/fr bauen und im Partner Center hochladen
-      (Windows oder GitHub-Actions-Workflow erforderlich)
-- [ ] Einreichung „Zur Zertifizierung übermitteln“ absenden (noch nicht abgesendet)
+- [x] Neues AppX 3.4.0 mit de/en/es/fr gebaut
+- [x] `Toolbox-3.4.0.appx` im Partner Center hochgeladen und validiert
+- [x] Einreichung „Zur Zertifizierung übermitteln“ am 16.11.2026 abgesendet;
+      Zertifizierung läuft
 - [ ] Nach der Veröffentlichung `STORE_URL` als Repository-Variable setzen
       (`https://apps.microsoft.com/detail/9P4FPTHZHVJD`)

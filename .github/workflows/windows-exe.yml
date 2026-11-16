@@ -76,23 +76,30 @@ jobs:
           if (-not $repo) {
             $repo = (gh repo view --json nameWithOwner --jq .nameWithOwner)
           }
-          $notesTemplate = Join-Path $env:GITHUB_WORKSPACE ".github/windows-release-notes.md"
-          $notes = Join-Path $env:RUNNER_TEMP "windows-release-notes.md"
-          $storeUrl = $env:STORE_URL
-          if ($storeUrl) {
-            $storeRow = "| **Microsoft Store** (Windows 10/11) | [Toolbox for Windows im Microsoft Store]($storeUrl) |"
+          # Beide Release-Workflows rendern denselben kombinierten Body aus
+          # macOS- und Windows-Notes. So darf jeder Workflow zuerst fertig
+          # werden, ohne dass die jeweils andere Plattform fehlt.
+          $notes = Join-Path $env:RUNNER_TEMP "release-notes.md"
+          if ($env:STORE_URL) {
+            node ../scripts/render-release-notes.js --repo $repo --tag $tag --out $notes --store-url $env:STORE_URL
           } else {
-            $storeRow = ""
+            node ../scripts/render-release-notes.js --repo $repo --tag $tag --out $notes
           }
-          (Get-Content $notesTemplate -Raw).Replace('{{REPO}}', $repo).Replace('{{TAG}}', $tag).Replace('{{STORE_ROW}}', $storeRow) |
-            Set-Content -Path $notes -Encoding utf8
-
-          gh release view $tag *> $null
           if ($LASTEXITCODE -ne 0) {
-            # Falls der macOS-Workflow denselben Release gleichzeitig anlegt,
-            # ist ein Fehlschlag hier in Ordnung – das Hochladen versucht es erneut.
-            gh release create $tag --title "Toolbox $version" --notes-file $notes
+            throw "Release-Notes konnten nicht erzeugt werden."
+          }
+
+          $title = "Toolbox $version"
+          $releaseReady = $false
+          for ($attempt = 1; $attempt -le 30; $attempt++) {
+            gh release view $tag *> $null
+            if ($LASTEXITCODE -eq 0) { $releaseReady = $true; break }
+            gh release create $tag --title $title --notes-file $notes *> $null
+            if ($LASTEXITCODE -eq 0) { $releaseReady = $true; break }
             Start-Sleep -Seconds 2
+          }
+          if (-not $releaseReady) {
+            throw "Release $tag konnte nicht angelegt werden."
           }
 
           # latest.yml und die Blockmap braucht electron-updater für Auto-Updates.
@@ -107,6 +114,19 @@ jobs:
             if ($LASTEXITCODE -eq 0) { break }
             if ($attempt -eq 5) { exit 1 }
             Start-Sleep -Seconds 4
+          }
+
+          # Den vollständigen Body nach dem Upload erneut setzen. Beide
+          # Workflows erzeugen denselben Text, daher ist die Reihenfolge
+          # unkritisch.
+          $notesUpdated = $false
+          for ($attempt = 1; $attempt -le 10; $attempt++) {
+            gh release edit $tag --notes-file $notes
+            if ($LASTEXITCODE -eq 0) { $notesUpdated = $true; break }
+            Start-Sleep -Seconds 2
+          }
+          if (-not $notesUpdated) {
+            throw "Release-Notes konnten nicht aktualisiert werden."
           }
 
       - name: Release-Assets prüfen

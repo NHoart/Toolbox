@@ -27,6 +27,11 @@ jobs:
       - name: Repository auschecken
         uses: actions/checkout@v4
 
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Neueste installierte Xcode-Version auswählen
         run: |
           set -euo pipefail
@@ -64,27 +69,64 @@ jobs:
             tag="v$version"
           fi
 
-          # Die Download-Tabelle steht ganz oben in den Release-Notes; dafür
-          # Repository und Tag in die Vorlage einsetzen.
+          # Beide Release-Workflows rendern denselben kombinierten Body aus
+          # macOS- und Windows-Notes. So darf jeder Workflow zuerst fertig
+          # werden, ohne dass die jeweils andere Plattform fehlt.
           repo="${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"
           notes="$(mktemp)"
-          store_row=""
           if [ -n "${STORE_URL:-}" ]; then
-            store_row="| **Microsoft Store** (Windows 10/11) | [Toolbox for Windows im Microsoft Store]($STORE_URL) |"
-          fi
-          sed -e "s|{{REPO}}|$repo|g" -e "s|{{TAG}}|$tag|g" \
-            .github/macos-release-notes.md \
-            | STORE_ROW="$store_row" perl -pe 's/\{\{STORE_ROW\}\}/$ENV{STORE_ROW}/g' > "$notes"
-
-          if gh release view "$tag" > /dev/null 2>&1; then
-            gh release upload "$tag" dist/Toolbox.dmg --clobber
+            node scripts/render-release-notes.js \
+              --repo "$repo" --tag "$tag" --out "$notes" --store-url "$STORE_URL"
           else
-            # Der Windows-Workflow kann denselben Release gleichzeitig anlegen.
-            if ! gh release create "$tag" dist/Toolbox.dmg \
-              --title "Toolbox $version" \
-              --notes-file "$notes"; then
-              gh release upload "$tag" dist/Toolbox.dmg --clobber
+            node scripts/render-release-notes.js \
+              --repo "$repo" --tag "$tag" --out "$notes"
+          fi
+
+          # Release anlegen, falls es noch nicht vom anderen Workflow erstellt
+          # wurde; danach das DMG hochladen und den vollständigen Body setzen.
+          release_ready=false
+          for attempt in $(seq 1 30); do
+            if gh release view "$tag" > /dev/null 2>&1; then
+              release_ready=true
+              break
             fi
+            if gh release create "$tag" \
+              --title "Toolbox $version" \
+              --notes-file "$notes" > /dev/null 2>&1; then
+              release_ready=true
+              break
+            fi
+            sleep 2
+          done
+          if [ "$release_ready" != true ]; then
+            echo "::error::Release $tag konnte nicht angelegt werden."
+            exit 1
+          fi
+
+          uploaded=false
+          for attempt in $(seq 1 10); do
+            if gh release upload "$tag" dist/Toolbox.dmg --clobber; then
+              uploaded=true
+              break
+            fi
+            sleep 3
+          done
+          if [ "$uploaded" != true ]; then
+            echo "::error::DMG konnte nicht am Release $tag hochgeladen werden."
+            exit 1
+          fi
+
+          notes_updated=false
+          for attempt in $(seq 1 10); do
+            if gh release edit "$tag" --notes-file "$notes"; then
+              notes_updated=true
+              break
+            fi
+            sleep 2
+          done
+          if [ "$notes_updated" != true ]; then
+            echo "::error::Release-Notes konnten nicht aktualisiert werden."
+            exit 1
           fi
 
       - name: Windows-Installer für denselben Release anstoßen

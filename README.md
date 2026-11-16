@@ -34,7 +34,11 @@ Die Windows-App gibt es als Installer direkt von GitHub:
 
 Windows 10/11 (64 Bit). Nach dem Download den Installer ausführen; die Installation läuft ohne Administratorrechte im Benutzerprofil. Der Installer ist nicht signiert, deshalb kann SmartScreen beim ersten Start warnen – über **Weitere Informationen → Trotzdem ausführen** startet die App trotzdem.
 
-Die Microsoft-Store-Fassung ist eine zusätzliche Installationsart und ersetzt den Installer nicht. Sobald sie veröffentlicht ist, steht der Store-Link in den Release-Notes neuer Releases; für das bereits veröffentlichte 3.3.1 wird er einmal manuell ergänzt. Einrichtung und Einreichung sind unter [`windows/store`](windows/store/README.md) beschrieben.
+Die Microsoft-Store-Fassung ist eine zusätzliche Installationsart und ersetzt den Installer nicht. Der Store-Eintrag ist eingereicht; der Link wird nach der Store-Zertifizierung aktiv:
+
+[**Toolbox for Windows im Microsoft Store**](https://apps.microsoft.com/detail/9P4FPTHZHVJD)
+
+Bis dahin ist der Link ein Platzhalter für die spätere Store-Seite. Einrichtung und Einreichung sind unter [`windows/store`](windows/store/README.md) beschrieben.
 
 Die Windows-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Ist sie installiert, lädt sie den neuen Installer, prüft die im Release hinterlegte SHA-512-Prüfsumme und installiert das Update im Hintergrund; danach startet sie neu. Manuell geht das über **Einstellungen → Updates**; abschalten lässt sich die automatische Prüfung dort ebenfalls. Die Microsoft-Store-Fassung aktualisiert sich über den Store; die GitHub-Update-Prüfung ist dort deaktiviert.
 
@@ -133,7 +137,7 @@ Das Skript baut die macOS-App (`Release`, Apple Silicon), signiert sie ad-hoc un
 
 `git tag v1.2.0 && git push origin v1.2.0` erzeugt ein Release `v1.2.0` mit DMG und Installer. Alternativ über **Actions → „macOS DMG“ → Run workflow** ein Release `v<Version>` aus dem aktuellen Stand bauen; der Windows-Workflow wird dabei automatisch mit angestoßen.
 
-Die Release-Notes (`.github/macos-release-notes.md` und `.github/windows-release-notes.md`) beginnen mit einer Tabelle der Installationswege. Der jeweilige Workflow ersetzt die Platzhalter `{{REPO}}`, `{{TAG}}` und `{{STORE_ROW}}`; `{{STORE_ROW}}` wird aus der Repository-Variable `STORE_URL` gesetzt und entfällt ohne URL. Vor einem Release `MARKETING_VERSION` (und `CURRENT_PROJECT_VERSION`) im Projekt sowie `version` in `windows/package.json` erhöhen – der Update-Check und die Release-Tags vergleichen diese Versionen.
+Die Release-Notes liegen in `.github/macos-release-notes.md` und `.github/windows-release-notes.md`; gemeinsamer Kopf und Abschluss stehen in `.github/release-notes-header.md` und `.github/release-notes-footer.md`. Beide Workflows rendern daraus mit `scripts/render-release-notes.js` denselben vollständigen Body und setzen ihn nach dem Upload erneut. Dadurch ist es unerheblich, welcher Workflow zuerst fertig wird. Das Skript ersetzt `{{REPO}}`, `{{TAG}}` und `{{STORE_ROW}}`; `{{STORE_ROW}}` wird aus der Repository-Variable `STORE_URL` gesetzt und entfällt ohne URL. Vor einem Release `MARKETING_VERSION` (und `CURRENT_PROJECT_VERSION`) im Projekt sowie `version` in `windows/package.json` erhöhen – der Update-Check und die Release-Tags vergleichen diese Versionen.
 
 ## Projektstruktur
 
