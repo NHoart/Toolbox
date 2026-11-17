@@ -317,7 +317,7 @@ class ToolboxStore extends EventEmitter {
     return Object.keys(this.data.water.history).length > 0 || this.data.water.total !== 0
   }
 
-  /** null = noch nichts zu synchronisieren (wie WaterStore.sendState auf dem Mac). */
+  /** null = nothing to sync yet (like WaterStore.sendState on the Mac). */
   waterSnapshot() {
     const updatedAt = this.data.water.updatedAt
     if (!this.hasWaterData() && updatedAt === null) return null
@@ -334,7 +334,7 @@ class ToolboxStore extends EventEmitter {
     }
   }
 
-  /** Übernimmt einen fremden Stand, ohne ihn als lokale Änderung zu markieren. */
+  /** Adopts a foreign state without marking it as a local change. */
   applyRemoteWater(snapshot) {
     const normalized = normalizeWaterSnapshot(snapshot)
     if (!normalized) return false

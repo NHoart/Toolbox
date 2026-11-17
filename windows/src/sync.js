@@ -137,7 +137,7 @@ class SyncService extends EventEmitter {
     this.emitStatus()
   }
 
-  /** Name geändert: neue Gruppe ankündigen und alte Verbindungen trennen. */
+  /** Name changed: announce the new group and drop the old connections. */
   setSyncName(name) {
     const value = String(name ?? '').slice(0, 60)
     if (value === this.store.syncName) return
@@ -154,7 +154,7 @@ class SyncService extends EventEmitter {
     this.syncNow()
   }
 
-  /** Sucht erneut nach Geräten und schickt den aktuellen Stand an alle. */
+  /** Searches for devices again and sends the current state to everyone. */
   syncNow() {
     if (!this.store.syncEnabled || !this.hasSyncName) return
     this.start()
@@ -186,7 +186,7 @@ class SyncService extends EventEmitter {
     return this.peers.length
   }
 
-  /** Ohne Namen läuft kein Abgleich. */
+  /** Without a name no sync runs. */
   get hasSyncName() {
     return normalizeSyncName(this.store.syncName).length > 0
   }
@@ -680,7 +680,7 @@ class SyncService extends EventEmitter {
     return `Toolbox (${name})`.slice(0, 60)
   }
 
-  /** Bonjour-service hängt kein `.local` an; der Zielname muss vollständig sein. */
+  /** The Bonjour service does not append `.local`; the target name must be complete. */
   mdnsHost() {
     const base = this.deviceName
       .toLowerCase()

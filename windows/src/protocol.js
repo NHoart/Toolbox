@@ -68,7 +68,7 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value))
 }
 
-/** Vergleichsform des Gruppennamens: Leerraum und Groß-/Kleinschreibung egal. */
+/** Comparison form of the group name: whitespace and case do not matter. */
 function normalizeSyncName(name) {
   return String(name ?? '')
     .trim()
@@ -81,7 +81,7 @@ function sameSyncName(a, b) {
   return left.length > 0 && left === normalizeSyncName(b)
 }
 
-/** Entfernt Einträge, die älter als 400 Tage sind – wie WaterStore.setToday. */
+/** Removes entries older than 400 days – like WaterStore.setToday. */
 function pruneHistory(history, now = new Date()) {
   if (!history || typeof history !== 'object') return {}
   const cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate() - MAX_HISTORY_DAYS)
@@ -146,7 +146,7 @@ function normalizeCounterSnapshot(raw) {
   }
 }
 
-/** Baut die Nachricht, die über TCP geht (eine Zeile, wie bei den Apple-Clients). */
+/** Builds the message sent over TCP (one line, as with the Apple clients). */
 function encodeMessage({ deviceID, deviceName, syncName, water, counter }) {
   const message = { deviceID, deviceName, syncName: syncName || '' }
   // Swift omits `nil` fields when encoding.
@@ -175,7 +175,7 @@ function decodeMessageLine(line) {
   }
 }
 
-/** Pro Bereich gewinnt der zuletzt geänderte Stand – ohne eigenen Stand immer. */
+/** Per area the most recently changed state wins – without our own state always. */
 function shouldApply(localUpdatedAt, remoteUpdatedAt) {
   if (localUpdatedAt === null || localUpdatedAt === undefined) return true
   return remoteUpdatedAt > localUpdatedAt

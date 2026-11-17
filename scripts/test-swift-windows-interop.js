@@ -228,7 +228,7 @@ function assertSnapshot(label, swift, winWater, winCounter) {
   assert.equal(
     swift.counter.savedCounters.length,
     winCounter.savedCounters.length,
-    `${label}: savedCounters-Länge`
+    `${label}: savedCounters length`
   )
   for (const [index, item] of swift.counter.savedCounters.entries()) {
     const other = winCounter.savedCounters[index]
@@ -239,7 +239,7 @@ function assertSnapshot(label, swift, winWater, winCounter) {
   }
   assert.ok(
     Math.abs(swift.counter.updatedAt - winCounter.updatedAt) < 0.001,
-    `${label}: Zähler-Zeitstempel`
+    `${label}: counter timestamp`
   )
 }
 
