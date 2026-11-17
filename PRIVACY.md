@@ -1,55 +1,53 @@
-# Datenschutzerklärung
+# Privacy Policy
 
-Stand: 14. November 2026
+Last updated: 14 November 2026
 
-Toolbox ist eine lokale App für Wasser-, Zähler- und Alltagswerkzeuge. Es gibt
-kein Benutzerkonto und keinen Server des Anbieters.
+Toolbox is a local app for water, counter and everyday tools. There is no user
+account and no server operated by the provider.
 
-## Verantwortlicher
+## Controller
 
 Noah Hartmann
-Kontakt: https://github.com/NHoart/Toolbox/issues
+Contact: https://github.com/NHoart/Toolbox/issues
 
-## Lokale Daten
+## Local data
 
-Toolbox speichert auf dem Gerät:
+Toolbox stores on the device:
 
-- Trinkmenge, Tagesziel und Verlauf
-- Zählerstände, gespeicherte Zähler und Einstellungen
-- den selbst vergebenen Sync-Namen und den Gerätenamen
+- water intake, daily goal and history
+- counter values, saved counters and settings
+- the self-assigned sync name and the device name
 
-Diese Daten werden nicht an den Anbieter übertragen.
+This data is not transmitted to the provider.
 
-## Abgleich im lokalen WLAN
+## Sync over the local Wi-Fi network
 
-Wenn der Abgleich eingeschaltet ist, kündigt Toolbox den Gerätenamen und den
-Sync-Namen über Bonjour/mDNS im lokalen Netzwerk an. Geräte mit demselben
-Sync-Namen verbinden sich direkt über TCP und tauschen die Wasser- und
-Zählerstände aus. Die Verbindung ist nicht zusätzlich verschlüsselt; sie
-verlässt das lokale Netzwerk nicht. Es gibt keinen Cloud-Dienst und keine
-Anmeldung.
+When sync is enabled, Toolbox advertises the device name and the sync name via
+Bonjour/mDNS on the local network. Devices with the same sync name connect
+directly over TCP and exchange the water and counter values. The connection is
+not additionally encrypted; it never leaves the local network. There is no
+cloud service and no sign-in.
 
 ## Updates
 
-Die EXE-Fassung fragt höchstens einmal pro Tag die GitHub-Release-Seite ab.
-Dabei wird die öffentliche Release-Seite geladen; der Anbieter erhält daraus
-keine App-Daten. Die Microsoft-Store-Fassung wird über den Microsoft Store
-aktualisiert; die GitHub-Update-Prüfung ist dort deaktiviert.
+The EXE version queries the GitHub release page at most once a day. This loads
+the public release page; the provider does not receive any app data from it.
+The Microsoft Store version is updated through the Microsoft Store; the GitHub
+update check is disabled there.
 
 ## Microsoft Store
 
-Die Microsoft-Store-Fassung wird über Microsoft bereitgestellt und
-aktualisiert. Microsoft verarbeitet dabei Daten gemäß der
-Microsoft-Datenschutzerklärung. Die App selbst sendet keine Telemetrie-,
-Analyse- oder Werbedaten.
+The Microsoft Store version is provided and updated by Microsoft. Microsoft
+processes data in accordance with the Microsoft Privacy Statement. The app
+itself sends no telemetry, analytics or advertising data.
 
-## Löschen
+## Deletion
 
-Lokale Daten lassen sich durch Deinstallieren der App und Löschen des
-AppData-Ordners entfernen. Bei der Store-Fassung können die App-Daten
-zusätzlich über die Windows-Einstellungen zurückgesetzt werden.
+Local data can be removed by uninstalling the app and deleting the AppData
+folder. For the Store version, the app data can additionally be reset through
+the Windows settings.
 
-## Änderungen
+## Changes
 
-Diese Erklärung wird bei Änderungen der Datenverarbeitung aktualisiert. Es gilt
-die hier veröffentlichte Fassung.
+This statement is updated when data processing changes. The version published
+here applies.

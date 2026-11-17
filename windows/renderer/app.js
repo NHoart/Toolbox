@@ -4,7 +4,8 @@ const api = window.toolbox
 const $ = id => document.getElementById(id)
 const I18N = window.ToolboxI18n
 const T = (text, variables) => (I18N ? I18N.t(text, variables) : text)
-const localeTag = I18N ? I18N.localeTag : 'de-DE'
+const localeTag = I18N ? I18N.localeTag : 'en-US'
+const language = I18N ? I18N.language : 'en'
 
 const APPLE_EPOCH_OFFSET_SECONDS = 978_307_200
 const RING_CIRCUMFERENCE = 2 * Math.PI * 92
@@ -1136,12 +1137,12 @@ function parseDecimal(text) {
     const group = decimal === ',' ? '.' : ','
     cleaned = cleaned.split(group).join('').replace(decimal, '.')
   } else if (lastComma >= 0) {
-    if (localeTag === 'en-US' && /^\d{1,3}(,\d{3})+$/.test(cleaned)) {
+    if (language === 'en' && /^\d{1,3}(,\d{3})+$/.test(cleaned)) {
       cleaned = cleaned.replace(/,/g, '')
     } else {
       cleaned = cleaned.replace(/,/g, '.')
     }
-  } else if (lastDot >= 0 && localeTag === 'de-DE' && /^\d{1,3}(\.\d{3})+$/.test(cleaned)) {
+  } else if (lastDot >= 0 && language === 'de' && /^\d{1,3}(\.\d{3})+$/.test(cleaned)) {
     // Deutsche Tausendertrennung: 1.000 = eintausend.
     cleaned = cleaned.replace(/\./g, '')
   }

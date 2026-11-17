@@ -16,7 +16,7 @@ struct MacSettingsSheet: View {
     @AppStorage(UpdateChecker.automaticChecksKey) private var automaticUpdateChecks = true
     @ObservedObject private var updates = UpdateChecker.shared
     @State private var manualUpdate: UpdateInfo?
-    @State private var manualStatus: String?
+    @State private var manualStatus: LocalizedStringKey?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -54,9 +54,9 @@ struct MacSettingsSheet: View {
     private var header: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 3) {
-                Text("Einstellungen")
+                Text("Settings")
                     .font(.system(size: 22, weight: .bold, design: .rounded))
-                Text("Wasser, Netzwerk und Updates")
+                Text("Water, network and updates")
                     .font(.system(size: 11.5))
                     .foregroundStyle(.secondary)
             }
@@ -71,7 +71,7 @@ struct MacSettingsSheet: View {
             .buttonStyle(.glass)
             .buttonBorderShape(.circle)
             .keyboardShortcut(.cancelAction)
-            .help("Schließen")
+            .help("Close")
         }
     }
 
@@ -83,7 +83,7 @@ struct MacSettingsSheet: View {
 
             Spacer()
 
-            Button("Fertig") { dismiss() }
+            Button("Done") { dismiss() }
                 .buttonStyle(.glassProminent)
                 .tint(MacTheme.accent)
                 .keyboardShortcut(.defaultAction)
@@ -94,20 +94,20 @@ struct MacSettingsSheet: View {
 
     private var sizesCard: some View {
         VStack(alignment: .leading, spacing: 11) {
-            MacCardHeader(title: "MENGEN", systemImage: "drop.fill", tint: MacTheme.accent)
+            MacCardHeader(title: "AMOUNTS", systemImage: "drop.fill", tint: MacTheme.accent)
 
-            stepperRow("Glas", value: $glass, range: 50...1000, step: 50)
+            stepperRow("Glass", value: $glass, range: 50...1000, step: 50)
             divider
-            stepperRow("Flasche", value: $bottle, range: 100...3000, step: 50)
+            stepperRow("Bottle", value: $bottle, range: 100...3000, step: 50)
             divider
-            stepperRow("Tagesziel", value: $goal, range: 500...6000, step: 250)
+            stepperRow("Daily goal", value: $goal, range: 500...6000, step: 250)
         }
         .macGlassCard(cornerRadius: 20, padding: 16)
     }
 
     private var networkCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            MacCardHeader(title: "LOKALES NETZWERK", systemImage: "wifi", tint: MacTheme.cyan)
+            MacCardHeader(title: "LOCAL NETWORK", systemImage: "wifi", tint: MacTheme.cyan)
 
             HStack(spacing: 10) {
                 Text("Name")
@@ -115,14 +115,14 @@ struct MacSettingsSheet: View {
 
                 Spacer()
 
-                TextField("z. B. Familie", text: syncNameBinding)
+                TextField("e.g. Family", text: syncNameBinding)
                     .textFieldStyle(.roundedBorder)
                     .font(.system(size: 12))
                     .frame(width: 210)
                     .autocorrectionDisabled()
             }
 
-            Toggle("Sync im WLAN", isOn: $lanEnabled)
+            Toggle("Sync over Wi-Fi", isOn: $lanEnabled)
                 .toggleStyle(.switch)
                 .font(.system(size: 12.5, weight: .medium))
 
@@ -135,19 +135,19 @@ struct MacSettingsSheet: View {
                 }
                 .font(.system(size: 11.5))
 
-                Button("Jetzt suchen") { LocalSync.shared.syncNow() }
+                Button("Search now") { LocalSync.shared.syncNow() }
                     .buttonStyle(.glass)
                     .disabled(!lan.hasSyncName)
             }
 
             if lanEnabled && !lan.hasSyncName {
-                Text("Ohne Namen ist der Abgleich aus. Trage auf allen Geräten denselben Namen ein.")
+                Text("Sync is off without a name. Enter the same name on all devices.")
                     .font(.system(size: 10.5))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            Text("Gleicht Wassertracker und Zähler direkt mit deinen anderen Geräten im selben WLAN ab – ohne Server. Nur Geräte mit demselben Namen gleichen sich ab.")
+            Text("Syncs the water tracker and counter directly with your other devices on the same Wi-Fi network – no server. Only devices with the same name sync with each other.")
                 .font(.system(size: 10.5))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -159,7 +159,7 @@ struct MacSettingsSheet: View {
         VStack(alignment: .leading, spacing: 10) {
             MacCardHeader(title: "UPDATES", systemImage: "arrow.triangle.2.circlepath", tint: MacTheme.violet)
 
-            Toggle("Automatisch nach Updates suchen", isOn: $automaticUpdateChecks)
+            Toggle("Check for updates automatically", isOn: $automaticUpdateChecks)
                 .toggleStyle(.switch)
                 .font(.system(size: 12.5, weight: .medium))
 
@@ -169,9 +169,9 @@ struct MacSettingsSheet: View {
                 HStack(spacing: 6) {
                     if updates.isChecking {
                         ProgressView().controlSize(.small)
-                        Text("Suche nach Updates…")
+                        Text("Checking for updates…")
                     } else {
-                        Text("Jetzt nach Updates suchen")
+                        Text("Check for updates now")
                     }
                 }
                 .font(.system(size: 12, weight: .medium))
@@ -186,7 +186,7 @@ struct MacSettingsSheet: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            Text("Prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version bereitsteht.")
+            Text("Checks GitHub at most once a day at launch for a newer version.")
                 .font(.system(size: 10.5))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -197,16 +197,16 @@ struct MacSettingsSheet: View {
     private var resetCard: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Heute zurücksetzen")
+                Text("Reset today")
                     .font(.system(size: 12.5, weight: .medium))
-                Text("Setzt die heutige Trinkmenge auf 0 ml.")
+                Text("Sets today's water intake to 0 ml.")
                     .font(.system(size: 10.5))
                     .foregroundStyle(.secondary)
             }
 
             Spacer()
 
-            Button("Zurücksetzen", role: .destructive) { WaterStore.reset() }
+            Button("Reset", role: .destructive) { WaterStore.reset() }
                 .buttonStyle(.glass)
         }
         .macGlassCard(cornerRadius: 20, padding: 16)
@@ -245,15 +245,15 @@ struct MacSettingsSheet: View {
         Binding(get: { lan.syncName }, set: { LocalSync.shared.setSyncName($0) })
     }
 
-    private var lanStatus: String {
-        guard lanEnabled else { return "Aus" }
-        guard lan.hasSyncName else { return "Name fehlt" }
-        if lan.peerCount == 1 { return "Verbunden mit 1 Gerät" }
-        if lan.peerCount > 1 { return "Verbunden mit \(lan.peerCount) Geräten" }
+    private var lanStatus: LocalizedStringKey {
+        guard lanEnabled else { return "Off" }
+        guard lan.hasSyncName else { return "Name missing" }
+        if lan.peerCount == 1 { return "Connected to 1 device" }
+        if lan.peerCount > 1 { return "Connected to \(lan.peerCount) devices" }
         if let date = lan.lastSync {
-            return "Zuletzt \(date.formatted(date: .omitted, time: .shortened))"
+            return "Last \(date.formatted(date: .omitted, time: .shortened))"
         }
-        return lan.isSearching ? "Suche im WLAN…" : "Kein Gerät gefunden"
+        return lan.isSearching ? "Searching the Wi-Fi network…" : "No device found"
     }
 
     private func checkNow() async {
@@ -262,9 +262,9 @@ struct MacSettingsSheet: View {
         case .update(let update):
             manualUpdate = update
         case .upToDate:
-            manualStatus = "Du benutzt bereits die neueste Version (\(UpdateChecker.currentVersion))."
+            manualStatus = "You are already using the latest version (\(UpdateChecker.currentVersion))."
         case .failed(let message):
-            manualStatus = "Die Update-Prüfung ist fehlgeschlagen: \(message)"
+            manualStatus = "The update check failed: \(message)"
         }
     }
 }

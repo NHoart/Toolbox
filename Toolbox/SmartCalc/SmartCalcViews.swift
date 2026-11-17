@@ -9,14 +9,14 @@ struct UnitConverterView: View {
         NavigationStack {
             Form {
                 Section {
-                    Picker("Umrechnung", selection: $conversion) {
+                    Picker("Conversion", selection: $conversion) {
                         ForEach(UnitConversion.allCases) { conversion in
                             Text(conversion.title).tag(conversion)
                         }
                     }
                     .navigationLinkPicker()
                 } header: {
-                    Text("Art der Umrechnung")
+                    Text("Conversion type")
                 }
 
                 Section {
@@ -24,19 +24,19 @@ struct UnitConverterView: View {
                         .decimalKeyboard()
                         .focused($isInputFocused)
                 } header: {
-                    Text("Wert eingeben")
+                    Text("Enter value")
                 }
 
                 ResultCard(
-                    title: "Ergebnis",
+                    title: "Result",
                     value: resultText,
                     detail: conversion.resultLabel
                 )
             }
-            .navigationTitle("Einheiten")
+            .navigationTitle("Units")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Abbrechen") {
+                    Button("Cancel") {
                         isInputFocused = false
                     }
                 }
@@ -54,7 +54,7 @@ struct UnitConverterView: View {
 
     private var resultText: String {
         guard let value = input.decimalValue else {
-            return "Bitte eine Zahl eingeben"
+            return "Enter a number"
         }
 
         let result: Double
@@ -97,34 +97,34 @@ struct DownloadTimeView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Datei und Verbindung") {
-                    TextField("Dateigröße in GB", text: $fileSize)
+                Section("File and connection") {
+                    TextField("File size in GB", text: $fileSize)
                         .decimalKeyboard()
                         .focused($isInputFocused)
 
-                    Picker("Einheit", selection: $speedUnit) {
+                    Picker("Unit", selection: $speedUnit) {
                         ForEach(SpeedUnit.allCases) { unit in
                             Text(unit.rawValue).tag(unit)
                         }
                     }
                     .pickerStyle(.segmented)
 
-                    TextField("Downloadgeschwindigkeit in \(speedUnit.rawValue)", text: $speed)
+                    TextField("Download speed in \(speedUnit.rawValue)", text: $speed)
                         .decimalKeyboard()
                         .focused($isInputFocused)
                 }
 
                 ResultCard(
-                    title: "Geschätzte Downloadzeit",
+                    title: "Estimated download time",
                     value: downloadTime,
-                    detail: "Berechnet ohne zusätzliche Verzögerungen"
+                    detail: "Calculated without extra delays"
                 )
 
             }
-            .navigationTitle("Downloadzeit")
+            .navigationTitle("Download time")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Abbrechen") {
+                    Button("Cancel") {
                         isInputFocused = false
                     }
                 }
@@ -148,7 +148,7 @@ struct DownloadTimeView: View {
             let downloadSpeed = speed.decimalValue,
             downloadSpeed > 0
         else {
-            return "Dateigröße und Geschwindigkeit eingeben"
+            return "Enter file size and speed"
         }
 
         let sizeInMB = size * 1_000
@@ -167,31 +167,31 @@ struct EnergyCostView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Verbrauch eingeben") {
-                    TextField("Leistung in Watt", text: $power)
+                Section("Enter usage") {
+                    TextField("Power in watts", text: $power)
                         .decimalKeyboard()
                         .focused($isInputFocused)
 
-                    TextField("Nutzungsdauer in Stunden", text: $duration)
+                    TextField("Duration in hours", text: $duration)
                         .decimalKeyboard()
                         .focused($isInputFocused)
 
-                    TextField("Strompreis pro kWh in € (optional)", text: $price)
+                    TextField("Electricity price per kWh in € (optional)", text: $price)
                         .decimalKeyboard()
                         .focused($isInputFocused)
                 }
 
                 ResultCard(
-                    title: "Stromverbrauch",
+                    title: "Power usage",
                     value: energyText,
-                    detail: "Kosten: \(costText)"
+                    detail: "Cost: \(costText)"
                 )
 
             }
-            .navigationTitle("Stromverbrauch")
+            .navigationTitle("Power usage")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Abbrechen") {
+                    Button("Cancel") {
                         isInputFocused = false
                     }
                 }
@@ -211,7 +211,7 @@ struct EnergyCostView: View {
 
     private var energyText: String {
         guard let energy = energyConsumption else {
-            return "Leistung und Nutzungsdauer eingeben"
+            return "Enter power and duration"
         }
 
         return "\(energy.formatted(.number.precision(.fractionLength(0...3)))) kWh"
@@ -222,7 +222,7 @@ struct EnergyCostView: View {
             let energy = energyConsumption,
             let electricityPrice = price.decimalValue
         else {
-            return "Kein Strompreis angegeben"
+            return "No electricity price provided"
         }
 
         return (energy * electricityPrice).formatted(.currency(code: "EUR"))
@@ -285,24 +285,24 @@ private enum UnitConversion: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .mbToGB:
-            "MB in GB"
+            String(localized: "MB to GB")
         case .gbToMB:
-            "GB in MB"
+            String(localized: "GB to MB")
         case .mbitToMB:
-            "Mbit in MB"
+            String(localized: "Mbit to MB")
         case .mbToMbit:
-            "MB in Mbit"
+            String(localized: "MB to Mbit")
         }
     }
 
     var inputLabel: String {
         switch self {
         case .gbToMB:
-            "Wert in GB"
+            String(localized: "Value in GB")
         case .mbToGB, .mbToMbit:
-            "Wert in MB"
+            String(localized: "Value in MB")
         case .mbitToMB:
-            "Wert in Mbit"
+            String(localized: "Value in Mbit")
         }
     }
 
@@ -354,12 +354,12 @@ private func formattedDuration(_ seconds: Double) -> String {
     let remainingSeconds = roundedSeconds % 60
 
     if hours > 0 {
-        return "\(hours) Std. \(minutes) Min. \(remainingSeconds) Sek."
+        return "\(hours) h \(minutes) min \(remainingSeconds) s"
     }
 
     if minutes > 0 {
-        return "\(minutes) Min. \(remainingSeconds) Sek."
+        return "\(minutes) min \(remainingSeconds) s"
     }
 
-    return "\(remainingSeconds) Sek."
+    return "\(remainingSeconds) s"
 }

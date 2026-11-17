@@ -1,121 +1,120 @@
-# Toolbox – Status der Microsoft-Store-Einreichung
+# Toolbox – Microsoft Store submission status
 
-Stand: **16. November 2026**
+As of: **17 November 2026**
 
-## Kurzfassung
+## Summary
 
-Die neue Store-Fassung **Toolbox 3.3.2** wurde auf Windows gebaut, geprüft und
-im Partner Center hochgeladen. Das Paket ist **Validated**; das alte
-`Toolbox-3.3.1.appx` wurde aus dem Entwurf entfernt.
+**Toolbox 3.4.0 is certified and has been published in the Microsoft Store since
+17 November 2026.** The Store page is live and publicly reachable:
 
-Die App-Oberfläche ist für **Deutsch, Englisch, Spanisch und Französisch**
-lokalisiert. Das AppX deklariert alle vier Sprachen. Es wurde **nichts zur
-Zertifizierung übermittelt**.
+<https://apps.microsoft.com/detail/9P4FPTHZHVJD>
+
+The submission is complete; no steps remain open in Partner Center. The GitHub
+release 3.5.0 from 16 November 2026 was deliberately **not** submitted to the
+Store – the Store version remains 3.4.0 for now.
 
 ## Partner Center
 
-| Feld | Wert |
+| Field | Value |
 | --- | --- |
-| Produkt-ID | `9P4FPTHZHVJD` |
-| Submission-ID | `1152921505702409983` |
-| Produktname | Toolbox for Windows |
-| Paket | `Toolbox-3.3.2.appx` – **Validated** |
-| Paketversion | `3.3.2.0`, x64 |
-| Altes Paket | `Toolbox-3.3.1.appx` entfernt |
-| Preise und Verfügbarkeit | Vollständig |
-| Eigenschaften | Vollständig |
-| Altersfreigaben | Vollständig / Complete |
-| Pakete | Vollständig |
-| Store-Einträge | Vollständig |
-| Übermittlungsoptionen | Vollständig |
-| Submit-Button | aktiv |
-| Einreichung abgesendet | **Nein** |
+| Product ID | `9P4FPTHZHVJD` |
+| Submission ID | `1152921505702409983` |
+| Product name | Toolbox for Windows |
+| Status | **In Microsoft Store** (published) |
+| Store page | live |
+| Package | `Toolbox-3.4.0.appx` – certified and live |
+| Package version | `3.4.0.0`, x64 |
+| Device family | Windows 10/11 Desktop, at least `10.0.17763.0` |
+| Submission last changed | 17 November 2026 |
+| Publication | immediately after certification – done |
+| Age ratings | USK 0, PEGI 3, ESRB Everyone, IARC 3+, Microsoft Store 3+ |
 
-Altersfreigaben: USK 0, PEGI 3, ESRB Everyone, IARC 3+, Microsoft Store 3+.
-Veröffentlichung ist auf „sofort nach erfolgreicher Zertifizierung“ gesetzt.
+The Partner Center overview reports “In Microsoft Store” and “Your product is
+currently available in the Microsoft Store”. The submission detail page no
+longer shows a running certification.
 
-## AppX-Build
+## AppX build
 
 - Workflow: **Microsoft Store (AppX)**
-- Branch: `codex/store-appx-languages`
-- Commit: `dbfd8fe`
-- Lauf: `43826611772` – **success**
-- Artefakt: **Toolbox-appx**
-- Datei: `Toolbox-3.3.2.appx` (156 MB)
-- SHA256:
-  `6ddb71227788240ccc59a2f85e1125a1bfb37e6a9350ae3bb76c27b1d979fc8d`
+- Tag: `v3.4.0`
+- Run: `43838714443` – **success**
+- File: `Toolbox-3.4.0.appx` (156.1 MB)
+- Manifest: identity `NHoartApps.ToolboxforWindows`, version `3.4.0.0`, `x64`,
+  languages `de-DE`, `en-US`, `es-ES`, `fr-FR`
 
-Manifestprüfung im Workflow und lokal:
+Run `43826611772` on the since-deleted `codex/store-appx-languages` branch
+belongs to the earlier 3.3.2 draft and is historical only.
 
-```text
-Identity:  NHoartApps.ToolboxforWindows
-Version:   3.3.2.0
-Architektur: x64
-Sprachen:  de-DE, en-US, es-ES, fr-FR
-```
+## Store listings
 
-Der Store-Build verwendet `toolsets.winCodeSign: 1.1.0` und entfernt die
-GitHub-Publish-Konfiguration aus dem NSIS-Build. Die zentrale Sprachliste steht
-in `windows/scripts/appx-languages.js`; der Workflow prüft das erzeugte
-Manifest mit `windows/scripts/verify-appx.ps1` und erzeugt `SHA256SUMS.txt`.
-
-## Store-Einträge
-
-| Sprache | Sprach-ID | Status | Screenshots |
+| Language | Language ID | Status | Screenshots |
 | --- | --- | --- | --- |
-| Deutsch (Deutschland) | `14` | Abgeschlossen | 5 |
-| Englisch (Vereinigte Staaten) | `4` | Abgeschlossen | 5 |
-| Spanisch (Spanien) | `15` | Abgeschlossen | 5 |
-| Französisch (Frankreich) | `19` | Abgeschlossen | 5 |
+| German (Germany) | `14` | Live | 5 |
+| English (United States) | `4` | Live | 5 |
+| Spanish (Spain) | `15` | Live | 5 |
+| French (France) | `19` | Live | 5 |
 
-Der französische Eintrag enthält eine vollständige Beschreibung, 8 Features,
-7 Keywords sowie Copyright-, Lizenz- und Entwicklerangaben.
+The Microsoft Store picks the listing that matches the user's language and
+region and falls back to English when no listing matches.
 
-## App-Lokalisierung
+## App localization
 
-Neu: `windows/renderer/i18n.js`
+`windows/renderer/i18n.js`
 
-- Sprachen: **Deutsch, Englisch, Spanisch, Französisch**
-- Systemsprache über `navigator.language` / `navigator.languages`
-- manuelle Sprachwahl in den Einstellungen; gespeichert in `localStorage`
-- Fallback: **Deutsch**
-- statische und dynamische Texte, Toasts, Dialoge und Fehlermeldungen
-- Datums-, Zahlen- und Währungsformatierung je Locale
-- Laufzeit geprüft mit Electron für `fr`, `en`, `es` und Fallback `it`
+- Languages: **German, English, Spanish, French**
+- System language via `navigator.languages` / `navigator.language`, using the
+  first supported entry in the user's preference list
+- Manual language choice in Settings; stored in `localStorage`
+- Fallback: **English**
+- Static and dynamic texts, toasts, dialogs and error messages
+- Date, number and currency formatting per locale, including the region
+  (`en-GB` keeps British formatting)
+- Runtime-checked with Electron for `fr`, `en`, `es`, `de-AT` and the fallback
+  for unsupported languages such as `it`
+
+The Apple apps use the same language set: the String Catalogs in
+`Toolbox/Localizable.xcstrings` and `ToolboxWidget/Localizable.xcstrings`
+contain German, Spanish and French, the development language is English and
+`CFBundleDevelopmentRegion` is `en`, so any unsupported system language resolves
+to English.
 
 ## Screenshots
 
-Je fünf PNGs (2464 × 1648) pro Sprache unter
-`windows/store/screenshots/<sprache>/`:
+Five PNGs each (2464 × 1648) per language under
+`windows/store/screenshots/<language>/`:
 
-| Store-Sprache | Ordner | Motive |
+| Store language | Folder | Motifs |
 | --- | --- | --- |
-| Deutsch (Deutschland) | `de/` | Verlauf, Einheiten, Zähler, Downloadzeit, Stromverbrauch |
-| Englisch (USA) | `en/` | englische Oberfläche |
-| Spanisch (Spanien) | `es/` | spanische Oberfläche |
-| Französisch (Frankreich) | `fr/` | französische Oberfläche |
+| German (Germany) | `de/` | History, units, counter, download time, power usage |
+| English (USA) | `en/` | English interface |
+| Spanish (Spain) | `es/` | Spanish interface |
+| French (France) | `fr/` | French interface |
 
-Die englischen, spanischen und französischen Aufnahmen wurden mit der
-lokalisierten App erzeugt und im Partner Center hochgeladen. Der deutsche
-Eintrag behält die deutschen Bilder.
+## Remaining steps
 
-## Verbleibende Schritte
+1. Set `STORE_URL` as a repository variable
+   (Settings → Secrets and variables → Actions → Variables) to
+   `https://apps.microsoft.com/detail/9P4FPTHZHVJD` – **still open**. The release
+   notes then include the Store row automatically.
+2. Future Store versions need their own submission; the procedure is described in
+   [`windows/store/README.md`](windows/store/README.md).
+3. 3.5.0 was not submitted and remains a pure GitHub release (DMG and EXE).
 
-1. **Zur Zertifizierung übermitteln** – dieser Schritt wurde bewusst nicht
-   ausgeführt.
-2. Die Änderungen sind auf `main` (`dbfd8fe`) gemergt und gepusht; der
-   Store-Workflow baut dort standardmäßig die vier Sprachen. Die
-   Screenshot-Dateien liegen lokal unter `windows/store/screenshots/`.
+## History
 
-## Ausgeführte Prüfungen
+| Date | Event |
+| --- | --- |
+| 16 Nov 2026 | `Toolbox-3.4.0.appx` validated in Partner Center, 3.3.2 removed |
+| 16 Nov 2026 | Submission sent for certification |
+| 17 Nov 2026 | Certification passed, app published in the Microsoft Store |
 
-- GitHub-Actions-Lauf `43826611772`: **success**
-- `npm test`: **35/35 bestanden**
-- `npm run dist:store -- --check`: **Store-Konfiguration OK**
-- Manifest im heruntergeladenen AppX: **vier Sprachen, Identität und Version OK**
-- SHA256 des Artefakts: **stimmt mit `SHA256SUMS.txt` überein**
-- Partner-Center-Übersicht: **6 × Vollständig, 0 × Unvollständig**
-- Partner-Center-Paket: **Toolbox-3.3.2.appx Validated**
-- Partner-Center-Screenshots: **je 5 für en-US, es-ES und fr-FR ersetzt und gespeichert**
-- Screenshot-Auflösung: **2464 × 1648, PNG**
-- Einreichung: **nicht abgesendet**
+## Checks performed
+
+- Partner Center overview (17 Nov 2026): **In Microsoft Store**, product available
+- Partner Center packages: `Toolbox-3.4.0.appx`, `v3.4.0.0`, x64, Windows.Desktop
+- Store page: publicly reachable, title, publisher, category and USK checked
+- GitHub Actions run `43838714443`: **success**
+- `npm test`: **42/42 passed**
+- `npm run dist:store -- --check`: **Store configuration OK**
+- Manifest inside the AppX: **four languages, identity and version OK**
+- Submission: **complete and published**

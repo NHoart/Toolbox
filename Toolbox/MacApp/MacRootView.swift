@@ -85,7 +85,7 @@ private struct MacSidebar: View {
                 VStack(alignment: .leading, spacing: 1) {
                     Text("Toolbox")
                         .font(.system(size: 15, weight: .bold, design: .rounded))
-                    Text("Alltagswerkzeuge")
+                    Text("Everyday tools")
                         .font(.system(size: 10))
                         .foregroundStyle(.secondary)
                 }
@@ -95,7 +95,7 @@ private struct MacSidebar: View {
             .padding(.horizontal, 8)
             .padding(.bottom, 22)
 
-            Text("WERKZEUGE")
+            Text("TOOLS")
                 .font(.system(size: 9, weight: .semibold))
                 .tracking(0.9)
                 .foregroundStyle(.tertiary)

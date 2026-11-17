@@ -12,32 +12,32 @@ struct SettingsView: View {
     @AppStorage(UpdateChecker.automaticChecksKey) private var automaticUpdateChecks = true
     @ObservedObject private var updates = UpdateChecker.shared
     @State private var manualUpdate: UpdateInfo?
-    @State private var manualStatus: String?
+    @State private var manualStatus: LocalizedStringKey?
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Größen") {
-                    Stepper("Glas: \(glass) ml", value: $glass, in: 50...1000, step: 50)
-                    Stepper("Flasche: \(bottle) ml", value: $bottle, in: 100...3000, step: 50)
+                Section("Sizes") {
+                    Stepper("Glass: \(glass) ml", value: $glass, in: 50...1000, step: 50)
+                    Stepper("Bottle: \(bottle) ml", value: $bottle, in: 100...3000, step: 50)
                 }
-                Section("Tagesziel") {
-                    Stepper("Ziel: \(goal) ml", value: $goal, in: 500...6000, step: 250)
+                Section("Daily goal") {
+                    Stepper("Goal: \(goal) ml", value: $goal, in: 500...6000, step: 250)
                 }
                 Section {
                     HStack {
                         Text("Name")
                         Spacer()
-                        TextField("z. B. Familie", text: syncNameBinding)
+                        TextField("e.g. Family", text: syncNameBinding)
                             .multilineTextAlignment(.trailing)
                             .autocorrectionDisabled()
                     }
                     if lanEnabled && !lan.hasSyncName {
-                        Text("Ohne Namen ist der Abgleich aus.")
+                        Text("Sync is off without a name.")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
-                    Toggle("Sync im WLAN", isOn: $lanEnabled)
+                    Toggle("Sync over Wi-Fi", isOn: $lanEnabled)
                     if lanEnabled {
                         HStack {
                             Text("Status")
@@ -45,26 +45,26 @@ struct SettingsView: View {
                             Text(lanStatus)
                                 .foregroundStyle(.secondary)
                         }
-                        Button("Jetzt suchen") { LocalSync.shared.syncNow() }
+                        Button("Search now") { LocalSync.shared.syncNow() }
                             .disabled(!lan.hasSyncName)
                     }
                 } header: {
-                    Text("Lokales Netzwerk")
+                    Text("Local network")
                 } footer: {
-                    Text("Gleicht Wassertracker und Zähler direkt mit deinen anderen Geräten im selben WLAN ab – ohne Server. Trage auf allen Geräten denselben Namen ein; nur Geräte mit diesem Namen gleichen sich ab.")
+                    Text("Syncs the water tracker and counter directly with your other devices on the same Wi-Fi network – no server. Enter the same name on all devices; only devices with that name sync.")
                 }
                 #if os(macOS)
                 Section {
-                    Toggle("Automatisch nach Updates suchen", isOn: $automaticUpdateChecks)
+                    Toggle("Check for updates automatically", isOn: $automaticUpdateChecks)
                     Button {
                         Task { await checkNow() }
                     } label: {
                         HStack(spacing: 6) {
                             if updates.isChecking {
                                 ProgressView().controlSize(.small)
-                                Text("Suche nach Updates…")
+                                Text("Checking for updates…")
                             } else {
-                                Text("Jetzt nach Updates suchen")
+                                Text("Check for updates now")
                             }
                         }
                     }
@@ -77,14 +77,14 @@ struct SettingsView: View {
                 } header: {
                     Text("Updates")
                 } footer: {
-                    Text("Prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version bereitsteht.")
+                    Text("Checks GitHub at most once a day at launch for a newer version.")
                 }
                 #endif
                 Section {
-                    Button("Heute zurücksetzen", role: .destructive) { WaterStore.reset() }
+                    Button("Reset today", role: .destructive) { WaterStore.reset() }
                 }
             }
-            .navigationTitle("Einstellungen")
+            .navigationTitle("Settings")
             .onChange(of: glass) { _, _ in WaterStore.markChanged() }
             .onChange(of: bottle) { _, _ in WaterStore.markChanged() }
             .onChange(of: goal) { _, _ in WaterStore.markChanged() }
@@ -101,9 +101,9 @@ struct SettingsView: View {
         case .update(let update):
             manualUpdate = update
         case .upToDate:
-            manualStatus = "Du benutzt bereits die neueste Version (\(UpdateChecker.currentVersion))."
+            manualStatus = "You are already using the latest version (\(UpdateChecker.currentVersion))."
         case .failed(let message):
-            manualStatus = "Die Update-Prüfung ist fehlgeschlagen: \(message)"
+            manualStatus = "The update check failed: \(message)"
         }
     }
 
@@ -111,14 +111,14 @@ struct SettingsView: View {
         Binding(get: { lan.syncName }, set: { LocalSync.shared.setSyncName($0) })
     }
 
-    private var lanStatus: String {
-        guard lanEnabled else { return "Aus" }
-        guard lan.hasSyncName else { return "Name fehlt" }
-        if lan.peerCount == 1 { return "Verbunden mit 1 Gerät" }
-        if lan.peerCount > 1 { return "Verbunden mit \(lan.peerCount) Geräten" }
+    private var lanStatus: LocalizedStringKey {
+        guard lanEnabled else { return "Off" }
+        guard lan.hasSyncName else { return "Name missing" }
+        if lan.peerCount == 1 { return "Connected to 1 device" }
+        if lan.peerCount > 1 { return "Connected to \(lan.peerCount) devices" }
         if let date = lan.lastSync {
-            return "Zuletzt \(date.formatted(date: .omitted, time: .shortened))"
+            return "Last \(date.formatted(date: .omitted, time: .shortened))"
         }
-        return lan.isSearching ? "Suche im WLAN…" : "Kein Gerät gefunden"
+        return lan.isSearching ? "Searching the Wi-Fi network…" : "No device found"
     }
 }

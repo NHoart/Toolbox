@@ -20,14 +20,14 @@ struct MacUnitsPage: View {
     }
 
     var body: some View {
-        MacPage(title: "Einheiten",
-                subtitle: "MB/GB und Mbit/MB umrechnen",
+        MacPage(title: "Units",
+                subtitle: "Convert MB/GB and Mbit/MB",
                 showSettings: $showSettings) {
             HStack(alignment: .top, spacing: 18) {
                 VStack(alignment: .leading, spacing: 16) {
-                    MacCardHeader(title: "UMRECHNUNG", systemImage: "arrow.left.arrow.right", tint: MacTheme.cyan)
+                    MacCardHeader(title: "CONVERSION", systemImage: "arrow.left.arrow.right", tint: MacTheme.cyan)
 
-                    Picker("Umrechnung", selection: $conversion) {
+                    Picker("Conversion", selection: $conversion) {
                         ForEach(MacUnitConversion.allCases) { option in
                             Text(option.title).tag(option)
                         }
@@ -35,7 +35,7 @@ struct MacUnitsPage: View {
                     .pickerStyle(.segmented)
                     .labelsHidden()
 
-                    MacField(title: "Wert",
+                    MacField(title: "Value",
                              placeholder: "0",
                              unit: conversion.inputLabel,
                              text: $input)
@@ -58,7 +58,7 @@ struct MacUnitsPage: View {
 
     private var resultCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            MacCardHeader(title: "ERGEBNIS", systemImage: "equal.circle.fill", tint: MacTheme.violet)
+            MacCardHeader(title: "RESULT", systemImage: "equal.circle.fill", tint: MacTheme.violet)
 
             if let result {
                 Text(result.formatted(.number.precision(.fractionLength(0...3))))
@@ -74,7 +74,7 @@ struct MacUnitsPage: View {
                     .foregroundStyle(.tertiary)
             }
 
-            Text(result == nil ? "Wert eingeben" : "Ergebnis in \(conversion.resultLabel)")
+            Text(result == nil ? "Enter value" : "Result in \(conversion.resultLabel)")
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
         }
@@ -119,22 +119,22 @@ struct MacDownloadPage: View {
     }
 
     var body: some View {
-        MacPage(title: "Downloadzeit",
-                subtitle: "Dateigröße und Geschwindigkeit",
+        MacPage(title: "Download time",
+                subtitle: "File size and speed",
                 showSettings: $showSettings) {
             HStack(alignment: .top, spacing: 18) {
                 VStack(alignment: .leading, spacing: 16) {
-                    MacCardHeader(title: "DATEI UND VERBINDUNG", systemImage: "arrow.down.circle.fill", tint: MacTheme.pink)
+                    MacCardHeader(title: "FILE AND CONNECTION", systemImage: "arrow.down.circle.fill", tint: MacTheme.pink)
 
-                    MacField(title: "Dateigröße", placeholder: "0", unit: "GB", text: $fileSize)
+                    MacField(title: "File size", placeholder: "0", unit: "GB", text: $fileSize)
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("EINHEIT")
+                        Text("UNIT")
                             .font(.system(size: 10.5, weight: .semibold))
                             .tracking(0.5)
                             .foregroundStyle(.secondary)
 
-                        Picker("Einheit", selection: $speedUnit) {
+                        Picker("Unit", selection: $speedUnit) {
                             ForEach(SpeedUnit.allCases) { unit in
                                 Text(unit.rawValue).tag(unit)
                             }
@@ -143,7 +143,7 @@ struct MacDownloadPage: View {
                         .labelsHidden()
                     }
 
-                    MacField(title: "Downloadgeschwindigkeit",
+                    MacField(title: "Download speed",
                              placeholder: "0",
                              unit: speedUnit.rawValue,
                              text: $speed)
@@ -170,7 +170,7 @@ struct MacDownloadPage: View {
 
     private var resultCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            MacCardHeader(title: "DOWNLOADZEIT", systemImage: "clock.fill", tint: MacTheme.pink)
+            MacCardHeader(title: "DOWNLOAD TIME", systemImage: "clock.fill", tint: MacTheme.pink)
 
             if let downloadTime {
                 Text(downloadTime)
@@ -187,8 +187,8 @@ struct MacDownloadPage: View {
             }
 
             Text(downloadTime == nil
-                 ? "Dateigröße und Geschwindigkeit eingeben"
-                 : "Berechnet ohne zusätzliche Verzögerungen")
+                 ? "Enter file size and speed"
+                 : "Calculated without extra delays")
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
         }
@@ -223,22 +223,22 @@ struct MacEnergyPage: View {
         guard
             let energy = energyConsumption,
             let electricityPrice = price.macDecimalValue
-        else { return "Kein Strompreis angegeben" }
+        else { return "No electricity price provided" }
 
         return (energy * electricityPrice).formatted(.currency(code: "EUR"))
     }
 
     var body: some View {
-        MacPage(title: "Stromverbrauch",
-                subtitle: "Leistung, Dauer und Kosten",
+        MacPage(title: "Power usage",
+                subtitle: "Power, duration and cost",
                 showSettings: $showSettings) {
             HStack(alignment: .top, spacing: 18) {
                 VStack(alignment: .leading, spacing: 16) {
-                    MacCardHeader(title: "VERBRAUCH EINGEBEN", systemImage: "bolt.fill", tint: MacTheme.amber)
+                    MacCardHeader(title: "ENTER USAGE", systemImage: "bolt.fill", tint: MacTheme.amber)
 
-                    MacField(title: "Leistung", placeholder: "0", unit: "Watt", text: $power)
-                    MacField(title: "Nutzungsdauer", placeholder: "0", unit: "Stunden", text: $duration)
-                    MacField(title: "Strompreis pro kWh (optional)", placeholder: "0", unit: "€", text: $price)
+                    MacField(title: "Power", placeholder: "0", unit: String(localized: "Watts"), text: $power)
+                    MacField(title: "Duration", placeholder: "0", unit: String(localized: "Hours"), text: $duration)
+                    MacField(title: "Electricity price per kWh (optional)", placeholder: "0", unit: "€", text: $price)
 
                     HStack {
                         Spacer()
@@ -262,7 +262,7 @@ struct MacEnergyPage: View {
 
     private var resultCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            MacCardHeader(title: "ERGEBNIS", systemImage: "bolt.circle.fill", tint: MacTheme.amber)
+            MacCardHeader(title: "RESULT", systemImage: "bolt.circle.fill", tint: MacTheme.amber)
 
             if let energyText {
                 Text(energyText)
@@ -278,7 +278,7 @@ struct MacEnergyPage: View {
                     .foregroundStyle(.tertiary)
             }
 
-            Text("Kosten: \(costText)")
+            Text("Cost: \(costText)")
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
         }
@@ -297,8 +297,8 @@ struct MacCounterPage: View {
     @State private var newName = ""
 
     var body: some View {
-        MacPage(title: "Zähler",
-                subtitle: "Manuell oder automatisch zählen",
+        MacPage(title: "Counter",
+                subtitle: "Count manually or automatically",
                 showSettings: $showSettings) {
             HStack(alignment: .top, spacing: 18) {
                 counterCard
@@ -308,17 +308,17 @@ struct MacCounterPage: View {
                     .frame(width: 268)
             }
         }
-        .alert("Stand speichern", isPresented: $showSaveAlert) {
+        .alert("Save count", isPresented: $showSaveAlert) {
             TextField("Name", text: $newName)
-            Button("Speichern") {
+            Button("Save") {
                 store.saveCurrent(name: newName)
                 newName = ""
             }
-            Button("Abbrechen", role: .cancel) {
+            Button("Cancel", role: .cancel) {
                 newName = ""
             }
         } message: {
-            Text("Aktueller Stand: \(store.count)")
+            Text("Current count: \(store.count)")
         }
         .onDisappear {
             store.stopAutoCounting()
@@ -330,7 +330,7 @@ struct MacCounterPage: View {
     private var counterCard: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack {
-                MacCardHeader(title: "ZÄHLERSTAND", systemImage: "plus.circle.fill", tint: MacTheme.violet)
+                MacCardHeader(title: "COUNTER VALUE", systemImage: "plus.circle.fill", tint: MacTheme.violet)
 
                 Spacer()
 
@@ -339,7 +339,7 @@ struct MacCounterPage: View {
                         Circle()
                             .fill(MacTheme.mint)
                             .frame(width: 6, height: 6)
-                        Text("Läuft")
+                        Text("Running")
                             .font(.system(size: 10, weight: .semibold))
                             .foregroundStyle(.secondary)
                     }
@@ -383,7 +383,7 @@ struct MacCounterPage: View {
                 Button {
                     store.undo()
                 } label: {
-                    Label("Rückgängig", systemImage: "arrow.uturn.backward")
+                    Label("Undo", systemImage: "arrow.uturn.backward")
                         .font(.system(size: 12, weight: .medium))
                 }
                 .buttonStyle(.glass)
@@ -391,7 +391,7 @@ struct MacCounterPage: View {
                 Button {
                     store.reset()
                 } label: {
-                    Label("Zurücksetzen", systemImage: "arrow.counterclockwise")
+                    Label("Reset", systemImage: "arrow.counterclockwise")
                         .font(.system(size: 12, weight: .medium))
                 }
                 .buttonStyle(.glass)
@@ -412,9 +412,9 @@ struct MacCounterPage: View {
     private var autoRow: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Automatisch")
+                Text("Automatic")
                     .font(.system(size: 12, weight: .semibold))
-                Text("\(store.incrementsPerSecond)× pro Sekunde")
+                Text("\(store.incrementsPerSecond)× per second")
                     .font(.system(size: 10.5))
                     .foregroundStyle(.secondary)
                     .monospacedDigit()
@@ -433,7 +433,7 @@ struct MacCounterPage: View {
                 .buttonStyle(.glass)
                 .buttonBorderShape(.circle)
                 .disabled(store.incrementsPerSecond <= CounterStore.minRate)
-                .help("Langsamer")
+                .help("Slower")
 
                 Button {
                     store.incrementsPerSecond += 1
@@ -445,7 +445,7 @@ struct MacCounterPage: View {
                 .buttonStyle(.glass)
                 .buttonBorderShape(.circle)
                 .disabled(store.incrementsPerSecond >= CounterStore.maxRate)
-                .help("Schneller")
+                .help("Faster")
             }
 
             Button {
@@ -455,7 +455,7 @@ struct MacCounterPage: View {
                     store.startAutoCounting()
                 }
             } label: {
-                Label(store.isAutoRunning ? "Stopp" : "Start",
+                Label(store.isAutoRunning ? "Stop" : "Start",
                       systemImage: store.isAutoRunning ? "stop.fill" : "play.fill")
                     .font(.system(size: 12, weight: .semibold))
             }
@@ -469,7 +469,7 @@ struct MacCounterPage: View {
     private var savedCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                MacCardHeader(title: "GESPEICHERT", systemImage: "bookmark.fill", tint: MacTheme.cyan)
+                MacCardHeader(title: "SAVED", systemImage: "bookmark.fill", tint: MacTheme.cyan)
 
                 Spacer()
 
@@ -482,7 +482,7 @@ struct MacCounterPage: View {
                 }
                 .buttonStyle(.glass)
                 .buttonBorderShape(.circle)
-                .help("Aktuellen Stand speichern")
+                .help("Save current count")
             }
 
             if store.savedCounters.isEmpty {
@@ -490,9 +490,9 @@ struct MacCounterPage: View {
                     Image(systemName: "bookmark")
                         .font(.system(size: 20, weight: .light))
                         .foregroundStyle(.tertiary)
-                    Text("Noch nichts gespeichert")
+                    Text("Nothing saved yet")
                         .font(.system(size: 11.5, weight: .medium))
-                    Text("Speichere den aktuellen Stand über das Symbol oben.")
+                    Text("Save the current count with the icon above.")
                         .font(.system(size: 10.5))
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -545,8 +545,8 @@ struct MacCounterPage: View {
         }
         .buttonStyle(.plain)
         .contextMenu {
-            Button("Laden") { store.load(saved) }
-            Button("Löschen", role: .destructive) {
+            Button("Load") { store.load(saved) }
+            Button("Delete", role: .destructive) {
                 store.deleteSaved(at: IndexSet(integer: index))
             }
         }
@@ -566,21 +566,21 @@ private enum MacUnitConversion: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .mbToGB: "MB in GB"
-        case .gbToMB: "GB in MB"
-        case .mbitToMB: "Mbit in MB"
-        case .mbToMbit: "MB in Mbit"
+        case .mbToGB: String(localized: "MB to GB")
+        case .gbToMB: String(localized: "GB to MB")
+        case .mbitToMB: String(localized: "Mbit to MB")
+        case .mbToMbit: String(localized: "MB to Mbit")
         }
     }
 
     var inputLabel: String {
         switch self {
         case .gbToMB:
-            "Wert in GB"
+            String(localized: "Value in GB")
         case .mbToGB, .mbToMbit:
-            "Wert in MB"
+            String(localized: "Value in MB")
         case .mbitToMB:
-            "Wert in Mbit"
+            String(localized: "Value in Mbit")
         }
     }
 
@@ -603,14 +603,14 @@ private func macFormattedDuration(_ seconds: Double) -> String {
     let remainingSeconds = roundedSeconds % 60
 
     if hours > 0 {
-        return "\(hours) Std. \(minutes) Min. \(remainingSeconds) Sek."
+        return "\(hours) h \(minutes) min \(remainingSeconds) s"
     }
 
     if minutes > 0 {
-        return "\(minutes) Min. \(remainingSeconds) Sek."
+        return "\(minutes) min \(remainingSeconds) s"
     }
 
-    return "\(remainingSeconds) Sek."
+    return "\(remainingSeconds) s"
 }
 
 // MARK: - Zahl-Helfer

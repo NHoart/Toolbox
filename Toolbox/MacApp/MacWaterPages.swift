@@ -19,8 +19,8 @@ struct MacWaterTodayPage: View {
     private var remaining: Int { max(goal - today, 0) }
 
     var body: some View {
-        MacPage(title: "Wassertracker",
-                subtitle: "Dein Fortschritt für heute",
+        MacPage(title: "Water tracker",
+                subtitle: "Your progress today",
                 showSettings: $showSettings) {
             heroCard
             tileRow
@@ -45,7 +45,7 @@ struct MacWaterTodayPage: View {
 
             VStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 5) {
-                    MacCardHeader(title: "HEUTE", systemImage: "sun.max.fill", tint: MacTheme.amber)
+                    MacCardHeader(title: "TODAY", systemImage: "sun.max.fill", tint: MacTheme.amber)
 
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text("\(today)")
@@ -60,8 +60,8 @@ struct MacWaterTodayPage: View {
                     }
 
                     Text(remaining == 0
-                         ? "Tagesziel erreicht – \(goal) ml geschafft."
-                         : "von \(goal) ml Ziel · noch \(remaining) ml offen")
+                         ? "Daily goal reached – \(goal) ml done."
+                         : "of \(goal) ml goal · \(remaining) ml to go")
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
 
@@ -70,15 +70,15 @@ struct MacWaterTodayPage: View {
                 }
 
                 HStack(spacing: 12) {
-                    quickAddButton(title: "Glas", icon: "drop.fill", ml: glass, tint: MacTheme.accent)
-                    quickAddButton(title: "Flasche", icon: "waterbottle.fill", ml: bottle, tint: MacTheme.cyan)
+                    quickAddButton(title: "Glass", icon: "drop.fill", ml: glass, tint: MacTheme.accent)
+                    quickAddButton(title: "Bottle", icon: "waterbottle.fill", ml: bottle, tint: MacTheme.cyan)
                 }
 
                 HStack(spacing: 10) {
                     Button {
                         showCustomAmount = true
                     } label: {
-                        Label("Eigene Menge", systemImage: "plus")
+                        Label("Custom amount", systemImage: "plus")
                             .font(.system(size: 12.5, weight: .semibold))
                     }
                     .buttonStyle(.glassProminent)
@@ -153,21 +153,21 @@ struct MacWaterTodayPage: View {
 
     private var tileRow: some View {
         HStack(spacing: 16) {
-            MacMetricTile(title: "Glas",
+            MacMetricTile(title: "Glass",
                           value: "\(glass) ml",
-                          detail: "Schnellwahl",
+                          detail: "Quick select",
                           systemImage: "drop.fill",
                           tint: MacTheme.accent)
 
-            MacMetricTile(title: "Flasche",
+            MacMetricTile(title: "Bottle",
                           value: "\(bottle) ml",
-                          detail: "Schnellwahl",
+                          detail: "Quick select",
                           systemImage: "waterbottle.fill",
                           tint: MacTheme.cyan)
 
-            MacMetricTile(title: "Tagesziel",
+            MacMetricTile(title: "Daily goal",
                           value: "\(goal) ml",
-                          detail: "Ziel für heute",
+                          detail: "Today's goal",
                           systemImage: "target",
                           tint: MacTheme.violet)
         }
@@ -216,8 +216,8 @@ struct MacWaterTodayPage: View {
     }
 
     private var undoTitle: LocalizedStringKey {
-        guard let undoAmount else { return "Rückgängig" }
-        return "Rückgängig (\(undoAmount) ml)"
+        guard let undoAmount else { return "Undo" }
+        return "Undo (\(undoAmount) ml)"
     }
 
     private func add(_ ml: Int) {
@@ -258,9 +258,9 @@ struct MacCustomAmountSheet: View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Menge eintragen")
+                    Text("Enter amount")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
-                    Text("Zahl eintippen oder eine Schnellauswahl verwenden.")
+                    Text("Type a number or use a quick pick.")
                         .font(.system(size: 11.5))
                         .foregroundStyle(.secondary)
                 }
@@ -317,17 +317,17 @@ struct MacCustomAmountSheet: View {
 
             HStack(spacing: 8) {
                 if !text.isEmpty && amount == nil {
-                    Text("Bitte eine Zahl zwischen 1 und 10000 eingeben.")
+                    Text("Enter a number between 1 and 10000.")
                         .font(.system(size: 10.5))
                         .foregroundStyle(.red)
                 }
 
                 Spacer()
 
-                Button("Abbrechen") { dismiss() }
+                Button("Cancel") { dismiss() }
                     .buttonStyle(.glass)
 
-                Button("Hinzufügen") { submit() }
+                Button("Add") { submit() }
                     .buttonStyle(.glassProminent)
                     .tint(MacTheme.accent)
                     .disabled(amount == nil)
@@ -361,25 +361,25 @@ struct MacHistoryPage: View {
     private var best: Int { days.map(\.ml).max() ?? 0 }
 
     var body: some View {
-        MacPage(title: "Verlauf",
-                subtitle: "Die letzten 30 Tage im Überblick",
+        MacPage(title: "History",
+                subtitle: "The last 30 days at a glance",
                 showSettings: $showSettings) {
             HStack(spacing: 16) {
-                MacMetricTile(title: "Durchschnitt",
+                MacMetricTile(title: "Average",
                               value: "\(average) ml",
-                              detail: "pro Tag",
+                              detail: "per day",
                               systemImage: "chart.line.uptrend.xyaxis",
                               tint: MacTheme.accent)
 
-                MacMetricTile(title: "Ziel erreicht",
-                              value: "\(daysReached) von \(days.count)",
-                              detail: "Tagen",
+                MacMetricTile(title: "Goal reached",
+                              value: "\(daysReached) of \(days.count)",
+                              detail: "days",
                               systemImage: "checkmark.seal.fill",
                               tint: MacTheme.mint)
 
-                MacMetricTile(title: "Bester Tag",
+                MacMetricTile(title: "Best day",
                               value: "\(best) ml",
-                              detail: "Höchstwert",
+                              detail: "Maximum",
                               systemImage: "trophy.fill",
                               tint: MacTheme.amber)
             }
@@ -399,27 +399,27 @@ struct MacHistoryPage: View {
     private var chartCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 10) {
-                MacCardHeader(title: "LETZTE 30 TAGE", systemImage: "chart.bar.fill", tint: MacTheme.accent)
+                MacCardHeader(title: "LAST 30 DAYS", systemImage: "chart.bar.fill", tint: MacTheme.accent)
                 Spacer()
-                legend(color: MacTheme.mint, label: "Ziel erreicht")
-                legend(color: MacTheme.accent, label: "Unter Ziel")
+                legend(color: MacTheme.mint, label: "Goal reached")
+                legend(color: MacTheme.accent, label: "Below goal")
             }
 
             Chart {
                 ForEach(days) { day in
                     BarMark(
-                        x: .value("Tag", day.date, unit: .day),
+                        x: .value("Day", day.date, unit: .day),
                         y: .value("ml", day.ml)
                     )
                     .foregroundStyle(barStyle(for: day.ml))
                     .cornerRadius(3)
                 }
 
-                RuleMark(y: .value("Ziel", goal))
+                RuleMark(y: .value("Goal", goal))
                     .foregroundStyle(MacTheme.violet.opacity(0.75))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
                     .annotation(position: .top, alignment: .trailing) {
-                        Text("Ziel: \(goal) ml")
+                        Text("Goal: \(goal) ml")
                             .font(.system(size: 9.5, weight: .medium))
                             .foregroundStyle(.secondary)
                     }
@@ -447,7 +447,7 @@ struct MacHistoryPage: View {
 
     private var daysCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            MacCardHeader(title: "TAGE", systemImage: "calendar", tint: MacTheme.violet)
+            MacCardHeader(title: "DAYS", systemImage: "calendar", tint: MacTheme.violet)
 
             VStack(spacing: 0) {
                 ForEach(Array(days.reversed().enumerated()), id: \.element.id) { index, day in

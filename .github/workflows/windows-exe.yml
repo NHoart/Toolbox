@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       publish:
-        description: "EXE als GitHub-Release veröffentlichen"
+        description: "Publish the EXE as a GitHub release"
         type: boolean
         default: true
 
@@ -20,42 +20,42 @@ concurrency:
 
 jobs:
   installer:
-    name: Windows-Installer bauen
+    name: Build Windows installer
     runs-on: windows-latest
     defaults:
       run:
         working-directory: windows
     steps:
-      - name: Repository auschecken
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Node einrichten
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
           cache-dependency-path: windows/package-lock.json
 
-      - name: Abhängigkeiten installieren
+      - name: Install dependencies
         run: npm ci
 
       - name: Tests
         run: npm test
 
-      - name: Headless-Sync-Smoke-Test
+      - name: Headless sync smoke test
         run: npm run smoke:sync
 
-      - name: Installer bauen
+      - name: Build installer
         run: npm run dist -- --publish never
 
-      - name: Installer als Workflow-Artefakt hochladen
+      - name: Upload installer as workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: Toolbox-windows
           path: windows/dist/Toolbox-Setup.exe
           if-no-files-found: error
 
-      - name: Release veröffentlichen
+      - name: Publish release
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
         shell: pwsh
         env:
@@ -70,15 +70,15 @@ jobs:
             $tag = "v$version"
           }
 
-          # Die Download-Tabelle steht ganz oben in den Release-Notes; dafür
-          # Repository und Tag in die Vorlage einsetzen.
+          # The download table sits at the top of the release notes; fill in
+          # the repository and tag in the template for it.
           $repo = $env:GITHUB_REPOSITORY
           if (-not $repo) {
             $repo = (gh repo view --json nameWithOwner --jq .nameWithOwner)
           }
-          # Beide Release-Workflows rendern denselben kombinierten Body aus
-          # macOS- und Windows-Notes. So darf jeder Workflow zuerst fertig
-          # werden, ohne dass die jeweils andere Plattform fehlt.
+          # Both release workflows render the same combined body from the
+          # macOS and Windows notes, so either workflow may finish first
+          # without the other platform missing.
           $notes = Join-Path $env:RUNNER_TEMP "release-notes.md"
           if ($env:STORE_URL) {
             node ../scripts/render-release-notes.js --repo $repo --tag $tag --out $notes --store-url $env:STORE_URL
@@ -86,7 +86,7 @@ jobs:
             node ../scripts/render-release-notes.js --repo $repo --tag $tag --out $notes
           }
           if ($LASTEXITCODE -ne 0) {
-            throw "Release-Notes konnten nicht erzeugt werden."
+            throw "The release notes could not be generated."
           }
 
           $title = "Toolbox $version"
@@ -99,10 +99,10 @@ jobs:
             Start-Sleep -Seconds 2
           }
           if (-not $releaseReady) {
-            throw "Release $tag konnte nicht angelegt werden."
+            throw "Release $tag could not be created."
           }
 
-          # latest.yml und die Blockmap braucht electron-updater für Auto-Updates.
+          # electron-updater needs latest.yml and the blockmap for auto updates.
           $assets = @(
             "dist/Toolbox-Setup.exe",
             "dist/Toolbox-Setup.exe.blockmap",
@@ -116,9 +116,8 @@ jobs:
             Start-Sleep -Seconds 4
           }
 
-          # Den vollständigen Body nach dem Upload erneut setzen. Beide
-          # Workflows erzeugen denselben Text, daher ist die Reihenfolge
-          # unkritisch.
+          # Set the complete body again after the upload. Both workflows
+          # produce the same text, so the order does not matter.
           $notesUpdated = $false
           for ($attempt = 1; $attempt -le 10; $attempt++) {
             gh release edit $tag --notes-file $notes
@@ -126,10 +125,10 @@ jobs:
             Start-Sleep -Seconds 2
           }
           if (-not $notesUpdated) {
-            throw "Release-Notes konnten nicht aktualisiert werden."
+            throw "The release notes could not be updated."
           }
 
-      - name: Release-Assets prüfen
+      - name: Verify release assets
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
         shell: pwsh
         env:
@@ -146,11 +145,11 @@ jobs:
           for ($attempt = 1; $attempt -le 90; $attempt++) {
             $names = @(gh release view $tag --json assets --jq '.assets[] | select(.state == "uploaded") | .name' 2>$null)
             if ($names -contains 'Toolbox.dmg' -and $names -contains 'Toolbox-Setup.exe' -and $names -contains 'latest.yml') {
-              Write-Host "Alle Release-Assets vorhanden: Toolbox.dmg, Toolbox-Setup.exe, latest.yml"
+              Write-Host "All release assets present: Toolbox.dmg, Toolbox-Setup.exe, latest.yml"
               exit 0
             }
             if ($attempt -eq 90) {
-              Write-Output "::error::Release $tag enthält nicht alle Assets."
+              Write-Output "::error::Release $tag does not contain all assets."
               gh release view $tag --json assets --jq '.assets[] | "\(.name) (\(.state))"'
               exit 1
             }

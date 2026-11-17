@@ -1,39 +1,39 @@
-## Toolbox für Windows
+## Toolbox for Windows
 
-Windows 10/11, 64 Bit. `Toolbox-Setup.exe` oben herunterladen, ausführen und den
-Anweisungen folgen – die Installation läuft ohne Administratorrechte im
-Benutzerprofil.
+Windows 10/11, 64-bit. Download `Toolbox-Setup.exe` above, run it and follow the
+instructions – the installation runs in the user profile without administrator
+rights.
 
-Da der Installer nicht signiert ist, zeigt Windows SmartScreen beim ersten Start
-möglicherweise eine Warnung. Über **Weitere Informationen → Trotzdem ausführen**
-lässt sich die App starten.
+Because the installer is not signed, Windows SmartScreen may show a warning on
+the first launch. **More info → Run anyway** starts the app.
 
-### Neu in 3.5.0
+### New in 3.6.0
 
-- **Wartungsrelease ohne Funktionsänderungen:** Toolbox 3.5.0 entspricht
-  funktional 3.4.0.
-- **Release-Prozess und Store-Dokumentation:** Beide Plattform-Workflows
-  erzeugen denselben vollständigen Release-Text; die Store-Doku beschreibt den
-  eingereichten Stand.
-- **Windows-App unverändert:** Die installierte Anwendung bleibt unverändert.
+- **System language with English fallback:** the app picks the first supported
+  entry from the Windows language list and falls back to English when the system
+  language is not available. German, English, Spanish and French are fully
+  translated.
+- **Region-aware formatting:** numbers, dates and currency follow the full
+  region tag of the system language (`en-GB` stays British), while the interface
+  uses the matching language.
+- **Manual choice unchanged:** Settings → Language still offers German, English,
+  Spanish and French; **System language** follows Windows.
 
-### Windows: Update von 3.1.x
+### Windows: updating from 3.1.x
 
-Windows-Versionen vor 3.2.0 enthalten den Updater noch nicht. Einmalig
-`Toolbox-Setup.exe` oben herunterladen, Toolbox schließen und den Installer über
-die bestehende Installation laufen lassen – Deinstallieren ist nicht nötig, die
-Daten bleiben erhalten. Da der Installer nicht signiert ist, kann der Defender
-SmartScreen warnen – über **Weitere Informationen → Trotzdem ausführen** lässt
-er sich starten. Ab 3.2.0 übernimmt das Auto-Update; 3.5.0 wird dort automatisch
-angeboten.
+Windows versions before 3.2.0 do not contain the updater yet. Once, download
+`Toolbox-Setup.exe` above, close Toolbox and run the installer over the existing
+installation – uninstalling is not necessary, the data is preserved. Because the
+installer is not signed, Defender SmartScreen may warn – **More info → Run
+anyway** starts it. From 3.2.0 on the auto-update takes over; 3.6.0 is offered
+automatically there.
 
-### Sync mit Mac und iPhone
+### Sync with Mac and iPhone
 
-Die Windows-App nutzt denselben Abgleich im lokalen WLAN wie die Apple-App.
-Trage auf allen Geräten in den Einstellungen unter **Lokales Netzwerk** denselben
-Namen ein; ohne Namen ist der Abgleich aus. Nur Geräte mit diesem Namen
-verbinden sich. Mac, iPhone und Windows-PC können gleichzeitig verbunden sein;
-Änderungen werden auch über ein drittes Gerät weitergegeben, das gerade als
-Brücke dient.
+The Windows app uses the same sync over the local Wi-Fi network as the Apple app.
+Enter the same name on all devices in Settings under **Local network**; without a
+name the sync is off. Only devices with this name connect. Mac, iPhone and
+Windows PC can be connected at the same time; changes are also passed on through
+a third device that acts as a bridge.
 
-Es gibt keinen Server und kein Konto; die Daten bleiben auf den Geräten.
+There is no server and no account; the data stays on the devices.

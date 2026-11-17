@@ -14,7 +14,7 @@ struct SidebarView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Gespeicherte Stände")
+                Text("Saved counts")
                     .font(.title3.bold())
                 Spacer()
                 closeButton
@@ -23,7 +23,7 @@ struct SidebarView: View {
 
             if store.savedCounters.isEmpty {
                 Spacer()
-                Text("Noch nichts gespeichert.\nTippe oben rechts auf das Speichern-Symbol.")
+                Text("Nothing saved yet.\nTap the save icon in the top right.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

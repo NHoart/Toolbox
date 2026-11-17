@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Toolbox gleicht deine Daten mit deinem anderen Gerät im selben WLAN ab.</string>
+	<string>Toolbox syncs your data with your other device on the same Wi-Fi network.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_toolboxsync._tcp</string>

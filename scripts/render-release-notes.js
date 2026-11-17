@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 'use strict'
 
-// Beide Release-Workflows verwenden dieses Skript. Es rendert den einen
-// kombinierten Body aus gemeinsamem Kopf, macOS-Teil, Windows-Teil und
-// gemeinsamem Abschluss. Dadurch darf jeder Workflow zuerst fertig werden,
-// ohne dass die Notes der anderen Plattform verloren gehen.
+// Both release workflows use this script. It renders the single combined body
+// from the shared header, the macOS part, the Windows part and the shared
+// footer. That way either workflow may finish first without losing the notes of
+// the other platform.
 
 const fs = require('fs')
 const path = require('path')
@@ -18,12 +18,12 @@ const sections = [
 ]
 
 function fail(message) {
-  console.error(`Fehler: ${message}`)
+  console.error(`Error: ${message}`)
   process.exit(1)
 }
 
 function usage() {
-  console.log('Aufruf: render-release-notes.js --repo <owner/name> --tag <tag> --out <datei> [--store-url <url>]')
+  console.log('Usage: render-release-notes.js --repo <owner/name> --tag <tag> --out <file> [--store-url <url>]')
 }
 
 function parseArgs(argv) {
@@ -41,44 +41,44 @@ function parseArgs(argv) {
       process.exit(0)
     }
     if (!argument.startsWith('--')) {
-      fail(`Unbekanntes Argument: ${argument}`)
+      fail(`Unknown argument: ${argument}`)
     }
     const value = argv[index + 1]
     if (value === undefined || value.startsWith('--')) {
-      fail(`${argument} braucht einen Wert`)
+      fail(`${argument} requires a value`)
     }
     index += 1
     if (argument === '--repo') result.repo = value
     else if (argument === '--tag') result.tag = value
     else if (argument === '--out') result.out = value
     else if (argument === '--store-url') result.storeUrl = value
-    else fail(`Unbekannte Option: ${argument}`)
+    else fail(`Unknown option: ${argument}`)
   }
 
-  if (!result.repo) fail('--repo fehlt')
-  if (!result.tag) fail('--tag fehlt')
-  if (!result.out) fail('--out fehlt')
+  if (!result.repo) fail('--repo is missing')
+  if (!result.tag) fail('--tag is missing')
+  if (!result.out) fail('--out is missing')
   if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(result.repo)) {
-    fail(`--repo ist ungültig: ${result.repo}`)
+    fail(`--repo is invalid: ${result.repo}`)
   }
   if (!/^[A-Za-z0-9_.-]+$/.test(result.tag)) {
-    fail(`--tag ist ungültig: ${result.tag}`)
+    fail(`--tag is invalid: ${result.tag}`)
   }
   if (result.storeUrl && (!/^https?:\/\/[^\s]+$/.test(result.storeUrl) || /[\r\n]/.test(result.storeUrl))) {
-    fail('--store-url ist ungültig')
+    fail('--store-url is invalid')
   }
   return result
 }
 
 const args = parseArgs(process.argv.slice(2))
 const storeRow = args.storeUrl
-  ? `| **Microsoft Store** (Windows 10/11) | [Toolbox for Windows im Microsoft Store](${args.storeUrl}) |`
+  ? `| **Microsoft Store** (Windows 10/11) | [Toolbox for Windows in the Microsoft Store](${args.storeUrl}) |`
   : ''
 
 const body = sections
   .map(file => {
     const filename = path.join(root, file)
-    if (!fs.existsSync(filename)) fail(`Release-Notes-Datei fehlt: ${file}`)
+    if (!fs.existsSync(filename)) fail(`Release notes file is missing: ${file}`)
     return fs.readFileSync(filename, 'utf8').trim()
   })
   .join('\n\n')
@@ -89,9 +89,9 @@ const body = sections
   .trim()
 
 const leftover = body.match(/\{\{[A-Z_]+\}\}/g)
-if (leftover) fail(`Unersetzte Platzhalter: ${[...new Set(leftover)].join(', ')}`)
-for (const heading of ['## Toolbox für macOS', '## Toolbox für Windows']) {
-  if (!body.includes(heading)) fail(`Release-Notes enthalten keinen Abschnitt "${heading}"`)
+if (leftover) fail(`Unreplaced placeholders: ${[...new Set(leftover)].join(', ')}`)
+for (const heading of ['## Toolbox for macOS', '## Toolbox for Windows']) {
+  if (!body.includes(heading)) fail(`Release notes do not contain the section "${heading}"`)
 }
 
 fs.writeFileSync(args.out, `${body}\n`, 'utf8')

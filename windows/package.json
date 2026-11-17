@@ -1,7 +1,7 @@
 {
   "name": "toolbox-windows",
   "productName": "Toolbox",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "Toolbox – Alltagswerkzeuge für Windows",
   "main": "main.js",
   "author": "Noah Hartmann",

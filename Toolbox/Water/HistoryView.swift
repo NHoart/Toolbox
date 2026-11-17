@@ -19,11 +19,11 @@ struct HistoryView: View {
                 Section {
                     Chart {
                         ForEach(days) { d in
-                            BarMark(x: .value("Tag", d.date, unit: .day),
+                            BarMark(x: .value("Day", d.date, unit: .day),
                                     y: .value("ml", d.ml))
                                 .foregroundStyle(d.ml >= goal ? Color.green : Color.blue)
                         }
-                        RuleMark(y: .value("Ziel", goal))
+                        RuleMark(y: .value("Goal", goal))
                             .foregroundStyle(.secondary)
                             .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
                     }
@@ -36,18 +36,18 @@ struct HistoryView: View {
                     .frame(height: 220)
                     .padding(.vertical, 8)
                 } header: {
-                    Text("Letzte 30 Tage")
+                    Text("Last 30 days")
                 } footer: {
-                    Text("Grün = Tagesziel erreicht. Gestrichelte Linie = Ziel (\(goal) ml).")
+                    Text("Green = daily goal reached. Dashed line = goal (\(goal) ml).")
                 }
 
-                Section("Statistik") {
-                    statRow("Durchschnitt", "\(average) ml")
-                    statRow("Ziel erreicht", "\(daysReached) von \(days.count) Tagen")
-                    statRow("Bester Tag", "\(best) ml")
+                Section("Statistics") {
+                    statRow("Average", "\(average) ml")
+                    statRow("Goal reached", "\(daysReached) of \(days.count) days")
+                    statRow("Best day", "\(best) ml")
                 }
 
-                Section("Tage") {
+                Section("Days") {
                     ForEach(days.reversed()) { d in
                         HStack {
                             Text(d.date, format: .dateTime.weekday(.abbreviated).day().month())
@@ -59,7 +59,7 @@ struct HistoryView: View {
                     }
                 }
             }
-            .navigationTitle("Verlauf")
+            .navigationTitle("History")
             .macSettingsToolbar()
             .onAppear(perform: refresh)
             .onChange(of: scenePhase) { _, phase in
@@ -71,7 +71,7 @@ struct HistoryView: View {
         }
     }
 
-    private func statRow(_ title: String, _ value: String) -> some View {
+    private func statRow(_ title: LocalizedStringKey, _ value: String) -> some View {
         HStack {
             Text(title)
             Spacer()

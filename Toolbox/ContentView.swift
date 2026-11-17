@@ -14,12 +14,12 @@ enum AppTab: CaseIterable, Identifiable {
 
     var title: LocalizedStringKey {
         switch self {
-        case .today: "Heute"
-        case .history: "Verlauf"
-        case .units: "Einheiten"
-        case .counter: "Zähler"
-        case .download: "Downloadzeit"
-        case .energy: "Stromverbrauch"
+        case .today: "Today"
+        case .history: "History"
+        case .units: "Units"
+        case .counter: "Counter"
+        case .download: "Download time"
+        case .energy: "Power usage"
         }
     }
 
@@ -66,27 +66,27 @@ struct ContentView: View {
             }
         #else
         TabView {
-            Tab("Heute", systemImage: "drop.fill") {
+            Tab("Today", systemImage: "drop.fill") {
                 WaterTodayView()
             }
 
-            Tab("Verlauf", systemImage: "chart.bar.fill") {
+            Tab("History", systemImage: "chart.bar.fill") {
                 HistoryView()
             }
 
-            Tab("Einheiten", systemImage: "arrow.left.arrow.right") {
+            Tab("Units", systemImage: "arrow.left.arrow.right") {
                 UnitConverterView()
             }
 
-            Tab("Zähler", systemImage: "plus.circle") {
+            Tab("Counter", systemImage: "plus.circle") {
                 CounterView()
             }
 
-            Tab("Downloadzeit", systemImage: "arrow.down.circle") {
+            Tab("Download time", systemImage: "arrow.down.circle") {
                 DownloadTimeView()
             }
 
-            Tab("Stromverbrauch", systemImage: "bolt.fill") {
+            Tab("Power usage", systemImage: "bolt.fill") {
                 EnergyCostView()
             }
         }
@@ -118,7 +118,7 @@ private struct MacSettingsToolbar: ViewModifier {
                     Button { showSettings = true } label: {
                         Image(systemName: "gearshape")
                     }
-                    .help("Einstellungen")
+                    .help("Settings")
                 }
             }
             .sheet(isPresented: $showSettings) {

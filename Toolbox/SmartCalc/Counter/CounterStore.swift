@@ -217,7 +217,9 @@ final class CounterStore: ObservableObject {
     /// Speichert den aktuellen Stand unter dem angegebenen Namen
     func saveCurrent(name: String) {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let finalName = trimmed.isEmpty ? "Stand \(savedCounters.count + 1)" : trimmed
+        let finalName = trimmed.isEmpty
+            ? String(localized: "Count \(savedCounters.count + 1)")
+            : trimmed
 
         savedCounters.insert(SavedCounter(name: finalName, value: count), at: 0)
         persistSaved()

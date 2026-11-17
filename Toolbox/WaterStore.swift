@@ -13,7 +13,7 @@ enum WaterStore {
             return d
         }
         guard let d = UserDefaults(suiteName: appGroupID) else {
-            assertionFailure("App Group '\(appGroupID)' nicht verfügbar. Capability in App- UND Widget-Target prüfen!")
+            assertionFailure("App group '\(appGroupID)' is not available. Check the capability on BOTH the app and widget target!")
             return .standard
         }
         return d
@@ -66,7 +66,7 @@ enum WaterStore {
         return defaults.integer(forKey: Key.total)
     }
 
-    /// Zuletzt hinzugefügte Mengen (jüngste zuletzt) für "Rückgängig".
+    /// Zuletzt hinzugefügte Mengen (jüngste zuletzt) für "Undo".
     /// Liegt in der App Group, damit auch im Widget eingetragene Mengen erfasst werden.
     private static var recentAdds: [Int] {
         get {

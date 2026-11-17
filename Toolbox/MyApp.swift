@@ -24,7 +24,7 @@ import SwiftUI
         .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(after: .appInfo) {
-                Button("Nach Updates suchen…") {
+                Button("Check for updates…") {
                     Task { await UpdateChecker.shared.checkManually() }
                 }
             }

@@ -41,17 +41,17 @@ struct CounterView: View {
             }
         }
         .animation(.easeInOut(duration: 0.25), value: showSidebar)
-        .alert("Stand speichern", isPresented: $showSaveAlert) {
+        .alert("Save count", isPresented: $showSaveAlert) {
             TextField("Name", text: $newName)
-            Button("Speichern") {
+            Button("Save") {
                 store.saveCurrent(name: newName)
                 newName = ""
             }
-            Button("Abbrechen", role: .cancel) {
+            Button("Cancel", role: .cancel) {
                 newName = ""
             }
         } message: {
-            Text("Aktueller Stand: \(store.count)")
+            Text("Current count: \(store.count)")
         }
         .onDisappear {
             store.stopAutoCounting()
@@ -169,7 +169,7 @@ struct CounterView: View {
                     .font(.system(size: 24, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .contentTransition(.numericText())
-                Text("pro Sekunde")
+                Text("per second")
                     .font(.system(size: 10, weight: .medium))
                     .opacity(0.8)
             }
@@ -246,7 +246,7 @@ struct CounterView: View {
             HStack(spacing: 6) {
                 Image(systemName: store.isAutoRunning ? "stop.fill" : "play.fill")
                 if !compact {
-                    Text(store.isAutoRunning ? "Stopp" : "Start")
+                    Text(store.isAutoRunning ? "Stop" : "Start")
                 }
             }
             .font(.system(size: 17, weight: .bold))

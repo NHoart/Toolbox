@@ -131,7 +131,7 @@ final class UpdateChecker: ObservableObject {
             if announceResult { showsNoUpdate = true }
         case .failed(let message):
             if announceResult {
-                errorMessage = "Die Update-Prüfung ist fehlgeschlagen. Bitte später erneut versuchen.\n\n\(message)"
+                errorMessage = String(localized: "The update check failed. Please try again later.\n\n\(message)")
             }
         }
     }
@@ -202,7 +202,7 @@ final class UpdateChecker: ObservableObject {
         case badResponse
 
         var errorDescription: String? {
-            "GitHub hat keine gültige Antwort geliefert."
+            String(localized: "GitHub did not return a valid response.")
         }
     }
 
@@ -333,7 +333,7 @@ enum UpdateInstaller {
 
     static func install(_ update: UpdateInfo, progress: @escaping @Sendable (Double?) -> Void) async throws {
         guard let digest = update.digest else {
-            throw InstallError(message: "Im Release fehlt die Prüfsumme der DMG.")
+            throw InstallError(message: String(localized: "The release is missing the DMG checksum."))
         }
 
         let workDir = FileManager.default.temporaryDirectory
@@ -417,7 +417,7 @@ enum UpdateInstaller {
 
         func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
             guard let http = downloadTask.response as? HTTPURLResponse, http.statusCode == 200 else {
-                finish(.failure(InstallError(message: "Die DMG konnte nicht heruntergeladen werden.")))
+                finish(.failure(InstallError(message: String(localized: "The DMG could not be downloaded."))))
                 return
             }
 
@@ -441,7 +441,7 @@ enum UpdateInstaller {
     private static func verify(_ file: URL, sha256 digest: String) throws {
         let normalized = digest.lowercased()
         guard normalized.hasPrefix("sha256:") else {
-            throw InstallError(message: "Unbekanntes Prüfsummenformat im Release.")
+            throw InstallError(message: String(localized: "Unknown checksum format in the release."))
         }
 
         let expected = String(normalized.dropFirst("sha256:".count))
@@ -449,7 +449,7 @@ enum UpdateInstaller {
         let actual = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
 
         guard actual == expected else {
-            throw InstallError(message: "Die heruntergeladene DMG ist beschädigt (Prüfsumme stimmt nicht).")
+            throw InstallError(message: String(localized: "The downloaded DMG is damaged (checksum mismatch)."))
         }
     }
 
@@ -457,19 +457,19 @@ enum UpdateInstaller {
         guard let bundle = Bundle(url: app),
               bundle.bundleIdentifier == bundleID,
               let version = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String else {
-            throw InstallError(message: "Die DMG enthält nicht die erwartete Toolbox-App.")
+            throw InstallError(message: String(localized: "The DMG does not contain the expected Toolbox app."))
         }
 
         guard version == UpdateChecker.displayVersion(expectedVersion),
               UpdateChecker.isVersion(version, newerThan: UpdateChecker.currentVersion) else {
-            throw InstallError(message: "Die Version in der DMG passt nicht zum Release.")
+            throw InstallError(message: String(localized: "The version in the DMG does not match the release."))
         }
 
         var staticCode: SecStaticCode?
         guard SecStaticCodeCreateWithPath(app as CFURL, [], &staticCode) == errSecSuccess,
               let staticCode,
               SecStaticCodeCheckValidity(staticCode, SecCSFlags(rawValue: kSecCSCheckAllArchitectures), nil) == errSecSuccess else {
-            throw InstallError(message: "Die Signatur der neuen App ist ungültig.")
+            throw InstallError(message: String(localized: "The new app's signature is invalid."))
         }
     }
 
@@ -487,7 +487,7 @@ enum UpdateInstaller {
             .filter { $0.pathExtension.lowercased() == "app" }
 
         guard apps.count == 1, let source = apps.first else {
-            throw InstallError(message: "Die DMG enthält nicht genau eine App.")
+            throw InstallError(message: String(localized: "The DMG does not contain exactly one app."))
         }
 
         let destination = workDir.appendingPathComponent("Toolbox.app")
@@ -607,7 +607,7 @@ enum UpdateInstaller {
         do {
             try process.run()
         } catch {
-            throw InstallError(message: "Der Neustart konnte nicht vorbereitet werden: \(error.localizedDescription)")
+            throw InstallError(message: String(localized: "The restart could not be prepared: \(error.localizedDescription)"))
         }
     }
 
@@ -623,7 +623,7 @@ enum UpdateInstaller {
         do {
             try process.run()
         } catch {
-            throw InstallError(message: "\(tool) konnte nicht gestartet werden: \(error.localizedDescription)")
+            throw InstallError(message: String(localized: "\(tool) could not be started: \(error.localizedDescription)"))
         }
 
         process.waitUntilExit()
@@ -632,7 +632,7 @@ enum UpdateInstaller {
             let data = errorPipe.fileHandleForReading.readDataToEndOfFile()
             let message = String(data: data, encoding: .utf8)?
                 .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            throw InstallError(message: "\(tool) ist fehlgeschlagen. \(message)")
+            throw InstallError(message: String(localized: "\(tool) failed. \(message)"))
         }
     }
 
@@ -654,13 +654,13 @@ struct UpdateCheckModifier: ViewModifier {
             .sheet(item: $checker.availableUpdate) { update in
                 UpdateSheet(update: update)
             }
-            .alert("Keine Updates", isPresented: $checker.showsNoUpdate) {
+            .alert("No updates", isPresented: $checker.showsNoUpdate) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text("Du benutzt bereits die neueste Version (\(UpdateChecker.currentVersion)).")
+                Text("You are already using the latest version (\(UpdateChecker.currentVersion)).")
             }
             .alert(
-                "Update-Prüfung fehlgeschlagen",
+                "Update check failed",
                 isPresented: Binding(
                     get: { checker.errorMessage != nil },
                     set: { if !$0 { checker.errorMessage = nil } }
@@ -682,10 +682,10 @@ struct UpdateSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Update verfügbar")
+            Text("Update available")
                 .font(.title2.bold())
 
-            Text("Version \(update.version) ist verfügbar – du benutzt \(UpdateChecker.currentVersion).")
+            Text("Version \(update.version) is available – you are using \(UpdateChecker.currentVersion).")
                 .font(.callout)
                 .foregroundStyle(.secondary)
 
@@ -707,13 +707,13 @@ struct UpdateSheet: View {
             }
 
             if checker.canInstall(update) {
-                Text("Toolbox lädt die neue Version, ersetzt die installierte App und startet neu.")
+                Text("Toolbox downloads the new version, replaces the installed app and restarts.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
 
             HStack {
-                Button("Später") { dismiss() }
+                Button("Later") { dismiss() }
                     .disabled(checker.isInstalling)
 
                 Spacer()
@@ -722,23 +722,23 @@ struct UpdateSheet: View {
                     if let progress = checker.downloadProgress {
                         ProgressView(value: progress)
                             .frame(width: 180)
-                        Text("Wird geladen … \(Int(progress * 100)) %")
+                        Text("Downloading … \(Int(progress * 100)) %")
                             .font(.callout)
                             .foregroundStyle(.secondary)
                     } else {
                         ProgressView()
                             .controlSize(.small)
-                        Text("Wird installiert…")
+                        Text("Installing…")
                             .font(.callout)
                             .foregroundStyle(.secondary)
                     }
                 } else if checker.canInstall(update) {
-                    Button("Installieren und neu starten") {
+                    Button("Install and restart") {
                         Task { await checker.install(update) }
                     }
                     .keyboardShortcut(.defaultAction)
                 } else {
-                    Button("Herunterladen") {
+                    Button("Download") {
                         openURL(update.downloadURL)
                         dismiss()
                     }

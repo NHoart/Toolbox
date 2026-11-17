@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       publish:
-        description: "DMG als GitHub-Release veröffentlichen"
+        description: "Publish the DMG as a GitHub release"
         type: boolean
         default: true
 
@@ -21,18 +21,18 @@ concurrency:
 
 jobs:
   dmg:
-    name: DMG bauen
+    name: Build DMG
     runs-on: xcode-27
     steps:
-      - name: Repository auschecken
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Node einrichten
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
-      - name: Neueste installierte Xcode-Version auswählen
+      - name: Select the newest installed Xcode version
         run: |
           set -euo pipefail
           latest="$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1 || true)"
@@ -41,17 +41,17 @@ jobs:
           fi
           xcodebuild -version
 
-      - name: DMG bauen
+      - name: Build DMG
         run: ./scripts/build-dmg.sh
 
-      - name: DMG als Workflow-Artefakt hochladen
+      - name: Upload DMG as workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: Toolbox-dmg
           path: dist/Toolbox.dmg
           if-no-files-found: error
 
-      - name: Release veröffentlichen
+      - name: Publish release
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
         env:
           GH_TOKEN: ${{ github.token }}
@@ -64,14 +64,14 @@ jobs:
           if [ "${GITHUB_REF_TYPE:-}" = "tag" ]; then
             tag="$GITHUB_REF_NAME"
           else
-            # Manueller Start: Release passend zur gebauten Version anlegen
-            # bzw. aktualisieren. Der Update-Check vergleicht diesen Tag.
+            # Manual run: create or update the release matching the built
+            # version. The update check compares this tag.
             tag="v$version"
           fi
 
-          # Beide Release-Workflows rendern denselben kombinierten Body aus
-          # macOS- und Windows-Notes. So darf jeder Workflow zuerst fertig
-          # werden, ohne dass die jeweils andere Plattform fehlt.
+          # Both release workflows render the same combined body from the
+          # macOS and Windows notes, so either workflow may finish first
+          # without the other platform missing.
           repo="${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"
           notes="$(mktemp)"
           if [ -n "${STORE_URL:-}" ]; then
@@ -82,8 +82,8 @@ jobs:
               --repo "$repo" --tag "$tag" --out "$notes"
           fi
 
-          # Release anlegen, falls es noch nicht vom anderen Workflow erstellt
-          # wurde; danach das DMG hochladen und den vollständigen Body setzen.
+          # Create the release if the other workflow has not done so yet;
+          # then upload the DMG and set the complete body.
           release_ready=false
           for attempt in $(seq 1 30); do
             if gh release view "$tag" > /dev/null 2>&1; then
@@ -99,7 +99,7 @@ jobs:
             sleep 2
           done
           if [ "$release_ready" != true ]; then
-            echo "::error::Release $tag konnte nicht angelegt werden."
+            echo "::error::Release $tag could not be created."
             exit 1
           fi
 
@@ -112,7 +112,7 @@ jobs:
             sleep 3
           done
           if [ "$uploaded" != true ]; then
-            echo "::error::DMG konnte nicht am Release $tag hochgeladen werden."
+            echo "::error::The DMG could not be uploaded to release $tag."
             exit 1
           fi
 
@@ -125,11 +125,11 @@ jobs:
             sleep 2
           done
           if [ "$notes_updated" != true ]; then
-            echo "::error::Release-Notes konnten nicht aktualisiert werden."
+            echo "::error::The release notes could not be updated."
             exit 1
           fi
 
-      - name: Windows-Installer für denselben Release anstoßen
+      - name: Trigger Windows installer for the same release
         if: github.ref_type != 'tag' && inputs.publish
         env:
           GH_TOKEN: ${{ github.token }}
@@ -137,7 +137,7 @@ jobs:
           set -euo pipefail
           gh workflow run windows-exe.yml --ref "$GITHUB_REF_NAME" -f publish=true
 
-      - name: Release-Assets prüfen
+      - name: Verify release assets
         if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
         env:
           GH_TOKEN: ${{ github.token }}
@@ -157,11 +157,11 @@ jobs:
             if printf '%s\n' "$names" | grep -qx 'Toolbox.dmg' \
               && printf '%s\n' "$names" | grep -qx 'Toolbox-Setup.exe' \
               && printf '%s\n' "$names" | grep -qx 'latest.yml'; then
-              echo "Alle Release-Assets vorhanden: Toolbox.dmg, Toolbox-Setup.exe, latest.yml"
+              echo "All release assets present: Toolbox.dmg, Toolbox-Setup.exe, latest.yml"
               exit 0
             fi
             if [ "$attempt" -eq 90 ]; then
-              echo "::error::Release $tag enthält nicht alle Assets."
+              echo "::error::Release $tag does not contain all assets."
               gh release view "$tag" --json assets --jq '.assets[] | "\(.name) (\(.state))"' || true
               exit 1
             fi

@@ -1,123 +1,132 @@
 # Toolbox
 
-Eine kleine Sammlung von Alltagswerkzeugen als SwiftUI-App für iPhone, iPad, Mac und Vision Pro – inklusive Home-Screen-Widget und Siri-Kurzbefehlen. Dieselben sechs Werkzeuge gibt es als Desktop-App für Windows, mit Abgleich im lokalen WLAN über Mac, iPhone und PC hinweg.
+A small collection of everyday tools as a SwiftUI app for iPhone, iPad, Mac and Vision Pro – including a Home Screen widget and Siri shortcuts. The same six tools are available as a desktop app for Windows, with syncing over the local Wi-Fi network across Mac, iPhone and PC.
 
 ## Download
 
 ### macOS
 
-Die fertige Mac-App gibt es als DMG direkt von GitHub:
+The ready-built Mac app is available as a DMG straight from GitHub:
 
-[**Toolbox.dmg herunterladen**](https://github.com/NHoart/Toolbox/releases/latest/download/Toolbox.dmg)
+[**Download Toolbox.dmg**](https://github.com/NHoart/Toolbox/releases/latest/download/Toolbox.dmg)
 
-Alle Versionen stehen auf der [Releases-Seite](https://github.com/NHoart/Toolbox/releases). Nach dem Download die DMG öffnen, `Toolbox` in den Ordner **Programme** ziehen und die App per Rechtsklick → **Öffnen** starten. Die DMG ist nicht mit einem Apple-Developer-Zertifikat signiert und nicht notarisiert, deshalb blockiert macOS den allerersten Start.
+All versions are listed on the [releases page](https://github.com/NHoart/Toolbox/releases). After downloading, open the DMG, drag `Toolbox` into the **Applications** folder and launch the app with a right-click → **Open**. The DMG is not signed with an Apple Developer certificate and not notarized, which is why macOS blocks the very first launch.
 
-Die Mac-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Liegt die App in **Programme**, lädt sie die neue DMG, prüft Prüfsumme und Signatur und ersetzt sich selbst; aus Xcode oder von der DMG gestartet bietet sie stattdessen den Download an. Manuell geht das über **Toolbox → Nach Updates suchen…** oder den Button in den Einstellungen; abschalten lässt sich die automatische Prüfung dort ebenfalls.
+The Mac app checks GitHub at most once a day at launch for a newer version. If the app lives in **Applications**, it downloads the new DMG, verifies the checksum and signature and replaces itself; when launched from Xcode or from the DMG it offers the download instead. Manually, use **Toolbox → Check for Updates…** or the button in Settings; the automatic check can be disabled there as well.
 
-### iPhone und iPad
+### iPhone and iPad
 
-Für iPhone und iPad gibt es kein fertiges IPA im Release und keinen App-Store-Download – die iOS-App wird mit Xcode aus dem Quellcode direkt aufs Gerät gebaut. Nötig sind ein Mac mit Xcode 27.2 oder neuer und ein iPhone oder iPad mit iOS/iPadOS 27.2 oder neuer.
+There is no ready-built IPA in the release and no App Store download for iPhone and iPad – the iOS app is built from source onto the device with Xcode. You need a Mac with Xcode 27.2 or newer and an iPhone or iPad with iOS/iPadOS 27.2 or newer.
 
-1. Repository klonen und die eigene Team-ID in `Config/Local.xcconfig` hinterlegen – den Befehl nennt [Bauen und Starten](#bauen-und-starten), die Team-ID steht in Xcode unter **Settings → Accounts** hinter dem angemeldeten Apple-Account. Für die App Group unten braucht es ein kostenpflichtiges Developer-Team.
-2. `Toolbox.xcodeproj` öffnen, das Schema `Toolbox` wählen und als Ziel das per Kabel oder WLAN verbundene iPhone bzw. iPad auswählen.
-3. Am Gerät den Entwicklermodus einschalten: **Einstellungen → Datenschutz & Sicherheit → Entwicklermodus**, das iPhone neu starten und den Modus nach dem Entsperren bestätigen. Ohne ihn startet die App nicht.
-4. **Run** (⌘R) drücken. Beim ersten Start fragt iOS nach der Freigabe für **Lokales Netzwerk** – erlauben, sonst findet der Abgleich im WLAN keine anderen Geräte.
-5. Meldet iOS, dass der Entwickler nicht verifiziert ist, unter **Einstellungen → Allgemein → VPN & Geräteverwaltung** den Eintrag **Apple Development: …** öffnen und **Vertrauen** wählen.
+1. Clone the repository and add your team ID to `Config/Local.xcconfig` – the command is shown in [Build and run](#build-and-run), and the team ID is listed in Xcode under **Settings → Accounts** next to the signed-in Apple account. The App Group below requires a paid developer team.
+2. Open `Toolbox.xcodeproj`, select the `Toolbox` scheme and choose the iPhone or iPad connected by cable or Wi-Fi as the destination.
+3. Enable Developer Mode on the device: **Settings → Privacy & Security → Developer Mode**, restart the iPhone and confirm the mode after unlocking. Without it, the app will not launch.
+4. Press **Run** (⌘R). On first launch, iOS asks for **Local Network** access – allow it, otherwise the Wi-Fi sync cannot find other devices.
+5. If iOS reports that the developer is not verified, open **Settings → General → VPN & Device Management**, select **Apple Development: …** and choose **Trust**.
 
-Für Widget und die gemeinsamen Daten von App und Widget muss in beiden Targets unter **Signing & Capabilities** die App Group `group.com.noahsapps.Wassertracker` aktiv sein; fehlt sie, bricht der Debug-Build beim ersten Zugriff auf den Wassertracker ab. Mit einem kostenlosen Apple-Account läuft die installierte App außerdem nur sieben Tage, danach ist in Xcode erneut **Run** nötig. Eine neue Version kommt nicht automatisch aufs Gerät: `git pull` und erneut aus Xcode installieren.
+For the widget and the data shared between app and widget, the App Group `group.com.noahsapps.Wassertracker` must be enabled in both targets under **Signing & Capabilities**; without it the debug build stops at the first access to the water tracker. With a free Apple account the installed app also runs for only seven days, after which you have to press **Run** in Xcode again. A new version does not reach the device automatically: run `git pull` and install again from Xcode.
 
 ### Windows
 
-Die Windows-App gibt es als Installer direkt von GitHub:
+The Windows app is available as an installer straight from GitHub:
 
-[**Toolbox-Setup.exe herunterladen**](https://github.com/NHoart/Toolbox/releases/latest/download/Toolbox-Setup.exe)
+[**Download Toolbox-Setup.exe**](https://github.com/NHoart/Toolbox/releases/latest/download/Toolbox-Setup.exe)
 
-Windows 10/11 (64 Bit). Nach dem Download den Installer ausführen; die Installation läuft ohne Administratorrechte im Benutzerprofil. Der Installer ist nicht signiert, deshalb kann SmartScreen beim ersten Start warnen – über **Weitere Informationen → Trotzdem ausführen** startet die App trotzdem.
+Windows 10/11 (64-bit). Run the installer after downloading; it installs into the user profile without administrator rights. The installer is not signed, so SmartScreen may warn on the first launch – **More info → Run anyway** starts the app regardless.
 
-Die Microsoft-Store-Fassung ist eine zusätzliche Installationsart und ersetzt den Installer nicht. Der Store-Eintrag ist eingereicht; der Link wird nach der Store-Zertifizierung aktiv:
+The Microsoft Store version is an additional installation path and does not replace the installer. It has been available in the Microsoft Store since 17 November 2026, currently at version 3.4.0:
 
-[**Toolbox for Windows im Microsoft Store**](https://apps.microsoft.com/detail/9P4FPTHZHVJD)
+[**Toolbox for Windows in the Microsoft Store**](https://apps.microsoft.com/detail/9P4FPTHZHVJD)
 
-Bis dahin ist der Link ein Platzhalter für die spätere Store-Seite. Einrichtung und Einreichung sind unter [`windows/store`](windows/store/README.md) beschrieben.
+The Store version updates through the Microsoft Store and trails the GitHub release; 3.5.0 is currently only available as DMG and EXE. Setup and submission are described in [`windows/store`](windows/store/README.md).
 
-Die Windows-App prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version liegt. Ist sie installiert, lädt sie den neuen Installer, prüft die im Release hinterlegte SHA-512-Prüfsumme und installiert das Update im Hintergrund; danach startet sie neu. Manuell geht das über **Einstellungen → Updates**; abschalten lässt sich die automatische Prüfung dort ebenfalls. Die Microsoft-Store-Fassung aktualisiert sich über den Store; die GitHub-Update-Prüfung ist dort deaktiviert.
+The Windows app checks GitHub at most once a day at launch for a newer version. When installed, it downloads the new installer, verifies the SHA-512 checksum published in the release and installs the update in the background; afterwards it restarts. Manually, use **Settings → Updates**; the automatic check can be disabled there as well. The Microsoft Store version updates through the Store; the GitHub update check is disabled there.
 
-## Funktionen
+## Features
 
-Die App ist in Tabs aufgeteilt:
+The app is split into tabs:
 
-| Tab | Beschreibung |
+| Tab | Description |
 | --- | --- |
-| **Heute** | Wassertracker: Fortschrittsring, Schnellwahl für Glas und Flasche, frei wählbare Menge (1–10.000 ml) sowie „Rückgängig“ für den letzten Eintrag. |
-| **Verlauf** | Diagramm der letzten 30 Tage (Charts) mit eingezeichnetem Tagesziel, Durchschnitt, Anzahl erreichter Ziele und bestem Tag. |
-| **Einheiten** | Umrechnung zwischen MB/GB und Mbit/MB. |
-| **Zähler** | Manueller Zähler mit Plus/Minus, Undo, Reset, Auto-Zählmodus (1–100 Schritte pro Sekunde), Haptik- und Ton-Feedback sowie benannten, gespeicherten Zählerständen in einer Seitenleiste. |
-| **Downloadzeit** | Geschätzte Downloaddauer aus Dateigröße und Geschwindigkeit (Mbit/s oder MB/s). |
-| **Stromverbrauch** | Energieverbrauch aus Leistung × Nutzungsdauer, optional mit Kostenberechnung zum eigenen kWh-Preis. |
+| **Today** | Water tracker: progress ring, quick pick for glass and bottle, custom amount (1–10,000 ml) and “Undo” for the last entry. |
+| **History** | Chart of the last 30 days (Charts) with the daily goal, average, number of goals reached and the best day. |
+| **Units** | Conversion between MB/GB and Mbit/MB. |
+| **Counter** | Manual counter with plus/minus, undo, reset, auto-count mode (1–100 steps per second), haptic and sound feedback plus named, saved counter values in a sidebar. |
+| **Download time** | Estimated download duration from file size and speed (Mbit/s or MB/s). |
+| **Power usage** | Energy consumption from power × duration, optionally with cost calculation at your own kWh price. |
 
-Die Windows-App enthält dieselben sechs Werkzeuge. Widget und Siri-Kurzbefehle gibt es nur in der Apple-Fassung.
+The Windows app contains the same six tools. The widget and Siri shortcuts exist only in the Apple version.
+
+### Languages
+
+All three platforms follow the system language and fall back to **English** when the system language is not available. German, English, Spanish and French are fully translated:
+
+- **macOS, iOS, iPadOS, visionOS:** `Localizable.xcstrings` (String Catalog) in `Toolbox` and `ToolboxWidget`; English is the development language, so any unsupported system language resolves to English.
+- **Windows:** `windows/renderer/i18n.js` picks the first supported entry from the system language list and uses the full region tag for number, date and currency formatting. A language can also be chosen manually in Settings; **System language** follows Windows.
+
+Dates, numbers and currencies are formatted with the user's locale, so `en-GB` shows British formatting while the interface stays English.
 
 ### Widget
 
-Das Widget zeigt den Tagesfortschritt als Ring (klein und mittel). In der mittleren Größe lassen sich Glas und Flasche direkt per Knopfdruck eintragen, ohne die App zu öffnen. Die Timeline aktualisiert sich spätestens alle 30 Minuten und um Mitternacht, damit der Tageszähler zurückspringt.
+The widget shows the daily progress as a ring (small and medium). In the medium size, glass and bottle can be logged with a single tap without opening the app. The timeline refreshes at least every 30 minutes and at midnight so the daily counter resets.
 
-### Siri & Kurzbefehle
+### Siri & Shortcuts
 
-Der Kurzbefehl „Wasser eintragen“ kennt Gläser und Flaschen (einzeln, doppelt oder dreifach) und antwortet mit dem aktuellen Stand, zum Beispiel:
+The “Log water” shortcut supports glasses and bottles (single, double or triple) and answers with the current total, for example:
 
-> „Hey Siri, ich habe zwei Gläser getrunken in Toolbox“
+> “Hey Siri, ich habe zwei Gläser getrunken in Toolbox”
 
-Die Größe von Glas und Flasche stammt dabei aus den Einstellungen der App.
+The size of the glass and bottle comes from the app's settings.
 
-## Voraussetzungen
+## Requirements
 
-### Apple-App
+### Apple app
 
-- Xcode mit iOS-/iPadOS-SDK 27.2 oder neuer (Projektformat `project.xcproj`)
-- Deployment-Target: iOS/iPadOS 27.2, macOS und visionOS
-- Ein eigenes Apple-Developer-Team für das Signieren
+- Xcode with the iOS/iPadOS SDK 27.2 or newer (project format `project.xcproj`)
+- Deployment target: iOS/iPadOS 27.2, macOS and visionOS
+- Your own Apple Developer team for signing
 
-### Windows-App
+### Windows app
 
-- Windows 10/11 (64 Bit)
-- Node.js 22 oder neuer und npm (nur zum Bauen und Starten aus dem Quellcode)
+- Windows 10/11 (64-bit)
+- Node.js 22 or newer and npm (only to build and run from source)
 
-## Bauen und Starten
+## Build and run
 
-1. Repository klonen und `Toolbox.xcodeproj` in Xcode öffnen.
-2. Die persönliche Team-ID hinterlegen – sie ist absichtlich **nicht** im Repo:
+1. Clone the repository and open `Toolbox.xcodeproj` in Xcode.
+2. Add your personal team ID – it is deliberately **not** in the repository:
    ```bash
    printf 'DEVELOPMENT_TEAM = XXXXXXXXXX\n' > Config/Local.xcconfig
    ```
-   `Config/Shared.xcconfig` bindet die Datei per `#include?` ein, ein frischer Clone baut also auch ohne sie (dann ohne automatisches Signieren).
-3. Das Schema `Toolbox` auswählen und auf einem Gerät, Simulator oder „My Mac (Designed for iPad)“ starten.
+   `Config/Shared.xcconfig` includes the file through `#include?`, so a fresh clone also builds without it (then without automatic signing).
+3. Select the `Toolbox` scheme and run on a device, simulator or “My Mac (Designed for iPad)”.
 
-### Windows-App bauen und starten
+### Build and run the Windows app
 
 ```bash
 cd windows
 npm ci
-npm start          # App lokal starten
-npm test           # Protokoll-, Speicher- und Sync-Tests inkl. Drei-Client-Kette
-npm run smoke:sync # Headless-Smoke-Test des Sync-Clients
-npm run dist       # Installer unter windows/dist/Toolbox-Setup.exe
-npm run dist:store # AppX für den Microsoft Store (Windows/Parallels)
+npm start          # start the app locally
+npm test           # protocol, storage and sync tests incl. the three-client chain
+npm run smoke:sync # headless smoke test of the sync client
+npm run dist       # installer at windows/dist/Toolbox-Setup.exe
+npm run dist:store # AppX for the Microsoft Store (Windows/Parallels)
 ```
 
-Der Installer wird regulär im Workflow auf `windows-latest` gebaut. `npm run dist` funktioniert auch auf einem Mac, sofern die Windows-Build-Werkzeuge von electron-builder verfügbar sind. `npm run dist:store` baut die Store-Fassung als AppX; die Identität steht in `windows/store/store.config.json`, und der NSIS-Installer bleibt davon unberührt. Details: [`windows/store/README.md`](windows/store/README.md).
+The installer is normally built in the workflow on `windows-latest`. `npm run dist` also works on a Mac provided electron-builder's Windows build tools are available. `npm run dist:store` builds the Store version as AppX; the identity lives in `windows/store/store.config.json`, and the NSIS installer is unaffected. Details: [`windows/store/README.md`](windows/store/README.md).
 
-### Sync zwischen Swift und Windows testen
+### Test the sync between Swift and Windows
 
-Der Interop-Test kompiliert den echten Apple-Sync-Code als headless CLI und verbindet zwei unabhängige Prozesse (Mac und iPhone) mit dem echten Windows-`SyncService` aus `windows/src/sync.js` als Relay und Store:
+The interop test compiles the real Apple sync code as a headless CLI and connects two independent processes (Mac and iPhone) with the real Windows `SyncService` from `windows/src/sync.js` as relay and store:
 
 ```bash
 bash scripts/build-sync-harness.sh
 node scripts/test-swift-windows-interop.js
 ```
 
-Der Test prüft, dass Änderungen von jedem Peer zu den anderen gelangen, verspätete alte Stände verworfen werden und am Ende alle Snapshot-Felder übereinstimmen. Das Wire-Format stammt direkt aus dem echten Swift-`LocalSync`; es gibt keine handgeschriebenen Fixtures. In CI läuft der Test unter `.github/workflows/sync-interop.yml` auf `macos-latest`.
+The test verifies that changes from every peer reach the others, that late stale states are discarded and that all snapshot fields match at the end. The wire format comes straight from the real Swift `LocalSync`; there are no hand-written fixtures. In CI the test runs in `.github/workflows/sync-interop.yml` on `macos-latest`.
 
-Der iOS-Build des App-Targets lässt sich mit folgendem Befehl prüfen:
+The iOS build of the app target can be checked with:
 
 ```bash
 xcodebuild -quiet -project Toolbox.xcodeproj -scheme Toolbox -configuration Debug \
@@ -125,94 +134,95 @@ xcodebuild -quiet -project Toolbox.xcodeproj -scheme Toolbox -configuration Debu
   CODE_SIGNING_ALLOWED=NO build
 ```
 
-### DMG lokal bauen
+### Build the DMG locally
 
 ```bash
 ./scripts/build-dmg.sh
 ```
 
-Das Skript baut die macOS-App (`Release`, Apple Silicon), signiert sie ad-hoc und legt das fertige Image unter `dist/Toolbox.dmg` ab.
+The script builds the macOS app (`Release`, Apple Silicon), signs it ad-hoc and writes the finished image to `dist/Toolbox.dmg`.
 
-### Release veröffentlichen
+### Publish a release
 
-`git tag v1.2.0 && git push origin v1.2.0` erzeugt ein Release `v1.2.0` mit DMG und Installer. Alternativ über **Actions → „macOS DMG“ → Run workflow** ein Release `v<Version>` aus dem aktuellen Stand bauen; der Windows-Workflow wird dabei automatisch mit angestoßen.
+`git tag v1.2.0 && git push origin v1.2.0` creates a `v1.2.0` release with DMG and installer. Alternatively use **Actions → “macOS DMG” → Run workflow** to build a `v<version>` release from the current state; the Windows workflow is triggered automatically.
 
-Die Release-Notes liegen in `.github/macos-release-notes.md` und `.github/windows-release-notes.md`; gemeinsamer Kopf und Abschluss stehen in `.github/release-notes-header.md` und `.github/release-notes-footer.md`. Beide Workflows rendern daraus mit `scripts/render-release-notes.js` denselben vollständigen Body und setzen ihn nach dem Upload erneut. Dadurch ist es unerheblich, welcher Workflow zuerst fertig wird. Das Skript ersetzt `{{REPO}}`, `{{TAG}}` und `{{STORE_ROW}}`; `{{STORE_ROW}}` wird aus der Repository-Variable `STORE_URL` gesetzt und entfällt ohne URL. Vor einem Release `MARKETING_VERSION` (und `CURRENT_PROJECT_VERSION`) im Projekt sowie `version` in `windows/package.json` erhöhen – der Update-Check und die Release-Tags vergleichen diese Versionen.
+The release notes live in `.github/macos-release-notes.md` and `.github/windows-release-notes.md`; the shared header and footer are in `.github/release-notes-header.md` and `.github/release-notes-footer.md`. Both workflows render the same complete body from them with `scripts/render-release-notes.js` and set it again after the upload, so it does not matter which workflow finishes first. The script replaces `{{REPO}}`, `{{TAG}}` and `{{STORE_ROW}}`; `{{STORE_ROW}}` comes from the `STORE_URL` repository variable and is omitted without a URL. Before a release, bump `MARKETING_VERSION` (and `CURRENT_PROJECT_VERSION`) in the project and `version` in `windows/package.json` – the update check and the release tags compare these versions.
 
-## Projektstruktur
+## Project structure
 
 ```
-Toolbox/                  App-Target (SwiftUI)
-├── MyApp.swift           App-Einstieg
-├── ContentView.swift     TabView mit allen Werkzeugen
-├── Water/                Wassertracker: Heute, Verlauf, Einstellungen, Siri-Intents
-├── WaterStore.swift      Persistenz über die App Group (in App *und* Widget)
-├── LocalSync.swift       Abgleich im lokalen WLAN über Bonjour
-├── Info.plist            Lokale-Netzwerk-Nutzung + Bonjour-Dienst
-└── SmartCalc/            Umrechner, Downloadzeit, Stromverbrauch, Zähler
+Toolbox/                  App target (SwiftUI)
+├── MyApp.swift           App entry point
+├── ContentView.swift     TabView with all tools
+├── Localizable.xcstrings Translations (de, en, es, fr)
+├── Water/                Water tracker: today, history, settings, Siri intents
+├── WaterStore.swift      Persistence through the App Group (in app *and* widget)
+├── LocalSync.swift       Sync over the local Wi-Fi network via Bonjour
+├── Info.plist            Local network usage + Bonjour service
+└── SmartCalc/            Converter, download time, power usage, counter
 
-ToolboxWidget/            WidgetKit-Extension (Wassertracker-Widget)
-Config/                   Shared.xcconfig + lokale, nicht versionierte Local.xcconfig
-windows/                  Windows-App (Electron, JavaScript)
-├── main.js               Hauptprozess, Fenster und IPC
-├── preload.js            Brücke zwischen Prozess und Oberfläche
-├── src/protocol.js       Apple-kompatibles Sync-Format (JSON + Zeitstempel)
-├── src/store.js          Lokale Daten in %APPDATA%\Toolbox\data.json
-├── src/sync.js           Bonjour + TCP, Mehrgeräte-Abgleich
-├── src/updater.js        Tägliche Update-Prüfung und Installation
-├── renderer/             Oberfläche (HTML/CSS/JS)
-├── store/                Store-Identität und Einreichungs-Anleitung
-└── test/                 Protokoll-, Speicher- und Sync-Tests
+ToolboxWidget/            WidgetKit extension (water tracker widget)
+Config/                   Shared.xcconfig + local, unversioned Local.xcconfig
+windows/                  Windows app (Electron, JavaScript)
+├── main.js               Main process, window and IPC
+├── preload.js            Bridge between process and UI
+├── src/protocol.js       Apple-compatible sync format (JSON + timestamps)
+├── src/store.js          Local data in %APPDATA%\Toolbox\data.json
+├── src/sync.js           Bonjour + TCP, multi-device sync
+├── src/updater.js        Daily update check and installation
+├── renderer/             UI (HTML/CSS/JS) incl. i18n
+├── store/                Store identity and submission guide
+└── test/                 Protocol, storage and sync tests
 
-swift-sync-harness/       Headless-CLI für den echten Swift-Sync
-scripts/                  Build-Skripte und Swift↔Windows-Interop-Test
+swift-sync-harness/       Headless CLI for the real Swift sync
+scripts/                  Build scripts and Swift↔Windows interop test
 ```
 
-## Datenspeicherung
+## Data storage
 
-Es gibt keinen eigenen Server. Alle Daten bleiben lokal; auf Wunsch gleicht die App sie direkt im lokalen WLAN mit den anderen Geräten ab (`LocalSync`). Wassertracker und Widget teilen sich `UserDefaults` über eine App Group:
+There is no server of our own. All data stays local; on request the app syncs it directly with the other devices on the local Wi-Fi network (`LocalSync`). Water tracker and widget share `UserDefaults` through an App Group:
 
-- Tagesmenge und Verlauf (max. 400 Tage) für den Wassertracker
-- Glas-/Flaschengröße und Tagesziel
-- Zählerstand, Auto-Zählrate und gespeicherte Zählerstände (im Standard-`UserDefaults`)
+- daily amount and history (max. 400 days) for the water tracker
+- glass/bottle size and daily goal
+- counter value, auto-count rate and saved counter values (in the standard `UserDefaults`)
 
-Die Windows-App speichert denselben Stand in `%APPDATA%\Toolbox\data.json`. Bei der Microsoft-Store-Fassung liegt der userData-Pfad im paketierten AppData-Bereich; beim ersten Start wird eine vorhandene Datei aus `%APPDATA%\Toolbox\data.json` automatisch übernommen.
+The Windows app stores the same state in `%APPDATA%\Toolbox\data.json`. For the Microsoft Store version the userData path lives in the packaged AppData area; on first launch an existing file from `%APPDATA%\Toolbox\data.json` is taken over automatically.
 
-### Sync im lokalen WLAN (Mac, iPhone, Windows)
+### Sync over the local Wi-Fi network (Mac, iPhone, Windows)
 
-Alle Fassungen sprechen dasselbe Protokoll: Jedes Gerät bietet den Bonjour-Dienst `_toolboxsync._tcp` an und sucht gleichzeitig danach. Beim Verbindungsaufbau schicken beide Seiten ihren vollständigen Stand samt Zeitstempel; pro Bereich (Wasser und Zähler) gewinnt der zuletzt geänderte Stand. Übernommene Stände werden sofort an alle offenen Verbindungen weitergegeben – auch an Geräte, die mit dem Ursprung nicht direkt verbunden sind.
+All versions speak the same protocol: every device advertises the Bonjour service `_toolboxsync._tcp` and searches for it at the same time. When a connection is established, both sides send their complete state including a timestamp; per area (water and counter) the most recently changed state wins. Adopted states are passed on immediately to all open connections – including devices that are not directly connected to the origin.
 
-Damit funktioniert auch die Kette über ein drittes Gerät:
+That is also how the chain across a third device works:
 
-1. **Mac ↔ iPhone**: Das iPhone übernimmt den aktuellen Mac-Stand.
-2. **Später iPhone ↔ Windows-PC**: Der Windows-PC bekommt denselben Stand – obwohl er mit dem Mac nie direkt verbunden war.
+1. **Mac ↔ iPhone**: the iPhone adopts the current Mac state.
+2. **Later iPhone ↔ Windows PC**: the Windows PC receives the same state – even though it was never directly connected to the Mac.
 
-Es gibt kein Gerätelimit: Mac, iPhone und Windows-PC können gleichzeitig verbunden sein. Der Abgleich läuft automatisch, solange Toolbox auf den Geräten geöffnet ist und alle im selben WLAN sind.
+There is no device limit: Mac, iPhone and Windows PC can be connected at the same time. Syncing runs automatically as long as Toolbox is open on the devices and all are on the same Wi-Fi network.
 
-Damit der Abgleich klappt:
+For the sync to work:
 
-- gleiches WLAN, ohne Client-Isolation (Gäste-WLANs blockieren sich oft gegenseitig)
-- Toolbox auf allen Geräten geöffnet
-- iPhone/iPad: lokales Netzwerk erlauben (`NSLocalNetworkUsageDescription` und `NSBonjourServices` in `Toolbox/Info.plist`)
-- Mac: Netzwerk-Client/-Server in den Entitlements (bereits gesetzt: `com.apple.security.network.client`/`server`)
-- Windows: beim ersten Start die Firewall-Freigabe für **Private Netzwerke** erteilen; das Netzwerkprofil muss „Privat“ sein
-- Windows kann kein AWDL/Peer-to-Peer; ein gemeinsamer Router bzw. ein WLAN ist nötig
-- Die Geräte sollten ihre Uhrzeit automatisch synchronisieren (Standard bei macOS, iOS und Windows), weil der Abgleich Zeitstempel vergleicht
+- same Wi-Fi network, without client isolation (guest networks often block each other)
+- Toolbox open on all devices
+- iPhone/iPad: allow the local network (`NSLocalNetworkUsageDescription` and `NSBonjourServices` in `Toolbox/Info.plist`)
+- Mac: network client/server in the entitlements (already set: `com.apple.security.network.client`/`server`)
+- Windows: grant the firewall permission for **Private networks** on first launch; the network profile must be “Private”
+- Windows cannot do AWDL/peer-to-peer; a shared router or Wi-Fi network is required
+- The devices should synchronize their clocks automatically (the default on macOS, iOS and Windows) because the sync compares timestamps
 
-Trage in den Einstellungen unter **Lokales Netzwerk** auf allen Geräten denselben Namen ein. Nur Geräte mit diesem Namen verbinden sich und gleichen sich ab; Groß-/Kleinschreibung und überzählige Leerzeichen spielen keine Rolle. Ohne Namen läuft kein Abgleich. In den Einstellungen zeigen alle Fassungen außerdem den Status und die verbundenen Geräte; „Jetzt suchen“ startet die Suche neu. Der Abgleich ist für das lokale Netz gedacht und nicht verschlüsselt – es werden keine Daten an Dritte gesendet.
+Enter the same name on all devices in Settings under **Local network**. Only devices with that name connect and sync with each other; upper/lower case and extra spaces do not matter. Without a name, no sync runs. In Settings all versions also show the status and the connected devices; “Search now” restarts the search. The sync is intended for the local network and is not encrypted – no data is sent to third parties.
 
-Umsetzung: `Toolbox/LocalSync.swift` (Apple) und `windows/src/sync.js` (Windows). Beide verwenden dasselbe Zeilen-JSON-Format mit Swift-Referenzzeitstempeln.
+Implementation: `Toolbox/LocalSync.swift` (Apple) and `windows/src/sync.js` (Windows). Both use the same line-based JSON format with Swift reference timestamps.
 
-## Datenschutz
+## Privacy
 
-Toolbox speichert alle Daten lokal und gleicht sie nur im lokalen WLAN ab.
+Toolbox stores all data locally and syncs it only over the local Wi-Fi network.
 Details: [`PRIVACY.md`](PRIVACY.md).
 
-## Lizenz
+## License
 
-Toolbox ist **kein Open-Source-Projekt**. Der Quellcode ist öffentlich einsehbar, die Rechte bleiben aber beim Autor: alle Rechte vorbehalten.
+Toolbox is **not an open-source project**. The source code is publicly readable, but the rights remain with the author: all rights reserved.
 
-- **Erlaubt** ist: den Code auf GitHub ansehen und dort forken, Änderungen als Pull Request vorschlagen, die App unentgeltlich nutzen.
-- **Nicht erlaubt** ist: den Code oder Teile davon kopieren, verändern und weitergeben, in eigene Apps oder Produkte einbauen oder eigene Fassungen der App veröffentlichen.
+- **Allowed:** view and fork the code on GitHub, propose changes as a pull request, use the app free of charge.
+- **Not allowed:** copy, modify and redistribute the code or parts of it, embed it in your own apps or products, or publish your own builds of the app.
 
-Der vollständige Text steht in [`LICENSE`](LICENSE), die Regeln für Beiträge in [`CONTRIBUTING.md`](CONTRIBUTING.md). Änderungen werden ausschließlich nach Review durch den Maintainer übernommen.
+The full text is in [`LICENSE`](LICENSE), the contribution rules in [`CONTRIBUTING.md`](CONTRIBUTING.md). Changes are merged exclusively after review by the maintainer.

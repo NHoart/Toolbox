@@ -34,13 +34,13 @@ struct WaterTodayView: View {
                 .padding(.top, 24)
 
                 HStack(spacing: 16) {
-                    addButton(title: "Glas", icon: "drop.fill", ml: WaterStore.glassML)
-                    addButton(title: "Flasche", icon: "waterbottle.fill", ml: WaterStore.bottleML)
+                    addButton(title: "Glass", icon: "drop.fill", ml: WaterStore.glassML)
+                    addButton(title: "Bottle", icon: "waterbottle.fill", ml: WaterStore.bottleML)
                 }
                 .padding(.horizontal)
 
                 Button { showCustomAmount = true } label: {
-                    Label("Eigene Menge", systemImage: "plus.circle.fill")
+                    Label("Custom amount", systemImage: "plus.circle.fill")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
@@ -56,7 +56,7 @@ struct WaterTodayView: View {
 
                 Spacer()
             }
-            .navigationTitle("Wassertracker")
+            .navigationTitle("Water tracker")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button { showSettings = true } label: { Image(systemName: "gearshape") }
@@ -77,7 +77,7 @@ struct WaterTodayView: View {
         }
     }
 
-    private func addButton(title: String, icon: String, ml: Int) -> some View {
+    private func addButton(title: LocalizedStringKey, icon: String, ml: Int) -> some View {
         Button { add(ml) } label: {
             VStack(spacing: 6) {
                 Image(systemName: icon).font(.title)
@@ -91,9 +91,9 @@ struct WaterTodayView: View {
         .buttonStyle(.plain)
     }
 
-    private var undoTitle: String {
-        guard let undoAmount else { return "Rückgängig" }
-        return "Rückgängig (\(undoAmount) ml)"
+    private var undoTitle: LocalizedStringKey {
+        guard let undoAmount else { return "Undo" }
+        return "Undo (\(undoAmount) ml)"
     }
 
     private func add(_ ml: Int) {
@@ -166,17 +166,17 @@ struct CustomAmountSheet: View {
                     }
                     .padding(.vertical, 4)
                 } header: {
-                    Text("Eigene Menge")
+                    Text("Custom amount")
                 } footer: {
                     if !text.isEmpty && amount == nil {
-                        Text("Bitte eine Zahl zwischen 1 und 10000 eingeben.")
+                        Text("Enter a number between 1 and 10000.")
                             .foregroundStyle(.red)
                     } else {
-                        Text("Zahl eintippen oder eine Schnellauswahl verwenden.")
+                        Text("Type a number or use a quick pick.")
                     }
                 }
 
-                Section("Schnellauswahl") {
+                Section("Quick select") {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 70), spacing: 8)], spacing: 8) {
                         ForEach(Self.presets, id: \.self) { preset in
                             Button("\(preset) ml") { text = String(preset) }
@@ -187,14 +187,14 @@ struct CustomAmountSheet: View {
                     .padding(.vertical, 4)
                 }
             }
-            .navigationTitle("Menge eintragen")
+            .navigationTitle("Enter amount")
             .inlineNavigationTitle()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Hinzufügen") { submit() }
+                    Button("Add") { submit() }
                         .disabled(amount == nil)
                 }
             }

@@ -4,7 +4,7 @@ import AppIntents
 
 // Interaktive Buttons im Widget (iOS 17+)
 struct AddGlassIntent: AppIntent {
-    static var title: LocalizedStringResource = "Glas trinken"
+    static var title: LocalizedStringResource = "Drink a glass"
     func perform() async throws -> some IntentResult {
         WaterStore.add(WaterStore.glassML)
         return .result()
@@ -12,7 +12,7 @@ struct AddGlassIntent: AppIntent {
 }
 
 struct AddBottleIntent: AppIntent {
-    static var title: LocalizedStringResource = "Flasche trinken"
+    static var title: LocalizedStringResource = "Drink a bottle"
     func perform() async throws -> some IntentResult {
         WaterStore.add(WaterStore.bottleML)
         return .result()
@@ -67,8 +67,8 @@ struct WaterWidgetView: View {
             HStack(spacing: 16) {
                 ring
                 VStack(spacing: 8) {
-                    Button(intent: AddGlassIntent()) { label("Glas", entry.glass) }
-                    Button(intent: AddBottleIntent()) { label("Flasche", entry.bottle) }
+                    Button(intent: AddGlassIntent()) { label("Glass", entry.glass) }
+                    Button(intent: AddBottleIntent()) { label("Bottle", entry.bottle) }
                 }
                 .buttonStyle(.plain)
             }
@@ -111,8 +111,8 @@ struct WassertrackerWidget: Widget {
             WaterWidgetView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("Wassertracker")
-        .description("Zeigt deinen Tagesfortschritt und lässt dich Wasser eintragen.")
+        .configurationDisplayName("Water tracker")
+        .description("Shows your daily progress and lets you log water.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

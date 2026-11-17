@@ -1,4 +1,4 @@
-name: Swift-Windows-Sync-Interop
+name: Swift-Windows sync interop
 
 on:
   push:
@@ -11,33 +11,33 @@ permissions:
 
 jobs:
   interop:
-    name: Drei echte Peers (Swift A/B + Windows)
+    name: Three real peers (Swift A/B + Windows)
     runs-on: macos-latest
     steps:
-      - name: Repository auschecken
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Node einrichten
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: Swift-Sync-Harness bauen
+      - name: Build Swift sync harness
         run: bash scripts/build-sync-harness.sh
 
-      - name: Drei-Peer-Interop testen
+      - name: Test three-peer interop
         run: node scripts/test-swift-windows-interop.js
 
   ios-build:
-    name: iOS-App-Target bauen
-    # macos-latest hat derzeit Xcode 26.6 und kann das neue project.xcproj
-    # (Xcode 27) nicht öffnen. Der xcode-27-Runner wird auch für die DMG genutzt.
+    name: Build iOS app target
+    # macos-latest currently ships Xcode 26.6 and cannot open the new
+    # project.xcproj format (Xcode 27). The xcode-27 runner is also used for the DMG.
     runs-on: xcode-27
     steps:
-      - name: Repository auschecken
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Neueste installierte Xcode-Version auswählen
+      - name: Select the newest installed Xcode version
         run: |
           set -euo pipefail
           latest="$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1 || true)"
@@ -46,7 +46,7 @@ jobs:
           fi
           xcodebuild -version
 
-      - name: iOS-Build
+      - name: iOS build
         run: >-
           xcodebuild -quiet -project Toolbox.xcodeproj -scheme Toolbox
           -configuration Debug -destination 'generic/platform=iOS'

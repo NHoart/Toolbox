@@ -536,8 +536,43 @@
   }
 
   const supported = ['de', 'en', 'es', 'fr']
+  // Englisch ist der Rückfall für alle Sprachen, die die App nicht kennt.
+  const defaultLanguage = 'en'
   const localeTags = { de: 'de-DE', en: 'en-US', es: 'es-ES', fr: 'fr-FR' }
   const STORAGE_KEY = 'toolbox.locale'
+
+  function baseLanguage(tag) {
+    return String(tag || '').trim().toLowerCase().split('-')[0]
+  }
+
+  /// Nimmt den vollständigen Region-Tag (z. B. en-GB), solange er gültig ist und
+  /// zur gewählten Sprache passt; sonst den Standard-Tag der Sprache.
+  function canonicalTag(tag, language) {
+    const raw = String(tag || '').trim()
+    if (raw) {
+      try {
+        const [canonical] = Intl.getCanonicalLocales(raw)
+        if (canonical && baseLanguage(canonical) === language) return canonical
+      } catch {
+        // Ungültiger Tag – unten auf den Standard der Sprache zurückfallen.
+      }
+    }
+    return localeTags[language]
+  }
+
+  function preferredTags() {
+    if (typeof navigator === 'undefined') return []
+    const tags = []
+    if (Array.isArray(navigator.languages)) {
+      for (const tag of navigator.languages) {
+        if (typeof tag === 'string' && tag.trim()) tags.push(tag)
+      }
+    }
+    if (typeof navigator.language === 'string' && navigator.language.trim()) {
+      tags.push(navigator.language)
+    }
+    return tags
+  }
 
   function readStoredPreference() {
     if (typeof localStorage === 'undefined') return null
@@ -564,20 +599,37 @@
     }
   }
 
-  function detectLocale() {
-    if (typeof window !== 'undefined' && window.__toolboxLocale) {
-      const forced = String(window.__toolboxLocale).toLowerCase().split('-')[0]
-      if (supported.includes(forced)) return forced
+  /// Reine Auswahllogik, damit sie ohne Browser geprüft werden kann.
+  /// Reihenfolge: erzwungene Sprache, gespeicherte Wahl, Systemsprachen,
+  /// danach Englisch.
+  function chooseLocale({ forced, stored, preferred } = {}) {
+    const forcedLanguage = baseLanguage(forced)
+    if (forced && supported.includes(forcedLanguage)) {
+      return { language: forcedLanguage, localeTag: canonicalTag(forced, forcedLanguage) }
     }
-    const stored = readStoredPreference()
-    if (stored) return stored
-    if (typeof navigator === 'undefined') return 'de'
-    const raw = (navigator.languages && navigator.languages[0]) || navigator.language || 'de'
-    const language = String(raw).toLowerCase().split('-')[0]
-    return supported.includes(language) ? language : 'de'
+    if (stored && supported.includes(stored)) {
+      return { language: stored, localeTag: localeTags[stored] }
+    }
+    for (const tag of preferred || []) {
+      const language = baseLanguage(tag)
+      if (supported.includes(language)) {
+        return { language, localeTag: canonicalTag(tag, language) }
+      }
+    }
+    return { language: defaultLanguage, localeTag: localeTags[defaultLanguage] }
   }
 
-  const locale = detectLocale()
+  function resolveLocale() {
+    const forced = typeof window !== 'undefined' ? window.__toolboxLocale : undefined
+    return chooseLocale({
+      forced,
+      stored: readStoredPreference(),
+      preferred: preferredTags(),
+    })
+  }
+
+  const resolved = resolveLocale()
+  const locale = resolved.language
   const preference = readStoredPreference() || 'system'
 
   function interpolate(template, variables) {
@@ -646,10 +698,14 @@
   return {
     dictionaries,
     supported,
+    defaultLanguage,
     locale,
+    language: locale,
     preference,
-    localeTag: localeTags[locale],
+    localeTag: resolved.localeTag,
     localeTags,
+    chooseLocale,
+    baseLanguage,
     setLocalePreference,
     t,
     translateFor,

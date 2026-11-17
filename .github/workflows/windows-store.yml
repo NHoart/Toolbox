@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       test_build:
-        description: "Testbau mit Platzhalter-Identität (nicht im Store einreichbar)"
+        description: "Test build with placeholder identity (cannot be submitted to the Store)"
         type: boolean
         default: false
 
@@ -20,32 +20,32 @@ concurrency:
 
 jobs:
   appx:
-    name: AppX bauen
+    name: Build AppX
     runs-on: windows-latest
     defaults:
       run:
         working-directory: windows
     steps:
-      - name: Repository auschecken
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Node einrichten
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
           cache-dependency-path: windows/package-lock.json
 
-      - name: Abhängigkeiten installieren
+      - name: Install dependencies
         run: npm ci
 
       - name: Tests
         run: npm test
 
-      - name: Headless-Sync-Smoke-Test
+      - name: Headless sync smoke test
         run: npm run smoke:sync
 
-      - name: Store-Identität prüfen
+      - name: Check Store identity
         id: store
         shell: pwsh
         run: |
@@ -53,19 +53,19 @@ jobs:
           $placeholder = (-not $config.identityName) -or $config.identityName.StartsWith('TODO') -or (-not $config.publisher) -or $config.publisher.StartsWith('CN=TODO')
           $testBuild = "${{ inputs.test_build }}" -eq "true"
           if ($placeholder -and -not $testBuild) {
-            Write-Host "::warning::Microsoft-Store-Identität noch nicht konfiguriert. Trage windows/store/store.config.json aus Partner Center ein; der AppX-Build wird übersprungen."
+            Write-Host "::warning::Microsoft Store identity not configured yet. Fill in windows/store/store.config.json from Partner Center; the AppX build is skipped."
             "build=false" >> $env:GITHUB_OUTPUT
           } else {
             "build=true" >> $env:GITHUB_OUTPUT
           }
 
-      - name: Store-Konfiguration prüfen
+      - name: Check Store configuration
         if: steps.store.outputs.build == 'true'
         env:
           ALLOW_STORE_PLACEHOLDER: ${{ inputs.test_build && '1' || '' }}
         run: npm run dist:store -- --check
 
-      - name: AppX bauen
+      - name: Build AppX
         if: steps.store.outputs.build == 'true'
         shell: pwsh
         env:
@@ -74,31 +74,31 @@ jobs:
           npm run dist:store 2>&1 | Tee-Object -FilePath store-build.log
           $exitCode = $LASTEXITCODE
           if ($exitCode -ne 0) {
-            "### AppX-Build fehlgeschlagen" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+            "### AppX build failed" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
             Get-Content store-build.log -Tail 120 | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
             $details = ((Get-Content store-build.log -Tail 12 | Where-Object { $_.Trim() }) -join ' | ') -replace '%', '%25'
-            Write-Output "::error title=AppX-Build fehlgeschlagen::$details"
+            Write-Output "::error title=AppX build failed::$details"
             exit $exitCode
           }
 
-      - name: AppX-Manifest prüfen
+      - name: Verify AppX manifest
         if: steps.store.outputs.build == 'true'
         shell: pwsh
         run: pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/verify-appx.ps1
 
-      - name: SHA256-Prüfsumme erzeugen
+      - name: Generate SHA256 checksum
         if: steps.store.outputs.build == 'true'
         shell: pwsh
         run: |
           $appx = @(Get-ChildItem -LiteralPath dist -Filter '*.appx' -File)
           if ($appx.Count -ne 1) {
-            throw "Genau eine .appx in dist erwartet, gefunden: $($appx.Count)."
+            throw "Expected exactly one .appx in dist, found: $($appx.Count)."
           }
           $hash = (Get-FileHash -LiteralPath $appx[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $($appx[0].Name)" | Set-Content -LiteralPath (Join-Path 'dist' 'SHA256SUMS.txt') -Encoding ascii
           Write-Host "SHA256: $hash"
 
-      - name: AppX als Workflow-Artefakt hochladen
+      - name: Upload AppX as workflow artifact
         if: steps.store.outputs.build == 'true'
         uses: actions/upload-artifact@v4
         with:

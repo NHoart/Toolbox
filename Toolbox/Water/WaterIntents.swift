@@ -12,17 +12,17 @@ enum WaterPortion: String, AppEnum {
     case threeBottles
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation {
-        TypeDisplayRepresentation(name: "Menge")
+        TypeDisplayRepresentation(name: "Amount")
     }
 
     static var caseDisplayRepresentations: [WaterPortion: DisplayRepresentation] {
         [
-            .glass: DisplayRepresentation(title: "ein Glas", synonyms: ["Glas", "Glas Wasser"]),
-            .twoGlasses: DisplayRepresentation(title: "zwei Gläser", synonyms: ["2 Gläser", "zwei Gläser Wasser"]),
-            .threeGlasses: DisplayRepresentation(title: "drei Gläser", synonyms: ["3 Gläser", "drei Gläser Wasser"]),
-            .bottle: DisplayRepresentation(title: "eine Flasche", synonyms: ["Flasche", "Flasche Wasser"]),
-            .twoBottles: DisplayRepresentation(title: "zwei Flaschen", synonyms: ["2 Flaschen", "zwei Flaschen Wasser"]),
-            .threeBottles: DisplayRepresentation(title: "drei Flaschen", synonyms: ["3 Flaschen", "drei Flaschen Wasser"]),
+            .glass: DisplayRepresentation(title: "a glass", synonyms: ["Glass", "glass of water"]),
+            .twoGlasses: DisplayRepresentation(title: "two glasses", synonyms: ["2 glasses", "two glasses of water"]),
+            .threeGlasses: DisplayRepresentation(title: "three glasses", synonyms: ["3 glasses", "three glasses of water"]),
+            .bottle: DisplayRepresentation(title: "a bottle", synonyms: ["Bottle", "bottle of water"]),
+            .twoBottles: DisplayRepresentation(title: "two bottles", synonyms: ["2 bottles", "two bottles of water"]),
+            .threeBottles: DisplayRepresentation(title: "three bottles", synonyms: ["3 bottles", "three bottles of water"]),
         ]
     }
 
@@ -46,29 +46,29 @@ enum WaterPortion: String, AppEnum {
     /// Gesamtmenge in ml.
     var milliliters: Int { unitML * count }
 
-    /// Text für die Siri-Antwort, z. B. "zwei Gläser".
+    /// Text für die Siri-Antwort, z. B. "two glasses".
     var label: String {
         switch self {
-        case .glass: "ein Glas"
-        case .twoGlasses: "zwei Gläser"
-        case .threeGlasses: "drei Gläser"
-        case .bottle: "eine Flasche"
-        case .twoBottles: "zwei Flaschen"
-        case .threeBottles: "drei Flaschen"
+        case .glass: "a glass"
+        case .twoGlasses: "two glasses"
+        case .threeGlasses: "three glasses"
+        case .bottle: "a bottle"
+        case .twoBottles: "two bottles"
+        case .threeBottles: "three bottles"
         }
     }
 }
 
 /// Trägt Gläser oder Flaschen Wasser ein.
 struct LogWaterIntent: AppIntent {
-    static var title: LocalizedStringResource = "Wasser eintragen"
-    static var description = IntentDescription("Trägt Gläser oder Flaschen Wasser in den Wassertracker ein.")
+    static var title: LocalizedStringResource = "Log water"
+    static var description = IntentDescription("Logs glasses or bottles of water in the water tracker.")
 
-    @Parameter(title: "Menge", requestValueDialog: "Was hast du getrunken?")
+    @Parameter(title: "Amount", requestValueDialog: "What did you drink?")
     var portion: WaterPortion
 
     static var parameterSummary: some ParameterSummary {
-        Summary("\(\.$portion) eintragen")
+        Summary("Log \(\.$portion)")
     }
 
     func perform() async throws -> some IntentResult & ProvidesDialog {
@@ -77,7 +77,7 @@ struct LogWaterIntent: AppIntent {
 
         let total = await WaterStore.todayML
         let goal = await WaterStore.goalML
-        return .result(dialog: "\(portion.label) eingetragen (\(ml) Milliliter). Heute: \(total) von \(goal) Millilitern.")
+        return .result(dialog: "Logged \(portion.label) (\(ml) millilitres). Today: \(total) of \(goal) millilitres.")
     }
 }
 
@@ -87,11 +87,11 @@ struct WaterShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: LogWaterIntent(),
             phrases: [
-                "Ich habe \(\.$portion) getrunken in \(.applicationName)",
+                "I drank \(\.$portion) in \(.applicationName)",
                 "\(.applicationName) ich habe \(\.$portion) getrunken",
-                "Trage \(\.$portion) Wasser in \(.applicationName) ein",
+                "Log \(\.$portion) of water in \(.applicationName)",
             ],
-            shortTitle: "Wasser eintragen",
+            shortTitle: "Log water",
             systemImageName: "drop.fill"
         )
     }

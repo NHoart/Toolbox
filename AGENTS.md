@@ -1,12 +1,13 @@
-# Projektanweisungen
+# Project Instructions
 
-## Commit-Messages
+## Commit messages
 
-Keine Attribution in Commit-Messages. Also **kein** "🤖 Generated with Codebuff",
-**keine** `Co-Authored-By: Codebuff <noreply@codebuff.com>`-Zeile und keine
-vergleichbaren AI-/Tool-Hinweise oder Trailer anhängen. Die Commit-Message endet
-mit ihrer letzten inhaltlichen Zeile.
+No attribution in commit messages. That means **no** "🤖 Generated with
+Codebuff", **no** `Co-Authored-By: Codebuff <noreply@codebuff.com>` line and no
+comparable AI/tool notes or trailers. The commit message ends with its last
+content line.
 
-## Sprache
+## Language
 
-Commit-Messages, Release-Notes und Dokumentation auf Deutsch.
+Commit messages, release notes and documentation in **English**. The app UI is
+localized in German, English, Spanish and French with English as the fallback.

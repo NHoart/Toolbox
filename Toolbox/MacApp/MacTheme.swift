@@ -154,7 +154,7 @@ struct MacCardHeader: View {
 struct MacMetricTile: View {
     let title: LocalizedStringKey
     let value: String
-    var detail: String?
+    var detail: LocalizedStringKey?
     let systemImage: String
     let tint: Color
 
@@ -315,7 +315,7 @@ struct MacPageHeader: View {
             }
             .buttonStyle(.glass)
             .buttonBorderShape(.circle)
-            .help("Einstellungen")
+            .help("Settings")
         }
     }
 }
