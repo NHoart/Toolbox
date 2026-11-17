@@ -202,7 +202,7 @@ function findOldWaterLine(lines, total) {
       const saved = message.counter?.savedCounters
       if (!Array.isArray(saved) || saved.length === 0) return line
     } catch {
-      // Keine gültige Zeile; weitersuchen.
+      // Not a valid line; keep looking.
     }
   }
   return null
@@ -308,7 +308,7 @@ async function main() {
     await waitForStatus(mac.harness, status => status.peers === 1, 'Mac erkennt Windows')
     await waitForStatus(iphone.harness, status => status.peers === 1, 'iPhone erkennt Windows')
 
-    // A (Mac) legt v1 an. B (iPhone) schreibt nichts und muss den Stand über Windows erhalten.
+    // A (Mac) creates v1. B (iPhone) writes nothing and must receive the state through Windows.
     mac.child.stdin.write('setsizes 250 600 2400\n')
     mac.child.stdin.write('addwater 400\n')
     mac.child.stdin.write('increment\n')
@@ -330,7 +330,7 @@ async function main() {
     assert.ok(Math.abs(windows.waterUpdatedAt() - macV1.waterUpdatedAt) < 0.001)
     assert.ok(Math.abs(iphoneV1.waterUpdatedAt - macV1.waterUpdatedAt) < 0.001)
 
-    // A ändert auf v2. Windows und B müssen den neueren Stand erhalten.
+    // A changes to v2. Windows and B must receive the newer state.
     await delay(200)
     mac.child.stdin.write('addwater 200\n')
 
@@ -350,11 +350,11 @@ async function main() {
       'iPhone erhält v2 über Windows'
     )
 
-    // Die echte Wire-Zeile von A-v2 für den späteren verspäteten Replay aufzeichnen.
+    // Record the real wire line of A-v2 for the late replay later.
     const oldV2Line = findOldWaterLine(proxy.captured, 600)
     assert.ok(oldV2Line, 'Die echte A-v2-Wire-Zeile muss aufgezeichnet sein')
 
-    // A speichert einen Zählerstand; Windows und B müssen das Feld übernehmen.
+    // A saves a counter value; Windows and B must adopt the field.
     mac.child.stdin.write('savecounter Interop-Stand\n')
     await waitFor(
       () => windows.savedCounters.length === 1
@@ -368,7 +368,7 @@ async function main() {
     )
     assert.equal(iphoneSaved.water, 600)
 
-    // Windows erzeugt den neueren Stand; beide Swift-Clients müssen ihn erhalten.
+    // Windows produces the newer state; both Swift clients must receive it.
     await delay(200)
     windows.addWater(250)
     windows.increment()
@@ -387,8 +387,8 @@ async function main() {
     assert.ok(Math.abs(macAfterWindows.waterUpdatedAt - windows.waterUpdatedAt()) < 0.001)
     assert.ok(Math.abs(iphoneAfterWindows.waterUpdatedAt - windows.waterUpdatedAt()) < 0.001)
 
-    // Die alte, echte A-v2-Zeile verspätet an Windows und B schicken.
-    // Beide müssen sie wegen des neueren Wasser- und Zähler-Zeitstempels verwerfen.
+    // Send the old real A-v2 line to Windows and B with a delay.
+    // Both must discard it because of the newer water and counter timestamps.
     await replayWireLine(sync.port, oldV2Line)
     await replayWireLine(iphonePort, oldV2Line)
     await delay(800)
@@ -410,14 +410,14 @@ async function main() {
     assert.ok(Math.abs(macAfterReplay.waterUpdatedAt - windows.waterUpdatedAt()) < 0.001)
     assert.ok(Math.abs(iphoneAfterReplay.waterUpdatedAt - windows.waterUpdatedAt()) < 0.001)
 
-    // Alle drei Clients müssen denselben vollständigen Snapshot haben.
+    // All three clients must have the same complete snapshot.
     const macSnapshot = await mac.harness.snapshot()
     const iphoneSnapshot = await iphone.harness.snapshot()
     const winWaterSnapshot = windows.waterSnapshot()
     const winCounterSnapshot = windows.counterSnapshot()
 
-    // Explizite Sollwerte: Die Gleichheit allein würde ein gemeinsames
-    // Weglassen eines Feldes nicht erkennen.
+    // Explicit expected values: equality alone would not catch a field
+    // that all of them omit.
     assert.equal(winWaterSnapshot.total, 850, 'Gesamtmenge')
     assert.deepEqual(
       winWaterSnapshot.history,
@@ -437,8 +437,8 @@ async function main() {
     assertSnapshot('Mac', macSnapshot, winWaterSnapshot, winCounterSnapshot)
     assertSnapshot('iPhone', iphoneSnapshot, winWaterSnapshot, winCounterSnapshot)
 
-    // Ein Gerät mit anderem Gruppennamen bleibt außen vor, auch wenn es
-    // direkt erreichbar ist und wir bereits Daten haben.
+    // A device with a different group name stays out, even if it
+    // is directly reachable and we already have data.
     sync.connectTo('127.0.0.1', outsiderPort)
     await delay(800)
     const outsiderStatus = await outsider.harness.status()

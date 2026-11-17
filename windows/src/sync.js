@@ -20,16 +20,16 @@ const CONNECT_TIMEOUT_MS = 8_000
 const MAX_BUFFER_BYTES = 2 * 1024 * 1024
 
 /**
- * Abgleich im lokalen WLAN – kompatibel zur Apple-App (LocalSync.swift).
+ * Sync over the local Wi-Fi – compatible with the Apple app (LocalSync.swift).
  *
- * Jedes Gerät öffnet einen TCP-Port, bietet ihn per Bonjour als
- * `_toolboxsync._tcp` an und sucht gleichzeitig nach anderen Geräten.
- * Angeboten und verbunden wird nur der gemeinsame Gruppenname (`syncName`);
- * Geräte ohne passenden Namen tauschen keine Stände aus. Beim
- * Verbindungsaufbau schicken beide Seiten ihren vollständigen Stand;
- * pro Bereich gewinnt der zuletzt geänderte Stand. Übernommene Stände werden
- * an die übrigen Verbindungen weitergegeben – so erreichen Änderungen auch
- * ein drittes Gerät, das mit dem Ursprung nicht direkt verbunden ist.
+ * Every device opens a TCP port, advertises it via Bonjour as
+ * `_toolboxsync._tcp` and searches for other devices at the same time.
+ * Only the shared group name (`syncName`) is advertised and connected;
+ * devices without a matching name exchange no states. When
+ * a connection is established both sides send their complete state;
+ * per area the most recently changed state wins. Adopted states are
+ * passed on to the remaining connections – so changes also reach
+ * a third device that is not directly connected to the origin.
  */
 class SyncService extends EventEmitter {
   constructor({
@@ -164,7 +164,7 @@ class SyncService extends EventEmitter {
       try {
         this.browser.update()
       } catch {
-        // Browser wurde gerade ersetzt.
+        // The browser was just replaced.
       }
     }
 
@@ -304,7 +304,7 @@ class SyncService extends EventEmitter {
       this.drop(id)
     })
 
-    // Beide Seiten schicken ihren Stand sofort nach dem Verbinden.
+    // Both sides send their state immediately after connecting.
     this.sendState(conn)
     return conn
   }
@@ -363,14 +363,14 @@ class SyncService extends EventEmitter {
     const message = decodeMessageLine(line)
     if (!message) return
 
-    // Nur Geräte mit demselben Gruppennamen dürfen Daten austauschen.
-    // Geräte ohne Namen (ältere Stände) werden ebenfalls abgewiesen.
+    // Only devices with the same group name may exchange data.
+    // Devices without a name (older states) are rejected as well.
     if (!sameSyncName(this.store.syncName, message.syncName)) {
       this.drop(conn.id)
       return
     }
 
-    // Eigene Ankündigung über den eigenen Listener ignorieren.
+    // Ignore our own announcement through our own listener.
     if (message.deviceID === this.store.deviceId) {
       this.drop(conn.id)
       return
@@ -406,8 +406,8 @@ class SyncService extends EventEmitter {
     if (applied) {
       this.lastSync = this.now()
       this.emitStatus()
-      // An die anderen Geräte weiterreichen, damit auch sie den neuen Stand
-      // bekommen, wenn sie mit dem Ursprung nicht direkt verbunden sind.
+      // Pass it on to the other devices so they receive the new state
+      // as well when they are not directly connected to the origin.
       this.broadcast(conn.id)
     }
 
@@ -445,13 +445,13 @@ class SyncService extends EventEmitter {
     if (this.heartbeatTimer) return
     this.heartbeatTimer = setInterval(() => {
       this.heartbeatTicks += 1
-      // Vollständiger Stand als Lebenszeichen und Nachzügler-Abgleich.
+      // Complete state as a heartbeat and catch-up sync.
       this.broadcast()
       if (this.browser && this.heartbeatTicks % 3 === 0) {
         try {
           this.browser.update()
         } catch {
-          // Ignorieren, der nächste Heartbeat sucht erneut.
+          // Ignore it, the next heartbeat searches again.
         }
       }
       if (this.heartbeatTicks % 3 === 0) {
@@ -506,8 +506,8 @@ class SyncService extends EventEmitter {
         host: this.mdnsHost(),
         txt: { id: this.store.deviceId, syncname: this.serviceSyncName },
         disableIPv6: true,
-        // Der Name gehört zu genau diesem Rechner; das erspart die 750-ms-Probe
-        // und verhindert, dass ein veralteter Eintrag das Veröffentlichen blockiert.
+        // The name belongs to exactly this machine; that saves the 750 ms probe
+        // and prevents a stale entry from blocking publication.
         probe: false,
       })
 
@@ -563,7 +563,7 @@ class SyncService extends EventEmitter {
   onServiceUp(service) {
     if (!service || !service.port) return
 
-    // Nur Geräte derselben Gruppe werden überhaupt verbunden.
+    // Only devices of the same group are connected at all.
     if (!sameSyncName(this.store.syncName, service.txt && service.txt.syncname)) return
 
     const announcedId = service.txt && service.txt.id
@@ -643,7 +643,7 @@ class SyncService extends EventEmitter {
     if (!force && signature === this.networkSignature) return
     this.networkSignature = signature
 
-    // Alte Verbindungen gehören meist zum alten Netz – verwerfen und neu suchen.
+    // Old connections usually belong to the old network – drop them and search again.
     for (const id of [...this.connections.keys()]) this.drop(id)
     this.knownServices.clear()
 
@@ -652,8 +652,8 @@ class SyncService extends EventEmitter {
       return
     }
 
-    // Neu veröffentlichen, damit die A-Records die aktuelle IP enthalten.
-    // Der Bonjour-Socket bleibt bestehen; nur die Records werden ersetzt.
+    // Publish again so the A records contain the current IP.
+    // The Bonjour socket stays; only the records are replaced.
     if (this.service) {
       try {
         this.service.stop()
@@ -667,7 +667,7 @@ class SyncService extends EventEmitter {
       try {
         this.browser.update()
       } catch {
-        // Der nächste Heartbeat sucht erneut.
+        // The next heartbeat searches again.
       }
     }
     this.emitStatus()

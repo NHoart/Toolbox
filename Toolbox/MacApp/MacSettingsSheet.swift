@@ -1,8 +1,8 @@
 #if os(macOS)
 import SwiftUI
 
-/// Einstellungen der Mac-App im Glas-Look.
-/// Die iPhone-Version behält ihre eigene `SettingsView`.
+/// Settings of the Mac app in the glass look.
+/// The iPhone version keeps its own `SettingsView`.
 struct MacSettingsSheet: View {
     @Environment(\.dismiss) private var dismiss
 
@@ -49,7 +49,7 @@ struct MacSettingsSheet: View {
         .onChange(of: lanEnabled) { _, enabled in LocalSync.shared.setEnabled(enabled) }
     }
 
-    // MARK: - Kopf und Fuß
+    // MARK: - Header and footer
 
     private var header: some View {
         HStack(alignment: .top) {

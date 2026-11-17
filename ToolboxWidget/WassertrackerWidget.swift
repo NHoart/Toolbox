@@ -2,7 +2,7 @@ import WidgetKit
 import SwiftUI
 import AppIntents
 
-// Interaktive Buttons im Widget (iOS 17+)
+// Interactive buttons in the widget (iOS 17+)
 struct AddGlassIntent: AppIntent {
     static var title: LocalizedStringResource = "Drink a glass"
     func perform() async throws -> some IntentResult {
@@ -38,10 +38,10 @@ struct WaterProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<WaterEntry>) -> Void) {
         let now = Date()
-        // Nächster Update um Mitternacht, damit der Tageszähler zurückspringt
+        // Next update at midnight so the daily counter resets
         let midnight = Calendar.current.startOfDay(for: now.addingTimeInterval(86400))
-        // Zusätzlich regelmäßig neu laden: Im Hintergrund eingetragene Mengen (z. B. per Siri)
-        // kommen so auch dann an, wenn WidgetKit eine Reload-Anfrage gedrosselt hat.
+        // Also reload regularly: amounts logged in the background (e.g. via Siri)
+        // arrive this way even when WidgetKit throttled a reload request.
         let nextRefresh = min(now.addingTimeInterval(30 * 60), midnight)
         completion(Timeline(entries: [current()], policy: .after(nextRefresh)))
     }

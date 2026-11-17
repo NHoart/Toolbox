@@ -3,7 +3,7 @@ import SwiftUI
 
 // MARK: - Farben
 
-/// Farbwelt der Mac-App: kräftige Wassertöne, die durch die Glasflächen scheinen.
+/// Color world of the Mac app: strong water tones shining through the glass surfaces.
 enum MacTheme {
     static let accent = Color(red: 0.16, green: 0.55, blue: 1.00)
     static let cyan = Color(red: 0.20, green: 0.83, blue: 0.93)
@@ -27,7 +27,7 @@ enum MacTheme {
 
 // MARK: - Hintergrund
 
-/// Weicher, farbiger Hintergrund, der den Glasflächen Tiefe gibt.
+/// Soft, colorful background that gives the glass surfaces depth.
 struct MacBackdrop: View {
     @Environment(\.colorScheme) private var scheme
 
@@ -65,17 +65,17 @@ struct MacBackdrop: View {
     }
 }
 
-// MARK: - Oberflächen
+// MARK: - Surfaces
 
 enum MacSurface {
-    /// Dezente Fläche für Felder und Zeilen.
+    /// Subtle surface for fields and rows.
     static func fill(_ scheme: ColorScheme, _ strong: Bool = false) -> Color {
         scheme == .dark
         ? Color.white.opacity(strong ? 0.12 : 0.07)
         : Color.black.opacity(strong ? 0.08 : 0.045)
     }
 
-    /// Helle Kante, die die Glasflächen wie Licht reflektieren lässt.
+    /// Light edge that lets the glass surfaces reflect like light.
     static func stroke(_ scheme: ColorScheme) -> Color {
         scheme == .dark ? Color.white.opacity(0.14) : Color.white.opacity(0.60)
     }
@@ -119,7 +119,7 @@ private struct MacGlassCardModifier: ViewModifier {
 }
 
 extension View {
-    /// Bringt die View auf eine Liquid-Glass-Karte.
+    /// Puts the view onto a Liquid Glass card.
     func macGlassCard(cornerRadius: CGFloat = 26,
                       tint: Color? = nil,
                       padding: CGFloat = 22) -> some View {
@@ -129,7 +129,7 @@ extension View {
 
 // MARK: - Bausteine
 
-/// Kleine, gesperrte Überschrift innerhalb einer Karte.
+/// Small, tracked heading inside a card.
 struct MacCardHeader: View {
     let title: LocalizedStringKey
     var systemImage: String?
@@ -191,7 +191,7 @@ struct MacMetricTile: View {
     }
 }
 
-/// Eingabefeld im Glas-Look.
+/// Input field in the glass look.
 struct MacField: View {
     let title: LocalizedStringKey
     let placeholder: String
@@ -244,7 +244,7 @@ struct MacField: View {
     }
 }
 
-/// Großer runder Aktionsknopf (Plus/Minus im Zähler).
+/// Large round action button (plus/minus in the counter).
 struct MacCircleButton: View {
     let systemImage: String
     let tint: Color
@@ -279,7 +279,7 @@ struct MacCircleButton: View {
     }
 }
 
-/// Kurzer Skalierungseffekt beim Drücken.
+/// Short scale effect when pressed.
 struct MacPressButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -290,7 +290,7 @@ struct MacPressButtonStyle: ButtonStyle {
 
 // MARK: - Seitenrahmen
 
-/// Kopfzeile jeder Mac-Seite mit großem Titel und Einstellungen-Zahnrad.
+/// Header of every Mac page with a large title and the settings gear.
 struct MacPageHeader: View {
     let title: LocalizedStringKey
     let subtitle: LocalizedStringKey
@@ -320,7 +320,7 @@ struct MacPageHeader: View {
     }
 }
 
-/// Scrollbarer Seitenrahmen mit einheitlichem Rand und Kopfzeile.
+/// Scrollable page frame with a consistent border and header.
 struct MacPage<Content: View>: View {
     let title: LocalizedStringKey
     let subtitle: LocalizedStringKey

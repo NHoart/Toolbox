@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-/// Ein benannter, gespeicherter Zählerstand
+/// A named, saved counter value
 struct SavedCounter: Identifiable, Codable, Equatable {
     var id = UUID()
     var name: String
@@ -15,15 +15,15 @@ struct SavedCounter: Identifiable, Codable, Equatable {
     var date = Date()
 }
 
-/// State Management für den Zähler inkl. gespeicherter Stände
+/// State management for the counter including saved values
 final class CounterStore: ObservableObject {
     @Published private(set) var count: Int
     @Published private(set) var savedCounters: [SavedCounter] = []
 
-    /// Wie oft der Zähler pro Sekunde automatisch hochzählt.
+    /// How many times per second the counter counts up automatically.
     @Published var incrementsPerSecond: Int {
         didSet {
-            // Beim Übernehmen eines fremden Stands nicht wieder hochladen.
+            // Do not upload again while adopting a foreign state.
             guard !isApplyingRemote else { return }
             let clamped = min(Self.maxRate, max(Self.minRate, incrementsPerSecond))
             guard clamped == incrementsPerSecond else {
@@ -35,7 +35,7 @@ final class CounterStore: ObservableObject {
         }
     }
 
-    /// Läuft der automatische Zähler gerade?
+    /// Is the automatic counter running right now?
     @Published private(set) var isAutoRunning = false
 
     static let minRate = 1
@@ -46,7 +46,7 @@ final class CounterStore: ObservableObject {
     private static let rateKey = "counter_rate"
     private static let updatedKey = "sync.counter.updatedAt"
 
-    /// Der headless Interop-Test isoliert seine Daten über eine eigene Suite.
+    /// The headless interop test isolates its data through its own suite.
     private static let defaults: UserDefaults = {
         if let testSuite = ProcessInfo.processInfo.environment["TOOLBOX_DEFAULTS_SUITE"],
            let suite = UserDefaults(suiteName: testSuite) {
@@ -64,11 +64,11 @@ final class CounterStore: ObservableObject {
     private var lastAutoSound = Date.distantPast
     private let tickInterval: TimeInterval = 1.0 / 30.0
 
-    /// Wird gerade ein Stand von einem anderen Gerät eingespielt?
+    /// Is a state from another device being applied right now?
     private var isApplyingRemote = false
     private var remoteObserver: NSObjectProtocol?
 
-    /// Damit der Ton bei hohen Raten nicht zum Dauerpiepen wird.
+    /// So the sound does not turn into a permanent beep at high rates.
     private static let maxAutoSoundsPerSecond = 10.0
 
     private var historyEnabled: Bool {
@@ -86,7 +86,7 @@ final class CounterStore: ObservableObject {
             savedCounters = decoded
         }
 
-        // Ein Stand von einem anderen Gerät wurde übernommen.
+        // A state from another device was adopted.
         remoteObserver = NotificationCenter.default.addObserver(forName: .syncDidApplyRemote,
                                                                 object: nil,
                                                                 queue: .main) { [weak self] _ in
@@ -95,7 +95,7 @@ final class CounterStore: ObservableObject {
         }
     }
 
-    // MARK: - Zähler
+    // MARK: - Counter
 
     func increment() {
         setCount(count + 1)
@@ -126,7 +126,7 @@ final class CounterStore: ObservableObject {
         HapticManager.shared.impactOccurred()
     }
 
-    /// Setzt den Wert und merkt sich den alten für Undo
+    /// Sets the value and remembers the old one for undo
     private func setCount(_ newValue: Int) {
         if historyEnabled {
             history.append(count)
@@ -136,9 +136,9 @@ final class CounterStore: ObservableObject {
         Self.markChanged()
     }
 
-    // MARK: - Automatisches Zählen
+    // MARK: - Automatic counting
 
-    /// Startet das automatische Hochzählen mit der eingestellten Rate.
+    /// Starts automatic counting up at the configured rate.
     func startAutoCounting() {
         guard !isAutoRunning else { return }
 
@@ -157,7 +157,7 @@ final class CounterStore: ObservableObject {
         HapticManager.shared.impactOccurred()
     }
 
-    /// Stoppt das automatische Hochzählen.
+    /// Stops automatic counting up.
     func stopAutoCounting() {
         guard isAutoRunning else { return }
 
@@ -168,7 +168,7 @@ final class CounterStore: ObservableObject {
         Self.defaults.set(count, forKey: Self.countKey)
         Self.markChanged()
 
-        // Undo macht den kompletten automatischen Lauf rückgängig.
+        // Undo reverts the entire automatic run.
         if count != countAtAutoStart, historyEnabled {
             history.append(countAtAutoStart)
         }
@@ -179,8 +179,8 @@ final class CounterStore: ObservableObject {
     private func autoTick() {
         guard isAutoRunning else { return }
 
-        // Die Rate wird gleichmäßig über die Ticks verteilt, damit auch
-        // hohe Raten nicht mehr Timer-Aufrufe als nötig benötigen.
+        // The rate is spread evenly across the ticks so that even
+        // high rates need no more timer calls than necessary.
         autoRemainder += Double(incrementsPerSecond) * tickInterval
         let steps = Int(autoRemainder)
         guard steps > 0 else { return }
@@ -189,7 +189,7 @@ final class CounterStore: ObservableObject {
 
         playAutoSoundIfNeeded()
 
-        // Nicht bei jedem Tick in die UserDefaults schreiben.
+        // Do not write to UserDefaults on every tick.
         let now = Date()
         if now.timeIntervalSince(lastAutoPersist) >= 0.5 {
             lastAutoPersist = now
@@ -197,7 +197,7 @@ final class CounterStore: ObservableObject {
         }
     }
 
-    /// Spielt den Hochzähl-Ton, höchstens `maxAutoSoundsPerSecond` mal pro Sekunde.
+    /// Plays the count-up sound, at most `maxAutoSoundsPerSecond` times per second.
     private func playAutoSoundIfNeeded() {
         let now = Date()
         guard now.timeIntervalSince(lastAutoSound) >= 1.0 / Self.maxAutoSoundsPerSecond else { return }
@@ -212,9 +212,9 @@ final class CounterStore: ObservableObject {
         }
     }
 
-    // MARK: - Gespeicherte Stände
+    // MARK: - Saved counters
 
-    /// Speichert den aktuellen Stand unter dem angegebenen Namen
+    /// Saves the current value under the given name
     func saveCurrent(name: String) {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         let finalName = trimmed.isEmpty
@@ -226,7 +226,7 @@ final class CounterStore: ObservableObject {
         HapticManager.shared.impactOccurred()
     }
 
-    /// Lädt einen gespeicherten Stand als aktuellen Zählerstand
+    /// Loads a saved value as the current counter value
     func load(_ saved: SavedCounter) {
         stopAutoCounting()
         setCount(saved.value)
@@ -245,9 +245,9 @@ final class CounterStore: ObservableObject {
         Self.markChanged()
     }
 
-    // MARK: - Synchronisation mit anderen Geräten
+    // MARK: - Sync with other devices
 
-    /// Zeitpunkt der letzten lokalen Änderung (für den Abgleich).
+    /// Time of the last local change (for syncing).
     static var updatedAt: Date? {
         get { Self.defaults.object(forKey: updatedKey) as? Date }
         set {
@@ -259,7 +259,7 @@ final class CounterStore: ObservableObject {
         }
     }
 
-    /// Gibt es überhaupt Daten, die sich zu synchronisieren lohnen?
+    /// Is there any data worth syncing at all?
     static var hasData: Bool {
         if Self.defaults.integer(forKey: countKey) != 0 { return true }
         guard let data = Self.defaults.data(forKey: savedKey),
@@ -269,7 +269,7 @@ final class CounterStore: ObservableObject {
         return !decoded.isEmpty
     }
 
-    /// Stand, der zwischen den Geräten ausgetauscht wird.
+    /// State that is exchanged between the devices.
     struct SyncSnapshot: Codable {
         var count: Int
         var savedCounters: [SavedCounter]
@@ -292,13 +292,13 @@ final class CounterStore: ObservableObject {
             count: Self.defaults.integer(forKey: countKey),
             savedCounters: stored,
             rate: storedRate > 0 ? min(maxRate, storedRate) : 5,
-            // Ohne Änderungszeit gilt der Stand als alt: Ein frisches Gerät
-            // soll damit keinen neueren Stand der anderen überschreiben.
+            // Without a change time the state counts as old: a fresh device
+            // must not overwrite a newer state of the others with it.
             updatedAt: updatedAt ?? .distantPast
         )
     }
 
-    /// Übernimmt einen fremden Stand, ohne ihn als neue lokale Änderung zu markieren.
+    /// Adopts a foreign state without marking it as a new local change.
     static func applySync(_ snapshot: SyncSnapshot) {
         let defaults = Self.defaults
         defaults.set(snapshot.count, forKey: countKey)
@@ -309,15 +309,15 @@ final class CounterStore: ObservableObject {
         updatedAt = snapshot.updatedAt
     }
 
-    /// Merkt die Änderung für den Abgleich im WLAN vor.
+    /// Notes the change for the Wi-Fi sync.
     private static func markChanged() {
         updatedAt = Date()
         NotificationCenter.default.post(name: .counterStoreDidChange, object: nil)
     }
 
-    /// Übernimmt geänderte Werte aus den UserDefaults in die veröffentlichten Eigenschaften.
+    /// Takes changed values from UserDefaults into the published properties.
     private func reloadFromDefaults() {
-        // Laufenden Auto-Zähler anhalten, ohne den alten Stand erneut zu speichern.
+        // Stop a running auto counter without saving the old state again.
         if isAutoRunning {
             isAutoRunning = false
             autoTimer?.invalidate()
@@ -342,6 +342,6 @@ final class CounterStore: ObservableObject {
 }
 
 extension Notification.Name {
-    /// Lokaler Zählerstand wurde geändert (LocalSync verteilt ihn).
+    /// The local counter value changed (LocalSync distributes it).
     static let counterStoreDidChange = Notification.Name("Toolbox.counterStoreDidChange")
 }

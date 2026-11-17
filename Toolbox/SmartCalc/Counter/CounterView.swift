@@ -14,7 +14,7 @@ struct CounterView: View {
     @State private var showSaveAlert = false
     @State private var newName = ""
 
-    /// Im Querformat (iPhone) steht nur wenig Höhe zur Verfügung.
+    /// In landscape (iPhone) only little height is available.
     private var isCompactHeight: Bool {
         verticalSizeClass == .compact
     }
@@ -89,7 +89,7 @@ struct CounterView: View {
 
     // MARK: - Layouts
 
-    /// Hochformat: Zähler mittig, Buttons darunter.
+    /// Portrait: counter centered, buttons below.
     private var regularLayout: some View {
         VStack(spacing: 0) {
             Spacer()
@@ -117,7 +117,7 @@ struct CounterView: View {
         }
     }
 
-    /// Querformat: riesiger Plus-Button mittig, kleiner Zähler seitlich.
+    /// Landscape: huge plus button centered, small counter beside it.
     private var compactLayout: some View {
         HStack(spacing: 12) {
             VStack(spacing: 12) {
@@ -153,9 +153,9 @@ struct CounterView: View {
                        value: store.count)
     }
 
-    // MARK: - Auto-Zähler
+    // MARK: - Auto counter
 
-    /// Schritte pro Sekunde einstellen und den Auto-Zähler starten/stoppen.
+    /// Set steps per second and start/stop the auto counter.
     private var autoPanel: some View {
         HStack(spacing: 14) {
             rateStepButton(symbol: "minus",
@@ -194,7 +194,7 @@ struct CounterView: View {
         )
     }
 
-    /// Kompakte Rate-Einstellung für das Querformat.
+    /// Compact rate setting for landscape.
     private var compactRateRow: some View {
         HStack(spacing: 8) {
             rateStepButton(symbol: "minus",
@@ -330,7 +330,7 @@ struct CounterView: View {
     }
 }
 
-/// Kleiner Skalierungseffekt beim Drücken
+/// Small scale effect when pressed
 struct PressScaleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

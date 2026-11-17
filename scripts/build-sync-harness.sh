@@ -4,8 +4,8 @@ cd "$(dirname "$0")/.."
 
 mkdir -p build/sync-harness
 
-# Kompiliert den echten Apple-Sync-Code (LocalSync + echte Stores) als CLI.
-# Haptik/Ton werden durch No-Ops ersetzt; das Wire-Format bleibt unverändert.
+# Compiles the real Apple sync code (LocalSync + real stores) as a CLI.
+# Haptics/sound are replaced by no-ops; the wire format stays unchanged.
 swiftc -swift-version 5 -O \
   -framework Network \
   -framework Combine \

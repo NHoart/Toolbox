@@ -1,7 +1,7 @@
 'use strict'
 
-// Diagnose: verbindet sich mit der ersten gefundenen Toolbox-App und zeigt
-// nur die Struktur der Sync-Nachricht (keine Mengen oder Namen von Ständen).
+// Diagnostics: connects to the first Toolbox app found and shows
+// only the structure of the sync message (no amounts or names of counters).
 //   node scripts/inspect-peer.js
 
 const net = require('node:net')

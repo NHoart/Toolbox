@@ -2,13 +2,13 @@
 //  LocalSync.swift
 //  Toolbox
 //
-//  Gleicht Wassertracker und Zähler direkt im lokalen WLAN ab – ohne Server,
-//  ohne Konto und ohne Apple-Developer-Account.
+//  Syncs water tracker and counter directly over the local Wi-Fi – without a
+//  server, without an account and without an Apple Developer account.
 //
-//  Jedes Gerät bietet einen Bonjour-Dienst (`_toolboxsync._tcp`) an und sucht
-//  gleichzeitig nach anderen Geräten. Beim Verbindungsaufbau schicken beide
-//  Seiten ihren Stand; pro Bereich gewinnt der zuletzt geänderte Stand.
-//  Änderungen werden danach an alle offenen Verbindungen verteilt.
+//  Every device advertises a Bonjour service (`_toolboxsync._tcp`) and searches
+//  for other devices at the same time. When a connection is established both
+//  sides send their state; per area the most recently changed state wins.
+//  Afterwards changes are distributed to all open connections.
 //
 
 import Foundation
@@ -19,18 +19,18 @@ import WidgetKit
 final class LocalSync: ObservableObject {
     static let shared = LocalSync()
 
-    /// Schalter aus den Einstellungen (Standard: an).
+    /// Switch from Settings (default: on).
     static let enabledKey = "lan_sync_enabled"
 
     static let serviceType = "_toolboxsync._tcp"
 
-    /// TXT-Schlüssel, über den Geräte ihren Gruppennamen ankündigen, bevor
-    /// eine Verbindung aufgebaut wird.
+    /// TXT key through which devices announce their group name before
+    /// a connection is established.
     static let syncNameTXTKey = "syncname"
 
     @Published private(set) var isEnabled: Bool
-    /// Gemeinsamer Name der Sync-Gruppe. Nur Geräte mit demselben Namen
-    /// gleichen sich ab; ohne Namen läuft kein Abgleich.
+    /// Shared name of the sync group. Only devices with the same name
+    /// sync with each other; without a name no sync runs.
     @Published private(set) var syncName: String
     @Published private(set) var peerCount = 0
     @Published private(set) var lastSync: Date?
@@ -50,8 +50,8 @@ final class LocalSync: ObservableObject {
         static let lastSync = "lan_sync_lastSync"
     }
 
-    /// Der headless Interop-Test isoliert auch Geräte-ID und Sync-Schalter
-    /// pro Prozess über eine eigene Suite. Die App nutzt weiterhin standard.
+    /// The headless interop test also isolates device ID and sync switch
+    /// per process through its own suite. The app still uses the standard one.
     private static let defaults: UserDefaults = {
         if let testSuite = ProcessInfo.processInfo.environment["TOOLBOX_DEFAULTS_SUITE"],
            let suite = UserDefaults(suiteName: testSuite) {
@@ -63,14 +63,14 @@ final class LocalSync: ObservableObject {
     private let queue = DispatchQueue(label: "Toolbox.LocalSync")
     private let parameters: NWParameters = {
         let parameters = NWParameters.tcp
-        // Erlaubt auch direkte Verbindungen ohne Router (AWDL/Peer-to-Peer).
+        // Also allows direct connections without a router (AWDL/peer-to-peer).
         parameters.includePeerToPeer = true
         return parameters
     }()
 
     private var listener: NWListener?
 
-    /// Port des lokalen Listeners – nur für den headless Interop-Test.
+    /// Port of the local listener – only for the headless interop test.
     var listeningPort: UInt16? { listener?.port?.rawValue }
 
     private var browser: NWBrowser?
@@ -78,12 +78,12 @@ final class LocalSync: ObservableObject {
     private var lastResults: Set<NWBrowser.Result> = []
     private var connections: [UUID: NWConnection] = [:]
     private var connectionEndpoints: [UUID: String] = [:]
-    /// Geräte-ID je Verbindung, damit dasselbe Gerät nicht doppelt zählt.
+    /// Device ID per connection so the same device is not counted twice.
     private var connectionPeers: [UUID: String] = [:]
     private var usedEndpoints: [String: UUID] = [:]
     private var observerTokens: [NSObjectProtocol] = []
     private var pendingBroadcast: DispatchWorkItem?
-    /// Entprellt den Neustart, während der Name getippt wird.
+    /// Debounces the restart while the name is being typed.
     private var nameRestart: DispatchWorkItem?
 
     private let deviceID: String
@@ -106,7 +106,7 @@ final class LocalSync: ObservableObject {
 
     // MARK: - Steuerung
 
-    /// Ohne Namen ist der Abgleich aus.
+    /// Without a name the sync is off.
     var hasSyncName: Bool { !Self.trimmedName(syncName).isEmpty }
 
     func start() {
@@ -116,8 +116,8 @@ final class LocalSync: ObservableObject {
         observeChanges()
     }
 
-    /// Startet nur den TCP-Listener ohne Bonjour/Browser – für den headless
-    /// Interop-Test. Im normalen App-Betrieb bleibt `start()` unverändert.
+    /// Starts only the TCP listener without Bonjour/browsing – for the headless
+    /// interop test. In normal app operation `start()` stays unchanged.
     func startInteropListener() {
         guard isEnabled, hasSyncName else { return }
         if listener == nil { startListener(advertise: false) }
@@ -137,10 +137,10 @@ final class LocalSync: ObservableObject {
         }
     }
 
-    /// Setzt den gemeinsamen Namen der Sync-Gruppe. Änderungen werden kurz
-    /// entprellt, damit nicht jeder Tastendruck die Suche neu startet.
-    /// `restart: false` nur für den headless Interop-Test, der den Listener
-    /// selbst und ohne Bonjour startet.
+    /// Sets the shared name of the sync group. Changes are
+    /// debounced briefly so not every keystroke restarts the search.
+    /// `restart: false` only for the headless interop test, which starts the listener
+    /// itself and without Bonjour.
     func setSyncName(_ name: String, restart: Bool = true) {
         let value = String(name.prefix(60))
         guard value != syncName else { return }
@@ -168,26 +168,26 @@ final class LocalSync: ObservableObject {
     private func restartAfterNameChange() {
         nameRestart = nil
         guard isEnabled, hasSyncName else { return }
-        // Beim ersten Eintragen des Namens läuft noch nichts – dann direkt starten.
+        // Nothing runs yet on the first entry of the name – start right away then.
         if listener != nil || browser != nil { stop() }
         start()
         broadcast()
     }
 
-    /// Sucht erneut nach Geräten und schickt den aktuellen Stand an offene Verbindungen.
+    /// Searches for devices again and sends the current state to open connections.
     func syncNow() {
         guard isEnabled, hasSyncName else { return }
         start()
 
-        // Immer frisch suchen: Bei mehreren Geräten kann die alte Suche einen
-        // Peer verlieren, während die übrigen verbunden bleiben.
+        // Always search afresh: with several devices the old search can
+        // lose a peer while the others stay connected.
         browser?.cancel()
         browser = nil
         startBrowser()
 
-        // Fehlende Peers auch dann erneut verbinden, wenn noch andere Geräte
-        // verbunden sind – sonst bleibt eine einzelne verlorene Verbindung
-        // unentdeckt, solange peerCount > 0 ist.
+        // Reconnect missing peers even when other devices are
+        // still connected – otherwise a single lost connection stays
+        // undetected as long as peerCount > 0.
         connect(to: lastResults)
         broadcast()
     }
@@ -248,15 +248,15 @@ final class LocalSync: ObservableObject {
             listener.start(queue: queue)
             self.listener = listener
         } catch {
-            // Port nicht verfügbar o. Ä. – beim nächsten Aktivieren erneut versuchen.
+            // Port unavailable or similar – try again on the next activation.
             listener = nil
         }
     }
 
     private func startBrowser() {
-        // Nur mit `bonjourWithTXTRecord` liefert Network.framework die
-        // TXT-Daten. Mit `.bonjour` wäre `result.metadata` immer `.none`,
-        // wodurch der Namensfilter alle Geräte verwerfen würde.
+        // Only with `bonjourWithTXTRecord` does Network.framework deliver the
+        // TXT data. With `.bonjour`, `result.metadata` would always be `.none`,
+        // so the name filter would discard every device.
         let browser = NWBrowser(
             for: .bonjourWithTXTRecord(type: Self.serviceType, domain: nil),
             using: parameters
@@ -265,7 +265,7 @@ final class LocalSync: ObservableObject {
         browser.stateUpdateHandler = { [weak self, weak browser] state in
             guard let self, let browser else { return }
             Task { @MainActor in
-                // Ein bereits ersetzter Browser darf den neuen nicht zurücksetzen.
+                // An already replaced browser must not reset the new one.
                 guard self.browser === browser else { return }
                 switch state {
                 case .ready:
@@ -282,9 +282,9 @@ final class LocalSync: ObservableObject {
         browser.browseResultsChangedHandler = { [weak self, weak browser] results, _ in
             guard let self, let browser else { return }
             Task { @MainActor in
-                // Ergebnisse einer alten, bereits ersetzten Suche ignorieren.
+                // Ignore results from an old, already replaced search.
                 guard self.browser === browser else { return }
-                // Nur Geräte mit demselben Gruppennamen werden verbunden.
+                // Only devices with the same group name are connected.
                 let matching = results.filter { Self.result($0, matches: self.syncName) }
                 self.lastResults = matching
                 self.connect(to: matching)
@@ -372,9 +372,9 @@ final class LocalSync: ObservableObject {
     // MARK: - Abgleich
 
     private func sendState(on connection: NWConnection) {
-        // Ein Gerät ohne eigene Daten und ohne Änderungszeit schickt keinen
-        // leeren Stand mit – sonst könnte es den Stand anderer Geräte als
-        // „neuer“ überschreiben.
+        // A device without its own data and without a change time sends no
+        // empty state – otherwise it could overwrite the state of other devices as
+        // "newer".
         let water = (WaterStore.hasData || WaterStore.updatedAt != nil)
             ? WaterStore.syncSnapshot() : nil
         let counter = (CounterStore.hasData || CounterStore.updatedAt != nil)
@@ -396,14 +396,14 @@ final class LocalSync: ObservableObject {
     private func handle(_ data: Data, from id: UUID) {
         guard let message = try? JSONDecoder().decode(Message.self, from: data) else { return }
 
-        // Nur Geräte mit demselben Gruppennamen dürfen Daten austauschen.
-        // Geräte ohne Namen (ältere Stände) werden ebenfalls abgewiesen.
+        // Only devices with the same group name may exchange data.
+        // Devices without a name (older states) are rejected as well.
         guard let remoteName = message.syncName, Self.sameName(remoteName, syncName) else {
             drop(id)
             return
         }
 
-        // Eigene Ankündigung über den eigenen Listener ignorieren.
+        // Ignore our own announcement through our own listener.
         guard message.deviceID != deviceID else {
             drop(id)
             return
@@ -417,8 +417,8 @@ final class LocalSync: ObservableObject {
 
         if let remote = message.water {
             let local = WaterStore.updatedAt
-            // Ohne eigenen Stand (frisches Gerät) immer übernehmen, sonst
-            // gewinnt der zuletzt geänderte Stand.
+            // Without our own state (fresh device) always adopt, otherwise
+            // the most recently changed state wins.
             if local == nil || remote.updatedAt > (local ?? .distantPast) {
                 WaterStore.applySync(remote)
                 WidgetCenter.shared.reloadAllTimelines()
@@ -441,13 +441,13 @@ final class LocalSync: ObservableObject {
         if applied {
             NotificationCenter.default.post(name: .syncDidApplyRemote, object: nil)
             markSynced()
-            // Übernommenen Stand an die anderen offenen Verbindungen
-            // weiterreichen, damit auch Geräte ihn bekommen, die mit dem
-            // Ursprung nicht direkt verbunden sind.
+            // Pass the adopted state on to the other open
+            // connections so devices that are not directly connected
+            // to the origin receive it too.
             broadcast(excluding: id)
         }
 
-        // Das andere Gerät hat einen älteren Stand: unseren nachschicken.
+        // The other device has an older state: send ours afterwards.
         if peerIsBehind, let connection = connections[id] {
             sendState(on: connection)
         }
@@ -497,8 +497,8 @@ final class LocalSync: ObservableObject {
 
     // MARK: - Namensvergleich
 
-    /// Vergleichsform des Gruppennamens: Leerraum und Groß-/Kleinschreibung
-    /// spielen keine Rolle, damit „Familie“ auf allen Geräten gleich zählt.
+    /// Comparison form of the group name: whitespace and upper/lower case
+    /// do not matter, so "Family" counts the same on all devices.
     private static func normalizedName(_ name: String) -> String {
         name.split(whereSeparator: { $0.isWhitespace })
             .joined(separator: " ")
@@ -514,7 +514,7 @@ final class LocalSync: ObservableObject {
         name.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    /// Prüft die Bonjour-Ankündigung, bevor eine Verbindung aufgebaut wird.
+    /// Checks the Bonjour announcement before a connection is established.
     private static func result(_ result: NWBrowser.Result, matches name: String) -> Bool {
         guard case let .bonjour(txt) = result.metadata,
               let advertised = txt[syncNameTXTKey] else {
@@ -525,6 +525,6 @@ final class LocalSync: ObservableObject {
 }
 
 extension Notification.Name {
-    /// Ein neuer Stand von einem anderen Gerät wurde übernommen.
+    /// A new state from another device was adopted.
     static let syncDidApplyRemote = Notification.Name("Toolbox.syncDidApplyRemote")
 }

@@ -113,7 +113,7 @@ struct WaterTodayView: View {
 }
 
 private extension View {
-    /// Zahlentastatur gibt es nur auf iOS.
+    /// A number keyboard only exists on iOS.
     @ViewBuilder
     func numberKeyboard() -> some View {
         #if os(iOS)
@@ -123,7 +123,7 @@ private extension View {
         #endif
     }
 
-    /// Kompakter Navigationstitel ist eine iOS-Darstellung.
+    /// The compact navigation title is an iOS presentation.
     @ViewBuilder
     func inlineNavigationTitle() -> some View {
         #if os(iOS)
@@ -134,7 +134,7 @@ private extension View {
     }
 }
 
-/// Sheet zum Eintragen einer frei wählbaren Menge in Millilitern.
+/// Sheet for entering a freely selectable amount in milliliters.
 struct CustomAmountSheet: View {
     @Environment(\.dismiss) private var dismiss
     let onAdd: (Int) -> Void

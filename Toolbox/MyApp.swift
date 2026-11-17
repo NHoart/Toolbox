@@ -4,11 +4,11 @@ import SwiftUI
     @State private var selectedTab: AppTab = .today
 
     init() {
-        // Abgleich mit dem anderen Gerät im lokalen WLAN starten.
+        // Start the sync with the other device on the local network.
         LocalSync.shared.start()
 
         #if os(macOS)
-        // Reste abgebrochener Update-Läufe im Hintergrund entfernen.
+        // Clean up leftovers of interrupted update runs in the background.
         Task.detached(priority: .utility) {
             UpdateInstaller.cleanUpStaleData()
         }
@@ -29,7 +29,7 @@ import SwiftUI
                 }
             }
 
-            // Im Menü „Ansicht“: Tabs ohne Maus über ⌘1–⌘6 wechseln.
+            // In the View menu: switch tabs with ⌘1–⌘6 without the mouse.
             CommandGroup(before: .sidebar) {
                 ForEach(AppTab.allCases) { tab in
                     Button(tab.title) {

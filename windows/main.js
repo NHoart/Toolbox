@@ -68,8 +68,8 @@ function bootstrap() {
   sync.start()
   scheduleDayRollover()
 
-  // Höchstens einmal pro Tag; Fehler bleiben im Hintergrund. Die Store-Fassung
-  // wird vom Microsoft Store aktualisiert und darf electron-updater nicht nutzen.
+  // At most once per day; errors stay in the background. The Store build
+  // is updated by the Microsoft Store and must not use electron-updater.
   if (!storeManaged) void updater.checkIfNeeded()
 
   powerMonitor.on('resume', () => sync.handleNetworkChange())
@@ -81,9 +81,9 @@ function bootstrap() {
   })
 }
 
-/// Beim ersten Start der Store-Fassung den Stand der EXE-Installation
-/// übernehmen. Die Paketierung ändert den userData-Pfad; ohne diese Kopie
-/// würde die Store-App mit leeren Daten beginnen.
+/// Take over the state of the EXE installation on the first start of the Store build
+/// Packaging changes the userData path; without this copy
+/// the Store app would start with empty data.
 function migrateLegacyStoreData() {
   if (!process.windowsStore) return
 
@@ -151,7 +151,7 @@ function applyTitleBarOverlay() {
   try {
     mainWindow.setTitleBarOverlay(titleBarOverlayOptions())
   } catch {
-    // Overlay ist auf dieser Windows-Version nicht verfügbar.
+    // The overlay is not available on this Windows version.
   }
 }
 
@@ -201,7 +201,7 @@ function scheduleDayRollover() {
 
   clearTimeout(dayRolloverTimer)
   dayRolloverTimer = setTimeout(() => {
-    // Der Tageszähler springt um Mitternacht zurück.
+    // The daily counter resets at midnight.
     notifyState(true)
     scheduleDayRollover()
   }, delay)

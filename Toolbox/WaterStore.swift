@@ -1,13 +1,13 @@
 import Foundation
 import WidgetKit
 
-// WICHTIG: Diese Datei muss in BEIDEN Targets sein (App + Widget).
-// Die App Group muss in beiden Targets unter "Signing & Capabilities" angehakt sein.
+// IMPORTANT: This file must be in BOTH targets (app + widget).
+// The App Group must be enabled in both targets under "Signing & Capabilities".
 enum WaterStore {
     static let appGroupID = "group.com.noahsapps.Wassertracker"
 
     static let defaults: UserDefaults = {
-        // Der headless Interop-Test isoliert seine Daten über eine eigene Suite.
+        // The headless interop test isolates its data through its own suite.
         if let testSuite = ProcessInfo.processInfo.environment["TOOLBOX_DEFAULTS_SUITE"],
            let d = UserDefaults(suiteName: testSuite) {
             return d
@@ -30,7 +30,7 @@ enum WaterStore {
         static let updatedAt = "sync.water.updatedAt"
     }
 
-    /// Ein Tag im Verlauf (für HistoryView).
+    /// One day in the history (for HistoryView).
     struct DayEntry: Identifiable {
         let date: Date
         let ml: Int
@@ -58,7 +58,7 @@ enum WaterStore {
         set { defaults.set(newValue, forKey: Key.history) }
     }
 
-    /// Heutige Menge; setzt sich automatisch bei neuem Tag auf 0.
+    /// Today's amount; resets to 0 automatically on a new day.
     static var todayML: Int {
         let today = dayString(Date())
         if let v = history[today] { return v }
@@ -66,8 +66,8 @@ enum WaterStore {
         return defaults.integer(forKey: Key.total)
     }
 
-    /// Zuletzt hinzugefügte Mengen (jüngste zuletzt) für "Undo".
-    /// Liegt in der App Group, damit auch im Widget eingetragene Mengen erfasst werden.
+    /// Recently added amounts (newest last) for "Undo".
+    /// Lives in the App Group so amounts logged in the widget are recorded too.
     private static var recentAdds: [Int] {
         get {
             guard defaults.string(forKey: Key.day) == dayString(Date()) else { return [] }
@@ -76,7 +76,7 @@ enum WaterStore {
         set { defaults.set(newValue, forKey: Key.recentAdds) }
     }
 
-    /// Menge, die als Nächstes rückgängig gemacht würde (nil = nichts zum Rückgängigmachen).
+    /// Amount that would be undone next (nil = nothing to undo).
     static var lastAddedML: Int? { recentAdds.last }
 
     static func add(_ ml: Int) {
@@ -84,12 +84,12 @@ enum WaterStore {
         guard ml > 0 else { return }
         var stack = recentAdds
         stack.append(ml)
-        // Nur die letzten 50 Einträge behalten
+        // Keep only the last 50 entries
         if stack.count > 50 { stack.removeFirst(stack.count - 50) }
         recentAdds = stack
     }
 
-    /// Entfernt die zuletzt hinzugefügte Menge (Glas oder Flasche) und gibt sie zurück.
+    /// Removes the most recently added amount (glass or bottle) and returns it.
     @discardableResult
     static func undoLast() -> Int? {
         var stack = recentAdds
@@ -104,7 +104,7 @@ enum WaterStore {
         setToday(0)
     }
 
-    /// Letzte n Tage (älteste zuerst, heute zuletzt), Tage ohne Eintrag = 0.
+    /// Last n days (oldest first, today last), days without an entry = 0.
     static func lastDays(_ n: Int) -> [DayEntry] {
         let cal = Calendar.current
         let start = cal.startOfDay(for: Date())
@@ -125,7 +125,7 @@ enum WaterStore {
 
         var h = history
         h[today] = value
-        // Alte Einträge (> 400 Tage) aufräumen
+        // Clean up old entries (> 400 days)
         if let cutoff = Calendar.current.date(byAdding: .day, value: -400, to: Date()) {
             let cutoffKey = dayString(cutoff)
             h = h.filter { $0.key >= cutoffKey }
@@ -141,9 +141,9 @@ enum WaterStore {
         return f.string(from: date)
     }
 
-    // MARK: - Synchronisation mit anderen Geräten
+    // MARK: - Sync with other devices
 
-    /// Zeitpunkt der letzten lokalen Änderung (für den Abgleich).
+    /// Time of the last local change (for syncing).
     static var updatedAt: Date? {
         get { defaults.object(forKey: Key.updatedAt) as? Date }
         set {
@@ -155,12 +155,12 @@ enum WaterStore {
         }
     }
 
-    /// Gibt es überhaupt Daten, die sich zu synchronisieren lohnen?
+    /// Is there any data worth syncing at all?
     static var hasData: Bool {
         !history.isEmpty || defaults.integer(forKey: Key.total) != 0
     }
 
-    /// Stand, der zwischen den Geräten ausgetauscht wird.
+    /// State that is exchanged between the devices.
     struct SyncSnapshot: Codable {
         var history: [String: Int]
         var recentAdds: [Int]
@@ -181,13 +181,13 @@ enum WaterStore {
             glass: glassML,
             bottle: bottleML,
             goal: goalML,
-            // Ohne Änderungszeit gilt der Stand als alt: Ein frisches Gerät
-            // soll damit keinen neueren Stand der anderen überschreiben.
+            // Without a change time the state counts as old: a fresh device
+            // must not overwrite a newer state of the others with it.
             updatedAt: updatedAt ?? .distantPast
         )
     }
 
-    /// Übernimmt einen fremden Stand, ohne ihn als neue lokale Änderung zu markieren.
+    /// Adopts a foreign state without marking it as a new local change.
     static func applySync(_ snapshot: SyncSnapshot) {
         var h = snapshot.history
         if let cutoff = Calendar.current.date(byAdding: .day, value: -400, to: Date()) {
@@ -210,7 +210,7 @@ enum WaterStore {
         updatedAt = snapshot.updatedAt
     }
 
-    /// Merkt eine lokale Änderung vor, lädt das Widget nach und stößt den Abgleich an.
+    /// Notes a local change, refreshes the widget and triggers the sync.
     static func markChanged() {
         updatedAt = Date()
         WidgetCenter.shared.reloadAllTimelines()
@@ -219,6 +219,6 @@ enum WaterStore {
 }
 
 extension Notification.Name {
-    /// Lokale Wassertracker-Daten wurden geändert (LocalSync verteilt sie).
+    /// Local water tracker data changed (LocalSync distributes it).
     static let waterStoreDidChange = Notification.Name("Toolbox.waterStoreDidChange")
 }

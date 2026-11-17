@@ -126,7 +126,7 @@ async function refresh() {
 }
 
 function applyState(next) {
-  // Noch nicht gespeicherte Mengen-Änderungen aus den Einstellungen nicht überschreiben.
+  // Do not overwrite amount changes from Settings that are not saved yet.
   if (settingsOpen && Object.keys(sizeDraft).length > 0) {
     Object.assign(next.water, sizeDraft)
   }
@@ -319,7 +319,7 @@ function drawChart() {
   ctx.font = '11px "Segoe UI", system-ui, sans-serif'
   ctx.textBaseline = 'middle'
 
-  // Gitterlinien und Y-Beschriftung
+  // Grid lines and Y labels
   const gridCount = 4
   for (let index = 0; index <= gridCount; index += 1) {
     const value = (maxValue / gridCount) * index
@@ -517,7 +517,7 @@ function computeEnergy() {
     : T('Kosten: {cost}', { cost: formatCurrency(energy * price) })
 }
 
-// ------------------------------------------------------------------- Zähler
+// ------------------------------------------------------------------ Counter
 
 function bindCounter() {
   $('counterPlus').addEventListener('click', () => run(api.counter.increment()))
@@ -689,7 +689,7 @@ function renderSettings() {
   const sync = state.sync
   $('syncToggle').checked = Boolean(sync.enabled)
 
-  // Während des Tippens nicht überschreiben; der Name wird entprellt gespeichert.
+  // Do not overwrite while typing; the name is saved debounced.
   const nameInput = $('syncName')
   if (document.activeElement !== nameInput) nameInput.value = sync.syncName || ''
 
@@ -1017,7 +1017,7 @@ function applyUpdateState(next) {
     return
   }
 
-  // Nur einmal pro gefundener Version automatisch öffnen; „Später“ bleibt so bestehen.
+  // Open automatically only once per found version; "Later" stays effective that way.
   if (next.update.version !== promptedUpdateVersion) {
     promptedUpdateVersion = next.update.version
     if ($('updateModal').hidden) openModal('updateModal', $('checkUpdates'))
@@ -1208,7 +1208,7 @@ function formatDuration(seconds) {
   return `${remaining} ${T('Sek.')}`
 }
 
-// Beim Wechsel von Hell/Dunkel die Canvas-Farben nachziehen.
+// Refresh the canvas colors when switching light/dark.
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
   if (activeTab === 'history') drawChart()
 })

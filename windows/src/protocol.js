@@ -2,14 +2,14 @@
 
 // Wire-Format des Toolbox-Abgleichs.
 //
-// Die Apple-App (macOS/iOS) verschickt pro Zeile ein JSON-Objekt:
+// The Apple app (macOS/iOS) sends one JSON object per line:
 //   { "deviceID": "...", "deviceName": "...", "syncName": "...", "water": {...}, "counter": {...} }
-// `syncName` ist der gemeinsame Name der Sync-Gruppe. Geräte ohne passenden
-// Namen tauschen keine Stände aus.
+// `syncName` is the shared name of the sync group. Devices without a matching
+// name exchange no states.
 //
-// Swift kodiert `Date` als Double in Sekunden seit dem 01.01.2001
+// Swift encodes `Date` as a Double in seconds since 2001-01-01
 // (timeIntervalSinceReferenceDate). Die Windows-App muss exakt dasselbe
-// Format sprechen, sonst können Mac/iPhone und Windows nicht zusammenarbeiten.
+// format, otherwise Mac/iPhone and Windows cannot work together.
 
 const APPLE_EPOCH_OFFSET_SECONDS = 978_307_200 // 1970-01-01 -> 2001-01-01
 const MAX_HISTORY_DAYS = 400
@@ -22,7 +22,7 @@ const DEFAULT_RATE = 5
 const MIN_RATE = 1
 const MAX_RATE = 100
 
-// Date.distantPast der Apple-Clients, als Referenzsekunden.
+// Date.distantPast of the Apple clients, as reference seconds.
 const APPLE_DISTANT_PAST = -63_113_904_000
 
 function toAppleTime(ms = Date.now()) {
@@ -34,9 +34,9 @@ function fromAppleTime(seconds) {
 }
 
 /**
- * Liest einen Zeitstempel der Apple-Clients. Erlaubt zusätzlich ISO-Strings,
- * damit ein künftiger Client das Feld nicht zwingend numerisch schicken muss.
- * Rückgabe: Referenzsekunden oder `fallback`.
+ * Reads a timestamp of the Apple clients. Additionally allows ISO strings
+ * so a future client does not have to send the field numerically.
+ * Returns: reference seconds or `fallback`.
  */
 function parseAppleTime(value, fallback = APPLE_DISTANT_PAST) {
   if (typeof value === 'number' && Number.isFinite(value)) return value
@@ -127,7 +127,7 @@ function normalizeWaterSnapshot(raw) {
     recentAdds,
     day: isDayString(raw.day) ? raw.day : null,
     total: Math.max(0, toInteger(raw.total, 0)),
-    // Wie die Apple-Getter: 0 bedeutet „Standardwert".
+    // Like the Apple getters: 0 means "default value".
     glass: glass > 0 ? glass : DEFAULT_GLASS,
     bottle: bottle > 0 ? bottle : DEFAULT_BOTTLE,
     goal: goal > 0 ? goal : DEFAULT_GOAL,
@@ -149,7 +149,7 @@ function normalizeCounterSnapshot(raw) {
 /** Baut die Nachricht, die über TCP geht (eine Zeile, wie bei den Apple-Clients). */
 function encodeMessage({ deviceID, deviceName, syncName, water, counter }) {
   const message = { deviceID, deviceName, syncName: syncName || '' }
-  // Swift lässt `nil`-Felder beim Kodieren weg.
+  // Swift omits `nil` fields when encoding.
   if (water) message.water = water
   if (counter) message.counter = counter
   return `${JSON.stringify(message)}\n`

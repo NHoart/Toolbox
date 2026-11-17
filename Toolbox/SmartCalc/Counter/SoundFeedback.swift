@@ -6,14 +6,14 @@
 import AVFoundation
 import AudioToolbox
 
-/// Ton-Feedback für den Zähler.
+/// Sound feedback for the counter.
 ///
-/// Die Audio-Session läuft in der Kategorie `.ambient`: Ist das Handy
-/// stummgeschaltet, bleibt die App still; Musik anderer Apps läuft weiter.
+/// The audio session runs in the `.ambient` category: if the phone is
+/// muted, the app stays silent; music from other apps keeps playing.
 final class SoundManager {
     static let shared = SoundManager()
 
-    /// Kann später über eine Einstellung abgeschaltet werden.
+    /// Can later be turned off through a setting.
     var isSoundEnabled = true
 
     private let engine = AVAudioEngine()
@@ -21,12 +21,12 @@ final class SoundManager {
     private let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1)!
 
     #if os(iOS)
-    /// Die Session wird einmalig asynchron aktiviert. Das synchrone
-    /// `setActive(_:)` blockiert auf dem Main-Thread und kann die App
-    /// unresponsive werden lassen.
+    /// The session is activated once asynchronously. The synchronous
+    /// `setActive(_:)` blocks on the main thread and can make the app
+    /// unresponsive.
     private var isSessionActive = false
     private var isActivatingSession = false
-    /// Ton, der noch auf die Aktivierung wartet, damit der erste Tipp nicht stumm bleibt.
+    /// Sound waiting for activation so the first tap is not silent.
     private var pendingTone: (frequency: Double, duration: Double)?
     #endif
 
@@ -36,7 +36,7 @@ final class SoundManager {
         #endif
 
         engine.attach(player)
-        // Seit iOS 27 ersetzt `connectNode(_:to:format:)` das veraltete `connect(_:to:format:)`.
+        // Since iOS 27 `connectNode(_:to:format:)` replaces the deprecated `connect(_:to:format:)`.
         try? engine.connectNode(player, to: engine.mainMixerNode, format: format)
 
         #if os(iOS)
@@ -44,19 +44,19 @@ final class SoundManager {
         #endif
     }
 
-    // MARK: - Töne
+    // MARK: - Sounds
 
-    /// Heller Ton beim Hochzählen.
+    /// Bright sound when counting up.
     func playIncrement() {
         play(frequency: 880)
     }
 
-    /// Tiefere Variante beim Runterzählen.
+    /// Lower variant when counting down.
     func playDecrement() {
         play(frequency: 587.33)
     }
 
-    /// Etwas längerer Ton beim Zurücksetzen.
+    /// Slightly longer sound when resetting.
     func playReset() {
         play(frequency: 440, duration: 0.18)
     }
@@ -68,7 +68,7 @@ final class SoundManager {
 
         #if os(iOS)
         guard isSessionActive else {
-            // Aktivierung läuft noch: Ton merken und danach abspielen.
+            // Activation still running: remember the sound and play it afterwards.
             pendingTone = (frequency, duration)
             activateSession()
             return
@@ -85,18 +85,18 @@ final class SoundManager {
 
         guard engine.isRunning,
               let buffer = makeBuffer(frequency: frequency, duration: duration) else {
-            // Fallback: System-Ton, respektiert den Stummschalter ebenfalls.
+            // Fallback: system sound, which also respects the mute switch.
             AudioServicesPlaySystemSound(1104)
             return
         }
 
         player.scheduleBuffer(buffer, at: nil, options: .interrupts, completionHandler: nil)
-        // Seit iOS 27 ersetzt `playAudio()` das veraltete `play()`.
+        // Since iOS 27 `playAudio()` replaces the deprecated `play()`.
         try? player.playAudio()
     }
 
     #if os(iOS)
-    /// Aktiviert die Audio-Session asynchron, ohne den Main-Thread zu blockieren.
+    /// Activates the audio session asynchronously without blocking the main thread.
     private func activateSession() {
         guard !isSessionActive, !isActivatingSession else { return }
         isActivatingSession = true
@@ -113,7 +113,7 @@ final class SoundManager {
                     playNow(frequency: tone.frequency, duration: tone.duration)
                 }
             } catch {
-                // Aktivierung fehlgeschlagen: wartenden Ton als System-Ton spielen.
+                // Activation failed: play the waiting sound as a system sound.
                 if pendingTone != nil {
                     pendingTone = nil
                     AudioServicesPlaySystemSound(1104)
@@ -123,7 +123,7 @@ final class SoundManager {
     }
     #endif
 
-    /// Kurzer Sinus-Ton mit weichem Ein- und Ausblenden (kein Knacken).
+    /// Short sine tone with a soft fade in and out (no click).
     private func makeBuffer(frequency: Double, duration: Double) -> AVAudioPCMBuffer? {
         let sampleRate = format.sampleRate
         let frameCount = AVAudioFrameCount(sampleRate * duration)

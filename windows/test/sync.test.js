@@ -120,11 +120,11 @@ test('Mac -> iPhone -> Windows: der Windows-PC bekommt den aktuellen Stand', asy
   const syncedTimestamp = phone.store.waterUpdatedAt()
   assert.equal(syncedTimestamp, mac.store.waterUpdatedAt())
 
-  // Der Mac ist danach nicht mehr im Netz – nur das iPhone bleibt.
+  // The Mac is no longer on the network – only the iPhone remains.
   mac.sync.stop()
   await waitFor(() => phone.sync.peerCount === 0, 'iPhone sollte den Mac verlieren')
 
-  // Später verbindet sich der Windows-PC mit dem iPhone.
+  // Later the Windows PC connects to the iPhone.
   await startNode(windows)
   windows.sync.connectTo('127.0.0.1', phone.sync.port)
 
@@ -137,7 +137,7 @@ test('Mac -> iPhone -> Windows: der Windows-PC bekommt den aktuellen Stand', asy
     'Windows sollte den über das iPhone weitergereichten Mac-Stand bekommen'
   )
 
-  // Der Zeitstempel bleibt erhalten, damit weitere Geräte den Stand richtig einordnen.
+  // The timestamp is preserved so other devices order the state correctly.
   assert.equal(windows.store.waterUpdatedAt(), syncedTimestamp)
   assert.equal(windows.store.counterUpdatedAt(), phone.store.counterUpdatedAt())
 })
@@ -156,7 +156,7 @@ test('Drei Geräte gleichzeitig: Änderungen laufen über die Kette weiter', asy
   await startNode(b)
   await startNode(c)
 
-  // Kette Mac <-> iPhone <-> Windows (Mac und Windows sind nicht direkt verbunden).
+  // Chain Mac <-> iPhone <-> Windows (Mac and Windows are not directly connected).
   b.sync.connectTo('127.0.0.1', a.sync.port)
   c.sync.connectTo('127.0.0.1', b.sync.port)
 
@@ -210,7 +210,7 @@ test('Ein frisches Gerät überschreibt keinen neueren Stand', async t => {
     'das frische Gerät sollte den Stand übernehmen'
   )
 
-  // Das frische Gerät hat keine eigenen Daten und darf den Mac nicht zurücksetzen.
+  // The fresh device has no own data and must not reset the Mac.
   assert.equal(old.store.todayML(), 650)
   assert.equal(old.store.sizes.goal, 2400)
   assert.equal(old.store.count, 1)
@@ -226,7 +226,7 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
   const phone = createNode(t, 'iPhone', clockPhone)
   const windows = createNode(t, 'Windows-PC', clockWindows)
 
-  // v1 entsteht auf dem Mac, bevor das iPhone verbunden ist.
+  // v1 is created on the Mac before the iPhone is connected.
   mac.store.addWater(400)
   mac.store.setSizes({ glass: 250, bottle: 600, goal: 2400 })
   mac.store.increment()
@@ -245,7 +245,7 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
     'das iPhone sollte v1 vom Mac erhalten'
   )
 
-  // v2 entsteht auf dem Mac, während das iPhone bereits verbunden ist.
+  // v2 is created on the Mac while the iPhone is already connected.
   clockMac.value = base + 30_000
   mac.store.addWater(200)
 
@@ -257,7 +257,7 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
   const v2Water = mac.store.waterUpdatedAt()
   const v2Counter = mac.store.counterUpdatedAt()
 
-  // Windows verbindet sich erst jetzt – und nur mit dem iPhone.
+  // Windows connects only now – and only to the iPhone.
   await startNode(windows)
   windows.sync.connectTo('127.0.0.1', phone.sync.port)
 
@@ -269,7 +269,7 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
     'das neue Windows-Gerät sollte v2 über das iPhone erhalten'
   )
 
-  // Die Windows-Änderung muss über das iPhone zurück zu Mac und iPhone laufen.
+  // The Windows change must travel back to Mac and iPhone via the iPhone.
   clockWindows.value = base + 90_000
   windows.store.addWater(250)
   windows.store.increment()
@@ -284,7 +284,7 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
     'die Windows-Änderung sollte Mac und iPhone erreichen'
   )
 
-  // Alle drei Stores müssen denselben Stand inklusive Zeitstempel haben.
+  // All three stores must have the same state including the timestamp.
   assert.deepEqual(mac.store.waterSnapshot(), phone.store.waterSnapshot())
   assert.deepEqual(phone.store.waterSnapshot(), windows.store.waterSnapshot())
   assert.deepEqual(mac.store.counterSnapshot(), phone.store.counterSnapshot())
@@ -333,7 +333,7 @@ test('Nur Geräte mit demselben Namen gleichen sich ab', async t => {
   assert.equal(mac.store.todayML(), 450, 'Mac behält den eigenen Stand')
   assert.equal(windows.store.todayML(), 250, 'Windows behält den eigenen Stand')
 
-  // Erst mit passendem Namen darf der Abgleich laufen.
+  // The sync may only run with a matching name.
   windows.sync.setSyncName(' familie ')
   await waitFor(() => windows.sync.listening, 'Windows-Sync-Server startet nach Namensänderung')
   windows.sync.connectTo('127.0.0.1', mac.sync.port)

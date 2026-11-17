@@ -287,7 +287,7 @@ struct MacEnergyPage: View {
     }
 }
 
-// MARK: - Zähler
+// MARK: - Counter
 
 struct MacCounterPage: View {
     @Binding var showSettings: Bool
@@ -325,7 +325,7 @@ struct MacCounterPage: View {
         }
     }
 
-    // MARK: Zählerkarte
+    // MARK: Counter card
 
     private var counterCard: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -464,7 +464,7 @@ struct MacCounterPage: View {
         }
     }
 
-    // MARK: Gespeicherte Stände
+    // MARK: Saved counters
 
     private var savedCard: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -555,7 +555,7 @@ struct MacCounterPage: View {
 
 // MARK: - Einheiten-Helfer
 
-/// Eigene Kopie für die Mac-Oberfläche, damit die iOS-Views unverändert bleiben.
+/// Separate copy for the Mac interface so the iOS views stay unchanged.
 private enum MacUnitConversion: String, CaseIterable, Identifiable {
     case mbToGB
     case gbToMB

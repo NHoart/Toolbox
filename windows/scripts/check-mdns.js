@@ -1,11 +1,11 @@
 'use strict'
 
-// Manueller Test gegen eine echte Toolbox-App (Mac/iPhone) im selben WLAN:
+// Manual test against a real Toolbox app (Mac/iPhone) on the same Wi-Fi:
 //   node test/manual-mdns.js [Sekunden]
 //
-// Startet einen Windows-Abgleich mit leerem Stand, sucht per Bonjour nach
-// Geräten und meldet, ob eine Verbindung zustande kommt und Daten ankommen.
-// Es werden keine Inhalte ausgegeben, nur ob Wasser/Zähler empfangen wurden.
+// Starts a Windows sync with an empty state, searches for devices via Bonjour
+// and reports whether a connection is made and data arrives.
+// No content is printed, only whether water/counter were received.
 
 const fs = require('node:fs')
 const os = require('node:os')
@@ -17,7 +17,7 @@ const { SyncService } = require('../src/sync')
 const seconds = Number(process.argv[2] || 20)
 const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'toolbox-mdns-'))
 const store = new ToolboxStore({ filePath: path.join(directory, 'data.json') })
-// Muss mit dem Namen im Feld „Lokales Netzwerk“ der echten App übereinstimmen.
+// Must match the name in the "Local network" field of the real app.
 store.setSyncName(process.env.TOOLBOX_SYNC_NAME || 'Familie')
 const sync = new SyncService({
   store,
@@ -27,8 +27,8 @@ const sync = new SyncService({
 let receivedWater = false
 let receivedCounter = false
 
-// Mit --incoming-only wird nur gelauscht. Kommt trotzdem eine Verbindung
-// zustande, hat die Apple-App die Windows-Ankündigung per Bonjour gefunden.
+// With --incoming-only it only listens. If a connection is made anyway,
+// the Apple app found the Windows announcement via Bonjour.
 if (process.argv.includes('--incoming-only')) {
   sync.connectTo = () => {}
 }

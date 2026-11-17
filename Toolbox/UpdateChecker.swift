@@ -8,7 +8,7 @@ import CryptoKit
 import Security
 #endif
 
-/// Eine neuere, auf GitHub veröffentlichte Version der App.
+/// A newer version of the app published on GitHub.
 struct UpdateInfo: Identifiable {
     let version: String
     let notes: String
@@ -20,14 +20,14 @@ struct UpdateInfo: Identifiable {
     var isDMG: Bool { downloadURL.pathExtension.lowercased() == "dmg" }
 }
 
-/// Ergebnis einer manuell ausgelösten Prüfung.
+/// Result of a manually triggered check.
 enum UpdateCheckOutcome {
     case update(UpdateInfo)
     case upToDate
     case failed(String)
 }
 
-/// Fragt die GitHub-Releases ab und meldet, wenn eine neuere Version bereitsteht.
+/// Queries the GitHub releases and reports when a newer version is available.
 @MainActor
 final class UpdateChecker: ObservableObject {
     static let shared = UpdateChecker()
@@ -46,7 +46,7 @@ final class UpdateChecker: ObservableObject {
     @Published private(set) var downloadProgress: Double?
     @Published var installError: String?
 
-    /// Schalter aus den Einstellungen (Standard: an).
+    /// Switch from Settings (default: on).
     static var automaticChecksEnabled: Bool {
         UserDefaults.standard.object(forKey: automaticChecksKey) as? Bool ?? true
     }
@@ -55,7 +55,7 @@ final class UpdateChecker: ObservableObject {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0"
     }
 
-    /// Prüft beim Start, aber höchstens einmal pro Tag und ohne Fehlermeldung.
+    /// Checks at launch, but at most once per day and without an error message.
     func checkIfNeeded() async {
         #if os(macOS)
         guard Self.automaticChecksEnabled else { return }
@@ -67,14 +67,14 @@ final class UpdateChecker: ObservableObject {
         #endif
     }
 
-    /// Prüft auf Wunsch über „Nach Updates suchen…“ im App-Menü.
+    /// Checks on demand via "Check for Updates…" in the app menu.
     func checkManually() async {
         #if os(macOS)
         await check(announceResult: true)
         #endif
     }
 
-    /// Ob die laufende App sich selbst ersetzen kann.
+    /// Whether the running app can replace itself.
     func canInstall(_ update: UpdateInfo) -> Bool {
         #if os(macOS)
         return update.isDMG
@@ -85,7 +85,7 @@ final class UpdateChecker: ObservableObject {
         #endif
     }
 
-    /// Lädt die DMG, prüft sie und ersetzt die installierte App.
+    /// Downloads the DMG, verifies it and replaces the installed app.
     func install(_ update: UpdateInfo) async {
         #if os(macOS)
         guard !isInstalling else { return }
@@ -111,10 +111,10 @@ final class UpdateChecker: ObservableObject {
     }
 
     #if os(macOS)
-    /// Beendet die App, damit der Installer sie ersetzen kann.
-    /// `NSApp.terminate` allein genügt nicht: Bei geöffnetem Update-Sheet
-    /// ignoriert AppKit die Anfrage und die App läuft weiter – der Installer
-    /// wartet dann endlos auf das Prozessende.
+    /// Quits the app so the installer can replace it.
+    /// `NSApp.terminate` alone is not enough: with the update sheet open
+    /// AppKit ignores the request and the app keeps running – the installer
+    /// then waits forever for the process to end.
     private func quitForInstall() {
         NSApp.terminate(nil)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -136,8 +136,8 @@ final class UpdateChecker: ObservableObject {
         }
     }
 
-    /// Prüft, ohne die globalen Hinweise des Hauptfensters zu setzen.
-    /// Wird aus den Einstellungen verwendet, wo ein eigener Status erscheint.
+    /// Checks without setting the global hints of the main window.
+    /// Used from Settings, where a separate status is shown.
     func checkForUpdates() async -> UpdateCheckOutcome {
         guard !isChecking else { return .upToDate }
         isChecking = true
@@ -223,7 +223,7 @@ final class UpdateChecker: ObservableObject {
         return Release(
             version: release.tagName,
             notes: release.body ?? "",
-            // Ohne DMG im Release bleibt die Release-Seite als Ziel.
+            // Without a DMG in the release the release page stays the target.
             downloadURL: dmg?.url ?? release.htmlURL,
             pageURL: release.htmlURL,
             digest: dmg?.digest
@@ -232,7 +232,7 @@ final class UpdateChecker: ObservableObject {
 
     // MARK: - Versionen
 
-    /// Vergleicht Versionsnummern wie `v1.2.0` und `1.1.0` komponentenweise.
+    /// Compares version numbers like `v1.2.0` and `1.1.0` component by component.
     nonisolated static func isVersion(_ version: String, newerThan current: String) -> Bool {
         let new = numericParts(of: version)
         let old = numericParts(of: current)
@@ -267,7 +267,7 @@ final class UpdateChecker: ObservableObject {
 // MARK: - Installation
 
 #if os(macOS)
-/// Lädt die DMG, prüft Prüfsumme und Signatur und ersetzt die installierte App.
+/// Downloads the DMG, verifies checksum and signature and replaces the installed app.
 enum UpdateInstaller {
     private static let bundleID = "com.noahsapps.Toolbox"
 
@@ -276,9 +276,9 @@ enum UpdateInstaller {
         var errorDescription: String? { message }
     }
 
-    /// Räumt Reste abgebrochener Update-Läufe auf: heruntergeladene DMGs,
-    /// entpackte Apps sowie Staging- und Backup-Bundles. Solange ein Installer
-    /// läuft (Lock mit lebender PID), bleibt alles unangetastet.
+    /// Cleans up leftovers of interrupted update runs: downloaded DMGs,
+    /// unpacked apps and staging and backup bundles. As long as an installer
+    /// is running (lock with a live PID), everything stays untouched.
     nonisolated static func cleanUpStaleData() {
         let fm = FileManager.default
         let lock = fm.temporaryDirectory.appendingPathComponent("ToolboxUpdate.lock", isDirectory: true)
@@ -296,7 +296,7 @@ enum UpdateInstaller {
             }
         }
 
-        // Nur Backups löschen, wenn die installierte App noch vorhanden ist.
+        // Only delete backups when the installed app still exists.
         let appURL = Bundle.main.bundleURL
         let parent = appURL.deletingLastPathComponent()
         if let entries = try? fm.contentsOfDirectory(at: parent, includingPropertiesForKeys: nil) {
@@ -315,9 +315,9 @@ enum UpdateInstaller {
         }
     }
 
-    /// Nur Apps unter /Applications bzw. ~/Applications dürfen sich selbst ersetzen.
+    /// Only apps under /Applications or ~/Applications may replace themselves.
     static func canReplaceRunningApp(at appURL: URL) -> Bool {
-        // In einer Sandbox kann kein Hilfsprozess zum Austauschen gestartet werden.
+        // In a sandbox no helper process can be started for the swap.
         guard ProcessInfo.processInfo.environment["APP_SANDBOX_CONTAINER_ID"] == nil else {
             return false
         }
@@ -436,7 +436,7 @@ enum UpdateInstaller {
         }
     }
 
-    // MARK: Prüfungen
+    // MARK: Checks
 
     private static func verify(_ file: URL, sha256 digest: String) throws {
         let normalized = digest.lowercased()
@@ -503,9 +503,9 @@ enum UpdateInstaller {
         let log = workDir.appendingPathComponent("install.log")
         let pid = ProcessInfo.processInfo.processIdentifier
 
-        // Die neue App wird erst neben das Ziel kopiert und dann getauscht.
-        // Früher wurde die alte App zuerst gelöscht – schlug das Kopieren fehl,
-        // war sie weg. Bei einem Fehler wird die alte Version wieder geöffnet.
+        // The new app is first copied next to the target and then swapped.
+        // Previously the old app was deleted first – if copying failed,
+        // it was gone. On an error the old version is opened again.
         let content = """
         #!/bin/sh
         set -u
@@ -518,8 +518,8 @@ enum UpdateInstaller {
         exec >>\(shellQuoted(log.path)) 2>&1
         echo "[$(date)] Update wird vorbereitet."
 
-        # Nur ein Installer gleichzeitig – ein alter, hängender Lauf darf nicht
-        # dazwischenfunken. Ein verwaister Lock wird übernommen.
+        # Only one installer at a time – an old, stuck run must not
+        # interfere. An orphaned lock is taken over.
         LOCK="${TMPDIR:-/tmp}/ToolboxUpdate.lock"
         if ! mkdir "$LOCK" 2>/dev/null; then
             OTHER="$(cat "$LOCK/pid" 2>/dev/null || true)"
@@ -533,7 +533,7 @@ enum UpdateInstaller {
         echo "$$" > "$LOCK/pid"
         trap 'rm -rf "$LOCK"' EXIT
 
-        # Auf das Ende der laufenden App warten (höchstens 30 Sekunden).
+        # Wait for the running app to end (at most 30 seconds).
         WAITED=0
         while kill -0 "$PID" 2>/dev/null; do
             if [ "$WAITED" -ge 150 ]; then
@@ -580,7 +580,7 @@ enum UpdateInstaller {
 
         rm -rf "$BACKUP" 2>/dev/null || true
 
-        # Neu starten; LaunchServices braucht manchmal einen Moment.
+        # Restart; LaunchServices sometimes needs a moment.
         ATTEMPTS=0
         until /usr/bin/open "$TARGET" 2>/dev/null; do
             ATTEMPTS=$((ATTEMPTS + 1))
@@ -644,7 +644,7 @@ enum UpdateInstaller {
 
 // MARK: - SwiftUI
 
-/// Hängt den Update-Hinweis an die App und stößt die Prüfung beim Start an.
+/// Attaches the update hint to the app and triggers the check at launch.
 struct UpdateCheckModifier: ViewModifier {
     @ObservedObject private var checker = UpdateChecker.shared
 

@@ -1,8 +1,8 @@
 'use strict'
 
-// Diese Liste ist die verbindliche Quelle für den Store-Build. Der Build
-// überschreibt damit die appx.languages aus package.json; ein Test stellt
-// sicher, dass beide Listen nicht auseinanderlaufen.
+// This list is the authoritative source for the Store build. The build
+// overwrites appx.languages from package.json with it; a test makes sure
+// that the two lists do not drift apart.
 const APPX_LANGUAGES = Object.freeze([
   'de-DE',
   'en-US',

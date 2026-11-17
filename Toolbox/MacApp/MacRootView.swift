@@ -3,7 +3,7 @@ import SwiftUI
 
 // MARK: - Werkzeuge
 
-/// Farbliche Zuordnung der Werkzeuge in der Seitenleiste.
+/// Color coding of the tools in the sidebar.
 private extension AppTab {
     var tint: Color {
         switch self {
@@ -19,8 +19,8 @@ private extension AppTab {
 
 // MARK: - Hauptansicht
 
-/// Mac-Oberfläche: Seitenleiste links, verglaste Werkzeuge rechts.
-/// Wird nur in der Mac-App verwendet; iPhone, iPad und Vision Pro behalten die Tableiste.
+/// Mac interface: sidebar on the left, glass-styled tools on the right.
+/// Used only in the Mac app; iPhone, iPad and Vision Pro keep the tab bar.
 struct MacRootView: View {
     @Binding var selection: AppTab
     @State private var showSettings = false

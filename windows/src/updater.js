@@ -6,9 +6,9 @@ const { EventEmitter } = require('node:events')
 
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000
 
-/// Prüft täglich auf GitHub nach einer neueren Version und installiert sie
-/// auf Wunsch. Die eigentliche Arbeit übernimmt electron-updater; dieser
-/// Dienst hält Status, Einstellungen und die deutschen Meldungen zusammen.
+/// Checks GitHub once a day for a newer version and installs it
+/// on request. electron-updater does the actual work; this
+/// service keeps status, settings and the messages together.
 class UpdateService extends EventEmitter {
   constructor({ filePath, currentVersion, isPackaged = false, storeManaged = false, updater = null, now = () => Date.now() } = {}) {
     super()
@@ -26,10 +26,10 @@ class UpdateService extends EventEmitter {
     this.announceErrors = false
     this.settings = this.loadSettings()
 
-    // In der Entwicklung gibt es keine app-update.yml und damit keinen Feed;
-    // dort wird gar nicht erst geprüft. Der Updater lässt sich für Tests
-    // einsetzen, ohne electron-updater zu laden. In der Store-Fassung
-    // aktualisiert der Microsoft Store die App; electron-updater bleibt aus.
+    // In development there is no app-update.yml and therefore no feed;
+    // it is not checked there at all. The updater can be
+    // injected for tests without loading electron-updater. In the Store build
+    // the Microsoft Store updates the app; electron-updater stays off.
     this.updater = this.storeManaged
       ? null
       : updater || require('electron-updater').autoUpdater
@@ -59,8 +59,8 @@ class UpdateService extends EventEmitter {
       fs.mkdirSync(path.dirname(this.filePath), { recursive: true })
       fs.writeFileSync(this.filePath, JSON.stringify(this.settings, null, 2))
     } catch {
-      // Die Einstellungen sind nicht kritisch; beim nächsten Start gelten
-      // dann wieder die Standardwerte.
+      // The settings are not critical; on the next start
+      // the default values apply again.
     }
   }
 
@@ -94,9 +94,9 @@ class UpdateService extends EventEmitter {
     return this.state()
   }
 
-  // MARK: - Prüfen
+  // MARK: - Checking
 
-  /// Prüft beim Start, aber höchstens einmal pro Tag und ohne Fehlermeldung.
+  /// Checks at launch, but at most once per day and without an error message.
   async checkIfNeeded() {
     if (this.storeManaged || !this.isPackaged || !this.settings.automaticChecks) return this.state()
     if (this.settings.lastCheck > 0 && this.now() - this.settings.lastCheck < CHECK_INTERVAL_MS) {
@@ -126,7 +126,7 @@ class UpdateService extends EventEmitter {
     try {
       await this.updater.checkForUpdates()
     } catch (error) {
-      // Das error-Ereignis kann den Zustand bereits zurückgesetzt haben.
+      // The error event may already have reset the state.
       if (this.checking) this.fail(error)
     }
 
@@ -137,7 +137,7 @@ class UpdateService extends EventEmitter {
 
   // MARK: - Installieren
 
-  /// Lädt das gefundene Update und startet die App damit neu.
+  /// Downloads the found update and restarts the app with it.
   async install() {
     if (this.storeManaged || !this.update || this.installing) return this.state()
 
@@ -157,7 +157,7 @@ class UpdateService extends EventEmitter {
     try {
       await this.updater.downloadUpdate()
     } catch (error) {
-      // Das error-Ereignis kann den Zustand bereits zurückgesetzt haben.
+      // The error event may already have reset the state.
       if (this.installing) this.fail(error)
     }
 

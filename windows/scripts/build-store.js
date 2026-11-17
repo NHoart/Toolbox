@@ -78,9 +78,9 @@ if (placeholder) {
 
 const config = {
   ...pkg.build,
-  // Die alte winCodeSign-2.6.0-Toolchain ist für AppX auf aktuellen
-  // Windows-Runnern nicht mehr zuverlässig. Windows Kits 10.0.26100.0
-  // verwenden; der NSIS-Build bleibt unberührt.
+  // The old winCodeSign-2.6.0 toolchain is no longer reliable for AppX on
+  // current Windows runners. Use Windows Kits 10.0.26100.0;
+  // the NSIS build stays untouched.
   toolsets: {
     ...(pkg.build.toolsets || {}),
     winCodeSign: '1.1.0',
@@ -97,16 +97,16 @@ const config = {
     displayName,
     applicationId,
     artifactName: 'Toolbox-${version}.${ext}',
-    // Immer die vier unterstützten Sprachen in das Manifest schreiben, auch
-    // wenn package.json versehentlich verändert wird. Die Prüfung oben
-    // verhindert, dass beide Listen stillschweigend auseinanderlaufen.
+    // Always write the four supported languages into the manifest, even
+    // if package.json was changed by accident. The check above
+    // prevents the two lists from drifting apart silently.
     languages: [...APPX_LANGUAGES],
   },
 }
 
-// Der Store-Build veröffentlicht nicht über electron-builder. Die aus dem
-// NSIS-Build geerbte publish-Konfiguration ist hier unnötig und wird von der
-// electron-builder-JS-API nicht als gültiges Schema akzeptiert.
+// The Store build does not publish through electron-builder. The publish
+// configuration inherited from the NSIS build is unnecessary here and is not
+// accepted as a valid schema by the electron-builder JS API.
 delete config.publish
 
 async function run() {
@@ -125,16 +125,16 @@ async function run() {
     return
   }
 
-  // Der Store signiert das Paket beim Einreichen neu. Ein lokales Zertifikat
-  // würde nur einen falschen Publisher in das Manifest schreiben.
+  // The Store re-signs the package on submission. A local certificate
+  // would only write a wrong publisher into the manifest.
   process.env.CSC_IDENTITY_AUTO_DISCOVERY = 'false'
 
   console.log(`Baue AppX für ${identityName} mit ${APPX_LANGUAGES.join(', ')} …`)
   await build({
     targets: Platform.WINDOWS.createTarget('appx', Arch.x64),
     config,
-    // Der Store-Build wird ausschließlich als Workflow-Artefakt hochgeladen;
-    // electron-builder darf nicht selbst veröffentlichen.
+    // The Store build is uploaded exclusively as a workflow artifact;
+    // electron-builder must not publish by itself.
     publish: 'never',
   })
   console.log('AppX fertig. Die Datei liegt unter windows/dist/.')

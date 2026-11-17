@@ -101,7 +101,7 @@ struct MacWaterTodayPage: View {
         .macGlassCard(tint: MacTheme.accent.opacity(0.20), padding: 32)
     }
 
-    /// Dünner Fortschrittsbalken unter der Tagesmenge.
+    /// Thin progress bar below the daily amount.
     private var progressBar: some View {
         GeometryReader { proxy in
             ZStack(alignment: .leading) {
@@ -238,7 +238,7 @@ struct MacWaterTodayPage: View {
 
 // MARK: - Eigene Menge
 
-/// Mac-Variante des Mengen-Sheets – gleiche Logik wie auf dem iPhone, nur im Glas-Look.
+/// Mac variant of the amount sheet – same logic as on the iPhone, just in the glass look.
 struct MacCustomAmountSheet: View {
     @Environment(\.dismiss) private var dismiss
     let onAdd: (Int) -> Void

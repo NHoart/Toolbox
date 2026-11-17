@@ -1,7 +1,7 @@
 import Foundation
 
-/// Headless-Ersatz für Haptik und Ton. Der echte Sync-Code nutzt diese
-/// Aufrufe nur als UI-Feedback; für den Protokolltest sind sie nicht nötig.
+/// Headless replacement for haptics and sound. The real sync code uses these
+/// calls only as UI feedback; the protocol test does not need them.
 final class HapticManager {
     static let shared = HapticManager()
 

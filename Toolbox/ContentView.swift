@@ -1,7 +1,7 @@
 import SwiftUI
 import WidgetKit
 
-/// Alle Werkzeuge der App als Tabs – inklusive der Ziffer für das Mac-Tastenkürzel.
+/// All tools of the app as tabs – including the digit for the Mac keyboard shortcut.
 enum AppTab: CaseIterable, Identifiable {
     case today
     case history
@@ -35,7 +35,7 @@ enum AppTab: CaseIterable, Identifiable {
     }
 
     #if os(macOS)
-    /// Taste für das Kürzel ⌘1–⌘6 in der Mac-App.
+    /// Key for the ⌘1–⌘6 shortcut in the Mac app.
     var shortcut: KeyEquivalent {
         switch self {
         case .today: "1"
@@ -55,8 +55,8 @@ struct ContentView: View {
 
     var body: some View {
         #if os(macOS)
-        // Die Mac-App bekommt eine eigene Oberfläche mit Seitenleiste im Liquid-Glass-Look.
-        // iPhone, iPad und Vision Pro behalten unverändert die Tableiste.
+        // The Mac app gets its own interface with a sidebar in the Liquid Glass look.
+        // iPhone, iPad and Vision Pro keep the tab bar unchanged.
         MacRootView(selection: $selection)
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {
@@ -91,8 +91,8 @@ struct ContentView: View {
             }
         }
         .onChange(of: scenePhase) { _, phase in
-            // Beim Öffnen der App mit dem anderen Gerät abgleichen und das Widget nachziehen –
-            // nötig für Einträge, die im Hintergrund (z. B. per Siri oder Widget) gemacht wurden.
+            // Sync with the other device when the app opens and refresh the widget –
+            // needed for entries made in the background (for example via Siri or the widget).
             if phase == .active {
                 LocalSync.shared.syncNow()
                 WidgetCenter.shared.reloadAllTimelines()
@@ -107,7 +107,7 @@ struct ContentView: View {
 }
 
 #if os(macOS)
-/// Zahnrad in der Toolbar, das die Einstellungen als Sheet öffnet – nur in der Mac-App.
+/// Gear in the toolbar that opens the settings as a sheet – Mac app only.
 private struct MacSettingsToolbar: ViewModifier {
     @State private var showSettings = false
 
@@ -129,8 +129,8 @@ private struct MacSettingsToolbar: ViewModifier {
 #endif
 
 extension View {
-    /// Stellt die Tabs auf dem Mac als Seitenleiste an die linke Seite. iPhone, iPad und
-    /// Vision Pro behalten ihre Tab-Leiste – dort bleibt der Stil unverändert.
+    /// Puts the tabs on the Mac on the left as a sidebar. iPhone, iPad and
+    /// Vision Pro keep their tab bar – the style stays unchanged there.
     @ViewBuilder
     func macSidebarTabs() -> some View {
         #if os(macOS)
@@ -140,8 +140,8 @@ extension View {
         #endif
     }
 
-    /// Zeigt das Einstellungen-Zahnrad neben der Tableiste. Nur die Mac-App bekommt es,
-    /// iPhone, iPad und Vision Pro bleiben unverändert.
+    /// Shows the settings gear next to the tab bar. Only the Mac app gets it,
+    /// iPhone, iPad and Vision Pro stay unchanged.
     @ViewBuilder
     func macSettingsToolbar() -> some View {
         #if os(macOS)

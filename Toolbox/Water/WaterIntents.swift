@@ -1,8 +1,8 @@
 import AppIntents
 import Foundation
 
-/// Menge, die per Siri eingetragen werden kann.
-/// Einheit und Anzahl stecken in einem Wert, weil eine Siri-Phrase nur einen Parameter enthalten darf.
+/// Amount that can be logged via Siri.
+/// Unit and count are packed into one value because a Siri phrase may only contain one parameter.
 enum WaterPortion: String, AppEnum {
     case glass
     case twoGlasses
@@ -26,7 +26,7 @@ enum WaterPortion: String, AppEnum {
         ]
     }
 
-    /// Anzahl der Einheiten.
+    /// Number of units.
     var count: Int {
         switch self {
         case .glass, .bottle: 1
@@ -35,7 +35,7 @@ enum WaterPortion: String, AppEnum {
         }
     }
 
-    /// Größe einer einzelnen Einheit in ml (aus den Einstellungen).
+    /// Size of a single unit in ml (from Settings).
     private var unitML: Int {
         switch self {
         case .glass, .twoGlasses, .threeGlasses: WaterStore.glassML
@@ -43,10 +43,10 @@ enum WaterPortion: String, AppEnum {
         }
     }
 
-    /// Gesamtmenge in ml.
+    /// Total amount in ml.
     var milliliters: Int { unitML * count }
 
-    /// Text für die Siri-Antwort, z. B. "two glasses".
+    /// Text for the Siri answer, e.g. "two glasses".
     var label: String {
         switch self {
         case .glass: "a glass"
@@ -59,7 +59,7 @@ enum WaterPortion: String, AppEnum {
     }
 }
 
-/// Trägt Gläser oder Flaschen Wasser ein.
+/// Logs glasses or bottles of water.
 struct LogWaterIntent: AppIntent {
     static var title: LocalizedStringResource = "Log water"
     static var description = IntentDescription("Logs glasses or bottles of water in the water tracker.")
@@ -81,7 +81,7 @@ struct LogWaterIntent: AppIntent {
     }
 }
 
-/// Macht den Kurzbefehl für Siri verfügbar, z. B. "Hey Siri, ich habe zwei Gläser getrunken in Toolbox".
+/// Makes the shortcut available to Siri, e.g. "Hey Siri, log two glasses of water in Toolbox".
 struct WaterShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(

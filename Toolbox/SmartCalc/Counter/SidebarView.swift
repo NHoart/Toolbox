@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-/// Seitenleiste mit allen gespeicherten Zählerständen
+/// Sidebar with all saved counter values
 struct SidebarView: View {
     @ObservedObject var store: CounterStore
     let onSelect: (SavedCounter) -> Void
@@ -62,7 +62,7 @@ struct SidebarView: View {
         .sidebarBackground()
     }
 
-    // MARK: - Schließen-Button (Liquid Glass ab iOS 26)
+    // MARK: - Close button (Liquid Glass from iOS 26)
 
     @ViewBuilder
     private var closeButton: some View {
@@ -83,7 +83,7 @@ struct SidebarView: View {
     }
 }
 
-// MARK: - Hintergrund der Seitenleiste
+// MARK: - Sidebar background
 
 private extension View {
     @ViewBuilder

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# Baut die macOS-App (Release) und verpackt sie als DMG unter dist/Toolbox.dmg.
+# Builds the macOS app (Release) and packages it as a DMG under dist/Toolbox.dmg.
 # Aufruf: ./scripts/build-dmg.sh
 #
-# Die App wird ad-hoc signiert ("-"), weil im Repo kein Developer-Zertifikat
-# liegt. Beim ersten Start muss macOS die App deshalb einmal freigeben.
+# The app is ad-hoc signed ("-") because the repo holds no developer certificate
+# in it. macOS therefore has to approve the app once on first launch.
 
 set -euo pipefail
 
@@ -37,7 +37,7 @@ if [ ! -d "$APP_PATH" ]; then
 fi
 
 echo "==> Signiere ad-hoc"
-# Erst die embeddete Extension, dann die App selbst.
+# First the embedded extension, then the app itself.
 if [ -d "$APP_PATH/Contents/PlugIns/$WIDGET_NAME.appex" ]; then
   codesign --force --sign - \
     --entitlements "$ROOT/ToolboxWidgetExtension.entitlements" \
@@ -57,9 +57,9 @@ mkdir -p "$STAGING_DIR"
 cp -R "$APP_PATH" "$STAGING_DIR/"
 ln -s /Applications "$STAGING_DIR/Applications"
 
-# diskutil ersetzt hdiutil unter macOS 27, scheitert auf CI-Runnern aber
-# gelegentlich mit Fehler 153. Deshalb mehrere Versuche und der Rückfall auf
-# hdiutil, falls diskutil nicht vorhanden ist oder weiter fehlschlägt.
+# diskutil replaces hdiutil on macOS 27 but fails on CI runners
+# occasionally with error 153. Hence several attempts and the fallback to
+# hdiutil when diskutil is missing or keeps failing.
 create_dmg() {
   if command -v diskutil >/dev/null 2>&1; then
     if diskutil image create from \

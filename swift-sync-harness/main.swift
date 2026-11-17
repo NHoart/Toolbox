@@ -26,15 +26,15 @@ func emit<T: Encodable>(_ prefix: String, _ value: T) {
 
 guard let suiteName = ProcessInfo.processInfo.environment["TOOLBOX_DEFAULTS_SUITE"],
       !suiteName.isEmpty else {
-    FileHandle.standardError.write(Data("TOOLBOX_DEFAULTS_SUITE fehlt\n".utf8))
+    FileHandle.standardError.write(Data("TOOLBOX_DEFAULTS_SUITE missing\n".utf8))
     exit(2)
 }
 
-// Jeder Lauf bekommt eine frische, isolierte Defaults-Suite.
+// Every run gets a fresh, isolated defaults suite.
 UserDefaults(suiteName: suiteName)?.removePersistentDomain(forName: suiteName)
 
 let counter = CounterStore()
-// Der Gruppennamen gehört zum Testaufbau; ohne ihn startet kein Listener.
+// The group name is part of the test setup; without it no listener starts.
 LocalSync.shared.setSyncName(
     ProcessInfo.processInfo.environment["TOOLBOX_SYNC_NAME"] ?? "Interop",
     restart: false
@@ -48,7 +48,7 @@ while (LocalSync.shared.listeningPort ?? 0) == 0 && waited < 8 {
 }
 
 guard let port = LocalSync.shared.listeningPort, port > 0 else {
-    FileHandle.standardError.write(Data("Listener-Port nicht verfügbar\n".utf8))
+    FileHandle.standardError.write(Data("Listener port unavailable\n".utf8))
     exit(1)
 }
 

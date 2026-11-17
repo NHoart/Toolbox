@@ -87,12 +87,12 @@ class ToolboxStore extends EventEmitter {
       const parsed = JSON.parse(raw)
       this.data = this.normalize(parsed)
     } catch {
-      // Defekte Datei nicht stillschweigend verlieren: zur Seite legen.
+      // Do not lose a broken file silently: move it aside.
       try {
         const backup = `${this.filePath}.corrupt-${Date.now()}`
         fs.renameSync(this.filePath, backup)
       } catch {
-        // Wenn auch das scheitert, startet die App mit leeren Daten.
+        // If that fails too, the app starts with empty data.
       }
       this.data = this.emptyData()
     }
@@ -164,7 +164,7 @@ class ToolboxStore extends EventEmitter {
     this.removeAllListeners()
   }
 
-  // MARK: - Gerät / Sync-Schalter
+  // MARK: - Device / sync switch
 
   get deviceId() {
     return this.data.deviceId
@@ -226,7 +226,7 @@ class ToolboxStore extends EventEmitter {
     const amount = Math.trunc(Number(ml))
     if (!Number.isFinite(amount) || amount <= 0) return false
 
-    // Wie WaterStore.add: an einem neuen Tag beginnt der Undo-Stapel leer.
+    // Like WaterStore.add: on a new day the undo stack starts empty.
     if (this.data.water.day !== localDayString(new Date(this.now()))) {
       this.data.water.recentAdds = []
     }
@@ -344,7 +344,7 @@ class ToolboxStore extends EventEmitter {
     return true
   }
 
-  // MARK: - Zähler
+  // MARK: - Counter
 
   get counter() {
     return this.data.counter
@@ -510,7 +510,7 @@ class ToolboxStore extends EventEmitter {
     return true
   }
 
-  // MARK: - Zustand für die Oberfläche
+  // MARK: - State for the interface
 
   getState() {
     const sizes = this.sizes

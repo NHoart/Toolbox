@@ -536,7 +536,7 @@
   }
 
   const supported = ['de', 'en', 'es', 'fr']
-  // Englisch ist der Rückfall für alle Sprachen, die die App nicht kennt.
+  // English is the fallback for every language the app does not know.
   const defaultLanguage = 'en'
   const localeTags = { de: 'de-DE', en: 'en-US', es: 'es-ES', fr: 'fr-FR' }
   const STORAGE_KEY = 'toolbox.locale'
@@ -545,8 +545,8 @@
     return String(tag || '').trim().toLowerCase().split('-')[0]
   }
 
-  /// Nimmt den vollständigen Region-Tag (z. B. en-GB), solange er gültig ist und
-  /// zur gewählten Sprache passt; sonst den Standard-Tag der Sprache.
+  /// Takes the full region tag (e.g. en-GB) as long as it is valid and
+  /// matches the chosen language; otherwise the default tag of the language.
   function canonicalTag(tag, language) {
     const raw = String(tag || '').trim()
     if (raw) {
@@ -554,7 +554,7 @@
         const [canonical] = Intl.getCanonicalLocales(raw)
         if (canonical && baseLanguage(canonical) === language) return canonical
       } catch {
-        // Ungültiger Tag – unten auf den Standard der Sprache zurückfallen.
+        // Invalid tag – fall back to the language default below.
       }
     }
     return localeTags[language]
@@ -599,7 +599,7 @@
     }
   }
 
-  /// Reine Auswahllogik, damit sie ohne Browser geprüft werden kann.
+  /// Pure selection logic so it can be tested without a browser.
   /// Reihenfolge: erzwungene Sprache, gespeicherte Wahl, Systemsprachen,
   /// danach Englisch.
   function chooseLocale({ forced, stored, preferred } = {}) {

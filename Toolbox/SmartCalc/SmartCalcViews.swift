@@ -80,7 +80,7 @@ struct DownloadTimeView: View {
 
         var id: Self { self }
 
-        // Faktor, um die Geschwindigkeit in MB/s umzurechnen
+        // Factor to convert the speed into MB/s
         var megabytesPerSecond: Double {
             switch self {
             case .mbit: 1.0 / 8
@@ -319,7 +319,7 @@ private enum UnitConversion: String, CaseIterable, Identifiable {
 }
 
 private extension View {
-    /// Dezimaltastatur gibt es nur auf iOS; auf dem Mac tippt man mit der normalen Tastatur.
+    /// A decimal keyboard only exists on iOS; on the Mac you type with the normal keyboard.
     @ViewBuilder
     func decimalKeyboard() -> some View {
         #if os(iOS)
@@ -329,7 +329,7 @@ private extension View {
         #endif
     }
 
-    /// Die NavigationLink-Darstellung eines Pickers ist iOS vorbehalten.
+    /// The NavigationLink presentation of a picker is reserved for iOS.
     @ViewBuilder
     func navigationLinkPicker() -> some View {
         #if os(iOS)
