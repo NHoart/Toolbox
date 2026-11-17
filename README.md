@@ -74,7 +74,7 @@ The widget shows the daily progress as a ring (small and medium). In the medium 
 
 The “Log water” shortcut supports glasses and bottles (single, double or triple) and answers with the current total, for example:
 
-> “Hey Siri, ich habe zwei Gläser getrunken in Toolbox”
+> “Hey Siri, log two glasses of water in Toolbox”
 
 The size of the glass and bottle comes from the app's settings.
 

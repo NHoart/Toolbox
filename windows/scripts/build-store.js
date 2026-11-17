@@ -22,7 +22,7 @@ let store
 try {
   store = JSON.parse(fs.readFileSync(configPath, 'utf8'))
 } catch (error) {
-  fail(`windows/store/store.config.json konnte nicht gelesen werden: ${error.message}`)
+  fail(`Could not read windows/store/store.config.json: ${error.message}`)
 }
 
 const identityName = String(store.identityName || '').trim()
@@ -37,43 +37,43 @@ const placeholder = !identityName
 
 if (placeholder && !allowPlaceholder) {
   fail([
-    'Die Microsoft-Store-Identität ist noch nicht eingetragen.',
+    'The Microsoft Store identity has not been entered yet.',
     '',
-    'Trage in windows/store/store.config.json die Werte aus Partner Center ein:',
+    'Enter the values from Partner Center in windows/store/store.config.json:',
     '  identityName         = Package/Identity/Name',
     '  publisher            = Package/Identity/Publisher',
     '  publisherDisplayName = Anzeigename des Herausgebers',
     '',
-    'Für einen reinen Testbau ohne Store-Identität:',
+    'For a pure test build without a Store identity:',
     '  ALLOW_STORE_PLACEHOLDER=1 npm run dist:store',
   ].join('\n'))
 }
 
 if (!/^[A-Za-z0-9.-]{3,50}$/.test(identityName)) {
-  fail(`identityName ist ungültig (3–50 Zeichen, nur A–Z, a–z, 0–9, Punkt und Bindestrich): ${identityName}`)
+  fail(`identityName is invalid (3–50 characters, only A–Z, a–z, 0–9, period and hyphen): ${identityName}`)
 }
 if (!/^CN=.+/.test(publisher)) {
-  fail(`publisher muss mit "CN=" beginnen und exakt dem Wert aus Partner Center entsprechen: ${publisher}`)
+  fail(`publisher must start with "CN=" and match the Partner Center value exactly: ${publisher}`)
 }
 if (!/^[A-Za-z][A-Za-z0-9.]*$/.test(applicationId)) {
-  fail(`applicationId ist ungültig (alphanumerische, mit einem Buchstaben beginnende Segmente, durch Punkte getrennt): ${applicationId}`)
+  fail(`applicationId is invalid (alphanumeric segments starting with a letter, separated by periods): ${applicationId}`)
 }
-if (!displayName) fail('displayName darf nicht leer sein.')
-if (!publisherDisplayName) fail('publisherDisplayName darf nicht leer sein.')
+if (!displayName) fail('displayName must not be empty.')
+if (!publisherDisplayName) fail('publisherDisplayName must not be empty.')
 
 const configuredLanguages = Array.isArray(pkg.build && pkg.build.appx && pkg.build.appx.languages)
   ? pkg.build.appx.languages.map(language => String(language).trim())
   : []
 if (configuredLanguages.join(',') !== APPX_LANGUAGES.join(',')) {
   fail([
-    'Die AppX-Sprachen in windows/package.json sind nicht vollständig.',
+    'The AppX languages in windows/package.json are incomplete.',
     `Erwartet: ${APPX_LANGUAGES.join(', ')}`,
     `Gefunden: ${configuredLanguages.length ? configuredLanguages.join(', ') : '(keine)'}`,
   ].join('\n'))
 }
 
 if (placeholder) {
-  console.warn('WARNUNG: Testbau mit Platzhalter-Identität. Dieses Paket kann nicht im Microsoft Store eingereicht werden.')
+  console.warn('WARNING: test build with placeholder identity. This package cannot be submitted to the Microsoft Store.')
 }
 
 const config = {
@@ -121,7 +121,7 @@ async function run() {
     console.log(`  languages: ${config.appx.languages.join(', ')}`)
     console.log(`  capabilities: ${(config.appx.capabilities || []).join(', ')}`)
     console.log(`  winCodeSign: ${config.toolsets.winCodeSign}`)
-    if (placeholder) console.log('  Hinweis: Platzhalter-Identität (Testbau).')
+    if (placeholder) console.log('  Note: placeholder identity (test build).')
     return
   }
 
@@ -129,7 +129,7 @@ async function run() {
   // would only write a wrong publisher into the manifest.
   process.env.CSC_IDENTITY_AUTO_DISCOVERY = 'false'
 
-  console.log(`Baue AppX für ${identityName} mit ${APPX_LANGUAGES.join(', ')} …`)
+  console.log(`Building AppX for ${identityName} with ${APPX_LANGUAGES.join(', ')} …`)
   await build({
     targets: Platform.WINDOWS.createTarget('appx', Arch.x64),
     config,
@@ -138,10 +138,10 @@ async function run() {
     publish: 'never',
   })
   console.log('AppX fertig. Die Datei liegt unter windows/dist/.')
-  console.log('Manifest prüfen (Windows): powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-appx.ps1')
+  console.log('Verify the manifest (Windows): powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-appx.ps1')
 }
 
 run().catch(error => {
-  console.error(checkOnly ? 'Store-Konfiguration ungültig:' : 'AppX-Build fehlgeschlagen:', error)
+  console.error(checkOnly ? 'Store configuration invalid:' : 'AppX-Build fehlgeschlagen:', error)
   process.exit(1)
 })

@@ -435,7 +435,7 @@ class SyncService extends EventEmitter {
     const peers = new Map()
     for (const conn of this.connections.values()) {
       if (!conn.peerId) continue
-      peers.set(conn.peerId, conn.peerName || 'Gerät')
+      peers.set(conn.peerId, conn.peerName || 'Device')
     }
     this.peers = [...peers.entries()].map(([id, name]) => ({ id, name }))
     this.emitStatus()
@@ -473,7 +473,7 @@ class SyncService extends EventEmitter {
         this.emitStatus()
       })
     } catch (error) {
-      this.discoveryError = `Bonjour konnte nicht gestartet werden: ${error.message}`
+      this.discoveryError = `Bonjour could not start: ${error.message}`
       this.emitStatus()
       return
     }
@@ -486,7 +486,7 @@ class SyncService extends EventEmitter {
       this.browser.on('srv-update', service => this.onServiceUp(service))
       this.isSearching = true
     } catch (error) {
-      this.discoveryError = `Suche im WLAN fehlgeschlagen: ${error.message}`
+      this.discoveryError = `Wi-Fi search failed: ${error.message}`
       this.isSearching = false
     }
 
@@ -512,7 +512,7 @@ class SyncService extends EventEmitter {
       })
 
       this.service.on('error', error => {
-        this.discoveryError = `Ankündigung im WLAN: ${error.message}`
+        this.discoveryError = `Wi-Fi announcement: ${error.message}`
         this.emitStatus()
       })
       this.service.on('up', () => {
@@ -520,7 +520,7 @@ class SyncService extends EventEmitter {
         this.emitStatus()
       })
     } catch (error) {
-      this.discoveryError = `Ankündigung im WLAN fehlgeschlagen: ${error.message}`
+      this.discoveryError = `Wi-Fi announcement failed: ${error.message}`
       this.service = null
       this.emitStatus()
     }

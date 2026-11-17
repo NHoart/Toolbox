@@ -88,7 +88,7 @@ browser.on('up', service => {
 
 setTimeout(() => {
   if (!connected) {
-    console.log(JSON.stringify({ error: 'kein Gerät gefunden' }))
+    console.log(JSON.stringify({ error: 'no device found' }))
     process.exit(3)
   }
 }, 12_000)

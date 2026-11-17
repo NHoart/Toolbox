@@ -25,7 +25,7 @@ async function waitFor(predicate, message, timeout = 15_000) {
     if (predicate()) return
     await delay(25)
   }
-  throw new Error(`Zeitüberschreitung: ${message}`)
+  throw new Error(`Timeout: ${message}`)
 }
 
 function createHarness(child) {
@@ -245,7 +245,7 @@ function assertSnapshot(label, swift, winWater, winCounter) {
 
 async function main() {
   if (!fs.existsSync(HARNESS)) {
-    throw new Error(`Swift-Harness fehlt: ${HARNESS}. Zuerst scripts/build-sync-harness.sh ausführen.`)
+    throw new Error(`Swift harness missing: ${HARNESS}. Run scripts/build-sync-harness.sh first.`)
   }
 
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'toolbox-interop-'))
@@ -320,12 +320,12 @@ async function main() {
     )
     await waitFor(
       () => windows.todayML() === 400 && windows.count === 1,
-      'Windows erhält v1 vom Mac'
+      'Windows receives v1 from the Mac'
     )
     const iphoneV1 = await waitForStatus(
       iphone.harness,
       status => status.water === 400 && status.counter === 1,
-      'iPhone erhält v1 über Windows'
+      'iPhone receives v1 through Windows'
     )
     assert.ok(Math.abs(windows.waterUpdatedAt() - macV1.waterUpdatedAt) < 0.001)
     assert.ok(Math.abs(iphoneV1.waterUpdatedAt - macV1.waterUpdatedAt) < 0.001)
@@ -341,13 +341,13 @@ async function main() {
     )
     await waitFor(
       () => windows.todayML() === 600 && windows.waterUpdatedAt() > macV1.waterUpdatedAt,
-      'Windows erhält v2 vom Mac'
+      'Windows receives v2 from the Mac'
     )
     await waitForStatus(
       iphone.harness,
       status => status.water === 600
         && Math.abs(status.waterUpdatedAt - macV2.waterUpdatedAt) < 0.001,
-      'iPhone erhält v2 über Windows'
+      'iPhone receives v2 through Windows'
     )
 
     // Record the real wire line of A-v2 for the late replay later.
@@ -359,12 +359,12 @@ async function main() {
     await waitFor(
       () => windows.savedCounters.length === 1
         && windows.savedCounters[0].name === 'Interop-Stand',
-      'Windows erhält den gespeicherten Zählerstand'
+      'Windows receives the saved counter value'
     )
     const iphoneSaved = await waitForStatus(
       iphone.harness,
       status => status.counter === 1,
-      'iPhone bleibt beim Zählerstand 1'
+      'iPhone stays at counter value 1'
     )
     assert.equal(iphoneSaved.water, 600)
 
@@ -372,17 +372,17 @@ async function main() {
     await delay(200)
     windows.addWater(250)
     windows.increment()
-    await waitFor(() => windows.todayML() === 850 && windows.count === 2, 'Windows-Änderung lokal')
+    await waitFor(() => windows.todayML() === 850 && windows.count === 2, 'Windows change locally')
 
     const macAfterWindows = await waitForStatus(
       mac.harness,
       status => status.water === 850 && status.counter === 2,
-      'Mac erhält Windows-Änderung'
+      'Mac receives the Windows change'
     )
     const iphoneAfterWindows = await waitForStatus(
       iphone.harness,
       status => status.water === 850 && status.counter === 2,
-      'iPhone erhält Windows-Änderung'
+      'iPhone receives the Windows change'
     )
     assert.ok(Math.abs(macAfterWindows.waterUpdatedAt - windows.waterUpdatedAt()) < 0.001)
     assert.ok(Math.abs(iphoneAfterWindows.waterUpdatedAt - windows.waterUpdatedAt()) < 0.001)
@@ -393,19 +393,19 @@ async function main() {
     await replayWireLine(iphonePort, oldV2Line)
     await delay(800)
 
-    assert.equal(windows.todayML(), 850, 'Alter A-v2-Stand darf Windows nicht überschreiben')
-    assert.equal(windows.count, 2, 'Alter A-v2-Stand darf den Windows-Zähler nicht überschreiben')
-    assert.equal(windows.savedCounters.length, 1, 'Gespeicherter Zählerstand darf nicht verloren gehen')
+    assert.equal(windows.todayML(), 850, 'The old A-v2 state must not overwrite Windows')
+    assert.equal(windows.count, 2, 'The old A-v2 state must not overwrite the Windows counter')
+    assert.equal(windows.savedCounters.length, 1, 'The saved counter value must not be lost')
 
     const macAfterReplay = await waitForStatus(
       mac.harness,
       status => status.water === 850 && status.counter === 2,
-      'Mac bleibt nach dem alten Replay bei 850'
+      'The Mac stays at 850 after the old replay'
     )
     const iphoneAfterReplay = await waitForStatus(
       iphone.harness,
       status => status.water === 850 && status.counter === 2,
-      'iPhone bleibt nach dem alten Replay bei 850'
+      'The iPhone stays at 850 after the old replay'
     )
     assert.ok(Math.abs(macAfterReplay.waterUpdatedAt - windows.waterUpdatedAt()) < 0.001)
     assert.ok(Math.abs(iphoneAfterReplay.waterUpdatedAt - windows.waterUpdatedAt()) < 0.001)
@@ -425,12 +425,12 @@ async function main() {
       'Verlauf'
     )
     assert.deepEqual(winWaterSnapshot.recentAdds, [400, 200, 250], 'recentAdds')
-    assert.equal(winWaterSnapshot.glass, 250, 'Glasgröße')
-    assert.equal(winWaterSnapshot.bottle, 600, 'Flaschengröße')
+    assert.equal(winWaterSnapshot.glass, 250, 'Glass size')
+    assert.equal(winWaterSnapshot.bottle, 600, 'Bottle size')
     assert.equal(winWaterSnapshot.goal, 2400, 'Tagesziel')
-    assert.equal(winCounterSnapshot.count, 2, 'Zählerstand')
-    assert.equal(winCounterSnapshot.rate, 5, 'Zählerrate')
-    assert.equal(winCounterSnapshot.savedCounters.length, 1, 'Gespeicherter Zählerstand fehlt')
+    assert.equal(winCounterSnapshot.count, 2, 'Counter value')
+    assert.equal(winCounterSnapshot.rate, 5, 'Counter rate')
+    assert.equal(winCounterSnapshot.savedCounters.length, 1, 'Saved counter value missing')
     assert.equal(winCounterSnapshot.savedCounters[0].name, 'Interop-Stand')
     assert.equal(winCounterSnapshot.savedCounters[0].value, 1)
 
@@ -446,12 +446,12 @@ async function main() {
     assert.equal(outsiderStatus.water, 0, 'fremder Name darf keine Daten bekommen')
     const outsiderSnapshot = await outsider.harness.snapshot()
     assert.equal(outsiderSnapshot.water.total, 0, 'fremder Name darf keinen Verlauf bekommen')
-    assert.equal(windows.todayML(), 850, 'fremder Name darf Windows nicht verändern')
+    assert.equal(windows.todayML(), 850, 'a foreign name must not change Windows')
 
     console.log(
       'Drei echte Peers erfolgreich: A=Mac, B=iPhone, Windows; '
       + 'v1 400 -> Windows/B; v2 600 -> Windows/B; '
-      + 'Windows 850/Zähler 2 -> A/B; verspätetes A-v2 600 verworfen; Snapshots identisch.'
+      + 'Windows 850/counter 2 -> A/B; late A-v2 600 discarded; snapshots identical.'
     )
   } catch (error) {
     const details = clients

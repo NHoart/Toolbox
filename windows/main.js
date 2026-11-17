@@ -101,7 +101,7 @@ function migrateLegacyStoreData() {
     fs.mkdirSync(path.dirname(target), { recursive: true })
     fs.copyFileSync(source, target)
   } catch (error) {
-    console.error('Toolbox-Daten konnten nicht aus der EXE-Installation übernommen werden:', error)
+    console.error('Could not import Toolbox data from the EXE installation:', error)
   }
 }
 

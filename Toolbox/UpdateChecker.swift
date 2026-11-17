@@ -516,7 +516,7 @@ enum UpdateInstaller {
         PID=\(pid)
 
         exec >>\(shellQuoted(log.path)) 2>&1
-        echo "[$(date)] Update wird vorbereitet."
+        echo "[$(date)] Preparing update."
 
         # Only one installer at a time – an old, stuck run must not
         # interfere. An orphaned lock is taken over.
@@ -524,7 +524,7 @@ enum UpdateInstaller {
         if ! mkdir "$LOCK" 2>/dev/null; then
             OTHER="$(cat "$LOCK/pid" 2>/dev/null || true)"
             if [ -n "$OTHER" ] && kill -0 "$OTHER" 2>/dev/null; then
-                echo "Ein anderes Update läuft bereits (PID $OTHER)."
+                echo "Another update is already running (PID $OTHER)."
                 exit 0
             fi
             rm -rf "$LOCK"
@@ -537,7 +537,7 @@ enum UpdateInstaller {
         WAITED=0
         while kill -0 "$PID" 2>/dev/null; do
             if [ "$WAITED" -ge 150 ]; then
-                echo "Die App wurde nicht beendet; Update abgebrochen."
+                echo "The app did not quit; update aborted."
                 exit 1
             fi
             WAITED=$((WAITED + 1))
@@ -555,7 +555,7 @@ enum UpdateInstaller {
         rm -rf "$STAGED" "$BACKUP" 2>/dev/null || true
 
         if ! /usr/bin/ditto "$SOURCE" "$STAGED" || [ ! -f "$STAGED/Contents/Info.plist" ]; then
-            echo "Die neue App konnte nicht vorbereitet werden."
+            echo "The new app could not be prepared."
             rm -rf "$STAGED"
             reopen_target
             exit 1
@@ -564,14 +564,14 @@ enum UpdateInstaller {
         /usr/bin/xattr -dr com.apple.quarantine "$STAGED" 2>/dev/null || true
 
         if ! mv "$TARGET" "$BACKUP"; then
-            echo "Die alte App konnte nicht gesichert werden."
+            echo "The old app could not be backed up."
             rm -rf "$STAGED"
             reopen_target
             exit 1
         fi
 
         if ! mv "$STAGED" "$TARGET"; then
-            echo "Die neue App konnte nicht eingesetzt werden; die alte Version wird wiederhergestellt."
+            echo "The new app could not be installed; the old version is being restored."
             mv "$BACKUP" "$TARGET" 2>/dev/null || true
             rm -rf "$STAGED"
             reopen_target
@@ -585,13 +585,13 @@ enum UpdateInstaller {
         until /usr/bin/open "$TARGET" 2>/dev/null; do
             ATTEMPTS=$((ATTEMPTS + 1))
             if [ "$ATTEMPTS" -ge 10 ]; then
-                echo "Die App konnte nicht automatisch geöffnet werden. Bitte manuell starten."
+                echo "The app could not be opened automatically. Please start it manually."
                 exit 1
             fi
             sleep 1
         done
 
-        echo "[$(date)] Update abgeschlossen."
+        echo "[$(date)] Update complete."
         rm -rf "$WORK"
         """
 

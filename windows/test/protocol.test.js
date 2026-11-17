@@ -19,20 +19,20 @@ const {
   toAppleTime,
 } = require('../src/protocol')
 
-test('Apple-Referenzzeit wird korrekt umgerechnet', () => {
+test('Apple reference time is converted correctly', () => {
   assert.equal(toAppleTime(978_307_200_000), 0)
   assert.equal(fromAppleTime(0), 978_307_200_000)
   assert.equal(toAppleTime(978_307_200_000 + 90_000), 90)
 })
 
-test('Zeitstempel werden als Zahl, ISO-String oder Fallback gelesen', () => {
+test('Timestamps are read as number, ISO string or fallback', () => {
   assert.equal(parseAppleTime(1234.5), 1234.5)
   assert.ok(Number.isFinite(parseAppleTime('2026-11-13T10:00:00Z')))
   assert.equal(parseAppleTime(undefined), APPLE_DISTANT_PAST)
   assert.equal(parseAppleTime('keine Zeit'), APPLE_DISTANT_PAST)
 })
 
-test('Verlauf wird auf 400 Tage begrenzt und bereinigt', () => {
+test('History is capped at 400 days and cleaned up', () => {
   const now = new Date(2026, 10, 13)
   const pruned = pruneHistory({
     '2026-11-13': 1500,
@@ -52,7 +52,7 @@ test('Ein leerer Stand meldet beide Bereiche als nichts zu synchronisieren', () 
   assert.equal(normalizeCounterSnapshot(undefined), null)
 })
 
-test('Wasserstand wird defensiv normalisiert', () => {
+test('Water level is normalized defensively', () => {
   const snapshot = normalizeWaterSnapshot({
     history: { '2026-11-13': 1750 },
     recentAdds: [250, 500, 0, -10],
@@ -71,7 +71,7 @@ test('Wasserstand wird defensiv normalisiert', () => {
   assert.equal(snapshot.updatedAt, 42)
 })
 
-test('Zählerstand wird begrenzt und gespeicherte Stände ergänzt', () => {
+test('Counter value is clamped and saved values are added', () => {
   const snapshot = normalizeCounterSnapshot({
     count: 12,
     rate: 500,
@@ -89,7 +89,7 @@ test('Zählerstand wird begrenzt und gespeicherte Stände ergänzt', () => {
   assert.equal(snapshot.savedCounters[0].date, 77)
 })
 
-test('Nachricht entspricht dem Swift-Format (eine Zeile, nil-Felder fehlen)', () => {
+test('Message matches the Swift format (one line, nil fields omitted)', () => {
   const line = encodeMessage({
     deviceID: 'windows-1',
     deviceName: 'Noahs-PC',
@@ -117,15 +117,15 @@ test('Nachricht entspricht dem Swift-Format (eine Zeile, nil-Felder fehlen)', ()
   assert.equal(parsed.water.updatedAt, 100)
 })
 
-test('Gruppenname wird ohne Leerraum und Groß-/Kleinschreibung verglichen', () => {
+test('Group name is compared ignoring whitespace and case', () => {
   assert.equal(normalizeSyncName('  Familie   Noah '), 'familie noah')
   assert.equal(sameSyncName('Familie Noah', ' familie  noah '), true)
-  assert.equal(sameSyncName('Familie', 'Büro'), false)
+  assert.equal(sameSyncName('Familie', 'Office'), false)
   assert.equal(sameSyncName('', ''), false)
   assert.equal(sameSyncName('   ', '   '), false)
 })
 
-test('Swift-Nachricht mit Zahlendaten wird dekodiert', () => {
+test('Swift message with numeric data is decoded', () => {
   const line = JSON.stringify({
     deviceID: 'mac-1',
     deviceName: 'Noahs-MacBook-Air',
@@ -157,14 +157,14 @@ test('Swift-Nachricht mit Zahlendaten wird dekodiert', () => {
   assert.equal(message.counter.count, 3)
 })
 
-test('Ungültige Zeilen werden verworfen', () => {
+test('Invalid lines are discarded', () => {
   assert.equal(decodeMessageLine('kein json'), null)
   assert.equal(decodeMessageLine('{}'), null)
   assert.equal(decodeMessageLine('{"deviceID":""}'), null)
   assert.equal(decodeMessageLine(''), null)
 })
 
-test('Merge-Regeln: ohne eigenen Stand immer, sonst nur der neuere', () => {
+test('Merge rules: always without our own state, otherwise only the newer one', () => {
   assert.equal(shouldApply(null, 10), true)
   assert.equal(shouldApply(5, 10), true)
   assert.equal(shouldApply(10, 5), false)

@@ -20,7 +20,7 @@ function createStore(t, clock) {
   return { store, filePath }
 }
 
-test('Frischer Stand hat Standardwerte und nichts zu synchronisieren', t => {
+test('Fresh state has defaults and nothing to sync', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store } = createStore(t, clock)
   const state = store.getState()
@@ -39,7 +39,7 @@ test('Frischer Stand hat Standardwerte und nichts zu synchronisieren', t => {
   assert.ok(store.deviceId.length > 0)
 })
 
-test('Wasser eintragen, rückgängig machen und zurücksetzen', t => {
+test('Log water, undo and reset', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store } = createStore(t, clock)
 
@@ -69,7 +69,7 @@ test('Wasser eintragen, rückgängig machen und zurücksetzen', t => {
   assert.deepEqual(changes, ['water', 'water', 'water', 'water'])
 })
 
-test('Mengen werden wie in den Einstellungen der Mac-App begrenzt', t => {
+test('Amounts are clamped like in the Mac app settings', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store } = createStore(t, clock)
 
@@ -82,7 +82,7 @@ test('Mengen werden wie in den Einstellungen der Mac-App begrenzt', t => {
   assert.equal(store.waterUpdatedAt(), toAppleTime(clock.value))
 })
 
-test('Neuer Tag beginnt bei 0 ml und ohne alten Undo-Stapel', t => {
+test('A new day starts at 0 ml and without an old undo stack', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store } = createStore(t, clock)
 
@@ -100,7 +100,7 @@ test('Neuer Tag beginnt bei 0 ml und ohne alten Undo-Stapel', t => {
   assert.equal(store.waterSnapshot().history[yesterday], 500)
 })
 
-test('Zähler: Plus, Minus, Undo, Reset und Rate', t => {
+test('Counter: plus, minus, undo, reset and rate', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store } = createStore(t, clock)
 
@@ -124,7 +124,7 @@ test('Zähler: Plus, Minus, Undo, Reset und Rate', t => {
   assert.equal(store.count, 0)
 })
 
-test('Gespeicherte Zählerstände speichern, laden und löschen', t => {
+test('Save, load and delete stored counter values', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store } = createStore(t, clock)
 
@@ -146,7 +146,7 @@ test('Gespeicherte Zählerstände speichern, laden und löschen', t => {
   assert.equal(store.savedCounters.length, 0)
 })
 
-test('Fremder Stand wird ohne lokale Änderungszeit übernommen', t => {
+test('Foreign state is adopted without a local change time', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store } = createStore(t, clock)
 
@@ -182,7 +182,7 @@ test('Fremder Stand wird ohne lokale Änderungszeit übernommen', t => {
   assert.deepEqual(changes, [])
 })
 
-test('Stand überlebt einen Neustart der App', t => {
+test('State survives an app restart', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store, filePath } = createStore(t, clock)
 
@@ -205,7 +205,7 @@ test('Stand überlebt einen Neustart der App', t => {
   assert.equal(reloaded.savedCounters[0].name, 'Test')
 })
 
-test('Defekte Datendatei wird zur Seite gelegt statt zu crashen', t => {
+test('Broken data file is moved aside instead of crashing', t => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'toolbox-corrupt-'))
   const filePath = path.join(directory, 'data.json')
   fs.writeFileSync(filePath, '{ kaputt', 'utf8')

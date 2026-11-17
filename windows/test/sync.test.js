@@ -46,14 +46,14 @@ async function waitFor(predicate, message, timeout = 6000) {
     if (predicate()) return
     await new Promise(resolve => setTimeout(resolve, 20))
   }
-  throw new Error(`Zeitüberschreitung: ${message}`)
+  throw new Error(`Timeout: ${message}`)
 }
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-test('Mac und Windows gleichen Wasser und Zähler in beide Richtungen ab', async t => {
+test('Mac and Windows sync water and counter in both directions', async t => {
   const base = Date.UTC(2026, 10, 13, 9, 0, 0)
   const clockA = { value: base }
   const clockB = { value: base + 60_000 }
@@ -77,7 +77,7 @@ test('Mac und Windows gleichen Wasser und Zähler in beide Richtungen ab', async
       && windows.store.sizes.goal === 2500
       && windows.store.count === 2
       && windows.store.savedCounters.length === 1,
-    'Windows sollte den Mac-Stand übernehmen'
+    'Windows should adopt the Mac state'
   )
 
   assert.equal(mac.store.todayML(), 750)
@@ -86,18 +86,18 @@ test('Mac und Windows gleichen Wasser und Zähler in beide Richtungen ab', async
 
   await waitFor(
     () => mac.sync.peerCount === 1 && windows.sync.peerCount === 1,
-    'beide Geräte sollten sich als verbunden zählen'
+    'both devices should count each other as connected'
   )
 })
 
-test('Mac -> iPhone -> Windows: der Windows-PC bekommt den aktuellen Stand', async t => {
+test('Mac -> iPhone -> Windows: the Windows PC receives the current state', async t => {
   const base = Date.UTC(2026, 10, 13, 9, 0, 0)
   const clockMac = { value: base }
   const clockPhone = { value: base + 60_000 }
   const clockWindows = { value: base + 120_000 }
 
   const mac = createNode(t, 'Noahs-MacBook-Air', clockMac)
-  const phone = createNode(t, 'iPhone von Noah', clockPhone)
+  const phone = createNode(t, 'Noah iPhone', clockPhone)
   const windows = createNode(t, 'Noahs-PC', clockWindows)
 
   mac.store.addWater(900)
@@ -114,7 +114,7 @@ test('Mac -> iPhone -> Windows: der Windows-PC bekommt den aktuellen Stand', asy
       && phone.store.sizes.goal === 2200
       && phone.store.count === 1
       && phone.store.savedCounters.length === 1,
-    'iPhone sollte den Mac-Stand übernehmen'
+    'iPhone should adopt the Mac state'
   )
 
   const syncedTimestamp = phone.store.waterUpdatedAt()
@@ -122,7 +122,7 @@ test('Mac -> iPhone -> Windows: der Windows-PC bekommt den aktuellen Stand', asy
 
   // The Mac is no longer on the network – only the iPhone remains.
   mac.sync.stop()
-  await waitFor(() => phone.sync.peerCount === 0, 'iPhone sollte den Mac verlieren')
+  await waitFor(() => phone.sync.peerCount === 0, 'iPhone should lose the Mac')
 
   // Later the Windows PC connects to the iPhone.
   await startNode(windows)
@@ -134,7 +134,7 @@ test('Mac -> iPhone -> Windows: der Windows-PC bekommt den aktuellen Stand', asy
       && windows.store.sizes.glass === 250
       && windows.store.count === 1
       && windows.store.savedCounters.length === 1,
-    'Windows sollte den über das iPhone weitergereichten Mac-Stand bekommen'
+    'Windows should receive the Mac state passed on through the iPhone'
   )
 
   // The timestamp is preserved so other devices order the state correctly.
@@ -142,7 +142,7 @@ test('Mac -> iPhone -> Windows: der Windows-PC bekommt den aktuellen Stand', asy
   assert.equal(windows.store.counterUpdatedAt(), phone.store.counterUpdatedAt())
 })
 
-test('Drei Geräte gleichzeitig: Änderungen laufen über die Kette weiter', async t => {
+test('Three devices at once: changes travel along the chain', async t => {
   const base = Date.now()
   const clockA = { value: base }
   const clockB = { value: base + 1_000 }
@@ -162,7 +162,7 @@ test('Drei Geräte gleichzeitig: Änderungen laufen über die Kette weiter', asy
 
   await waitFor(
     () => a.sync.peerCount === 1 && b.sync.peerCount === 2 && c.sync.peerCount === 1,
-    'drei Geräte sollten gleichzeitig verbunden sein'
+    'three devices should be connected at the same time'
   )
 
   clockA.value = base + 5_000
@@ -171,7 +171,7 @@ test('Drei Geräte gleichzeitig: Änderungen laufen über die Kette weiter', asy
 
   await waitFor(
     () => c.store.todayML() === 300 && c.store.count === 1,
-    'Windows sollte die Änderung über das iPhone erreichen'
+    'Windows should reach the change through the iPhone'
   )
   assert.equal(b.store.todayML(), 300)
   assert.equal(b.store.count, 1)
@@ -182,14 +182,14 @@ test('Drei Geräte gleichzeitig: Änderungen laufen über die Kette weiter', asy
 
   await waitFor(
     () => a.store.todayML() === 900 && a.store.count === 2,
-    'der Mac sollte die Windows-Änderung über das iPhone erreichen'
+    'the Mac should receive the Windows change through the iPhone'
   )
   assert.equal(b.store.todayML(), 900)
   assert.equal(b.store.count, 2)
   assert.equal(a.store.waterUpdatedAt(), c.store.waterUpdatedAt())
 })
 
-test('Ein frisches Gerät überschreibt keinen neueren Stand', async t => {
+test('A fresh device does not overwrite a newer state', async t => {
   const base = Date.UTC(2026, 10, 13, 9, 0, 0)
   const clockOld = { value: base }
   const clockNew = { value: base + 90_000 }
@@ -207,7 +207,7 @@ test('Ein frisches Gerät überschreibt keinen neueren Stand', async t => {
 
   await waitFor(
     () => fresh.store.todayML() === 650 && fresh.store.count === 1,
-    'das frische Gerät sollte den Stand übernehmen'
+    'the fresh device should adopt the state'
   )
 
   // The fresh device has no own data and must not reset the Mac.
@@ -216,7 +216,7 @@ test('Ein frisches Gerät überschreibt keinen neueren Stand', async t => {
   assert.equal(old.store.count, 1)
 })
 
-test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t => {
+test('Three separate clients: v1 -> v2 -> new Windows, and back', async t => {
   const base = Date.UTC(2026, 10, 13, 9, 0, 0)
   const clockMac = { value: base }
   const clockPhone = { value: base + 60_000 }
@@ -242,7 +242,7 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
       && phone.store.count === 1
       && phone.store.waterUpdatedAt() === v1Water
       && phone.store.counterUpdatedAt() === v1Counter,
-    'das iPhone sollte v1 vom Mac erhalten'
+    'the iPhone should receive v1 from the Mac'
   )
 
   // v2 is created on the Mac while the iPhone is already connected.
@@ -252,7 +252,7 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
   await waitFor(
     () => phone.store.todayML() === 600
       && phone.store.waterUpdatedAt() === mac.store.waterUpdatedAt(),
-    'das iPhone sollte v2 vom Mac erhalten'
+    'the iPhone should receive v2 from the Mac'
   )
   const v2Water = mac.store.waterUpdatedAt()
   const v2Counter = mac.store.counterUpdatedAt()
@@ -266,7 +266,7 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
       && windows.store.count === 1
       && windows.store.waterUpdatedAt() === v2Water
       && windows.store.counterUpdatedAt() === v2Counter,
-    'das neue Windows-Gerät sollte v2 über das iPhone erhalten'
+    'the new Windows device should receive v2 through the iPhone'
   )
 
   // The Windows change must travel back to Mac and iPhone via the iPhone.
@@ -281,7 +281,7 @@ test('Drei getrennte Clients: v1 -> v2 -> neues Windows, und zurück', async t =
       && phone.store.count === 2
       && mac.store.waterUpdatedAt() === windows.store.waterUpdatedAt()
       && phone.store.waterUpdatedAt() === windows.store.waterUpdatedAt(),
-    'die Windows-Änderung sollte Mac und iPhone erreichen'
+    'the Windows change should reach Mac and iPhone'
   )
 
   // All three stores must have the same state including the timestamp.
@@ -306,18 +306,18 @@ test('Ohne Namen startet kein Abgleich', async t => {
   assert.equal(node.sync.getStatus().syncName, '')
 
   node.sync.setSyncName('Familie')
-  await waitFor(() => node.sync.listening, 'nach dem Namen sollte der Server starten')
+  await waitFor(() => node.sync.listening, 'the server should start after the name is set')
   assert.equal(node.sync.running, true)
   assert.equal(node.sync.getStatus().syncName, 'Familie')
 })
 
-test('Nur Geräte mit demselben Namen gleichen sich ab', async t => {
+test('Only devices with the same name sync with each other', async t => {
   const base = Date.UTC(2026, 10, 13, 9, 0, 0)
   const clockMac = { value: base + 60_000 }
   const clockWindows = { value: base }
 
   const mac = createNode(t, 'Mac', clockMac, 'Familie')
-  const windows = createNode(t, 'Windows-PC', clockWindows, 'Büro')
+  const windows = createNode(t, 'Windows-PC', clockWindows, 'Office')
 
   mac.store.addWater(450)
   mac.store.increment()
@@ -330,19 +330,19 @@ test('Nur Geräte mit demselben Namen gleichen sich ab', async t => {
   await delay(600)
   assert.equal(mac.sync.peerCount, 0, 'fremder Name darf kein Peer werden')
   assert.equal(windows.sync.peerCount, 0, 'fremder Name darf kein Peer werden')
-  assert.equal(mac.store.todayML(), 450, 'Mac behält den eigenen Stand')
-  assert.equal(windows.store.todayML(), 250, 'Windows behält den eigenen Stand')
+  assert.equal(mac.store.todayML(), 450, 'the Mac keeps its own state')
+  assert.equal(windows.store.todayML(), 250, 'Windows keeps its own state')
 
   // The sync may only run with a matching name.
   windows.sync.setSyncName(' familie ')
-  await waitFor(() => windows.sync.listening, 'Windows-Sync-Server startet nach Namensänderung')
+  await waitFor(() => windows.sync.listening, 'Windows sync server starts after a name change')
   windows.sync.connectTo('127.0.0.1', mac.sync.port)
 
   await waitFor(
     () => windows.store.todayML() === 450
       && windows.store.count === 1
       && windows.store.waterUpdatedAt() === mac.store.waterUpdatedAt(),
-    'nach gleichem Namen sollte der Mac-Stand ankommen'
+    'after the same name the Mac state should arrive'
   )
   assert.ok(mac.sync.peerCount === 1 && windows.sync.peerCount === 1)
 })

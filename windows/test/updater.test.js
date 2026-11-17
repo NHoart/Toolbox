@@ -58,7 +58,7 @@ function createService({
   return { service, updater, filePath }
 }
 
-test('meldet eine neuere Version und merkt sich die Prüfung', async () => {
+test('reports a newer version and remembers the check', async () => {
   const { service, updater, filePath } = createService()
 
   const state = await service.check()
@@ -75,7 +75,7 @@ test('meldet eine neuere Version und merkt sich die Prüfung', async () => {
   assert.equal(saved.lastCheck, 1_000_000)
 })
 
-test('prüft beim Start höchstens einmal pro Tag', async () => {
+test('checks at launch at most once per day', async () => {
   let now = 1_000_000
   const { service, updater } = createService({ now: () => now })
 
@@ -91,7 +91,7 @@ test('prüft beim Start höchstens einmal pro Tag', async () => {
   assert.equal(updater.checkCalls, 2)
 })
 
-test('lässt sich die automatische Prüfung abschalten und merkt sie sich', async () => {
+test('the automatic check can be turned off and is remembered', async () => {
   const filePath = createFile()
   const first = createService({ filePath })
 
@@ -105,7 +105,7 @@ test('lässt sich die automatische Prüfung abschalten und merkt sie sich', asyn
   assert.equal(second.service.state().automaticChecks, false)
 })
 
-test('installiert das geladene Update und startet die App neu', async () => {
+test('installs the downloaded update and restarts the app', async () => {
   const { service, updater } = createService()
 
   await service.check()
@@ -117,7 +117,7 @@ test('installiert das geladene Update und startet die App neu', async () => {
   assert.equal(state.progress, null)
 })
 
-test('prüft im Entwicklungsmodus nicht und meldet den Grund', async () => {
+test('does not check in development mode and reports the reason', async () => {
   const { service, updater } = createService({ isPackaged: false })
 
   const state = await service.check()
@@ -126,7 +126,7 @@ test('prüft im Entwicklungsmodus nicht und meldet den Grund', async () => {
   assert.match(state.error, /installierten App/)
 })
 
-test('deaktiviert electron-updater in der Microsoft-Store-Fassung', async () => {
+test('disables electron-updater in the Microsoft Store build', async () => {
   const updater = new FakeUpdater()
   const service = new UpdateService({
     filePath: createFile(),

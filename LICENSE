@@ -1,66 +1,63 @@
 Copyright (c) 2026 Noah (github.com/NHoart)
 
-Alle Rechte vorbehalten.
+All rights reserved.
 
-Toolbox ist kein Open-Source-Projekt. Der Quellcode ist öffentlich einsehbar,
-aber nicht zur freien Verwendung, Veränderung oder Weitergabe freigegeben.
-Ohne vorherige schriftliche Zustimmung des Rechteinhabers sind keine Rechte
-eingeräumt, außer den hier ausdrücklich genannten.
+Toolbox is not an open-source project. The source code is publicly readable but
+is not released for free use, modification or redistribution. No rights are
+granted without the prior written consent of the copyright holder, except those
+expressly stated here.
 
-## Erlaubt
+## Permitted
 
-1. **Ansehen und Forken auf GitHub.** Der Quellcode darf auf GitHub betrachtet
-   und im Rahmen der GitHub-Nutzungsbedingungen dort geforkt werden. Das ist
-   eine Kopie innerhalb von GitHub, kein Nutzungsrecht darüber hinaus.
-2. **Beiträge vorschlagen.** Änderungen dürfen angefertigt und als Pull Request
-   eingereicht werden. Einzelheiten und die dafür geltende Rechtseinräumung
-   stehen in `CONTRIBUTING.md`. Übernommen wird ausschließlich, was der
-   Rechteinhaber zusammenführt.
-3. **Die App nutzen.** Die veröffentlichten Builds (z. B. die DMG aus den
-   Releases) dürfen unentgeltlich heruntergeladen, installiert und für eigene
-   Zwecke verwendet werden, solange dabei keine Rechte aus diesem Dokument
-   verletzt werden.
+1. **Viewing and forking on GitHub.** The source code may be viewed on GitHub and
+   forked there within the GitHub terms of service. That is a copy inside GitHub,
+   not a right to use it beyond that.
+2. **Proposing contributions.** Changes may be made and submitted as a pull
+   request. Details and the rights granted for that are described in
+   `CONTRIBUTING.md`. Only what the copyright holder merges is accepted.
+3. **Using the app.** The published builds (for example the DMG from the
+   releases) may be downloaded, installed and used for your own purposes free of
+   charge, as long as no rights from this document are violated in doing so.
 
-## Nicht erlaubt
+## Not permitted
 
-Ohne vorherige schriftliche Zustimmung des Rechteinhabers ist es insbesondere
-untersagt,
+Without the prior written consent of the copyright holder it is in particular
+prohibited to
 
-1. den Quellcode oder Teile davon zu vervielfältigen, zu verbreiten, öffentlich
-   zugänglich zu machen oder zu veröffentlichen – außer als Fork innerhalb von
-   GitHub nach Ziffer 1,
-2. den Quellcode oder Teile davon zu verändern und diese veränderten Fassungen
-   zu verbreiten oder zu veröffentlichen; ausgenommen sind Änderungen, die
-   ausschließlich als Pull Request nach Ziffer 2 eingereicht werden,
-3. den Quellcode oder Teile davon in eigene Programme, Apps, Bibliotheken,
-   Dienste oder sonstige Produkte zu übernehmen, egal ob ganz oder teilweise,
-   verändert oder unverändert,
-4. die App oder abgeleitete Fassungen davon unter eigenem Namen, eigener Marke
-   oder als eigenes Produkt anzubieten, zu vertreiben oder zu verkaufen,
-5. die veröffentlichten Builds weiterzuverbreiten, zu vermieten, zu verkaufen
-   oder in Softwarepakete, Stores oder ähnliche Vertriebswege einzustellen,
-6. Hinweise auf Urheberschaft, Lizenz oder Herkunft (Copyright-Vermerke,
-   Dateiköpfe, „Über"-Ansichten) zu entfernen oder zu verdecken.
+1. reproduce, distribute, make publicly available or publish the source code or
+   parts of it – except as a fork inside GitHub under item 1,
+2. modify the source code or parts of it and distribute or publish those
+   modified versions; excluded are changes that are submitted exclusively as a
+   pull request under item 2,
+3. incorporate the source code or parts of it into your own programs, apps,
+   libraries, services or other products, whether in whole or in part, modified
+   or unmodified,
+4. offer, distribute or sell the app or derived versions of it under your own
+   name, your own brand or as your own product,
+5. redistribute, rent or sell the published builds or add them to software
+   packages, stores or similar distribution channels,
+6. remove or obscure notices of authorship, licence or origin (copyright
+   notices, file headers, “About” screens).
 
-## Beiträge
+## Contributions
 
-Rechte an eingereichten Beiträgen siehe `CONTRIBUTING.md`. Beiträge ändern
-nichts daran, dass alle Rechte am Projekt beim Rechteinhaber liegen.
+For rights in submitted contributions see `CONTRIBUTING.md`. Contributions do
+not change the fact that all rights in the project remain with the copyright
+holder.
 
-## Gewährleistung
+## Warranty
 
-Die Software wird unentgeltlich und „wie besehen" bereitgestellt. Es wird keine
-Gewährleistung irgendeiner Art übernommen, weder ausdrücklich noch
-stillschweigend, einschließlich nicht für Marktgängigkeit, Eignung für einen
-bestimmten Zweck oder Nichtverletzung von Rechten Dritter. Der Rechteinhaber
-haftet nicht für Schäden, die aus der Nutzung der Software entstehen, soweit
-dies gesetzlich zulässig ist.
+The software is provided free of charge and “as is”. No warranty of any kind is
+given, neither express nor implied, including not for merchantability, fitness
+for a particular purpose or non-infringement of third-party rights. The
+copyright holder is not liable for damages arising from the use of the software,
+as far as this is legally permitted.
 
-## Schlussbestimmungen
+## Final provisions
 
-Diese Bedingungen werden durch deutsches Recht geregelt. Sollte eine Bestimmung
-unwirksam sein, bleibt der Rest davon unberührt; an die Stelle der unwirksamen
-Bestimmung tritt die zulässige Regelung, die dem verfolgten Zweck am nächsten
-kommt. Anfragen zu weitergehenden Rechten (z. B. kommerzielle Nutzung,
-Einbindung in andere Produkte oder eine andere Lizenzierung) sind an den
-Rechteinhaber über die im Repository genannten Kontaktwege zu richten.
+These terms are governed by German law. Should a provision be invalid, the rest
+of it remains unaffected; the invalid provision is replaced by the permissible
+rule that comes closest to the purpose pursued. Requests for extended rights
+(for example commercial use, embedding in other products or a different licence)
+are to be directed to the copyright holder through the contact channels named in
+the repository.

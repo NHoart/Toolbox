@@ -168,7 +168,7 @@ function decodeMessageLine(line) {
   if (typeof message.deviceID !== 'string' || message.deviceID.length === 0) return null
   return {
     deviceID: message.deviceID,
-    deviceName: typeof message.deviceName === 'string' ? message.deviceName : 'Gerät',
+    deviceName: typeof message.deviceName === 'string' ? message.deviceName : 'Device',
     syncName: typeof message.syncName === 'string' ? message.syncName : '',
     water: normalizeWaterSnapshot(message.water),
     counter: normalizeCounterSnapshot(message.counter),

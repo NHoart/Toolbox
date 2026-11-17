@@ -720,7 +720,7 @@ function renderSettings() {
       const dot = document.createElement('span')
       dot.className = 'peer-dot'
       const name = document.createElement('span')
-      name.textContent = peer.name || T('Gerät')
+      name.textContent = peer.name || T('Device')
       row.append(dot, name)
       peers.append(row)
     }

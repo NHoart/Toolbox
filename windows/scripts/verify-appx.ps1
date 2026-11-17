@@ -14,14 +14,14 @@ if (-not $Path) {
     $dist = Join-Path $PSScriptRoot '..\dist'
     $candidates = @(Get-ChildItem -LiteralPath $dist -Filter '*.appx' -File -ErrorAction SilentlyContinue)
     if ($candidates.Count -ne 1) {
-        Fail "Genau eine .appx in $dist erwartet, gefunden: $($candidates.Count)."
+        Fail "Expected exactly one .appx in $dist, found: $($candidates.Count)."
     }
     $Path = $candidates[0].FullName
 }
 
 $Path = (Resolve-Path -LiteralPath $Path).Path
 if ([IO.Path]::GetExtension($Path) -ne '.appx') {
-    Fail "Erwartet wird eine .appx-Datei, erhalten: $Path"
+    Fail "Expected a .appx file, got: $Path"
 }
 
 $packageJsonPath = Join-Path $PSScriptRoot '..\package.json'
@@ -60,7 +60,7 @@ try {
     $extra = @($uniqueResources | Where-Object { $expected -notcontains $_ })
 
     if ($resources.Count -ne $uniqueResources.Count) {
-        Fail "Doppelte Spracheinträge im Manifest: $($resources -join ', ')"
+        Fail "Duplicate language entries in the manifest: $($resources -join ', ')"
     }
     if ($missing.Count -gt 0) {
         Fail "Fehlende Sprachen im AppX: $($missing -join ', ')"
@@ -74,16 +74,16 @@ try {
     $identityVersion = $identity.GetAttribute('Version')
 
     if ($identityName -ne $storeConfig.identityName) {
-        Fail "Identity.Name stimmt nicht: $identityName statt $($storeConfig.identityName)"
+        Fail "Identity.Name does not match: $identityName instead of $($storeConfig.identityName)"
     }
     if ($identityPublisher -ne $storeConfig.publisher) {
-        Fail "Identity.Publisher stimmt nicht: $identityPublisher statt $($storeConfig.publisher)"
+        Fail "Identity.Publisher does not match: $identityPublisher instead of $($storeConfig.publisher)"
     }
     if ($identityArchitecture -ne 'x64') {
-        Fail "ProcessorArchitecture ist $identityArchitecture, erwartet x64."
+        Fail "ProcessorArchitecture is $identityArchitecture, expected x64."
     }
     if (-not $identityVersion.StartsWith("$($packageJson.version).")) {
-        Fail "Paketversion $identityVersion passt nicht zu package.json $($packageJson.version)."
+        Fail "Package version $identityVersion does not match package.json $($packageJson.version)."
     }
 
     $hash = (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()

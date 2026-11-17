@@ -33,7 +33,7 @@ async function waitFor(predicate, message, timeout = 10_000) {
     if (predicate()) return
     await new Promise(resolve => setTimeout(resolve, 20))
   }
-  throw new Error(`Zeitüberschreitung: ${message}`)
+  throw new Error(`Timeout: ${message}`)
 }
 
 async function main() {
@@ -54,7 +54,7 @@ async function main() {
     windows.sync.start()
     await waitFor(
       () => mac.sync.listening && windows.sync.listening,
-      'die Sync-Server sollten lauschen'
+      'the sync servers should be listening'
     )
     windows.sync.connectTo('127.0.0.1', mac.sync.port)
 
@@ -62,7 +62,7 @@ async function main() {
       () => windows.store.todayML() === 500
         && windows.store.count === 1
         && windows.store.waterUpdatedAt() === mac.store.waterUpdatedAt(),
-      'Windows sollte den Mac-Stand übernehmen'
+      'Windows should adopt the Mac state'
     )
 
     windows.store.addWater(250)
@@ -72,12 +72,12 @@ async function main() {
       () => mac.store.todayML() === 750
         && mac.store.count === 2
         && mac.store.waterUpdatedAt() === windows.store.waterUpdatedAt(),
-      'der Mac sollte die Windows-Änderung übernehmen'
+      'the Mac should adopt the Windows change'
     )
 
     assert.deepEqual(mac.store.waterSnapshot(), windows.store.waterSnapshot())
     assert.deepEqual(mac.store.counterSnapshot(), windows.store.counterSnapshot())
-    console.log('Sync-Smoke-Test erfolgreich: Mac und Windows teilen 750 ml und Zählerstand 2.')
+    console.log('Sync smoke test passed: Mac and Windows share 750 ml and counter value 2.')
   } finally {
     for (const node of nodes) {
       node.sync.stop()

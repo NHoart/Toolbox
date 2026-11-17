@@ -17,7 +17,7 @@ DIST_DIR="$ROOT/dist"
 DMG_PATH="$DIST_DIR/$APP_NAME.dmg"
 APP_PATH="$BUILD_DIR/$APP_NAME.app"
 
-echo "==> Baue $APP_NAME ($CONFIGURATION, macOS)"
+echo "==> Building $APP_NAME ($CONFIGURATION, macOS)"
 rm -rf "$BUILD_DIR" "$DIST_DIR"
 mkdir -p "$BUILD_DIR" "$DIST_DIR"
 
@@ -32,11 +32,11 @@ xcodebuild \
   build
 
 if [ ! -d "$APP_PATH" ]; then
-  echo "Fehler: $APP_PATH wurde nicht gebaut." >&2
+  echo "Error: $APP_PATH was not built." >&2
   exit 1
 fi
 
-echo "==> Signiere ad-hoc"
+echo "==> Signing ad-hoc"
 # First the embedded extension, then the app itself.
 if [ -d "$APP_PATH/Contents/PlugIns/$WIDGET_NAME.appex" ]; then
   codesign --force --sign - \
@@ -50,7 +50,7 @@ codesign --force --sign - \
 
 codesign --verify --deep --strict "$APP_PATH"
 
-echo "==> Erstelle DMG"
+echo "==> Creating DMG"
 STAGING_DIR="$BUILD_DIR/dmg-staging"
 rm -rf "$STAGING_DIR"
 mkdir -p "$STAGING_DIR"
@@ -69,7 +69,7 @@ create_dmg() {
       "$DMG_PATH"; then
       return 0
     fi
-    echo "Hinweis: diskutil konnte das Image nicht erstellen, versuche hdiutil." >&2
+    echo "Note: diskutil could not create the image, trying hdiutil." >&2
     rm -f "$DMG_PATH"
   fi
 
@@ -87,11 +87,11 @@ for attempt in 1 2 3; do
   fi
   rm -f "$DMG_PATH"
   if [ "$attempt" -eq 3 ]; then
-    echo "Fehler: DMG konnte nicht erstellt werden." >&2
+    echo "Error: the DMG could not be created." >&2
     exit 1
   fi
-  echo "Neuer Versuch in 5 Sekunden ($attempt/3)." >&2
+  echo "Retrying in 5 seconds ($attempt/3)." >&2
   sleep 5
 done
 
-echo "Fertig: $DMG_PATH"
+echo "Done: $DMG_PATH"
