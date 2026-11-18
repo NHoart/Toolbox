@@ -66,6 +66,14 @@ All three platforms follow the system language and fall back to **English** when
 
 Dates, numbers and currencies are formatted with the user's locale, so `en-GB` shows British formatting while the interface stays English.
 
+The fallback is checked on the real built bundles, not only by a green build:
+
+```bash
+bash scripts/test-apple-localization.sh
+```
+
+The script builds the macOS and iOS app including the widget, runs a probe as each bundle's main executable with a forced `-AppleLanguages` value and checks every String Catalog key. It covers English, German, Austrian German, Spanish, French and unsupported languages (Italian, Japanese, Russian, Portuguese, Chinese), plus a deliberately removed German key that must fall back to English.
+
 ### Widget
 
 The widget shows the daily progress as a ring (small and medium). In the medium size, glass and bottle can be logged with a single tap without opening the app. The timeline refreshes at least every 30 minutes and at midnight so the daily counter resets.

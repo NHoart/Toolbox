@@ -1,28 +1,48 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "NSLocalNetworkUsageDescription": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toolbox gleicht deine Daten mit deinem anderen Gerät im selben WLAN ab."
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Toolbox"
+          }
+        }
+      }
+    },
+    "NSLocalNetworkUsageDescription" : {
+      "comment" : "Privacy - Local Network Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Toolbox gleicht deine Daten mit deinem anderen Gerät im selben WLAN ab."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toolbox sincroniza tus datos con tu otro dispositivo en la misma red Wi-Fi."
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Toolbox syncs your data with your other device on the same Wi-Fi network."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toolbox synchronise vos données avec votre autre appareil sur le même réseau Wi-Fi."
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Toolbox sincroniza tus datos con tu otro dispositivo en la misma red Wi-Fi."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Toolbox synchronise vos données avec votre autre appareil sur le même réseau Wi-Fi."
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

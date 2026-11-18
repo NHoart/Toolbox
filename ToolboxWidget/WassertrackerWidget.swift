@@ -96,7 +96,7 @@ struct WaterWidgetView: View {
         .padding(6)
     }
 
-    private func label(_ title: String, _ ml: Int) -> some View {
+    private func label(_ title: LocalizedStringKey, _ ml: Int) -> some View {
         Text("+ \(title) (\(ml) ml)")
             .font(.footnote.bold())
             .frame(maxWidth: .infinity)

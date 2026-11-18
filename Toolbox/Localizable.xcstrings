@@ -1,4472 +1,4479 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%@ could not be started: %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ konnte nicht gestartet werden: %@"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ could not be started: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ konnte nicht gestartet werden: %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo iniciar %@: %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo iniciar %@: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Impossible de démarrer %@ : %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de démarrer %@ : %@"
           }
         }
       }
     },
-    "%@ failed. %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ ist fehlgeschlagen. %@"
+    "%@ failed. %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ist fehlgeschlagen. %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ falló. %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ falló. %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec de %@. %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de %@. %@"
           }
         }
       }
     },
-    "%lld": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+    "%lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         }
       }
     },
-    "%lld / %lld": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld / %lld"
+    "%lld / %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld / %lld"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld / %lld"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld / %lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld / %lld"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld / %lld"
           }
         }
       }
     },
-    "%lld / %lld ml": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld / %lld ml"
+    "%lld / %lld ml" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld / %lld ml"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld / %lld ml"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld / %lld ml"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld / %lld ml"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld / %lld ml"
           }
         }
       }
     },
-    "%lld ml": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld ml"
+    "%lld ml" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ml"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld ml"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ml"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld ml"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ml"
           }
         }
       }
     },
-    "%lld× per second": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld× pro Sekunde"
+    "%lld× per second" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld× pro Sekunde"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld× por segundo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld× por segundo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld× par seconde"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld× par seconde"
           }
         }
       }
     },
-    "%lld×/s": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld×/s"
+    "%lld×/s" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld×/s"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld×/s"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld×/s"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld×/s"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld×/s"
           }
         }
       }
     },
-    "+ %@ (%lld ml)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+ %@ (%lld ml)"
+    "+ %@ (%lld ml)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+ %@ (%lld ml)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+ %@ (%lld ml)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+ %@ (%lld ml)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+ %@ (%lld ml)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+ %@ (%lld ml)"
           }
         }
       }
     },
-    "+%lld ml": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lld ml"
+    "+%lld ml" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lld ml"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lld ml"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lld ml"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+%lld ml"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lld ml"
           }
         }
       }
     },
-    "2 bottles": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2 Flaschen"
+    "0" : {
+
+    },
+    "2 bottles" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 Flaschen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2 botellas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 botellas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2 bouteilles"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 bouteilles"
           }
         }
       }
     },
-    "2 glasses": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2 Gläser"
+    "2 glasses" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 Gläser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2 vasos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 vasos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2 verres"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 verres"
           }
         }
       }
     },
-    "3 bottles": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3 Flaschen"
+    "3 bottles" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 Flaschen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3 botellas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 botellas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3 bouteilles"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 bouteilles"
           }
         }
       }
     },
-    "3 glasses": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3 Gläser"
+    "3 glasses" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 Gläser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3 vasos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 vasos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3 verres"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 verres"
           }
         }
       }
     },
-    "AMOUNTS": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MENGEN"
+    "a bottle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "eine Flasche"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CANTIDADES"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "una botella"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "QUANTITÉS"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "une bouteille"
           }
         }
       }
     },
-    "Add": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hinzufügen"
+    "a glass" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ein Glas"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Añadir"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un vaso"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un verre"
           }
         }
       }
     },
-    "Amount": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Menge"
+    "Add" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cantidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quantité"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter"
           }
         }
       }
     },
-    "Automatic": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisch"
+    "Amount" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menge"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automático"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cantidad"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatique"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantité"
           }
         }
       }
     },
-    "Average": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Durchschnitt"
+    "AMOUNTS" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MENGEN"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Promedio"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CANTIDADES"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moyenne"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QUANTITÉS"
           }
         }
       }
     },
-    "Below goal": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unter Ziel"
+    "Automatic" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Por debajo del objetivo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automático"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sous l'objectif"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatique"
           }
         }
       }
     },
-    "Best day": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bester Tag"
+    "Average" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durchschnitt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mejor día"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Promedio"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meilleur jour"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moyenne"
           }
         }
       }
     },
-    "Bottle": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Flasche"
+    "Below goal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unter Ziel"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Botella"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por debajo del objetivo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bouteille"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sous l'objectif"
           }
         }
       }
     },
-    "Bottle: %lld ml": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Flasche: %lld ml"
+    "Best day" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bester Tag"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Botella: %lld ml"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mejor día"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bouteille : %lld ml"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meilleur jour"
           }
         }
       }
     },
-    "CONVERSION": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "UMRECHNUNG"
+    "Bottle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flasche"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CONVERSIÓN"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Botella"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CONVERSION"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bouteille"
           }
         }
       }
     },
-    "COUNTER VALUE": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ZÄHLERSTAND"
+    "bottle of water" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flasche Wasser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "VALOR DEL CONTADOR"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "botella de agua"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "VALEUR DU COMPTEUR"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bouteille d'eau"
           }
         }
       }
     },
-    "Calculated without extra delays": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Berechnet ohne zusätzliche Verzögerungen"
+    "Bottle: %lld ml" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flasche: %lld ml"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calculado sin retardos adicionales"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Botella: %lld ml"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calculé sans délais supplémentaires"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bouteille : %lld ml"
           }
         }
       }
     },
-    "Cancel": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Abbrechen"
+    "Calculated without extra delays" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berechnet ohne zusätzliche Verzögerungen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancelar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculado sin retardos adicionales"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuler"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculé sans délais supplémentaires"
           }
         }
       }
     },
-    "Check for updates automatically": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatisch nach Updates suchen"
+    "Cancel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscar actualizaciones automáticamente"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rechercher les mises à jour automatiquement"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
           }
         }
       }
     },
-    "Check for updates now": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jetzt nach Updates suchen"
+    "Check for updates automatically" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch nach Updates suchen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscar actualizaciones ahora"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar actualizaciones automáticamente"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rechercher les mises à jour maintenant"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher les mises à jour automatiquement"
           }
         }
       }
     },
-    "Check for updates…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nach Updates suchen…"
+    "Check for updates now" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt nach Updates suchen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscar actualizaciones…"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar actualizaciones ahora"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rechercher des mises à jour…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher les mises à jour maintenant"
           }
         }
       }
     },
-    "Checking for updates…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suche nach Updates…"
+    "Check for updates…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Updates suchen…"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscando actualizaciones…"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar actualizaciones…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recherche de mises à jour…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher des mises à jour…"
           }
         }
       }
     },
-    "Checks GitHub at most once a day at launch for a newer version.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version bereitsteht."
+    "Checking for updates…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suche nach Updates…"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comprueba en GitHub como máximo una vez al día si hay una versión más reciente."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscando actualizaciones…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vérifie sur GitHub au maximum une fois par jour au démarrage si une version plus récente est disponible."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recherche de mises à jour…"
           }
         }
       }
     },
-    "Close": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schließen"
+    "Checks GitHub at most once a day at launch for a newer version." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüft beim Start höchstens einmal pro Tag, ob auf GitHub eine neuere Version bereitsteht."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cerrar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprueba en GitHub como máximo una vez al día si hay una versión más reciente."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fermer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifie sur GitHub au maximum une fois par jour au démarrage si une version plus récente est disponible."
           }
         }
       }
     },
-    "Connected to %lld devices": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verbunden mit %lld Geräten"
+    "Close" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conectado a %lld dispositivos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerrar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connecté à %lld appareils"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer"
           }
         }
       }
     },
-    "Connected to 1 device": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verbunden mit 1 Gerät"
+    "Connected to %lld devices" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbunden mit %lld Geräten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conectado a 1 dispositivo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conectado a %lld dispositivos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connecté à 1 appareil"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecté à %lld appareils"
           }
         }
       }
     },
-    "Conversion": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Umrechnung"
+    "Connected to 1 device" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbunden mit 1 Gerät"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conversión"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conectado a 1 dispositivo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conversion"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecté à 1 appareil"
           }
         }
       }
     },
-    "Conversion type": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Art der Umrechnung"
+    "Conversion" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umrechnung"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tipo de conversión"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conversión"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Type de conversion"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conversion"
           }
         }
       }
     },
-    "Convert MB/GB and Mbit/MB": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MB/GB und Mbit/MB umrechnen"
+    "CONVERSION" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UMRECHNUNG"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Convierte MB/GB y Mbit/MB"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CONVERSIÓN"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Convertir MB/GB et Mbit/MB"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CONVERSION"
           }
         }
       }
     },
-    "Cost: %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kosten: %@"
+    "Conversion type" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Art der Umrechnung"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coste: %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo de conversión"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coût : %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type de conversion"
           }
         }
       }
     },
-    "Count %lld": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stand %lld"
+    "Convert MB/GB and Mbit/MB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MB/GB und Mbit/MB umrechnen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recuento %lld"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convierte MB/GB y Mbit/MB"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compteur %lld"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convertir MB/GB et Mbit/MB"
           }
         }
       }
     },
-    "Count manually or automatically": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Manuell oder automatisch zählen"
+    "Cost: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kosten: %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cuenta manual o automáticamente"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coste: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compter manuellement ou automatiquement"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coût : %@"
           }
         }
       }
     },
-    "Counter": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zähler"
+    "Count %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stand %lld"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contador"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recuento %lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compteur"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compteur %lld"
           }
         }
       }
     },
-    "Current count: %lld": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktueller Stand: %lld"
+    "Count manually or automatically" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manuell oder automatisch zählen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recuento actual: %lld"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuenta manual o automáticamente"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valeur actuelle : %lld"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compter manuellement ou automatiquement"
           }
         }
       }
     },
-    "Custom amount": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eigene Menge"
+    "Counter" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zähler"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cantidad personalizada"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contador"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quantité personnalisée"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compteur"
           }
         }
       }
     },
-    "DAYS": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "TAGE"
+    "COUNTER VALUE" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ZÄHLERSTAND"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DÍAS"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VALOR DEL CONTADOR"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "JOURS"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VALEUR DU COMPTEUR"
           }
         }
       }
     },
-    "DOWNLOAD TIME": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DOWNLOADZEIT"
+    "Current count: %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktueller Stand: %lld"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "TIEMPO DE DESCARGA"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recuento actual: %lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "TEMPS DE TÉLÉCHARGEMENT"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valeur actuelle : %lld"
           }
         }
       }
     },
-    "Daily goal": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tagesziel"
+    "Custom amount" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigene Menge"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objetivo diario"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cantidad personalizada"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objectif quotidien"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantité personnalisée"
           }
         }
       }
     },
-    "Daily goal reached – %lld ml done.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tagesziel erreicht – %lld ml geschafft."
+    "Daily goal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tagesziel"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objetivo diario alcanzado: %lld ml."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetivo diario"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objectif quotidien atteint – %lld ml atteints."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif quotidien"
           }
         }
       }
     },
-    "Day": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tag"
+    "Daily goal reached – %lld ml done." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tagesziel erreicht – %lld ml geschafft."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Día"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetivo diario alcanzado: %lld ml."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jour"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif quotidien atteint – %lld ml atteints."
           }
         }
       }
     },
-    "Days": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tage"
+    "Day" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tag"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Días"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Día"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jours"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jour"
           }
         }
       }
     },
-    "Delete": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Löschen"
+    "days" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tage"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eliminar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "días"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "jours"
           }
         }
       }
     },
-    "Done": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fertig"
+    "Days" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tage"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Listo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Días"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Terminé"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jours"
           }
         }
       }
     },
-    "Download": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herunterladen"
+    "DAYS" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TAGE"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descargar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DÍAS"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Télécharger"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JOURS"
           }
         }
       }
     },
-    "Download speed": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Downloadgeschwindigkeit"
+    "Delete" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Velocidad de descarga"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vitesse de téléchargement"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
           }
         }
       }
     },
-    "Download speed in %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Downloadgeschwindigkeit in %@"
+    "Done" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Velocidad de descarga en %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vitesse de téléchargement en %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
           }
         }
       }
     },
-    "Download time": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Downloadzeit"
+    "Download" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herunterladen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tiempo de descarga"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descargar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Temps de téléchargement"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger"
           }
         }
       }
     },
-    "Downloading … %lld %%": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wird geladen … %lld %%"
+    "Download speed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloadgeschwindigkeit"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Descargando… %lld %%"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velocidad de descarga"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Téléchargement… %lld %%"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vitesse de téléchargement"
           }
         }
       }
     },
-    "Drink a bottle": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Flasche trinken"
+    "Download speed in %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloadgeschwindigkeit in %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beber una botella"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velocidad de descarga en %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boire une bouteille"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vitesse de téléchargement en %@"
           }
         }
       }
     },
-    "Drink a glass": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glas trinken"
+    "Download time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Downloadzeit"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beber un vaso"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiempo de descarga"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boire un verre"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temps de téléchargement"
           }
         }
       }
     },
-    "Duration": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nutzungsdauer"
+    "DOWNLOAD TIME" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DOWNLOADZEIT"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Duración"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TIEMPO DE DESCARGA"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Durée"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TEMPS DE TÉLÉCHARGEMENT"
           }
         }
       }
     },
-    "Duration in hours": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nutzungsdauer in Stunden"
+    "Downloading … %lld %%" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird geladen … %lld %%"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Duración en horas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descargando… %lld %%"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Durée en heures"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Téléchargement… %lld %%"
           }
         }
       }
     },
-    "ENTER USAGE": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "VERBRAUCH EINGEBEN"
+    "Drink a bottle" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flasche trinken"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "INTRODUCIR CONSUMO"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beber una botella"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "SAISIR LA CONSOMMATION"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boire une bouteille"
           }
         }
       }
     },
-    "Electricity price per kWh (optional)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strompreis pro kWh (optional)"
+    "Drink a glass" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glas trinken"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Precio de la luz por kWh (opcional)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beber un vaso"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prix de l'électricité par kWh (facultatif)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boire un verre"
           }
         }
       }
     },
-    "Electricity price per kWh in € (optional)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strompreis pro kWh in € (optional)"
+    "Duration" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutzungsdauer"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Precio de la luz por kWh en € (opcional)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duración"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prix de l'électricité par kWh en € (facultatif)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durée"
           }
         }
       }
     },
-    "Enter a number between 1 and 10000.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bitte eine Zahl zwischen 1 und 10000 eingeben."
+    "Duration in hours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutzungsdauer in Stunden"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Introduce un número entre 1 y 10000."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duración en horas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saisissez un nombre entre 1 et 10000."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durée en heures"
           }
         }
       }
     },
-    "Enter amount": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Menge eintragen"
+    "e.g. Family" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "z. B. Familie"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Introducir cantidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "p. ej. Familia"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saisir la quantité"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "p. ex. Famille"
           }
         }
       }
     },
-    "Enter file size and speed": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dateigröße und Geschwindigkeit eingeben"
+    "Electricity price per kWh (optional)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strompreis pro kWh (optional)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Introduce tamaño y velocidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Precio de la luz por kWh (opcional)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saisir taille et vitesse"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prix de l'électricité par kWh (facultatif)"
           }
         }
       }
     },
-    "Enter usage": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verbrauch eingeben"
+    "Electricity price per kWh in € (optional)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strompreis pro kWh in € (optional)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Introducir consumo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Precio de la luz por kWh en € (opcional)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saisir la consommation"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prix de l'électricité par kWh en € (facultatif)"
           }
         }
       }
     },
-    "Enter value": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wert eingeben"
+    "Enter a number between 1 and 10000." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte eine Zahl zwischen 1 und 10000 eingeben."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Introducir valor"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduce un número entre 1 y 10000."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saisir la valeur"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez un nombre entre 1 et 10000."
           }
         }
       }
     },
-    "Estimated download time": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Geschätzte Downloadzeit"
+    "Enter amount" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menge eintragen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tiempo de descarga estimado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introducir cantidad"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Temps de téléchargement estimé"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisir la quantité"
           }
         }
       }
     },
-    "Everyday tools": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alltagswerkzeuge"
+    "Enter file size and speed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateigröße und Geschwindigkeit eingeben"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Herramientas diarias"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduce tamaño y velocidad"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Outils du quotidien"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisir taille et vitesse"
           }
         }
       }
     },
-    "FILE AND CONNECTION": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DATEI UND VERBINDUNG"
+    "Enter usage" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbrauch eingeben"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ARCHIVO Y CONEXIÓN"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introducir consumo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "FICHIER ET CONNEXION"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisir la consommation"
           }
         }
       }
     },
-    "Faster": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schneller"
+    "ENTER USAGE" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VERBRAUCH EINGEBEN"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Más rápido"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "INTRODUCIR CONSUMO"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus rapide"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SAISIR LA CONSOMMATION"
           }
         }
       }
     },
-    "File and connection": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datei und Verbindung"
+    "Enter value" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wert eingeben"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Archivo y conexión"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introducir valor"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fichier et connexion"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisir la valeur"
           }
         }
       }
     },
-    "File size": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dateigröße"
+    "Estimated download time" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschätzte Downloadzeit"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tamaño del archivo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiempo de descarga estimado"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Taille du fichier"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temps de téléchargement estimé"
           }
         }
       }
     },
-    "File size and speed": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dateigröße und Geschwindigkeit"
+    "Everyday tools" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alltagswerkzeuge"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tamaño y velocidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herramientas diarias"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Taille et vitesse"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outils du quotidien"
           }
         }
       }
     },
-    "File size in GB": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dateigröße in GB"
+    "Faster" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schneller"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tamaño del archivo en GB"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más rápido"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Taille du fichier en GB"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus rapide"
           }
         }
       }
     },
-    "GB to MB": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GB in MB"
+    "File and connection" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei und Verbindung"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GB a MB"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivo y conexión"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GB en MB"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fichier et connexion"
           }
         }
       }
     },
-    "GitHub did not return a valid response.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GitHub hat keine gültige Antwort geliefert."
+    "FILE AND CONNECTION" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DATEI UND VERBINDUNG"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GitHub no devolvió una respuesta válida."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ARCHIVO Y CONEXIÓN"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GitHub n'a pas renvoyé de réponse valide."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FICHIER ET CONNEXION"
           }
         }
       }
     },
-    "Glass": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glas"
+    "File size" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateigröße"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vaso"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño del archivo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verre"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille du fichier"
           }
         }
       }
     },
-    "Glass: %lld ml": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glas: %lld ml"
+    "File size and speed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateigröße und Geschwindigkeit"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vaso: %lld ml"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño y velocidad"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verre : %lld ml"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille et vitesse"
           }
         }
       }
     },
-    "Goal": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ziel"
+    "File size in GB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateigröße in GB"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objetivo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño del archivo en GB"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objectif"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille du fichier en GB"
           }
         }
       }
     },
-    "Goal reached": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ziel erreicht"
+    "GB to MB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GB in MB"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objetivo alcanzado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GB a MB"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objectif atteint"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GB en MB"
           }
         }
       }
     },
-    "Goal: %lld ml": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ziel: %lld ml"
+    "GitHub did not return a valid response." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub hat keine gültige Antwort geliefert."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objetivo: %lld ml"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub no devolvió una respuesta válida."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objectif : %lld ml"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub n'a pas renvoyé de réponse valide."
           }
         }
       }
     },
-    "Green = daily goal reached. Dashed line = goal (%lld ml).": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grün = Tagesziel erreicht. Gestrichelte Linie = Ziel (%lld ml)."
+    "Glass" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glas"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verde = objetivo diario alcanzado. Línea discontinua = objetivo (%lld ml)."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaso"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vert = objectif quotidien atteint. Ligne pointillée = objectif (%lld ml)."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verre"
           }
         }
       }
     },
-    "History": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verlauf"
+    "glass of water" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glas Wasser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Historial"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vaso de agua"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Historique"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "verre d'eau"
           }
         }
       }
     },
-    "Hours": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stunden"
+    "Glass: %lld ml" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glas: %lld ml"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Horas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vaso: %lld ml"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Heures"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verre : %lld ml"
           }
         }
       }
     },
-    "Install and restart": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Installieren und neu starten"
+    "Goal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziel"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Instalar y reiniciar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetivo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Installer et redémarrer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif"
           }
         }
       }
     },
-    "Installing…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wird installiert…"
+    "Goal reached" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziel erreicht"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Instalando…"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetivo alcanzado"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Installation…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif atteint"
           }
         }
       }
     },
-    "LAST 30 DAYS": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "LETZTE 30 TAGE"
+    "Goal: %lld ml" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziel: %lld ml"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ÚLTIMOS 30 DÍAS"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetivo: %lld ml"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "30 DERNIERS JOURS"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif : %lld ml"
           }
         }
       }
     },
-    "LOCAL NETWORK": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "LOKALES NETZWERK"
+    "Green = daily goal reached. Dashed line = goal (%lld ml)." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grün = Tagesziel erreicht. Gestrichelte Linie = Ziel (%lld ml)."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RED LOCAL"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verde = objetivo diario alcanzado. Línea discontinua = objetivo (%lld ml)."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RÉSEAU LOCAL"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vert = objectif quotidien atteint. Ligne pointillée = objectif (%lld ml)."
           }
         }
       }
     },
-    "Last %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zuletzt %@"
+    "History" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlauf"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Última: %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historial"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dernière : %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historique"
           }
         }
       }
     },
-    "Last 30 days": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Letzte 30 Tage"
+    "Hours" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stunden"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Últimos 30 días"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "30 derniers jours"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heures"
           }
         }
       }
     },
-    "Later": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Später"
+    "Install and restart" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installieren und neu starten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Más tarde"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalar y reiniciar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus tard"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer et redémarrer"
           }
         }
       }
     },
-    "Load": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laden"
+    "Installing…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird installiert…"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cargar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalando…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Charger"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installation…"
           }
         }
       }
     },
-    "Local network": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lokales Netzwerk"
+    "Last %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuletzt %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Red local"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Última: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réseau local"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière : %@"
           }
         }
       }
     },
-    "Log ${portion}": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trage ${portion} ein"
+    "Last 30 days" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte 30 Tage"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrar ${portion}"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Últimos 30 días"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer ${portion}"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 derniers jours"
           }
         }
       }
     },
-    "Log water": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wasser eintragen"
+    "LAST 30 DAYS" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LETZTE 30 TAGE"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrar agua"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ÚLTIMOS 30 DÍAS"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer de l'eau"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 DERNIERS JOURS"
           }
         }
       }
     },
-    "Logged %@ (%lld millilitres). Today: %lld of %lld millilitres.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ eingetragen (%lld Milliliter). Heute: %lld von %lld Millilitern."
+    "Later" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Später"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registrado %@ (%lld mililitros). Hoy: %lld de %lld mililitros."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más tarde"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ enregistré (%lld millilitres). Aujourd'hui : %lld sur %lld millilitres."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus tard"
           }
         }
       }
     },
-    "Logs glasses or bottles of water in the water tracker.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trägt Gläser oder Flaschen Wasser in den Wassertracker ein."
+    "Load" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laden"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Registra vasos o botellas de agua en el seguimiento."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistre des verres ou des bouteilles d'eau dans le suivi."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Charger"
           }
         }
       }
     },
-    "MB to GB": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MB in GB"
+    "Local network" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokales Netzwerk"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MB a GB"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Red local"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MB en GB"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réseau local"
           }
         }
       }
     },
-    "MB to Mbit": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MB in Mbit"
+    "LOCAL NETWORK" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LOKALES NETZWERK"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MB a Mbit"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RED LOCAL"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MB en Mbit"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RÉSEAU LOCAL"
           }
         }
       }
     },
-    "Maximum": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Höchstwert"
+    "Log ${portion}" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trage ${portion} ein"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Máximo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registrar ${portion}"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maximum"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer ${portion}"
           }
         }
       }
     },
-    "Mbit to MB": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mbit in MB"
+    "Log water" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wasser eintragen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mbit a MB"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registrar agua"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mbit en MB"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer de l'eau"
           }
         }
       }
     },
-    "Name": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Name"
+    "Logged %@ (%lld millilitres). Today: %lld of %lld millilitres." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ eingetragen (%lld Milliliter). Heute: %lld von %lld Millilitern."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nombre"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registrado %@ (%lld mililitros). Hoy: %lld de %lld mililitros."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nom"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ enregistré (%lld millilitres). Aujourd'hui : %lld sur %lld millilitres."
           }
         }
       }
     },
-    "Name missing": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Name fehlt"
+    "Logs glasses or bottles of water in the water tracker." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trägt Gläser oder Flaschen Wasser in den Wassertracker ein."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Falta el nombre"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registra vasos o botellas de agua en el seguimiento."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nom manquant"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistre des verres ou des bouteilles d'eau dans le suivi."
           }
         }
       }
     },
-    "No device found": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kein Gerät gefunden"
+    "Maximum" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höchstwert"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se encontró ningún dispositivo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Máximo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucun appareil trouvé"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum"
           }
         }
       }
     },
-    "No updates": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Updates"
+    "MB to GB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MB in GB"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No hay actualizaciones"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MB a GB"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune mise à jour"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MB en GB"
           }
         }
       }
     },
-    "Nothing saved yet": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch nichts gespeichert"
+    "MB to Mbit" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MB in Mbit"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aún no hay nada guardado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MB a Mbit"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rien d'enregistré pour l'instant"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MB en Mbit"
           }
         }
       }
     },
-    "Nothing saved yet.\nTap the save icon in the top right.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noch nichts gespeichert.\nTippe oben rechts auf das Speichern-Symbol."
+    "Mbit to MB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mbit in MB"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aún no hay nada guardado.\nToca el icono de guardar arriba a la derecha."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mbit a MB"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rien d'enregistré.\nTouchez l'icône d'enregistrement en haut à droite."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mbit en MB"
           }
         }
       }
     },
-    "OK": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+    "ml" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ml"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ml"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ml"
           }
         }
       }
     },
-    "Off": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aus"
+    "Name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desactivado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Désactivé"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom"
           }
         }
       }
     },
-    "Power": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leistung"
+    "Name missing" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name fehlt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Potencia"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falta el nombre"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puissance"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom manquant"
           }
         }
       }
     },
-    "Power in watts": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leistung in Watt"
+    "No device found" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Gerät gefunden"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Potencia en vatios"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontró ningún dispositivo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puissance en watts"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun appareil trouvé"
           }
         }
       }
     },
-    "Power usage": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stromverbrauch"
+    "No updates" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Updates"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Consumo eléctrico"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay actualizaciones"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Consommation électrique"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune mise à jour"
           }
         }
       }
     },
-    "Power, duration and cost": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leistung, Dauer und Kosten"
+    "Nothing saved yet" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch nichts gespeichert"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Potencia, duración y coste"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay nada guardado"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puissance, durée et coût"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rien d'enregistré pour l'instant"
           }
         }
       }
     },
-    "Quick select": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schnellwahl"
+    "Nothing saved yet.\nTap the save icon in the top right." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch nichts gespeichert.\nTippe oben rechts auf das Speichern-Symbol."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Selección rápida"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay nada guardado.\nToca el icono de guardar arriba a la derecha."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sélection rapide"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rien d'enregistré.\nTouchez l'icône d'enregistrement en haut à droite."
           }
         }
       }
     },
-    "RESULT": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ERGEBNIS"
+    "of %lld ml goal · %lld ml to go" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "von %lld ml Ziel · noch %lld ml offen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RESULTADO"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "de %lld ml de objetivo · faltan %lld ml"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RÉSULTAT"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sur %lld ml d'objectif · %lld ml restants"
           }
         }
       }
     },
-    "Reset": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reset"
+    "Off" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restablecer"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desactivado"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réinitialiser"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactivé"
           }
         }
       }
     },
-    "Reset today": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Heute zurücksetzen"
+    "OK" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restablecer hoy"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réinitialiser aujourd'hui"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
     },
-    "Result": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ergebnis"
+    "per day" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pro Tag"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resultado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "por día"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Résultat"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "par jour"
           }
         }
       }
     },
-    "Result in %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ergebnis in %@"
+    "per second" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pro Sekunde"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resultado en %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "por segundo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Résultat en %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "par seconde"
           }
         }
       }
     },
-    "Running": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Läuft"
+    "Power" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leistung"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En marcha"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potencia"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En cours"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puissance"
           }
         }
       }
     },
-    "SAVED": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GESPEICHERT"
+    "Power in watts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leistung in Watt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GUARDADOS"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potencia en vatios"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ENREGISTRÉS"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puissance en watts"
           }
         }
       }
     },
-    "Save": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Speichern"
+    "Power usage" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stromverbrauch"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guardar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consumo eléctrico"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consommation électrique"
           }
         }
       }
     },
-    "Save count": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stand speichern"
+    "Power, duration and cost" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leistung, Dauer und Kosten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guardar recuento"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potencia, duración y coste"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer le compteur"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puissance, durée et coût"
           }
         }
       }
     },
-    "Save current count": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aktuellen Stand speichern"
+    "Quick select" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schnellwahl"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guardar recuento actual"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selección rápida"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer la valeur actuelle"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélection rapide"
           }
         }
       }
     },
-    "Save the current count with the icon above.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Speichere den aktuellen Stand über das Symbol oben."
+    "Reset" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guarda el recuento actual con el icono de arriba."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restablecer"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrez la valeur actuelle avec l'icône ci-dessus."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser"
           }
         }
       }
     },
-    "Saved counts": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gespeicherte Stände"
+    "Reset today" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute zurücksetzen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recuentos guardados"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restablecer hoy"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compteurs enregistrés"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser aujourd'hui"
           }
         }
       }
     },
-    "Search now": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jetzt suchen"
+    "Result" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ergebnis"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscar ahora"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultado"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rechercher maintenant"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résultat"
           }
         }
       }
     },
-    "Searching the Wi-Fi network…": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suche im WLAN…"
+    "RESULT" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ERGEBNIS"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscando en la red Wi-Fi…"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RESULTADO"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recherche sur le réseau Wi-Fi…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RÉSULTAT"
           }
         }
       }
     },
-    "Sets today's water intake to 0 ml.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Setzt die heutige Trinkmenge auf 0 ml."
+    "Result in %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ergebnis in %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pone el consumo de agua de hoy a 0 ml."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultado en %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Remet la consommation d'eau du jour à 0 ml."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résultat en %@"
           }
         }
       }
     },
-    "Settings": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einstellungen"
+    "Running" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Läuft"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajustes"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En marcha"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réglages"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En cours"
           }
         }
       }
     },
-    "Shows your daily progress and lets you log water.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zeigt deinen Tagesfortschritt und lässt dich Wasser eintragen."
+    "Save" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichern"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Muestra tu progreso diario y te permite registrar agua."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Affiche votre progression du jour et permet de saisir de l'eau."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer"
           }
         }
       }
     },
-    "Sizes": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Größen"
+    "Save count" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stand speichern"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tamaños"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar recuento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tailles"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer le compteur"
           }
         }
       }
     },
-    "Slower": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Langsamer"
+    "Save current count" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuellen Stand speichern"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Más lento"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar recuento actual"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus lent"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la valeur actuelle"
           }
         }
       }
     },
-    "Start": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start"
+    "Save the current count with the icon above." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichere den aktuellen Stand über das Symbol oben."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Iniciar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guarda el recuento actual con el icono de arriba."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Démarrer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrez la valeur actuelle avec l'icône ci-dessus."
           }
         }
       }
     },
-    "Statistics": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Statistik"
+    "SAVED" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GESPEICHERT"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estadísticas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GUARDADOS"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Statistiques"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ENREGISTRÉS"
           }
         }
       }
     },
-    "Status": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Status"
+    "Saved counts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gespeicherte Stände"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recuentos guardados"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "État"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compteurs enregistrés"
           }
         }
       }
     },
-    "Stop": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stopp"
+    "Search now" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt suchen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Detener"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar ahora"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arrêter"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher maintenant"
           }
         }
       }
     },
-    "Sync is off without a name.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ohne Namen ist der Abgleich aus."
+    "Searching the Wi-Fi network…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suche im WLAN…"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La sincronización está desactivada sin nombre."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscando en la red Wi-Fi…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La synchronisation est désactivée sans nom."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recherche sur le réseau Wi-Fi…"
           }
         }
       }
     },
-    "Sync is off without a name. Enter the same name on all devices.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ohne Namen ist der Abgleich aus. Trage auf allen Geräten denselben Namen ein."
+    "Sets today's water intake to 0 ml." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setzt die heutige Trinkmenge auf 0 ml."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La sincronización está desactivada sin nombre. Introduce el mismo nombre en todos los dispositivos."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pone el consumo de agua de hoy a 0 ml."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La synchronisation est désactivée sans nom. Saisissez le même nom sur tous les appareils."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remet la consommation d'eau du jour à 0 ml."
           }
         }
       }
     },
-    "Sync over Wi-Fi": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sync im WLAN"
+    "Settings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sincronizar por Wi-Fi"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Synchroniser en Wi-Fi"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages"
           }
         }
       }
     },
-    "Syncs the water tracker and counter directly with your other devices on the same Wi-Fi network – no server. Enter the same name on all devices; only devices with that name sync.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gleicht Wassertracker und Zähler direkt mit deinen anderen Geräten im selben WLAN ab – ohne Server. Trage auf allen Geräten denselben Namen ein; nur Geräte mit diesem Namen gleichen sich ab."
+    "Shows your daily progress and lets you log water." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt deinen Tagesfortschritt und lässt dich Wasser eintragen."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sincroniza el seguimiento de agua y el contador directamente con tus otros dispositivos en la misma red Wi-Fi, sin servidor. Introduce el mismo nombre en todos los dispositivos; solo se sincronizan los dispositivos con ese nombre."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra tu progreso diario y te permite registrar agua."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Synchronise le suivi d'eau et le compteur directement avec vos autres appareils sur le même réseau Wi-Fi, sans serveur. Saisissez le même nom sur tous les appareils ; seuls les appareils portant ce nom se synchronisent."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affiche votre progression du jour et permet de saisir de l'eau."
           }
         }
       }
     },
-    "Syncs the water tracker and counter directly with your other devices on the same Wi-Fi network – no server. Only devices with the same name sync with each other.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gleicht Wassertracker und Zähler direkt mit deinen anderen Geräten im selben WLAN ab – ohne Server. Nur Geräte mit demselben Namen gleichen sich ab."
+    "Sizes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Größen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sincroniza el seguimiento de agua y el contador directamente con tus otros dispositivos en la misma red Wi-Fi, sin servidor. Solo se sincronizan los dispositivos con el mismo nombre."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaños"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Synchronise le suivi d'eau et le compteur directement avec vos autres appareils sur le même réseau Wi-Fi, sans serveur. Seuls les appareils portant le même nom se synchronisent."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tailles"
           }
         }
       }
     },
-    "TODAY": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "HEUTE"
+    "Slower" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langsamer"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "HOY"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más lento"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AUJOURD'HUI"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus lent"
           }
         }
       }
     },
-    "TOOLS": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "WERKZEUGE"
+    "Start" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "HERRAMIENTAS"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OUTILS"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrer"
           }
         }
       }
     },
-    "The DMG could not be downloaded.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die DMG konnte nicht heruntergeladen werden."
+    "Statistics" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistik"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo descargar el DMG."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estadísticas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le DMG n'a pas pu être téléchargé."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistiques"
           }
         }
       }
     },
-    "The DMG does not contain exactly one app.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die DMG enthält nicht genau eine App."
+    "Status" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El DMG no contiene exactamente una app."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le DMG ne contient pas exactement une app."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "État"
           }
         }
       }
     },
-    "The DMG does not contain the expected Toolbox app.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die DMG enthält nicht die erwartete Toolbox-App."
+    "Stop" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stopp"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El DMG no contiene la app Toolbox esperada."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detener"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le DMG ne contient pas l'app Toolbox attendue."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrêter"
           }
         }
       }
     },
-    "The downloaded DMG is damaged (checksum mismatch).": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die heruntergeladene DMG ist beschädigt (Prüfsumme stimmt nicht)."
+    "Sync is off without a name." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Namen ist der Abgleich aus."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El DMG descargado está dañado (la suma de verificación no coincide)."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización está desactivada sin nombre."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le DMG téléchargé est endommagé (somme de contrôle incorrecte)."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation est désactivée sans nom."
           }
         }
       }
     },
-    "The last 30 days at a glance": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die letzten 30 Tage im Überblick"
+    "Sync is off without a name. Enter the same name on all devices." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Namen ist der Abgleich aus. Trage auf allen Geräten denselben Namen ein."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Los últimos 30 días de un vistazo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización está desactivada sin nombre. Introduce el mismo nombre en todos los dispositivos."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les 30 derniers jours en un coup d'œil"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation est désactivée sans nom. Saisissez le même nom sur tous les appareils."
           }
         }
       }
     },
-    "The new app's signature is invalid.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Signatur der neuen App ist ungültig."
+    "Sync over Wi-Fi" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync im WLAN"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La firma de la nueva app no es válida."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizar por Wi-Fi"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La signature de la nouvelle app est invalide."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchroniser en Wi-Fi"
           }
         }
       }
     },
-    "The release is missing the DMG checksum.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Im Release fehlt die Prüfsumme der DMG."
+    "Syncs the water tracker and counter directly with your other devices on the same Wi-Fi network – no server. Enter the same name on all devices; only devices with that name sync." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gleicht Wassertracker und Zähler direkt mit deinen anderen Geräten im selben WLAN ab – ohne Server. Trage auf allen Geräten denselben Namen ein; nur Geräte mit diesem Namen gleichen sich ab."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Falta la suma de verificación del DMG en la versión."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincroniza el seguimiento de agua y el contador directamente con tus otros dispositivos en la misma red Wi-Fi, sin servidor. Introduce el mismo nombre en todos los dispositivos; solo se sincronizan los dispositivos con ese nombre."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La somme de contrôle du DMG manque dans la version."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronise le suivi d'eau et le compteur directement avec vos autres appareils sur le même réseau Wi-Fi, sans serveur. Saisissez le même nom sur tous les appareils ; seuls les appareils portant ce nom se synchronisent."
           }
         }
       }
     },
-    "The restart could not be prepared: %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der Neustart konnte nicht vorbereitet werden: %@"
+    "Syncs the water tracker and counter directly with your other devices on the same Wi-Fi network – no server. Only devices with the same name sync with each other." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gleicht Wassertracker und Zähler direkt mit deinen anderen Geräten im selben WLAN ab – ohne Server. Nur Geräte mit demselben Namen gleichen sich ab."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se pudo preparar el reinicio: %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincroniza el seguimiento de agua y el contador directamente con tus otros dispositivos en la misma red Wi-Fi, sin servidor. Solo se sincronizan los dispositivos con el mismo nombre."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le redémarrage n'a pas pu être préparé : %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronise le suivi d'eau et le compteur directement avec vos autres appareils sur le même réseau Wi-Fi, sans serveur. Seuls les appareils portant le même nom se synchronisent."
           }
         }
       }
     },
-    "The update check failed. Please try again later.\n\n%@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Update-Prüfung ist fehlgeschlagen. Bitte später erneut versuchen.\n\n%@"
+    "The DMG could not be downloaded." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die DMG konnte nicht heruntergeladen werden."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La comprobación de actualizaciones falló. Inténtalo de nuevo más tarde.\n\n%@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo descargar el DMG."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La vérification des mises à jour a échoué. Veuillez réessayer plus tard.\n\n%@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le DMG n'a pas pu être téléchargé."
           }
         }
       }
     },
-    "The update check failed: %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Update-Prüfung ist fehlgeschlagen: %@"
+    "The DMG does not contain exactly one app." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die DMG enthält nicht genau eine App."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La comprobación de actualizaciones falló: %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El DMG no contiene exactamente una app."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La vérification des mises à jour a échoué : %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le DMG ne contient pas exactement une app."
           }
         }
       }
     },
-    "The version in the DMG does not match the release.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Version in der DMG passt nicht zum Release."
+    "The DMG does not contain the expected Toolbox app." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die DMG enthält nicht die erwartete Toolbox-App."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La versión del DMG no coincide con la versión publicada."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El DMG no contiene la app Toolbox esperada."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La version du DMG ne correspond pas à la version publiée."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le DMG ne contient pas l'app Toolbox attendue."
           }
         }
       }
     },
-    "Today": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Heute"
+    "The downloaded DMG is damaged (checksum mismatch)." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die heruntergeladene DMG ist beschädigt (Prüfsumme stimmt nicht)."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoy"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El DMG descargado está dañado (la suma de verificación no coincide)."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aujourd'hui"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le DMG téléchargé est endommagé (somme de contrôle incorrecte)."
           }
         }
       }
     },
-    "Today's goal": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ziel für heute"
+    "The last 30 days at a glance" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die letzten 30 Tage im Überblick"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objetivo de hoy"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los últimos 30 días de un vistazo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objectif du jour"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les 30 derniers jours en un coup d'œil"
           }
         }
       }
     },
-    "Toolbox": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toolbox"
+    "The new app's signature is invalid." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Signatur der neuen App ist ungültig."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toolbox"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La firma de la nueva app no es válida."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toolbox"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La signature de la nouvelle app est invalide."
           }
         }
       }
     },
-    "Toolbox downloads the new version, replaces the installed app and restarts.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toolbox lädt die neue Version, ersetzt die installierte App und startet neu."
+    "The release is missing the DMG checksum." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Release fehlt die Prüfsumme der DMG."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toolbox descarga la nueva versión, sustituye la app instalada y se reinicia."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falta la suma de verificación del DMG en la versión."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toolbox télécharge la nouvelle version, remplace l'app installée et redémarre."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La somme de contrôle du DMG manque dans la version."
           }
         }
       }
     },
-    "Type a number or use a quick pick.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zahl eintippen oder eine Schnellauswahl verwenden."
+    "The restart could not be prepared: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Neustart konnte nicht vorbereitet werden: %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Escribe un número o usa una selección rápida."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo preparar el reinicio: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saisissez un nombre ou utilisez une sélection rapide."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le redémarrage n'a pas pu être préparé : %@"
           }
         }
       }
     },
-    "UNIT": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EINHEIT"
+    "The update check failed: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Update-Prüfung ist fehlgeschlagen: %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "UNIDAD"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La comprobación de actualizaciones falló: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "UNITÉ"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vérification des mises à jour a échoué : %@"
           }
         }
       }
     },
-    "UPDATES": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "UPDATES"
+    "The update check failed. Please try again later.\n\n%@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Update-Prüfung ist fehlgeschlagen. Bitte später erneut versuchen.\n\n%@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ACTUALIZACIONES"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La comprobación de actualizaciones falló. Inténtalo de nuevo más tarde.\n\n%@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MISES À JOUR"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vérification des mises à jour a échoué. Veuillez réessayer plus tard.\n\n%@"
           }
         }
       }
     },
-    "Undo": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rückgängig"
+    "The version in the DMG does not match the release." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Version in der DMG passt nicht zum Release."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deshacer"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La versión del DMG no coincide con la versión publicada."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuler"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La version du DMG ne correspond pas à la version publiée."
           }
         }
       }
     },
-    "Undo (%lld ml)": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rückgängig (%lld ml)"
+    "three bottles" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "drei Flaschen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deshacer (%lld ml)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tres botellas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuler (%lld ml)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "trois bouteilles"
           }
         }
       }
     },
-    "Unit": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einheit"
+    "three bottles of water" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "drei Flaschen Wasser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tres botellas de agua"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unité"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "trois bouteilles d'eau"
           }
         }
       }
     },
-    "Units": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einheiten"
+    "three glasses" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "drei Gläser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unidades"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tres vasos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unités"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "trois verres"
           }
         }
       }
     },
-    "Unknown checksum format in the release.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unbekanntes Prüfsummenformat im Release."
+    "three glasses of water" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "drei Gläser Wasser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Formato de suma de verificación desconocido."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tres vasos de agua"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Format de somme de contrôle inconnu."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "trois verres d'eau"
           }
         }
       }
     },
-    "Update available": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Update verfügbar"
+    "Today" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actualización disponible"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mise à jour disponible"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd'hui"
           }
         }
       }
     },
-    "Update check failed": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Update-Prüfung fehlgeschlagen"
+    "TODAY" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HEUTE"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Error en la comprobación"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HOY"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec de la vérification"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AUJOURD'HUI"
           }
         }
       }
     },
-    "Updates": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Updates"
+    "Today's goal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziel für heute"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actualizaciones"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetivo de hoy"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mises à jour"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif du jour"
           }
         }
       }
     },
-    "Value": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wert"
+    "Toolbox" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toolbox"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valor"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toolbox"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valeur"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toolbox"
           }
         }
       }
     },
-    "Value in GB": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wert in GB"
+    "Toolbox downloads the new version, replaces the installed app and restarts." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toolbox lädt die neue Version, ersetzt die installierte App und startet neu."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valor en GB"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toolbox descarga la nueva versión, sustituye la app instalada y se reinicia."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valeur en GB"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toolbox télécharge la nouvelle version, remplace l'app installée et redémarre."
           }
         }
       }
     },
-    "Value in MB": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wert in MB"
+    "TOOLS" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WERKZEUGE"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valor en MB"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HERRAMIENTAS"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valeur en MB"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OUTILS"
           }
         }
       }
     },
-    "Value in Mbit": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wert in Mbit"
+    "two bottles" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zwei Flaschen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valor en Mbit"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dos botellas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Valeur en Mbit"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "deux bouteilles"
           }
         }
       }
     },
-    "Version %@": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version %@"
+    "two bottles of water" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zwei Flaschen Wasser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versión %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dos botellas de agua"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "deux bouteilles d'eau"
           }
         }
       }
     },
-    "Version %@ is available – you are using %@.": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version %@ ist verfügbar – du benutzt %@."
+    "two glasses" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zwei Gläser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La versión %@ está disponible; usas la %@."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dos vasos"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La version %@ est disponible – vous utilisez la %@."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "deux verres"
           }
         }
       }
     },
-    "Water tracker": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wassertracker"
+    "two glasses of water" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zwei Gläser Wasser"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seguimiento de agua"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dos vasos de agua"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suivi de l'eau"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "deux verres d'eau"
           }
         }
       }
     },
-    "Water, network and updates": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wasser, Netzwerk und Updates"
+    "Type a number or use a quick pick." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahl eintippen oder eine Schnellauswahl verwenden."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agua, red y actualizaciones"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribe un número o usa una selección rápida."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eau, réseau et mises à jour"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez un nombre ou utilisez une sélection rapide."
           }
         }
       }
     },
-    "Watts": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Watt"
+    "Undo" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rückgängig"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vatios"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deshacer"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Watts"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
           }
         }
       }
     },
-    "What did you drink?": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Was hast du getrunken?"
+    "Undo (%lld ml)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rückgängig (%lld ml)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¿Qué has bebido?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deshacer (%lld ml)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Qu'avez-vous bu ?"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler (%lld ml)"
           }
         }
       }
     },
-    "You are already using the latest version (%@).": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du benutzt bereits die neueste Version (%@)."
+    "Unit" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einheit"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ya usas la última versión (%@)."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unidad"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vous utilisez déjà la dernière version (%@)."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unité"
           }
         }
       }
     },
-    "Your progress today": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dein Fortschritt für heute"
+    "UNIT" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EINHEIT"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tu progreso de hoy"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UNIDAD"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Votre progression du jour"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UNITÉ"
           }
         }
       }
     },
-    "a bottle": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "eine Flasche"
+    "Units" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einheiten"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "una botella"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unidades"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "une bouteille"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unités"
           }
         }
       }
     },
-    "a glass": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ein Glas"
+    "Unknown checksum format in the release." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekanntes Prüfsummenformat im Release."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "un vaso"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formato de suma de verificación desconocido."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "un verre"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format de somme de contrôle inconnu."
           }
         }
       }
     },
-    "bottle of water": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Flasche Wasser"
+    "Update available" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update verfügbar"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "botella de agua"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualización disponible"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bouteille d'eau"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour disponible"
           }
         }
       }
     },
-    "days": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tage"
+    "Update check failed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update-Prüfung fehlgeschlagen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "días"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error en la comprobación"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "jours"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de la vérification"
           }
         }
       }
     },
-    "e.g. Family": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "z. B. Familie"
+    "Updates" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updates"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "p. ej. Familia"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizaciones"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "p. ex. Famille"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mises à jour"
           }
         }
       }
     },
-    "glass of water": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glas Wasser"
+    "UPDATES" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UPDATES"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "vaso de agua"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ACTUALIZACIONES"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "verre d'eau"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MISES À JOUR"
           }
         }
       }
     },
-    "ml": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ml"
+    "Value" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wert"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ml"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valor"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ml"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valeur"
           }
         }
       }
     },
-    "of %lld ml goal · %lld ml to go": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "von %lld ml Ziel · noch %lld ml offen"
+    "Value in GB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wert in GB"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "de %lld ml de objetivo · faltan %lld ml"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valor en GB"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "sur %lld ml d'objectif · %lld ml restants"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valeur en GB"
           }
         }
       }
     },
-    "per day": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "pro Tag"
+    "Value in MB" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wert in MB"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "por día"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valor en MB"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "par jour"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valeur en MB"
           }
         }
       }
     },
-    "per second": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "pro Sekunde"
+    "Value in Mbit" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wert in Mbit"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "por segundo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valor en Mbit"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "par seconde"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valeur en Mbit"
           }
         }
       }
     },
-    "three bottles": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "drei Flaschen"
+    "Version %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "tres botellas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versión %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "trois bouteilles"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
           }
         }
       }
     },
-    "three bottles of water": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "drei Flaschen Wasser"
+    "Version %@ is available – you are using %@." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@ ist verfügbar – du benutzt %@."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "tres botellas de agua"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La versión %@ está disponible; usas la %@."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "trois bouteilles d'eau"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La version %@ est disponible – vous utilisez la %@."
           }
         }
       }
     },
-    "three glasses": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "drei Gläser"
+    "Water tracker" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wassertracker"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "tres vasos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguimiento de agua"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "trois verres"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivi de l'eau"
           }
         }
       }
     },
-    "three glasses of water": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "drei Gläser Wasser"
+    "Water, network and updates" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wasser, Netzwerk und Updates"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "tres vasos de agua"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agua, red y actualizaciones"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "trois verres d'eau"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eau, réseau et mises à jour"
           }
         }
       }
     },
-    "two bottles": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "zwei Flaschen"
+    "Watts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Watt"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dos botellas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vatios"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "deux bouteilles"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Watts"
           }
         }
       }
     },
-    "two bottles of water": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "zwei Flaschen Wasser"
+    "What did you drink?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was hast du getrunken?"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dos botellas de agua"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué has bebido?"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "deux bouteilles d'eau"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu'avez-vous bu ?"
           }
         }
       }
     },
-    "two glasses": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "zwei Gläser"
+    "You are already using the latest version (%@)." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du benutzt bereits die neueste Version (%@)."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dos vasos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya usas la última versión (%@)."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "deux verres"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous utilisez déjà la dernière version (%@)."
           }
         }
       }
     },
-    "two glasses of water": {
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "zwei Gläser Wasser"
+    "Your progress today" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein Fortschritt für heute"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dos vasos de agua"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu progreso de hoy"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "deux verres d'eau"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre progression du jour"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }
