@@ -5,16 +5,18 @@ unchanged; the Store version uses the same sync engine and the same local data.
 
 ## Status
 
-**Published:** Toolbox 3.4.0 is certified and has been available in the
-Microsoft Store since 17 November 2026.
+**Published:** Toolbox 3.6.0 is certified and has been available in the
+Microsoft Store since 18 November 2026.
 
 - Store page: <https://apps.microsoft.com/detail/9P4FPTHZHVJD>
-- Package: `Toolbox-3.4.0.appx`, version `3.4.0.0`, x64
-- Submission 1 (`1152921505702409983`), last changed on 17 Nov 2026
+- Package: `Toolbox-3.6.0.appx`, version `3.6.0.0`, x64
+- First submission (`1152921505702409983`) certified 3.4.0 on 17 Nov 2026
+- 3.6.0 certified and published on 18 Nov 2026
 - Partner Center: “In Microsoft Store”, available for Windows 10/11 Desktop
 
 Newer GitHub releases do not automatically reach the Store; every Store version
-needs its own submission (section 6). 3.5.0 was deliberately not submitted.
+needs its own submission (section 6). 3.5.0 and 3.6.1 were deliberately not
+submitted.
 
 ## One-time setup
 
@@ -94,8 +96,8 @@ The existing `windows-exe.yml` workflow is unchanged. The Store version is
 
 ### 4. Upload the AppX to Partner Center
 
-Current state (17 Nov 2026): `Toolbox-3.4.0.appx` is the only package in the
-submission, it was certified and has been published since 17 Nov 2026. The steps
+Current state (18 Nov 2026): `Toolbox-3.6.0.appx` is the only package in the
+submission, it was certified and has been published since 18 Nov 2026. The steps
 below describe the flow of a submission and apply unchanged to later versions.
 
 1. **Start the workflow:** **Actions → Microsoft Store (AppX) → Run workflow**.
@@ -192,8 +194,8 @@ French; **System language** keeps following Windows. The Store listings also
 exist in English (United States), Spanish (Spain) and French (France). Product
 ID: `9P4FPTHZHVJD`.
 
-> **Important:** `Toolbox-3.4.0.appx` was certified with the four languages and
-> has been published in the Store since 17 Nov 2026; it contains the manual
+> **Important:** `Toolbox-3.6.0.appx` was certified with the four languages and
+> has been published in the Store since 18 Nov 2026; it contains the manual
 > language choice. 3.3.2 was removed from the submission. The build runs on
 > Windows or through the **Microsoft Store (AppX)** workflow; it is not possible
 > on macOS.
@@ -280,7 +282,7 @@ were produced with the localized app; the German listing still uses the German
 screenshots.
 
 The **package languages** in `windows/package.json` are `de-DE`, `en-US`,
-`es-ES` and `fr-FR`. The AppX `Toolbox-3.4.0.appx` validated in Partner Center
+`es-ES` and `fr-FR`. The AppX `Toolbox-3.6.0.appx` validated in Partner Center
 contains these four languages and adds the manual language choice.
 
 ### Pricing and availability
@@ -375,5 +377,6 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
 - [x] Build the new AppX 3.4.0 with de/en/es/fr
 - [x] Upload and validate `Toolbox-3.4.0.appx` in Partner Center
 - [x] Submit on 16 Nov 2026, certified and published on 17 Nov 2026
+- [x] Build, validate and publish `Toolbox-3.6.0.appx` on 18 Nov 2026
 - [ ] Set `STORE_URL` as a repository variable
       (`https://apps.microsoft.com/detail/9P4FPTHZHVJD`) – still open

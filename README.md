@@ -34,11 +34,11 @@ The Windows app is available as an installer straight from GitHub:
 
 Windows 10/11 (64-bit). Run the installer after downloading; it installs into the user profile without administrator rights. The installer is not signed, so SmartScreen may warn on the first launch – **More info → Run anyway** starts the app regardless.
 
-The Microsoft Store version is an additional installation path and does not replace the installer. It has been available in the Microsoft Store since 17 November 2026, currently at version 3.4.0:
+The Microsoft Store version is an additional installation path and does not replace the installer. It has been available in the Microsoft Store since 17 November 2026, currently at version 3.6.0:
 
 [**Toolbox for Windows in the Microsoft Store**](https://apps.microsoft.com/detail/9P4FPTHZHVJD)
 
-The Store version updates through the Microsoft Store and trails the GitHub release; 3.6.1 is currently available only as DMG and EXE. Setup and submission are described in [`windows/store`](windows/store/README.md).
+The Store version updates through the Microsoft Store and trails the GitHub release; the newest GitHub release is available first as DMG and EXE. Setup and submission are described in [`windows/store`](windows/store/README.md).
 
 The Windows app checks GitHub at most once a day at launch for a newer version. When installed, it downloads the new installer, verifies the SHA-512 checksum published in the release and installs the update in the background; afterwards it restarts. Manually, use **Settings → Updates**; the automatic check can be disabled there as well. The Microsoft Store version updates through the Store; the GitHub update check is disabled there.
 
