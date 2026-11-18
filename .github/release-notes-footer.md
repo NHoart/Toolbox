@@ -1,10 +1,11 @@
 ## Verified release state
 
-3.6.0 adds the localization of all three apps. The Windows test suite (42 tests)
-and the headless sync smoke test run with this release; the Xcode builds for
-macOS and iOS are produced by the GitHub Actions workflows, and the localization
-catalog is compiled into the app bundle for German, Spanish and French with
-English as the development language. A test on physical devices, a real Wi-Fi
+3.6.1 fixes the localization of the widget labels. The Windows test suite
+(43 tests) and the headless sync smoke test run with this release; the Xcode
+builds for macOS and iOS are produced by the GitHub Actions workflows, and
+`scripts/test-apple-localization.sh` verifies on the built bundles that every
+app and widget catalog key resolves in German, Spanish and French and falls back
+to English for unsupported languages. A test on physical devices, a real Wi-Fi
 test, an update run and the native Windows interface are still outstanding.
 
 ## Checklist: first launch and three-device sync

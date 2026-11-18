@@ -13,16 +13,14 @@ Download `Toolbox.dmg` above.
      “Toolbox was blocked”, or
    - in Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
-### New in 3.6.0
+### New in 3.6.1
 
-- **System language with English fallback:** the Mac app follows the system
-  language and shows English whenever the system language is not available.
-  German, English, Spanish and French are fully translated.
-- **Number and date formats per region:** dates, numbers and prices follow the
-  region of the system language, so `en-GB` uses British formatting while the
-  interface stays English.
-- **Localized network permission:** the prompt for the local network is shown in
-  the system language as well.
+- **Widget labels follow the system language:** the glass and bottle buttons in
+  the medium widget are now translated as well, so German, Spanish and French no
+  longer show English labels there.
+- **Localization fallback verified:** a new test runs inside the real macOS and
+  iOS bundles with a forced system language and checks every String Catalog key,
+  including the English fallback for unsupported languages.
 
 ### Updating from an older version
 

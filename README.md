@@ -38,7 +38,7 @@ The Microsoft Store version is an additional installation path and does not repl
 
 [**Toolbox for Windows in the Microsoft Store**](https://apps.microsoft.com/detail/9P4FPTHZHVJD)
 
-The Store version updates through the Microsoft Store and trails the GitHub release; 3.5.0 is currently only available as DMG and EXE. Setup and submission are described in [`windows/store`](windows/store/README.md).
+The Store version updates through the Microsoft Store and trails the GitHub release; 3.6.1 is currently available only as DMG and EXE. Setup and submission are described in [`windows/store`](windows/store/README.md).
 
 The Windows app checks GitHub at most once a day at launch for a newer version. When installed, it downloads the new installer, verifies the SHA-512 checksum published in the release and installs the update in the background; afterwards it restarts. Manually, use **Settings → Updates**; the automatic check can be disabled there as well. The Microsoft Store version updates through the Store; the GitHub update check is disabled there.
 

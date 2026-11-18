@@ -7,17 +7,10 @@ rights.
 Because the installer is not signed, Windows SmartScreen may show a warning on
 the first launch. **More info → Run anyway** starts the app.
 
-### New in 3.6.0
+### New in 3.6.1
 
-- **System language with English fallback:** the app picks the first supported
-  entry from the Windows language list and falls back to English when the system
-  language is not available. German, English, Spanish and French are fully
-  translated.
-- **Region-aware formatting:** numbers, dates and currency follow the full
-  region tag of the system language (`en-GB` stays British), while the interface
-  uses the matching language.
-- **Manual choice unchanged:** Settings → Language still offers German, English,
-  Spanish and French; **System language** follows Windows.
+No functional changes on Windows in this release. The app is identical to 3.6.0
+and keeps the system language support with English fallback introduced there.
 
 ### Windows: updating from 3.1.x
 
@@ -25,7 +18,7 @@ Windows versions before 3.2.0 do not contain the updater yet. Once, download
 `Toolbox-Setup.exe` above, close Toolbox and run the installer over the existing
 installation – uninstalling is not necessary, the data is preserved. Because the
 installer is not signed, Defender SmartScreen may warn – **More info → Run
-anyway** starts it. From 3.2.0 on the auto-update takes over; 3.6.0 is offered
+anyway** starts it. From 3.2.0 on the auto-update takes over; 3.6.1 is offered
 automatically there.
 
 ### Sync with Mac and iPhone
