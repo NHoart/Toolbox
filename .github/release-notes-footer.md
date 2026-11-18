@@ -1,6 +1,6 @@
 ## Verified release state
 
-3.6.1 fixes the localization of the widget labels. The Windows test suite
+3.7.0 adds the current-language card to the macOS settings. The Windows test suite
 (43 tests) and the headless sync smoke test run with this release; the Xcode
 builds for macOS and iOS are produced by the GitHub Actions workflows, and
 `scripts/test-apple-localization.sh` verifies on the built bundles that every
