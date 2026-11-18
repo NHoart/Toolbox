@@ -9,8 +9,8 @@ the first launch. **More info → Run anyway** starts the app.
 
 ### New in 3.6.1
 
-No functional changes on Windows in this release. The app is identical to 3.6.0
-and keeps the system language support with English fallback introduced there.
+- **No functional changes on Windows:** the app is identical to 3.6.0 and keeps
+  the system language support with English fallback introduced there.
 
 ### Windows: updating from 3.1.x
 

@@ -71,16 +71,40 @@ function parseArgs(argv) {
 }
 
 const args = parseArgs(process.argv.slice(2))
+const version = args.tag.replace(/^v/, '')
 const storeRow = args.storeUrl
   ? `| **Microsoft Store** (Windows 10/11) | [Toolbox for Windows in the Microsoft Store](${args.storeUrl}) |`
   : ''
 
-const body = sections
-  .map(file => {
-    const filename = path.join(root, file)
-    if (!fs.existsSync(filename)) fail(`Release notes file is missing: ${file}`)
-    return fs.readFileSync(filename, 'utf8').trim()
-  })
+const rendered = sections.map(file => {
+  const filename = path.join(root, file)
+  if (!fs.existsSync(filename)) fail(`Release notes file is missing: ${file}`)
+  return { file, text: fs.readFileSync(filename, 'utf8').trim() }
+})
+
+// Every release says what changed on each platform, so the notes cannot ship
+// without a section for the version being released.
+const platformSections = [
+  '.github/macos-release-notes.md',
+  '.github/windows-release-notes.md'
+]
+for (const { file, text } of rendered) {
+  if (!platformSections.includes(file)) continue
+  const heading = `### New in ${version}`
+  const start = text.indexOf(heading)
+  if (start === -1) {
+    fail(`${file} has no "${heading}" section; describe what is new in ${version}.`)
+  }
+  const rest = text.slice(start + heading.length)
+  const nextHeading = rest.search(/^#{2,3} /m)
+  const section = nextHeading === -1 ? rest : rest.slice(0, nextHeading)
+  if (!/^\s*[-*] \S/m.test(section)) {
+    fail(`${file}: "${heading}" needs at least one bullet describing the change.`)
+  }
+}
+
+const body = rendered
+  .map(({ text }) => text)
   .join('\n\n')
   .replaceAll('{{REPO}}', args.repo)
   .replaceAll('{{TAG}}', args.tag)
