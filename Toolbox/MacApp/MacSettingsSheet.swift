@@ -5,6 +5,7 @@ import SwiftUI
 /// The iPhone version keeps its own `SettingsView`.
 struct MacSettingsSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
 
     @AppStorage(WaterStore.Key.glass, store: WaterStore.defaults) private var glass = 200
     @AppStorage(WaterStore.Key.bottle, store: WaterStore.defaults) private var bottle = 500
@@ -25,6 +26,7 @@ struct MacSettingsSheet: View {
             ScrollView {
                 VStack(spacing: 14) {
                     sizesCard
+                    languageCard
                     networkCard
                     updatesCard
                     resetCard
@@ -101,6 +103,32 @@ struct MacSettingsSheet: View {
             stepperRow("Bottle", value: $bottle, range: 100...3000, step: 50)
             divider
             stepperRow("Daily goal", value: $goal, range: 500...6000, step: 250)
+        }
+        .macGlassCard(cornerRadius: 20, padding: 16)
+    }
+
+    private var languageCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            MacCardHeader(title: "LANGUAGE", systemImage: "globe", tint: MacTheme.cyan)
+
+            HStack(spacing: 10) {
+                Text("Language")
+                    .font(.system(size: 12.5, weight: .medium))
+
+                Spacer()
+
+                Text(appLanguageName)
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+
+                Button("Open System Settings") { openLanguageSettings() }
+                    .buttonStyle(.glass)
+            }
+
+            Text("Set the language for Toolbox under Applications.")
+                .font(.system(size: 10.5))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .macGlassCard(cornerRadius: 20, padding: 16)
     }
@@ -239,6 +267,19 @@ struct MacSettingsSheet: View {
                 .labelsHidden()
                 .controlSize(.small)
         }
+    }
+
+    private var appLanguageName: String {
+        let code = Bundle.main.preferredLocalizations.first ?? "en"
+        let base = code.split(separator: "-").first.map(String.init) ?? code
+        return Locale(identifier: base).localizedString(forLanguageCode: base)?.capitalized ?? base.uppercased()
+    }
+
+    private func openLanguageSettings() {
+        guard let url = URL(string: "x-apple.systempreferences:com.apple.Localization-Settings.extension") else {
+            return
+        }
+        openURL(url)
     }
 
     private var syncNameBinding: Binding<String> {
