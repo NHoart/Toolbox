@@ -600,8 +600,7 @@
   }
 
   /// Pure selection logic so it can be tested without a browser.
-  /// Reihenfolge: erzwungene Sprache, gespeicherte Wahl, Systemsprachen,
-  /// danach Englisch.
+  /// Order: forced language, stored choice, system languages, then English.
   function chooseLocale({ forced, stored, preferred } = {}) {
     const forcedLanguage = baseLanguage(forced)
     if (forced && supported.includes(forcedLanguage)) {

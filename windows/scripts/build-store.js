@@ -42,7 +42,7 @@ if (placeholder && !allowPlaceholder) {
     'Enter the values from Partner Center in windows/store/store.config.json:',
     '  identityName         = Package/Identity/Name',
     '  publisher            = Package/Identity/Publisher',
-    '  publisherDisplayName = Anzeigename des Herausgebers',
+    '  publisherDisplayName = Publisher display name',
     '',
     'For a pure test build without a Store identity:',
     '  ALLOW_STORE_PLACEHOLDER=1 npm run dist:store',
@@ -67,8 +67,8 @@ const configuredLanguages = Array.isArray(pkg.build && pkg.build.appx && pkg.bui
 if (configuredLanguages.join(',') !== APPX_LANGUAGES.join(',')) {
   fail([
     'The AppX languages in windows/package.json are incomplete.',
-    `Erwartet: ${APPX_LANGUAGES.join(', ')}`,
-    `Gefunden: ${configuredLanguages.length ? configuredLanguages.join(', ') : '(keine)'}`,
+    `Expected: ${APPX_LANGUAGES.join(', ')}`,
+    `Found: ${configuredLanguages.length ? configuredLanguages.join(', ') : '(none)'}`,
   ].join('\n'))
 }
 
@@ -112,7 +112,7 @@ delete config.publish
 async function run() {
   if (checkOnly) {
     await validateConfiguration(config, { isEnabled: false, add() {} })
-    console.log('Store-Konfiguration OK.')
+    console.log('Store configuration OK.')
     console.log(`  identityName: ${identityName}`)
     console.log(`  publisher: ${publisher}`)
     console.log(`  publisherDisplayName: ${publisherDisplayName}`)
@@ -137,11 +137,11 @@ async function run() {
     // electron-builder must not publish by itself.
     publish: 'never',
   })
-  console.log('AppX fertig. Die Datei liegt unter windows/dist/.')
+  console.log('AppX finished. The file is in windows/dist/.')
   console.log('Verify the manifest (Windows): powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-appx.ps1')
 }
 
 run().catch(error => {
-  console.error(checkOnly ? 'Store configuration invalid:' : 'AppX-Build fehlgeschlagen:', error)
+  console.error(checkOnly ? 'Store configuration invalid:' : 'AppX build failed:', error)
   process.exit(1)
 })

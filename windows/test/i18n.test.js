@@ -20,7 +20,7 @@ test('Region wird auf die Sprachbasis abgebildet', () => {
   })
 })
 
-test('Unbekannte Sprachen fallen auf Englisch zurück', () => {
+test('Unknown languages fall back to English', () => {
   assert.deepEqual(i18n.chooseLocale({ preferred: ['it-IT'] }), {
     language: 'en',
     localeTag: 'en-US',
@@ -35,7 +35,7 @@ test('Unbekannte Sprachen fallen auf Englisch zurück', () => {
   })
 })
 
-test('Die erste unterstützte Systemsprache gewinnt', () => {
+test('The first supported system language wins', () => {
   assert.deepEqual(i18n.chooseLocale({ preferred: ['it-IT', 'de-DE', 'en-US'] }), {
     language: 'de',
     localeTag: 'de-DE',
@@ -57,14 +57,14 @@ test('Manuelle Wahl und erzwungene Sprache schlagen die Systemsprache', () => {
   })
 })
 
-test('Ungültige Region-Tags brechen die Auswahl nicht', () => {
+test('Invalid region tags do not break the selection', () => {
   assert.deepEqual(i18n.chooseLocale({ preferred: ['en-US-x-!!!'] }), {
     language: 'en',
     localeTag: 'en-US',
   })
 })
 
-test('Alle Übersetzungen decken dieselben Schlüssel ab', () => {
+test('All translations cover the same keys', () => {
   const languages = ['en', 'es', 'fr']
   const reference = Object.keys(i18n.dictionaries.en).sort()
 
@@ -75,7 +75,7 @@ test('Alle Übersetzungen decken dieselben Schlüssel ab', () => {
   }
 })
 
-test('Englisch ist vollständig übersetzt', () => {
+test('English is fully translated', () => {
   assert.equal(i18n.translateFor('en', 'Heute'), 'Today')
   assert.equal(i18n.translateFor('en', 'Einstellungen'), 'Settings')
   assert.equal(i18n.translateFor('de', 'Heute'), 'Heute')

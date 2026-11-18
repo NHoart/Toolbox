@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$Path,
-    [string[]]$ExpectedLanguages = @('de-DE', 'en-US', 'es-ES', 'fr-FR')
+    [string[]]$ExpectedLanguages = @('en-US', 'de-DE', 'es-ES', 'fr-FR')
 )
 
 $ErrorActionPreference = 'Stop'
@@ -33,14 +33,14 @@ $temp = Join-Path ([IO.Path]::GetTempPath()) ('toolbox-appx-' + [guid]::NewGuid(
 New-Item -ItemType Directory -Path $temp | Out-Null
 
 try {
-    # Expand-Archive erwartet eine .zip-Endung; die .appx ist technisch ein ZIP.
+    # Expand-Archive expects a .zip extension; the .appx is technically a ZIP.
     $zipPath = Join-Path $temp 'package.zip'
     Copy-Item -LiteralPath $Path -Destination $zipPath
     Expand-Archive -LiteralPath $zipPath -DestinationPath $temp -Force
 
     $manifestPath = Join-Path $temp 'AppxManifest.xml'
     if (-not (Test-Path -LiteralPath $manifestPath)) {
-        Fail 'AppxManifest.xml fehlt im Paket.'
+        Fail 'AppxManifest.xml is missing from the package.'
     }
 
     [xml]$manifest = Get-Content -LiteralPath $manifestPath -Raw
@@ -49,7 +49,7 @@ try {
 
     $identity = $manifest.SelectSingleNode('/appx:Package/appx:Identity', $ns)
     if ($null -eq $identity) {
-        Fail 'Identity fehlt im AppxManifest.xml.'
+        Fail 'Identity is missing from AppxManifest.xml.'
     }
 
     $resources = @($manifest.SelectNodes('/appx:Package/appx:Resources/appx:Resource', $ns) |
@@ -62,11 +62,14 @@ try {
     if ($resources.Count -ne $uniqueResources.Count) {
         Fail "Duplicate language entries in the manifest: $($resources -join ', ')"
     }
+    if ($resources.Count -eq 0 -or $resources[0] -ne 'en-US') {
+        Fail "English (en-US) must be the first language in the manifest, found: $($resources[0])"
+    }
     if ($missing.Count -gt 0) {
-        Fail "Fehlende Sprachen im AppX: $($missing -join ', ')"
+        Fail "Missing languages in the AppX: $($missing -join ', ')"
     }
     if ($extra.Count -gt 0) {
-        Fail "Unerwartete Sprachen im AppX: $($extra -join ', ')"
+        Fail "Unexpected languages in the AppX: $($extra -join ', ')"
     }
     $identityName = $identity.GetAttribute('Name')
     $identityPublisher = $identity.GetAttribute('Publisher')
@@ -87,12 +90,12 @@ try {
     }
 
     $hash = (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
-    Write-Host 'AppX-Manifest OK'
-    Write-Host "  Datei: $Path"
+    Write-Host 'AppX manifest OK'
+    Write-Host "  File: $Path"
     Write-Host "  Identity: $identityName"
     Write-Host "  Version: $identityVersion"
-    Write-Host "  Architektur: $identityArchitecture"
-    Write-Host "  Sprachen: $($uniqueResources -join ', ')"
+    Write-Host "  Architecture: $identityArchitecture"
+    Write-Host "  Languages: $($uniqueResources -join ', ')"
     Write-Host "  SHA256: $hash"
 }
 finally {

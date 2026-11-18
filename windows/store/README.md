@@ -69,13 +69,16 @@ reliable for AppX on current Windows runners. It also removes the GitHub
 through the workflow. On failure the workflow writes the last lines of the build
 log into the job summary.
 
-- The Store build **always** writes `de-DE`, `en-US`, `es-ES` and `fr-FR` into
-  the AppX manifest. The central list lives in
+- The Store build **always** writes `en-US`, `de-DE`, `es-ES` and `fr-FR` into
+  the AppX manifest, with `en-US` first: the first entry is the package's
+  default language and the fallback Windows uses when none of the user's
+  languages is supported. The central list lives in
   `windows/scripts/appx-languages.js`; `windows/package.json` and the build must
   contain exactly these four languages, otherwise the build aborts.
 - After the build, `windows/scripts/verify-appx.ps1` checks the finished
-  package: identity, package version, `x64` and **exactly** the four languages.
-  Any deviation fails the workflow before an artifact is uploaded.
+  package: identity, package version, `x64`, **exactly** the four languages and
+  `en-US` as the first (default) entry. Any deviation fails the workflow before
+  an artifact is uploaded.
 - The run stores the artifact **Toolbox-appx**, containing
   `Toolbox-<version>.appx` and `SHA256SUMS.txt`.
 - Before the real identity is entered, **Test build with placeholder identity**
