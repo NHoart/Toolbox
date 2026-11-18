@@ -13,16 +13,14 @@ Download `Toolbox.dmg` above.
      “Toolbox was blocked”, or
    - in Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
-### New in 3.7.0
+### New in 3.7.1
 
-- **Current language at a glance:** the macOS settings now show which language
-  Toolbox is currently using, right next to the button that opens the macOS
-  Language & Region settings.
-- **Uses Apple's per-app language setting:** there is no separate in-app
-  override; choosing a language for Toolbox under **Applications** in System
-  Settings applies on the next launch.
-- **Fully localized:** the new card is translated into German, Spanish and
-  French, with English as the fallback.
+- **Widget labels fixed:** the two buttons in the water widget now show
+  “Glass” and “Bottle” again instead of a raw debug string, so the medium
+  widget is readable at a glance.
+- **Localized labels:** the buttons follow the app language – “Glas” and
+  “Flasche” in German, “Vaso” and “Botella” in Spanish, “Verre” and
+  “Bouteille” in French – and fall back to English for unsupported languages.
 
 ### Updating from an older version
 
