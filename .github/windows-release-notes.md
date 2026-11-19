@@ -7,6 +7,13 @@ rights.
 Because the installer is not signed, Windows SmartScreen may show a warning on
 the first launch. **More info → Run anyway** starts the app.
 
+### New in 3.7.2
+
+- **Microsoft Store version:** Settings no longer contain an Updates section.
+  The Microsoft Store keeps Toolbox up to date automatically.
+- **Installer version:** no functional change; the GitHub update check remains
+  in Settings.
+
 ### New in 3.7.1
 
 - **No functional changes on Windows:** the app is identical to 3.7.0 and keeps

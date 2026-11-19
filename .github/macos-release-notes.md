@@ -13,6 +13,11 @@ Download `Toolbox.dmg` above.
      “Toolbox was blocked”, or
    - in Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
+### New in 3.7.2
+
+- **No functional changes on macOS:** this release only affects the Microsoft
+  Store version of Toolbox for Windows.
+
 ### New in 3.7.1
 
 - **Widget labels fixed:** the two buttons in the water widget now show

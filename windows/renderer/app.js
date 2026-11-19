@@ -656,14 +656,12 @@ function bindSettings() {
 
 function bindUpdates() {
   $('autoUpdateToggle').addEventListener('change', event => {
-    if (updateState && updateState.storeManaged) return
     const enabled = event.target.checked
     runUpdate(api.update.setAutomatic(enabled))
     toast(enabled ? T('Automatische Update-Prüfung eingeschaltet') : T('Automatische Update-Prüfung ausgeschaltet'))
   })
 
   $('checkUpdates').addEventListener('click', () => {
-    if (updateState && updateState.storeManaged) return
     if (updateState && updateState.update) {
       openModal('updateModal', $('checkUpdates'))
       return
@@ -685,6 +683,11 @@ function renderSettings() {
   if (!state) return
   renderSettingsValues()
   if (I18N) $('languageSelect').value = I18N.preference
+  $('settingsSubtitle').textContent = T(
+    updateState && updateState.storeManaged
+      ? 'Wasser, Netzwerk und Anzeige'
+      : 'Wasser, Netzwerk, Updates und Anzeige'
+  )
 
   const sync = state.sync
   $('syncToggle').checked = Boolean(sync.enabled)
@@ -1027,15 +1030,22 @@ function applyUpdateState(next) {
 function renderUpdateSection() {
   if (!updateState) return
 
-  const storeManaged = Boolean(updateState.storeManaged)
+  const card = $('updateCard')
+
+  // In the Store build the Microsoft Store updates the app, so the whole
+  // Updates section is removed from Settings instead of only being hidden.
+  if (updateState.storeManaged) {
+    if (card) card.remove()
+    return
+  }
+
+  // The markup starts hidden so the card never flashes before the update
+  // state is known; the regular build shows it here.
+  if (card) card.hidden = false
+
   const toggle = $('autoUpdateToggle')
   toggle.checked = Boolean(updateState.automaticChecks)
-  toggle.disabled = storeManaged || Boolean(updateState.installing)
-
-  $('autoUpdateRow').hidden = storeManaged
-  $('checkUpdateRow').hidden = storeManaged
-  $('updateHint').hidden = storeManaged
-  $('updateStoreHint').hidden = !storeManaged
+  toggle.disabled = Boolean(updateState.installing)
 
   $('updateStatus').textContent = updateStatusText()
 
@@ -1047,11 +1057,10 @@ function renderUpdateSection() {
   button.textContent = updateState.update
     ? T('Update {version} installieren', { version: updateState.update.version })
     : T('Jetzt nach Updates suchen')
-  button.disabled = storeManaged || Boolean(updateState.checking || updateState.installing)
+  button.disabled = Boolean(updateState.checking || updateState.installing)
 }
 
 function updateStatusText() {
-  if (updateState.storeManaged) return T('Updates über den Microsoft Store')
   if (updateState.installing) {
     return typeof updateState.progress === 'number'
       ? T('Wird geladen … {percent} %', { percent: Math.round(updateState.progress * 100) })
