@@ -6,16 +6,17 @@ A small collection of everyday tools as a SwiftUI app for iPhone, iPad, Mac and 
 
 The screenshots show the English interface; German, Spanish and French are available as well.
 
-<p align="center">
-  <img src="docs/screenshots/today.png" width="32%" alt="Today: water tracker with progress ring and quick picks">
-  <img src="docs/screenshots/history.png" width="32%" alt="History: chart of the last 30 days">
-  <img src="docs/screenshots/units.png" width="32%" alt="Units: conversion between MB/GB and Mbit/MB">
-</p>
-<p align="center">
-  <img src="docs/screenshots/counter.png" width="32%" alt="Counter with plus, minus, undo and saved counter values">
-  <img src="docs/screenshots/download-time.png" width="32%" alt="Download time from file size and speed">
-  <img src="docs/screenshots/power-usage.png" width="32%" alt="Power usage with optional cost calculation">
-</p>
+![Today: water tracker with progress ring and quick picks](docs/screenshots/today.png)
+
+![History: chart of the last 30 days](docs/screenshots/history.png)
+
+![Units: conversion between MB/GB and Mbit/MB](docs/screenshots/units.png)
+
+![Counter with plus, minus, undo and saved counter values](docs/screenshots/counter.png)
+
+![Download time from file size and speed](docs/screenshots/download-time.png)
+
+![Power usage with optional cost calculation](docs/screenshots/power-usage.png)
 
 ## Download
 
@@ -55,7 +56,7 @@ The Microsoft Store version is an additional installation path and does not repl
 
 The Store version updates through the Microsoft Store and trails the GitHub release; the newest GitHub release is available first as DMG and EXE. Setup and submission are described in [`windows/store`](windows/store/README.md).
 
-The Windows app checks GitHub at most once a day at launch for a newer version. When installed, it downloads the new installer, verifies the SHA-512 checksum published in the release and installs the update in the background; afterwards it restarts. Manually, use **Settings → Updates**; the automatic check can be disabled there as well. The Microsoft Store version updates through the Store; the GitHub update check is disabled there.
+The Windows app checks GitHub at most once a day at launch for a newer version. When installed, it downloads the new installer, verifies the SHA-512 checksum published in the release and installs the update in the background; afterwards it restarts. Manually, use **Settings → Updates**; the automatic check can be disabled there as well. The Microsoft Store version updates through the Store and removes the Updates section from Settings entirely.
 
 ## Features
 
