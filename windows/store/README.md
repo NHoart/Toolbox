@@ -18,14 +18,14 @@ Newer GitHub releases do not automatically reach the Store; every Store version
 needs its own submission (section 6). 3.5.0 and 3.6.1 were deliberately not
 submitted.
 
-**Next submission (built, not uploaded yet):** `Toolbox-3.7.2.appx`
+**Submission 3 (in certification):** `Toolbox-3.7.2.appx`
 (version `3.7.2.0`, x64, SHA256
 `d70d8ba6cec176f7f105b0949c0e025d22b9f670e960ba8bb8cecca16d0a5583`) was built
 from branch `store-3.7.2` (commit `dca01d1`) by workflow run `44573892233` on
 19 Nov 2026 and contains the Settings change. Submission 3
-(`1152921505702451589`) is still in certification and contains
-`Toolbox-3.6.0.appx`, so the new package cannot be uploaded until that
-certification finishes.
+(`1152921505702451589`) was cancelled and re-submitted on 19 Nov 2026 with this
+package; it is now in certification. The four “What's new” texts and the
+updated certification notes are stored in the submission.
 
 ## One-time setup
 
@@ -105,12 +105,11 @@ The existing `windows-exe.yml` workflow is unchanged. The Store version is
 
 ### 4. Upload the AppX to Partner Center
 
-Current state (19 Nov 2026): Submission 3 (`1152921505702451589`) is in
-certification and still contains only `Toolbox-3.6.0.appx`. It is read-only
-until certification finishes. The replacement `Toolbox-3.7.2.appx` is built and
-verified (checksum above), but cannot be uploaded while Submission 3 is in
-certification. The steps below describe the flow of a submission and apply
-unchanged to later versions.
+Current state (19 Nov 2026): Submission 3 (`1152921505702451589`) was cancelled
+while in certification and re-submitted the same day with
+`Toolbox-3.7.2.appx` (version `3.7.2.0`, checksum above). It is now in
+certification; the Store continues to serve 3.6.0 until it passes. The steps
+below describe the flow of a submission and apply unchanged to later versions.
 
 1. **Start the workflow:** **Actions → Microsoft Store (AppX) → Run workflow**.
    For a release a `v<version>` tag is enough; the workflow then runs
@@ -179,8 +178,9 @@ installation table. Without `STORE_URL` the row stays empty.
    version.
 
 The submission with the Settings change (no Updates section in the Store build)
-uses `Toolbox-3.7.2.appx` from run `44573892233` (commit `dca01d1`). The existing
-`v3.7.1` artifact was built before that change and must not be reused for it.
+uses `Toolbox-3.7.2.appx` from run `44573892233` (commit `dca01d1`), uploaded to
+Submission 3 on 19 Nov 2026. The existing `v3.7.1` artifact was built before
+that change and must not be reused for it.
 
 Later automation can use the Microsoft Store Developer CLI with an Entra ID app.
 That requires seller ID, tenant ID, client ID and client secret; these
@@ -414,5 +414,7 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
 - [x] Submit Submission 3 for certification so the new screenshots go live
 - [x] Build `Toolbox-3.7.2.appx` from commit `dca01d1` with the Settings
       change (run `44573892233`, checksum verified)
-- [ ] Upload it as a new submission after Submission 3 finishes certification
-- [ ] Enter the "What's new" texts above in the four Store listings
+- [x] Cancel Submission 3 and re-submit it with `Toolbox-3.7.2.appx`
+      (19 Nov 2026)
+- [x] Enter the "What's new" texts above in the four Store listings
+- [x] Update the certification notes with the removed Updates section
