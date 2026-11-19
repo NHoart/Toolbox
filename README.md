@@ -2,6 +2,21 @@
 
 A small collection of everyday tools as a SwiftUI app for iPhone, iPad, Mac and Vision Pro – including a Home Screen widget and Siri shortcuts. The same six tools are available as a desktop app for Windows, with syncing over the local Wi-Fi network across Mac, iPhone and PC.
 
+## Screenshots
+
+The screenshots show the English interface; German, Spanish and French are available as well.
+
+<p align="center">
+  <img src="docs/screenshots/today.png" width="32%" alt="Today: water tracker with progress ring and quick picks">
+  <img src="docs/screenshots/history.png" width="32%" alt="History: chart of the last 30 days">
+  <img src="docs/screenshots/units.png" width="32%" alt="Units: conversion between MB/GB and Mbit/MB">
+</p>
+<p align="center">
+  <img src="docs/screenshots/counter.png" width="32%" alt="Counter with plus, minus, undo and saved counter values">
+  <img src="docs/screenshots/download-time.png" width="32%" alt="Download time from file size and speed">
+  <img src="docs/screenshots/power-usage.png" width="32%" alt="Power usage with optional cost calculation">
+</p>
+
 ## Download
 
 ### macOS
@@ -184,6 +199,7 @@ windows/                  Windows app (Electron, JavaScript)
 
 swift-sync-harness/       Headless CLI for the real Swift sync
 scripts/                  Build scripts and Swift↔Windows interop test
+docs/screenshots/         Screenshots for the README (English)
 ```
 
 ## Data storage

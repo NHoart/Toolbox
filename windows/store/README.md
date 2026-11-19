@@ -262,16 +262,16 @@ identical.
 is publicly readable; use and redistribution are governed by the LICENSE in the
 repository: <https://github.com/NHoart/Toolbox/blob/main/LICENSE>  
 **Store logo:** `windows/store/StoreListingIcon.png` (300 × 300, 1:1)  
-**Screenshots:** five PNGs each (2464 × 1648) uploaded per language in the Store
+**Screenshots:** six PNGs each (2464 × 1648) uploaded per language in the Store
 listing. The files live under `windows/store/screenshots/<language>/`
-(`de`, `en`, `es`, `fr`); motifs: history, units, counter, download time and
-power usage.  
+(`de`, `en`, `es`, `fr`); motifs in tab order: today (water tracker), history,
+units, counter, download time and power usage.  
 **What's new in this version:** leave empty for the first submission.
 
 ### Additional Store listings (en-US, es-ES, fr-FR)
 
 The **English (United States)**, **Spanish (Spain)** and **French (France)**
-listings are complete and each has five language-specific screenshots.
+listings are complete and each has six language-specific screenshots.
 Descriptions, short descriptions, eight features each, seven keywords each as
 well as copyright, license and developer details are translated. The earlier
 notes about a German-only interface were removed once the app was localized to
@@ -280,6 +280,13 @@ de/en/es/fr.
 The screenshots show the interface in the respective Store language. The images
 were produced with the localized app; the German listing still uses the German
 screenshots.
+
+The set was recaptured on 19 November 2026 from Toolbox 3.7.1 at a window size of
+1180 × 780 points: one screenshot per tab and language, all distinct and in tab
+order. It has been uploaded for all four languages to Submission 3 in the order of the
+filenames, and Submission 3 was submitted for certification on 19 November 2026.
+The live listing still shows the older set, which repeats “Units” in slots 1 and
+2 and has no screenshot for today or history, until certification completes.
 
 The **package languages** in `windows/package.json` are `de-DE`, `en-US`,
 `es-ES` and `fr-FR`. The AppX `Toolbox-3.6.0.appx` validated in Partner Center
@@ -364,7 +371,7 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
 
 ### Before submitting
 
-- [x] Upload screenshots (five each under `windows/store/screenshots/<language>/`)
+- [x] Upload the original five screenshots per language
 - [x] Answer the IARC questionnaire completely and save the age ratings
 - [x] Fill in pricing and availability, properties, Store listing and submission options
 - [x] Upload and validate AppX 3.3.2 (`Toolbox-3.3.2.appx`)
@@ -380,3 +387,6 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
 - [x] Build, validate and publish `Toolbox-3.6.0.appx` on 18 Nov 2026
 - [ ] Set `STORE_URL` as a repository variable
       (`https://apps.microsoft.com/detail/9P4FPTHZHVJD`) – still open
+- [x] Replace the Store screenshots in Partner Center with the six-tab set
+      (Submission 3, 19 Nov 2026, all four languages)
+- [x] Submit Submission 3 for certification so the new screenshots go live

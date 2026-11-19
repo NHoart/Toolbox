@@ -49,10 +49,10 @@ belongs to the earlier 3.3.2 draft and is historical only.
 
 | Language | Language ID | Status | Screenshots |
 | --- | --- | --- | --- |
-| German (Germany) | `14` | Live | 5 |
-| English (United States) | `4` | Live | 5 |
-| Spanish (Spain) | `15` | Live | 5 |
-| French (France) | `19` | Live | 5 |
+| German (Germany) | `14` | Live | 5 (1 duplicate) |
+| English (United States) | `4` | Live | 5 (1 duplicate) |
+| Spanish (Spain) | `15` | Live | 5 (1 duplicate) |
+| French (France) | `19` | Live | 5 (1 duplicate) |
 
 The Microsoft Store picks the listing that matches the user's language and
 region and falls back to English when no listing matches.
@@ -80,15 +80,21 @@ to English.
 
 ## Screenshots
 
-Five PNGs each (2464 × 1648) per language under
+Six PNGs each (2464 × 1648) per language under
 `windows/store/screenshots/<language>/`:
 
 | Store language | Folder | Motifs |
 | --- | --- | --- |
-| German (Germany) | `de/` | History, units, counter, download time, power usage |
-| English (USA) | `en/` | English interface |
-| Spanish (Spain) | `es/` | Spanish interface |
-| French (France) | `fr/` | French interface |
+| German (Germany) | `de/` | Today, history, units, counter, download time, power usage |
+| English (USA) | `en/` | Same motifs, English interface |
+| Spanish (Spain) | `es/` | Same motifs, Spanish interface |
+| French (France) | `fr/` | Same motifs, French interface |
+
+The live listing still shows five screenshots, with “Units” repeated in slots 1
+and 2 and no screenshot for today or history. The recaptured six-tab set was
+uploaded for all four languages to Submission 3, which was submitted for
+certification on 19 November 2026 and replaces the live set once certification
+completes.
 
 ## Remaining steps
 
@@ -99,6 +105,10 @@ Five PNGs each (2464 × 1648) per language under
 2. Future Store versions need their own submission; the procedure is described in
    [`windows/store/README.md`](windows/store/README.md).
 3. 3.5.0 was not submitted and remains a pure GitHub release (DMG and EXE).
+4. Submission 3 is in certification since 19 November 2026. It contains the
+   six-tab screenshot set for all four languages (today first); the live listing
+   keeps the old set with the duplicated “Units” screenshot until certification
+   completes and the update publishes automatically.
 
 ## History
 
