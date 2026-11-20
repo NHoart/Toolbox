@@ -7,11 +7,14 @@ rights.
 Because the installer is not signed, Windows SmartScreen may show a warning on
 the first launch. **More info → Run anyway** starts the app.
 
-### New in 3.7.1
+### New in 3.7.2
 
-- **No functional changes on Windows:** the app is identical to 3.7.0 and keeps
-  the system language support with English fallback. This release only fixes
-  the labels in the Apple water widget.
+- **Updated brand header:** the title bar now shows the Toolbox app icon at the
+  same size as the macOS sidebar, together with the app name and the localized
+  subtitle (“Everyday tools”, “Alltagswerkzeuge”, “Herramientas diarias”,
+  “Outils du quotidien”).
+- **No other functional changes on Windows:** the tools and the Wi-Fi sync work
+  exactly as in 3.7.1.
 
 ### Windows: updating from 3.1.x
 
@@ -19,7 +22,7 @@ Windows versions before 3.2.0 do not contain the updater yet. Once, download
 `Toolbox-Setup.exe` above, close Toolbox and run the installer over the existing
 installation – uninstalling is not necessary, the data is preserved. Because the
 installer is not signed, Defender SmartScreen may warn – **More info → Run
-anyway** starts it. From 3.2.0 on the auto-update takes over; 3.7.1 is offered
+anyway** starts it. From 3.2.0 on the auto-update takes over; 3.7.2 is offered
 automatically there.
 
 ### Sync with Mac and iPhone

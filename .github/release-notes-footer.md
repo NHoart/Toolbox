@@ -1,6 +1,7 @@
 ## Verified release state
 
-3.7.1 fixes the labels in the Apple water widget. The Windows test suite
+3.7.2 refreshes the brand headers in the macOS sidebar and the Windows title
+bar. The Windows test suite
 (43 tests) and the headless sync smoke test run with this release; the Xcode
 builds for macOS and iOS are produced by the GitHub Actions workflows, and
 `scripts/test-apple-localization.sh` verifies on the built bundles that every

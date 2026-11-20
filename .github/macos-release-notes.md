@@ -13,14 +13,13 @@ Download `Toolbox.dmg` above.
      “Toolbox was blocked”, or
    - in Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
-### New in 3.7.1
+### New in 3.7.2
 
-- **Widget labels fixed:** the two buttons in the water widget now show
-  “Glass” and “Bottle” again instead of a raw debug string, so the medium
-  widget is readable at a glance.
-- **Localized labels:** the buttons follow the app language – “Glas” and
-  “Flasche” in German, “Vaso” and “Botella” in Spanish, “Verre” and
-  “Bouteille” in French – and fall back to English for unsupported languages.
+- **The real app icon in the sidebar:** the header now shows the Toolbox app
+  icon instead of the old water-drop badge, so it matches the icon in the Dock,
+  the Finder and the app switcher.
+- **No other functional changes on macOS:** the tools, sync and widget behave
+  exactly as in 3.7.1.
 
 ### Updating from an older version
 
