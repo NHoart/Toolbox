@@ -7,6 +7,7 @@
     de: {},
     en: {
       'WERKZEUGE': 'TOOLS',
+      'Alltagswerkzeuge': 'Everyday tools',
       'Heute': 'Today',
       'Verlauf': 'History',
       'Einheiten': 'Units',
@@ -183,6 +184,7 @@
     },
     es: {
       'WERKZEUGE': 'HERRAMIENTAS',
+      'Alltagswerkzeuge': 'Herramientas diarias',
       'Heute': 'Hoy',
       'Verlauf': 'Historial',
       'Einheiten': 'Unidades',
@@ -359,6 +361,7 @@
     },
     fr: {
       'WERKZEUGE': 'OUTILS',
+      'Alltagswerkzeuge': 'Outils du quotidien',
       'Heute': "Aujourd'hui",
       'Verlauf': 'Historique',
       'Einheiten': 'Unités',
