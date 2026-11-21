@@ -13,8 +13,16 @@ the first launch. **More info → Run anyway** starts the app.
   same size as the macOS sidebar, together with the app name and the localized
   subtitle (“Everyday tools”, “Alltagswerkzeuge”, “Herramientas diarias”,
   “Outils du quotidien”).
-- **No other functional changes on Windows:** the tools and the Wi-Fi sync work
-  exactly as in 3.7.1.
+- **Microsoft Store version:** Settings no longer contain an Updates section.
+  The Microsoft Store keeps Toolbox up to date automatically.
+- **Installer version:** no functional change; the GitHub update check remains
+  in Settings, and the tools and the Wi-Fi sync work exactly as before.
+
+### New in 3.7.1
+
+- **No functional changes on Windows:** the app is identical to 3.7.0 and keeps
+  the system language support with English fallback. This release only fixes
+  the labels in the Apple water widget.
 
 ### Windows: updating from 3.1.x
 

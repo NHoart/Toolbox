@@ -441,6 +441,10 @@ body[data-platform="darwin"] .titlebar {
   backdrop-filter: none;
 }
 
+/* The Store build has no Updates section. The ID keeps this rule ahead of any
+   class-based layout rule that might otherwise override the hidden attribute. */
+#updateCard[hidden] { display: none !important; }
+
 .card-head {
   display: flex;
   align-items: center;

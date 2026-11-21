@@ -21,6 +21,15 @@ Download `Toolbox.dmg` above.
 - **No other functional changes on macOS:** the tools, sync and widget behave
   exactly as in 3.7.1.
 
+### New in 3.7.1
+
+- **Widget labels fixed:** the two buttons in the water widget now show
+  “Glass” and “Bottle” again instead of a raw debug string, so the medium
+  widget is readable at a glance.
+- **Localized labels:** the buttons follow the app language – “Glas” and
+  “Flasche” in German, “Vaso” and “Botella” in Spanish, “Verre” and
+  “Bouteille” in French – and fall back to English for unsupported languages.
+
 ### Updating from an older version
 
 Versions **before 2.0.3** (for example 1.3.0 or 2.0.2) cannot install this

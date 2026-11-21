@@ -18,6 +18,16 @@ Newer GitHub releases do not automatically reach the Store; every Store version
 needs its own submission (section 6). 3.5.0 and 3.6.1 were deliberately not
 submitted.
 
+**Submission 3 (in certification):** `Toolbox-3.7.2.appx`
+(version `3.7.2.0`, x64, SHA256
+`d70d8ba6cec176f7f105b0949c0e025d22b9f670e960ba8bb8cecca16d0a5583`) was built
+from commit `dca01d1` by workflow run `44573892233` on 19 Nov 2026 and contains
+the Settings change. Submission 3 (`1152921505702451589`) was cancelled and
+re-submitted on 19 Nov 2026 with this package. It was rejected on 20 Nov 2026
+(policy 10.1.1.3) and resubmitted on 21 Nov 2026 with the Windows-rendered
+screenshots; it is now in certification. The four “What's new” texts and the
+updated certification notes are stored in the submission.
+
 ## One-time setup
 
 ### 1. Reserve the developer account and name
@@ -96,8 +106,10 @@ The existing `windows-exe.yml` workflow is unchanged. The Store version is
 
 ### 4. Upload the AppX to Partner Center
 
-Current state (18 Nov 2026): `Toolbox-3.6.0.appx` is the only package in the
-submission, it was certified and has been published since 18 Nov 2026. The steps
+Current state (19 Nov 2026): Submission 3 (`1152921505702451589`) was cancelled
+while in certification and re-submitted the same day with
+`Toolbox-3.7.2.appx` (version `3.7.2.0`, checksum above). It is now in
+certification; the Store continues to serve 3.6.0 until it passes. The steps
 below describe the flow of a submission and apply unchanged to later versions.
 
 1. **Start the workflow:** **Actions → Microsoft Store (AppX) → Run workflow**.
@@ -165,6 +177,11 @@ installation table. Without `STORE_URL` the row stays empty.
    Center as a new submission (steps from section 4).
 4. The Store updates installed apps; `electron-updater` is disabled in the Store
    version.
+
+The submission with the Settings change (no Updates section in the Store build)
+uses `Toolbox-3.7.2.appx` from run `44573892233` (commit `dca01d1`), uploaded to
+Submission 3 on 19 Nov 2026. The existing `v3.7.1` artifact was built before
+that change and must not be reused for it.
 
 Later automation can use the Microsoft Store Developer CLI with an Entra ID app.
 That requires seller ID, tenant ID, client ID and client secret; these
@@ -266,7 +283,13 @@ repository: <https://github.com/NHoart/Toolbox/blob/main/LICENSE>
 listing. The files live under `windows/store/screenshots/<language>/`
 (`de`, `en`, `es`, `fr`); motifs in tab order: today (water tracker), history,
 units, counter, download time and power usage.  
-**What's new in this version:** leave empty for the first submission.
+**What's new in this version:** empty for the first submission. For the next
+submission, which removes the Updates section from the Store build, use:
+
+- de-DE: `Die Einstellungen zeigen in der Store-Fassung keinen Update-Bereich mehr; Updates kommen automatisch über den Microsoft Store.`
+- en-US: `The Store version no longer shows an Updates section in Settings; updates are delivered automatically by the Microsoft Store.`
+- es-ES: `La versión de Store ya no muestra una sección de actualizaciones en Ajustes; las actualizaciones llegan automáticamente a través de Microsoft Store.`
+- fr-FR: `La version Store n'affiche plus de section Mises à jour dans les paramètres ; les mises à jour sont fournies automatiquement par le Microsoft Store.`
 
 ### Additional Store listings (en-US, es-ES, fr-FR)
 
@@ -368,14 +391,14 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
 - **Notes for certification:**
 
 > Toolbox is an Electron desktop app (Win32, x64) without sign-in and without a
-> cloud. The Store version does not check GitHub for updates; updates come
-> exclusively from the Microsoft Store. On first launch Windows may ask for the
-> firewall permission for private networks; it is only needed for the optional
-> device sync via Bonjour/mDNS and TCP and can be declined without restricting
-> the other features. The sync is inactive without a sync name. One device is
-> enough to review the app; syncing requires two devices on the same Wi-Fi
-> network with an identical sync name. No data is sent to third parties and no
-> telemetry is collected.
+> cloud. The Store build has no Updates section in Settings; the Microsoft Store
+> delivers all updates and the app does not check GitHub. On first launch
+> Windows may ask for the firewall permission for private networks; it is only
+> needed for the optional device sync via Bonjour/mDNS and TCP and can be
+> declined without restricting the other features. The sync is inactive without
+> a sync name. One device is enough to review the app; syncing requires two
+> devices on the same Wi-Fi network with an identical sync name. No data is sent
+> to third parties and no telemetry is collected.
 
 ### Before submitting
 
@@ -397,6 +420,12 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
       (`https://apps.microsoft.com/detail/9P4FPTHZHVJD`) – still open
 - [x] Replace the Store screenshots in Partner Center with the six-tab set
       (Submission 3, 19 Nov 2026, all four languages)
+- [x] Build `Toolbox-3.7.2.appx` from commit `dca01d1` with the Settings
+      change (run `44573892233`, checksum verified)
+- [x] Cancel Submission 3 and re-submit it with `Toolbox-3.7.2.appx`
+      (19 Nov 2026)
+- [x] Enter the "What's new" texts above in the four Store listings
+- [x] Update the certification notes with the removed Updates section
 - [x] Submit Submission 3 for certification (rejected 20 Nov 2026, 10.1.1.3)
 - [x] Re-render the six screenshots per language from the Windows interface
       (21 Nov 2026, `scripts/capture-store-screenshots.js`)
