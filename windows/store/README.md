@@ -283,13 +283,14 @@ repository: <https://github.com/NHoart/Toolbox/blob/main/LICENSE>
 listing. The files live under `windows/store/screenshots/<language>/`
 (`de`, `en`, `es`, `fr`); motifs in tab order: today (water tracker), history,
 units, counter, download time and power usage.  
-**What's new in this version:** empty for the first submission. For the next
-submission, which removes the Updates section from the Store build, use:
+**What's new in this version:** use the following texts for the 3.7.3 Store
+submission, which adds the brand header and keeps the Store Settings without an
+Updates section:
 
-- de-DE: `Die Einstellungen zeigen in der Store-Fassung keinen Update-Bereich mehr; Updates kommen automatisch über den Microsoft Store.`
-- en-US: `The Store version no longer shows an Updates section in Settings; updates are delivered automatically by the Microsoft Store.`
-- es-ES: `La versión de Store ya no muestra una sección de actualizaciones en Ajustes; las actualizaciones llegan automáticamente a través de Microsoft Store.`
-- fr-FR: `La version Store n'affiche plus de section Mises à jour dans les paramètres ; les mises à jour sont fournies automatiquement par le Microsoft Store.`
+- de-DE: `Die Titelzeile zeigt jetzt das Toolbox-App-Logo mit App-Namen und Untertitel. Die Einstellungen der Store-Fassung enthalten weiterhin keinen Update-Bereich; Updates kommen automatisch über den Microsoft Store.`
+- en-US: `The title bar now shows the Toolbox app logo with the app name and subtitle. The Store version's Settings still have no Updates section; updates are delivered automatically by the Microsoft Store.`
+- es-ES: `La barra de título ahora muestra el logotipo de Toolbox con el nombre y el subtítulo de la app. Los Ajustes de la versión de Store siguen sin una sección de actualizaciones; Microsoft Store entrega las actualizaciones automáticamente.`
+- fr-FR: `La barre de titre affiche désormais le logo de Toolbox avec le nom et le sous-titre de l'application. Les paramètres de la version Store n'ont toujours pas de section Mises à jour ; le Microsoft Store fournit les mises à jour automatiquement.`
 
 ### Additional Store listings (en-US, es-ES, fr-FR)
 
