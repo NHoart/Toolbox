@@ -5,28 +5,29 @@ unchanged; the Store version uses the same sync engine and the same local data.
 
 ## Status
 
-**Published:** Toolbox 3.6.0 is certified and has been available in the
-Microsoft Store since 18 November 2026.
+**Published:** Toolbox 3.7.2 is certified and has been available in the
+Microsoft Store since 21 November 2026.
 
 - Store page: <https://apps.microsoft.com/detail/9P4FPTHZHVJD>
-- Package: `Toolbox-3.6.0.appx`, version `3.6.0.0`, x64
-- First submission (`1152921505702409983`) certified 3.4.0 on 17 Nov 2026
-- 3.6.0 certified and published on 18 Nov 2026
+- Package: `Toolbox-3.7.2.appx`, version `3.7.2.0`, x64
+- Submission 3 (`1152921505702451589`) passed certification and published on
+  21 Nov 2026
+- 3.7.2 was built from commit `dca01d1`, before the brand header change, so the
+  live app still shows the old title bar
 - Partner Center: “In Microsoft Store”, available for Windows 10/11 Desktop
 
 Newer GitHub releases do not automatically reach the Store; every Store version
 needs its own submission (section 6). 3.5.0 and 3.6.1 were deliberately not
 submitted.
 
-**Submission 3 (in certification):** `Toolbox-3.7.2.appx`
-(version `3.7.2.0`, x64, SHA256
-`d70d8ba6cec176f7f105b0949c0e025d22b9f670e960ba8bb8cecca16d0a5583`) was built
-from commit `dca01d1` by workflow run `44573892233` on 19 Nov 2026 and contains
-the Settings change. Submission 3 (`1152921505702451589`) was cancelled and
-re-submitted on 19 Nov 2026 with this package. It was rejected on 20 Nov 2026
-(policy 10.1.1.3) and resubmitted on 21 Nov 2026 with the Windows-rendered
-screenshots; it is now in certification. The four “What's new” texts and the
-updated certification notes are stored in the submission.
+**Submission 4 (in certification):** `Toolbox-3.7.3.appx`
+(version `3.7.3.0`, x64, SHA256
+`4fb97cb4368328304efdc7d0e4ea7921632cbba0d8612250ce96dc0b0db6c756`) was built
+from commit `ab5c0f5` by workflow run `44847964079` on 21 Nov 2026. It contains
+the brand header and the Store Settings change, so the app matches the
+screenshots. Submission 4 (`1152921505702465324`) was submitted for
+certification on 21 Nov 2026. The four “What's new” texts contain the 3.7.3
+brand-header note.
 
 ## One-time setup
 
@@ -106,11 +107,10 @@ The existing `windows-exe.yml` workflow is unchanged. The Store version is
 
 ### 4. Upload the AppX to Partner Center
 
-Current state (19 Nov 2026): Submission 3 (`1152921505702451589`) was cancelled
-while in certification and re-submitted the same day with
-`Toolbox-3.7.2.appx` (version `3.7.2.0`, checksum above). It is now in
-certification; the Store continues to serve 3.6.0 until it passes. The steps
-below describe the flow of a submission and apply unchanged to later versions.
+Current state (21 Nov 2026): Submission 3 (3.7.2) is published; Submission 4
+(`1152921505702465324`) is in certification with `Toolbox-3.7.3.appx` (version
+`3.7.3.0`, checksum above). The steps below describe the flow of a submission
+and apply unchanged to later versions.
 
 1. **Start the workflow:** **Actions → Microsoft Store (AppX) → Run workflow**.
    For a release a `v<version>` tag is enough; the workflow then runs
@@ -178,10 +178,11 @@ installation table. Without `STORE_URL` the row stays empty.
 4. The Store updates installed apps; `electron-updater` is disabled in the Store
    version.
 
-The submission with the Settings change (no Updates section in the Store build)
-uses `Toolbox-3.7.2.appx` from run `44573892233` (commit `dca01d1`), uploaded to
-Submission 3 on 19 Nov 2026. The existing `v3.7.1` artifact was built before
-that change and must not be reused for it.
+The submission with the Settings change and the brand header uses
+`Toolbox-3.7.3.appx` from run `44847964079` (commit `ab5c0f5`), uploaded to
+Submission 4 on 21 Nov 2026. The existing `v3.7.1` artifact was built before the
+Settings change and must not be reused; `Toolbox-3.7.2.appx` predates the brand
+header.
 
 Later automation can use the Microsoft Store Developer CLI with an Entra ID app.
 That requires seller ID, tenant ID, client ID and client secret; these
@@ -432,3 +433,9 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
       (21 Nov 2026, `scripts/capture-store-screenshots.js`)
 - [x] Upload the Windows-rendered screenshots for all four languages and
       resubmit (21 Nov 2026, Submission 3 with `Toolbox-3.7.2.appx`)
+- [x] Publish Submission 3 (`Toolbox-3.7.2.appx`) on 21 Nov 2026
+- [x] Build `Toolbox-3.7.3.appx` from commit `ab5c0f5` with the brand header
+      (run `44847964079`, checksum verified)
+- [x] Replace the package and submit Submission 4 with `Toolbox-3.7.3.appx`
+      (21 Nov 2026, in certification)
+- [x] Update the 3.7.3 "What's new" texts in all four Store listings

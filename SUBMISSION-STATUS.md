@@ -1,108 +1,77 @@
 # Toolbox – Microsoft Store submission status
 
-As of: **17 November 2026**
-
-> **21 November 2026:** Submission 3 (screenshot update) was rejected in
-> certification on 20 November 2026 under policy **10.1.1.3, Inaccurate
-> Representation**, because the images showed macOS window controls. The Store
-> still serves the last certified package. The six screenshots per language were
-> re-rendered from the Windows interface and uploaded for all four languages.
-> Submission 3 (with `Toolbox-3.7.2.appx`) was resubmitted for certification on
-> 21 November 2026; see [`windows/store/README.md`](windows/store/README.md).
+As of: **21 November 2026**
 
 ## Summary
 
-**Toolbox 3.4.0 is certified and has been published in the Microsoft Store since
-17 November 2026.** The Store page is live and publicly reachable:
+**Toolbox 3.7.2 is certified and published in the Microsoft Store since
+21 November 2026.** The Store page is live and publicly reachable:
 
 <https://apps.microsoft.com/detail/9P4FPTHZHVJD>
 
-The submission is complete; no steps remain open in Partner Center. The GitHub
-release 3.5.0 from 16 November 2026 was deliberately **not** submitted to the
-Store – the Store version remains 3.4.0 for now.
+3.7.2 was built from commit `dca01d1`, before the brand header change. Its title
+bar therefore still shows the old header, while the live screenshots already show
+the new one.
+
+**Submission 4 is in certification:** `Toolbox-3.7.3.appx` (version `3.7.3.0`,
+x64, SHA256
+`4fb97cb4368328304efdc7d0e4ea7921632cbba0d8612250ce96dc0b0db6c756`) was built
+from commit `ab5c0f5` by workflow run `44847964079` on 21 November 2026. It adds
+the brand header and keeps the Store Settings without an Updates section, so the
+app will match the screenshots. Submission 4 (`1152921505702465324`) was
+submitted for certification on 21 November 2026.
 
 ## Partner Center
 
 | Field | Value |
 | --- | --- |
 | Product ID | `9P4FPTHZHVJD` |
-| Submission ID | `1152921505702409983` |
+| Submission ID | `1152921505702465324` (Submission 4) |
 | Product name | Toolbox for Windows |
-| Status | **In Microsoft Store** (published) |
-| Store page | live |
-| Package | `Toolbox-3.4.0.appx` – certified and live |
-| Package version | `3.4.0.0`, x64 |
+| Status | **Update in certification** |
+| Store page | live (3.7.2) |
+| Package | `Toolbox-3.7.3.appx` – validated |
+| Package version | `3.7.3.0`, x64 |
 | Device family | Windows 10/11 Desktop, at least `10.0.17763.0` |
-| Submission last changed | 17 November 2026 |
-| Publication | immediately after certification – done |
+| Submission last changed | 21 November 2026 |
+| Publication | immediately after certification |
 | Age ratings | USK 0, PEGI 3, ESRB Everyone, IARC 3+, Microsoft Store 3+ |
-
-The Partner Center overview reports “In Microsoft Store” and “Your product is
-currently available in the Microsoft Store”. The submission detail page no
-longer shows a running certification.
 
 ## AppX build
 
 - Workflow: **Microsoft Store (AppX)**
-- Tag: `v3.4.0`
-- Run: `43838714443` – **success**
-- File: `Toolbox-3.4.0.appx` (156.1 MB)
-- Manifest: identity `NHoartApps.ToolboxforWindows`, version `3.4.0.0`, `x64`,
-  languages `de-DE`, `en-US`, `es-ES`, `fr-FR`
+- Ref: `main` at commit `ab5c0f5`
+- Run: `44847964079` – **success**
+- File: `Toolbox-3.7.3.appx` (156.1 MB)
+- SHA256: `4fb97cb4368328304efdc7d0e4ea7921632cbba0d8612250ce96dc0b0db6c756`
+- Manifest: identity `NHoartApps.ToolboxforWindows`, version `3.7.3.0`, `x64`,
+  languages `en-US`, `de-DE`, `es-ES`, `fr-FR` (`en-US` first)
+- Includes the new brand header (`brand-tagline`) and the Store build’s removed
+  Updates section
 
-Run `43826611772` on the since-deleted `codex/store-appx-languages` branch
-belongs to the earlier 3.3.2 draft and is historical only.
+The 3.7.2 package from run `44573892233` (commit `dca01d1`) predates the brand
+header and is historical. The `v3.7.1` artifact predates the Settings change and
+must not be reused.
 
 ## Store listings
 
 | Language | Language ID | Status | Screenshots |
 | --- | --- | --- | --- |
-| German (Germany) | `14` | Live | 5 (1 duplicate) |
-| English (United States) | `4` | Live | 5 (1 duplicate) |
-| Spanish (Spain) | `15` | Live | 5 (1 duplicate) |
-| French (France) | `19` | Live | 5 (1 duplicate) |
+| German (Germany) | `14` | Complete | 6 |
+| English (United States) | `4` | Complete | 6 |
+| Spanish (Spain) | `15` | Complete | 6 |
+| French (France) | `19` | Complete | 6 |
 
-The Microsoft Store picks the listing that matches the user's language and
-region and falls back to English when no listing matches.
+All four listings are localized and use the six Windows-rendered screenshots
+(2464 × 1648) under `windows/store/screenshots/<language>/`. The “What’s new”
+texts for 3.7.3 mention the new brand header and the unchanged Store update
+behaviour (no Updates section in Settings).
 
-## App localization
-
-`windows/renderer/i18n.js`
-
-- Languages: **German, English, Spanish, French**
-- System language via `navigator.languages` / `navigator.language`, using the
-  first supported entry in the user's preference list
-- Manual language choice in Settings; stored in `localStorage`
-- Fallback: **English**
-- Static and dynamic texts, toasts, dialogs and error messages
-- Date, number and currency formatting per locale, including the region
-  (`en-GB` keeps British formatting)
-- Runtime-checked with Electron for `fr`, `en`, `es`, `de-AT` and the fallback
-  for unsupported languages such as `it`
-
-The Apple apps use the same language set: the String Catalogs in
-`Toolbox/Localizable.xcstrings` and `ToolboxWidget/Localizable.xcstrings`
-contain German, Spanish and French, the development language is English and
-`CFBundleDevelopmentRegion` is `en`, so any unsupported system language resolves
-to English.
-
-## Screenshots
-
-Six PNGs each (2464 × 1648) per language under
-`windows/store/screenshots/<language>/`:
-
-| Store language | Folder | Motifs |
-| --- | --- | --- |
-| German (Germany) | `de/` | Today, history, units, counter, download time, power usage |
-| English (USA) | `en/` | Same motifs, English interface |
-| Spanish (Spain) | `es/` | Same motifs, Spanish interface |
-| French (France) | `fr/` | Same motifs, French interface |
-
-The live listing still shows five screenshots, with “Units” repeated in slots 1
-and 2 and no screenshot for today or history. The recaptured six-tab set was
-uploaded for all four languages to Submission 3, which was submitted for
-certification on 19 November 2026 and replaces the live set once certification
-completes.
+The screenshot set from 19 November 2026 was rejected in certification on
+20 November 2026 (policy **10.1.1.3, Inaccurate Representation**) because it had
+been captured from the Mac app and showed macOS window controls. The current set
+is rendered from the Windows interface, including the Windows title bar and the
+app logo.
 
 ## Remaining steps
 
@@ -110,29 +79,33 @@ completes.
    (Settings → Secrets and variables → Actions → Variables) to
    `https://apps.microsoft.com/detail/9P4FPTHZHVJD` – **still open**. The release
    notes then include the Store row automatically.
-2. Future Store versions need their own submission; the procedure is described in
+2. Wait for Submission 4 (3.7.3) to pass certification; the Store publishes it
+   automatically and replaces the live 3.7.2.
+3. Future Store versions need their own submission; the procedure is described in
    [`windows/store/README.md`](windows/store/README.md).
-3. 3.5.0 was not submitted and remains a pure GitHub release (DMG and EXE).
-4. Submission 3 is in certification since 19 November 2026. It contains the
-   six-tab screenshot set for all four languages (today first); the live listing
-   keeps the old set with the duplicated “Units” screenshot until certification
-   completes and the update publishes automatically.
 
 ## History
 
 | Date | Event |
 | --- | --- |
-| 16 Nov 2026 | `Toolbox-3.4.0.appx` validated in Partner Center, 3.3.2 removed |
-| 16 Nov 2026 | Submission sent for certification |
-| 17 Nov 2026 | Certification passed, app published in the Microsoft Store |
+| 16 Nov 2026 | `Toolbox-3.4.0.appx` validated and submitted |
+| 17 Nov 2026 | 3.4.0 certified and published |
+| 18 Nov 2026 | 3.6.0 certified and published |
+| 19 Nov 2026 | Submission 3 resubmitted with `Toolbox-3.7.2.appx` |
+| 20 Nov 2026 | Submission 3 rejected under 10.1.1.3 (macOS screenshots) |
+| 21 Nov 2026 | Windows-rendered screenshots uploaded; Submission 3 passed certification and 3.7.2 published |
+| 21 Nov 2026 | `Toolbox-3.7.3.appx` built from `ab5c0f5`; Submission 4 submitted for certification |
 
 ## Checks performed
 
-- Partner Center overview (17 Nov 2026): **In Microsoft Store**, product available
-- Partner Center packages: `Toolbox-3.4.0.appx`, `v3.4.0.0`, x64, Windows.Desktop
-- Store page: publicly reachable, title, publisher, category and USK checked
-- GitHub Actions run `43838714443`: **success**
-- `npm test`: **42/42 passed**
-- `npm run dist:store -- --check`: **Store configuration OK**
-- Manifest inside the AppX: **four languages, identity and version OK**
-- Submission: **complete and published**
+- GitHub Actions run `44847964079`: **success**
+- `npm test`: **45/45 passed**
+- AppX SHA256 matches `SHA256SUMS.txt`
+- Manifest checked: identity, version `3.7.3.0`, `x64`, four languages, `en-US`
+  first
+- AppX contents checked: `brand-tagline` present and `updateCard` hidden
+- Partner Center: package **Validated**, languages supported in packages
+  **Updated**
+- Store listings: all four languages complete, six screenshots each, 3.7.3
+  “What’s new” texts saved
+- Submission 4: **Update in certification**
