@@ -281,12 +281,20 @@ The screenshots show the interface in the respective Store language. The images
 were produced with the localized app; the German listing still uses the German
 screenshots.
 
-The set was recaptured on 19 November 2026 from Toolbox 3.7.1 at a window size of
-1180 × 780 points: one screenshot per tab and language, all distinct and in tab
-order. It has been uploaded for all four languages to Submission 3 in the order of the
-filenames, and Submission 3 was submitted for certification on 19 November 2026.
-The live listing still shows the older set, which repeats “Units” in slots 1 and
-2 and has no screenshot for today or history, until certification completes.
+The set from 19 November 2026 was rejected in certification on 20 November 2026
+(policy **10.1.1.3, Inaccurate Representation**): it had been captured from the
+Mac app and showed macOS window controls. The screenshots are now rendered from
+the Windows interface, including the Windows title bar and the app logo, at
+2464 × 1648. Regenerate them from `windows` with:
+
+```bash
+node_modules/.bin/electron scripts/capture-store-screenshots.js
+```
+
+The script renders the six tabs in German, English, Spanish and French and
+writes them to `windows/store/screenshots/<language>/`. Upload the new set for
+all four languages; the live listing keeps the older set until the corrected
+submission passes certification.
 
 The **package languages** in `windows/package.json` are `de-DE`, `en-US`,
 `es-ES` and `fr-FR`. The AppX `Toolbox-3.6.0.appx` validated in Partner Center
@@ -389,4 +397,8 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
       (`https://apps.microsoft.com/detail/9P4FPTHZHVJD`) – still open
 - [x] Replace the Store screenshots in Partner Center with the six-tab set
       (Submission 3, 19 Nov 2026, all four languages)
-- [x] Submit Submission 3 for certification so the new screenshots go live
+- [x] Submit Submission 3 for certification (rejected 20 Nov 2026, 10.1.1.3)
+- [x] Re-render the six screenshots per language from the Windows interface
+      (21 Nov 2026, `scripts/capture-store-screenshots.js`)
+- [x] Upload the Windows-rendered screenshots for all four languages and
+      resubmit (21 Nov 2026, Submission 3 with `Toolbox-3.7.2.appx`)

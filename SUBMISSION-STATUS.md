@@ -2,6 +2,14 @@
 
 As of: **17 November 2026**
 
+> **21 November 2026:** Submission 3 (screenshot update) was rejected in
+> certification on 20 November 2026 under policy **10.1.1.3, Inaccurate
+> Representation**, because the images showed macOS window controls. The Store
+> still serves the last certified package. The six screenshots per language were
+> re-rendered from the Windows interface and uploaded for all four languages.
+> Submission 3 (with `Toolbox-3.7.2.appx`) was resubmitted for certification on
+> 21 November 2026; see [`windows/store/README.md`](windows/store/README.md).
+
 ## Summary
 
 **Toolbox 3.4.0 is certified and has been published in the Microsoft Store since
