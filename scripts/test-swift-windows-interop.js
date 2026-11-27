@@ -575,6 +575,41 @@ async function main() {
       'the speed timestamp is adopted'
     )
 
+    // A speed-only update must not stop a running auto count; a foreign count
+    // still does. Windows and Apple must behave the same here.
+    iphone.child.stdin.write('startauto\n')
+    const autoStarted = await waitForStatus(
+      iphone.harness,
+      status => status.autoRunning === true && status.rate === 9,
+      'the iPhone starts auto counting'
+    )
+
+    await delay(300)
+    mac.child.stdin.write('setrate 12\n')
+    const autoAfterRate = await waitForStatus(
+      iphone.harness,
+      status => status.rate === 12 && status.autoRunning === true,
+      'a speed-only update keeps the auto count running'
+    )
+    assert.equal(
+      autoAfterRate.counterUpdatedAt,
+      autoStarted.counterUpdatedAt,
+      'a speed-only update does not touch the count timestamp'
+    )
+
+    await delay(300)
+    mac.child.stdin.write('increment\n')
+    const autoStopped = await waitForStatus(
+      iphone.harness,
+      status => status.counter === 4 && status.autoRunning === false,
+      'a foreign count stops the auto count'
+    )
+    assert.equal(autoStopped.rate, 12)
+    await waitFor(
+      () => windows.count === 4 && windows.rate === 12,
+      'Windows receives the new count and speed'
+    )
+
     // A widget entry runs in its own process and only posts a cross-process
     // notification. The running app must sync it without another change.
     await delay(300)
@@ -633,6 +668,7 @@ async function main() {
       + 'Windows 850/counter 2 -> A/B; late A-v2 600 discarded; snapshots identical; '
       + 'B sizes-only 300/700/2700 kept A at 950; '
       + 'A count 3 + B speed 9 merged without a reset; '
+      + 'B auto kept running on speed 12 and stopped on A count 4; '
       + 'widget entry +50 reached Windows and B without another change.'
     )
   } catch (error) {

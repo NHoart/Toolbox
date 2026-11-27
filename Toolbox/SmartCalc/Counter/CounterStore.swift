@@ -89,12 +89,15 @@ final class CounterStore: ObservableObject {
             savedCounters = decoded
         }
 
-        // A state from another device was adopted.
-        remoteObserver = NotificationCenter.default.addObserver(forName: .syncDidApplyRemote,
+        // A counter state from another device was adopted.
+        remoteObserver = NotificationCenter.default.addObserver(forName: .counterSyncDidApply,
                                                                 object: nil,
-                                                                queue: .main) { [weak self] _ in
+                                                                queue: .main) { [weak self] notification in
             guard let self else { return }
-            Task { @MainActor in self.reloadFromDefaults() }
+            // A speed-only update must not stop a running auto count; a
+            // foreign count still does.
+            let countsApplied = notification.userInfo?["countsApplied"] as? Bool ?? true
+            Task { @MainActor in self.reloadFromDefaults(stopAuto: countsApplied) }
         }
     }
 
@@ -337,6 +340,8 @@ final class CounterStore: ObservableObject {
     struct MergeResult {
         /// Something was taken over from the other device.
         var applied = false
+        /// The count (not just the speed) was taken over.
+        var countsApplied = false
         /// The other device has older count data or speed and needs our state.
         var peerIsBehind = false
     }
@@ -360,12 +365,14 @@ final class CounterStore: ObservableObject {
             if remote.updatedAt > local {
                 applyCounts(remote)
                 result.applied = true
+                result.countsApplied = true
             } else if remote.updatedAt < local {
                 result.peerIsBehind = true
             }
         } else {
             applyCounts(remote)
             result.applied = true
+            result.countsApplied = true
         }
 
         if let local = localRateAt {
@@ -418,8 +425,19 @@ final class CounterStore: ObservableObject {
     }
 
     /// Takes changed values from UserDefaults into the published properties.
-    private func reloadFromDefaults() {
-        // Stop a running auto counter without saving the old state again.
+    private func reloadFromDefaults(stopAuto: Bool) {
+        if !stopAuto {
+            // Speed-only update: adopt the speed without touching the running
+            // count, which can be ahead of the value persisted by the timer.
+            isApplyingRemote = true
+            defer { isApplyingRemote = false }
+            let storedRate = Self.defaults.integer(forKey: Self.rateKey)
+            incrementsPerSecond = storedRate > 0 ? min(Self.maxRate, storedRate) : 5
+            return
+        }
+
+        // Stop a running auto counter without saving the old state again – a
+        // foreign count replaces it.
         if isAutoRunning {
             isAutoRunning = false
             autoTimer?.invalidate()
@@ -446,4 +464,6 @@ final class CounterStore: ObservableObject {
 extension Notification.Name {
     /// The local counter value changed (LocalSync distributes it).
     static let counterStoreDidChange = Notification.Name("Toolbox.counterStoreDidChange")
+    /// A counter state from another device was adopted.
+    static let counterSyncDidApply = Notification.Name("Toolbox.counterSyncDidApply")
 }

@@ -5,6 +5,7 @@ struct HarnessStatus: Codable {
     var water: Int
     var counter: Int
     var rate: Int
+    var autoRunning: Bool
     var waterUpdatedAt: Double
     var waterSizesUpdatedAt: Double
     var counterUpdatedAt: Double
@@ -87,6 +88,12 @@ func handle(_ line: String) {
         guard parts.count > 1, let rate = Int(parts[1]) else { return }
         counter.incrementsPerSecond = rate
 
+    case "startauto":
+        counter.startAutoCounting()
+
+    case "stopauto":
+        counter.stopAutoCounting()
+
     case "savecounter":
         let name = parts.count > 1 ? parts[1] : "Interop-Stand"
         counter.saveCurrent(name: name)
@@ -114,6 +121,7 @@ func handle(_ line: String) {
             water: WaterStore.todayML,
             counter: counter.count,
             rate: counter.incrementsPerSecond,
+            autoRunning: counter.isAutoRunning,
             waterUpdatedAt: WaterStore.updatedAt?.timeIntervalSinceReferenceDate ?? -1,
             waterSizesUpdatedAt: WaterStore.sizesUpdatedAt?.timeIntervalSinceReferenceDate ?? -1,
             counterUpdatedAt: CounterStore.updatedAt?.timeIntervalSinceReferenceDate ?? -1,

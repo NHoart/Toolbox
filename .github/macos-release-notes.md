@@ -22,6 +22,9 @@ Download `Toolbox.dmg` above.
 - **Widget and Siri entries reach the other devices immediately:** water logged
   from the widget or via Siri while the app is running is now forwarded to the
   running app and synced right away instead of waiting for the next change.
+- **Auto count keeps running on a speed update:** when only the automatic speed
+  arrives from another device, a running auto count continues at the new speed.
+  A newer counter value from another device still stops it.
 - **No other functional changes on macOS:** the tools, water tracker, widget and
   Siri shortcuts behave as in 3.7.4.
 

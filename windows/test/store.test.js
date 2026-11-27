@@ -193,6 +193,41 @@ test('A rate change keeps the count timestamp and an older count', t => {
   assert.equal(store.counterRateUpdatedAt(), toAppleTime(clock.value) + 120)
 })
 
+test('A remote speed keeps a running auto count alive, a remote count stops it', t => {
+  const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
+  const { store } = createStore(t, clock)
+
+  store.increment()
+  const amountTime = store.counterUpdatedAt()
+  store.startAuto()
+  assert.equal(store.isAutoRunning, true)
+
+  // A speed-only state must not stop the local auto count.
+  clock.value += 1000
+  assert.equal(store.applyRemoteCounter({
+    count: 1,
+    savedCounters: [],
+    rate: 9,
+    updatedAt: amountTime - 60,
+    rateUpdatedAt: toAppleTime(clock.value + 60),
+  }), true)
+  assert.equal(store.isAutoRunning, true, 'a speed-only state keeps auto running')
+  assert.equal(store.rate, 9)
+  assert.equal(store.counterUpdatedAt(), amountTime)
+
+  // A newer count from another device still stops it.
+  clock.value += 1000
+  assert.equal(store.applyRemoteCounter({
+    count: 50,
+    savedCounters: [],
+    rate: 9,
+    updatedAt: toAppleTime(clock.value),
+    rateUpdatedAt: toAppleTime(clock.value - 60),
+  }), true)
+  assert.equal(store.isAutoRunning, false, 'a foreign count stops auto counting')
+  assert.equal(store.count, 50)
+})
+
 test('Save, load and delete stored counter values', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store } = createStore(t, clock)

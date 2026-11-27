@@ -18,6 +18,9 @@ the first launch. **More info → Run anyway** starts the app.
   iPhone, iPad or Mac app is running, entries made in its widget or via Siri are
   now passed on to the Windows PC right away instead of waiting for another
   change.
+- **Auto count keeps running on a speed update:** when only the automatic speed
+  arrives from another device, a running auto count continues at the new speed.
+  A newer counter value from another device still stops it.
 - **No other functional changes on Windows:** the tools, water tracker, installer
   update check and Wi-Fi sync behave as in 3.7.4.
 

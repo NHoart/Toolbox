@@ -414,6 +414,8 @@ final class LocalSync: ObservableObject {
 
         var peerIsBehind = false
         var applied = false
+        var counterApplied = false
+        var counterCountsApplied = false
 
         if let remote = message.water {
             // Amounts and sizes are merged independently: a device that only
@@ -432,12 +434,23 @@ final class LocalSync: ObservableObject {
             // changed the speed keeps its old count timestamp and must not
             // overwrite a newer count of this device.
             let result = CounterStore.mergeSync(remote)
-            if result.applied { applied = true }
+            if result.applied {
+                applied = true
+                counterApplied = true
+                counterCountsApplied = result.countsApplied
+            }
             if result.peerIsBehind { peerIsBehind = true }
         }
 
         if applied {
             NotificationCenter.default.post(name: .syncDidApplyRemote, object: nil)
+            if counterApplied {
+                NotificationCenter.default.post(
+                    name: .counterSyncDidApply,
+                    object: nil,
+                    userInfo: ["countsApplied": counterCountsApplied]
+                )
+            }
             markSynced()
             // Pass the adopted state on to the other open
             // connections so devices that are not directly connected
