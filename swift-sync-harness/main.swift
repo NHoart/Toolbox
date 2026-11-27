@@ -34,10 +34,22 @@ guard let suiteName = ProcessInfo.processInfo.environment["TOOLBOX_DEFAULTS_SUIT
     exit(2)
 }
 
+// Simulates a widget entry from another process: write to the shared suite,
+// post the cross-process notification and exit without starting LocalSync.
+if let raw = ProcessInfo.processInfo.environment["TOOLBOX_EXTERNAL_ADD"],
+   let amount = Int(raw) {
+    WaterStore.add(amount)
+    _ = WaterStore.defaults.synchronize()
+    Thread.sleep(forTimeInterval: 0.2)
+    exit(0)
+}
+
 // Every run gets a fresh, isolated defaults suite.
 UserDefaults(suiteName: suiteName)?.removePersistentDomain(forName: suiteName)
 
 let counter = CounterStore()
+// The running app forwards widget entries from the other process.
+WaterStore.startObservingExternalChanges()
 // The group name is part of the test setup; without it no listener starts.
 LocalSync.shared.setSyncName(
     ProcessInfo.processInfo.environment["TOOLBOX_SYNC_NAME"] ?? "Interop",

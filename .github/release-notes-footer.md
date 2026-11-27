@@ -2,8 +2,10 @@
 
 3.7.5 fixes the counter sync: the count and the automatic count speed now carry
 separate change times, so changing only the speed on one device can no longer
-overwrite a newer count from another device. The Windows test suite (51 tests)
-and the headless Swift↔Windows interop test run with this release; the Xcode
+overwrite a newer count from another device. It also forwards water logged from
+the widget or via Siri to the running app, so those entries reach the other
+devices immediately. The Windows test suite (51 tests) and the headless
+Swift↔Windows interop test run with this release; the Xcode
 builds for macOS and iOS are produced by the GitHub Actions workflows, and
 `scripts/test-apple-localization.sh` verifies on the built bundles that every
 app and widget catalog key resolves in German, Spanish and French and falls back

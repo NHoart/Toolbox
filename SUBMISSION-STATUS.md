@@ -28,8 +28,9 @@ from the `v3.7.4` tag by workflow run `46014096867` on 27 November 2026 and must
 be submitted as Submission 5; Submission 4 (3.7.3) remains in certification.
 
 **3.7.5 is prepared:** it fixes the counter sync (the count and the automatic
-speed now carry separate timestamps). Once `v3.7.5` is released, its AppX must
-be built and submitted; until then `Toolbox-3.7.4.appx` remains the newest built
+speed now carry separate timestamps) and forwards water logged from the widget
+or via Siri to the running app. Once `v3.7.5` is released, its AppX must be
+built and submitted; until then `Toolbox-3.7.4.appx` remains the newest built
 package.
 
 ## Partner Center

@@ -74,6 +74,9 @@ struct WaterTodayView: View {
             .onReceive(NotificationCenter.default.publisher(for: .syncDidApplyRemote)) { _ in
                 refresh()
             }
+            .onReceive(NotificationCenter.default.publisher(for: .waterStoreDidChange)) { _ in
+                refresh()
+            }
         }
     }
 

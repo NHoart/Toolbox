@@ -14,6 +14,10 @@ the first launch. **More info → Run anyway** starts the app.
   on the Windows PC therefore no longer makes its older count look newer, so it
   can no longer overwrite a newer count from the Mac or iPhone during the next
   sync – and the other way round.
+- **Water from the Apple widget or Siri arrives immediately:** while the updated
+  iPhone, iPad or Mac app is running, entries made in its widget or via Siri are
+  now passed on to the Windows PC right away instead of waiting for another
+  change.
 - **No other functional changes on Windows:** the tools, water tracker, installer
   update check and Wi-Fi sync behave as in 3.7.4.
 

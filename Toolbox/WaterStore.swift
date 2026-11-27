@@ -1,4 +1,5 @@
 import Foundation
+import CoreFoundation
 import WidgetKit
 
 // IMPORTANT: This file must be in BOTH targets (app + widget).
@@ -18,6 +19,10 @@ enum WaterStore {
         }
         return d
     }()
+
+    /// Cross-process name for water changes. The widget and Siri run in
+    /// another process, so a plain NotificationCenter post stays there.
+    static let changeNotificationName = "Toolbox.waterStoreDidChange"
 
     enum Key {
         static let glass = "glassML"
@@ -334,6 +339,40 @@ enum WaterStore {
     private static func notifyChanged() {
         WidgetCenter.shared.reloadAllTimelines()
         NotificationCenter.default.post(name: .waterStoreDidChange, object: nil)
+        // Also tell the running app when the change was made by the widget or
+        // Siri in their own process.
+        CFNotificationCenterPostNotification(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            CFNotificationName(changeNotificationName as CFString),
+            nil,
+            nil,
+            true
+        )
+    }
+
+    // MARK: - Changes from the widget process
+
+    private static var observesExternalChanges = false
+
+    /// Forwards water changes made in the widget or by Siri (another process)
+    /// into this process, so the running app syncs them immediately and
+    /// refreshes its views. Called once from the app; the widget only posts.
+    static func startObservingExternalChanges() {
+        guard !observesExternalChanges else { return }
+        observesExternalChanges = true
+
+        CFNotificationCenterAddObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            nil,
+            { _, _, _, _, _ in
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: .waterStoreDidChange, object: nil)
+                }
+            },
+            changeNotificationName as CFString,
+            nil,
+            .deliverImmediately
+        )
     }
 }
 

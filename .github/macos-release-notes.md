@@ -19,6 +19,9 @@ Download `Toolbox.dmg` above.
   automatic count speed now carry separate change times. Changing only the speed
   on one device therefore no longer makes its older count look newer, so it can
   no longer overwrite a newer count from another device during the next sync.
+- **Widget and Siri entries reach the other devices immediately:** water logged
+  from the widget or via Siri while the app is running is now forwarded to the
+  running app and synced right away instead of waiting for the next change.
 - **No other functional changes on macOS:** the tools, water tracker, widget and
   Siri shortcuts behave as in 3.7.4.
 

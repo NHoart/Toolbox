@@ -4,6 +4,10 @@ import SwiftUI
     @State private var selectedTab: AppTab = .today
 
     init() {
+        // Widget and Siri write from their own process: forward those changes
+        // so the running app syncs them right away.
+        WaterStore.startObservingExternalChanges()
+
         // Start the sync with the other device on the local network.
         LocalSync.shared.start()
 

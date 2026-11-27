@@ -1,7 +1,7 @@
 'use strict'
 
 const assert = require('node:assert/strict')
-const { spawn } = require('node:child_process')
+const { spawn, spawnSync } = require('node:child_process')
 const fs = require('node:fs')
 const net = require('node:net')
 const os = require('node:os')
@@ -265,7 +265,8 @@ async function main() {
   fs.mkdirSync(homeOther, { recursive: true })
 
   const nonce = `${process.pid}-${Date.now()}`
-  const mac = createSwiftClient('Mac', `toolbox-interop-mac-${nonce}`, homeMac)
+  const macSuite = `toolbox-interop-mac-${nonce}`
+  const mac = createSwiftClient('Mac', macSuite, homeMac)
   const iphone = createSwiftClient('iPhone', `toolbox-interop-iphone-${nonce}`, homeIPhone)
   const outsider = createSwiftClient(
     'Andere Gruppe',
@@ -574,6 +575,47 @@ async function main() {
       'the speed timestamp is adopted'
     )
 
+    // A widget entry runs in its own process and only posts a cross-process
+    // notification. The running app must sync it without another change.
+    await delay(300)
+    const widgetProcess = spawnSync(HARNESS, [], {
+      cwd: ROOT,
+      env: {
+        ...process.env,
+        TOOLBOX_DEFAULTS_SUITE: macSuite,
+        TOOLBOX_EXTERNAL_ADD: '50',
+      },
+      timeout: 15_000,
+      encoding: 'utf8',
+    })
+    assert.equal(
+      widgetProcess.status,
+      0,
+      `widget process failed: ${widgetProcess.stderr || widgetProcess.error || ''}`
+    )
+
+    const macWidget = await waitForStatus(
+      mac.harness,
+      status => status.water === 1000,
+      'the running Mac app sees the widget entry'
+    )
+    await waitFor(
+      () => windows.todayML() === 1000,
+      'Windows receives the widget entry without another change',
+      3000
+    )
+    await waitForStatus(
+      iphone.harness,
+      status => status.water === 1000,
+      'the iPhone receives the widget entry',
+      3000
+    )
+    assert.equal(
+      windows.waterUpdatedAt(),
+      macWidget.waterUpdatedAt,
+      'the widget entry is synced like a normal amount change'
+    )
+
     // A device with a different group name stays out, even if it
     // is directly reachable and we already have data.
     sync.connectTo('127.0.0.1', outsiderPort)
@@ -583,14 +625,15 @@ async function main() {
     assert.equal(outsiderStatus.water, 0, 'fremder Name darf keine Daten bekommen')
     const outsiderSnapshot = await outsider.harness.snapshot()
     assert.equal(outsiderSnapshot.water.total, 0, 'fremder Name darf keinen Verlauf bekommen')
-    assert.equal(windows.todayML(), 950, 'a foreign name must not change Windows')
+    assert.equal(windows.todayML(), 1000, 'a foreign name must not change Windows')
 
     console.log(
       'Drei echte Peers erfolgreich: A=Mac, B=iPhone, Windows; '
       + 'v1 400 -> Windows/B; v2 600 -> Windows/B; '
       + 'Windows 850/counter 2 -> A/B; late A-v2 600 discarded; snapshots identical; '
       + 'B sizes-only 300/700/2700 kept A at 950; '
-      + 'A count 3 + B speed 9 merged without a reset.'
+      + 'A count 3 + B speed 9 merged without a reset; '
+      + 'widget entry +50 reached Windows and B without another change.'
     )
   } catch (error) {
     const details = clients

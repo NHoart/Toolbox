@@ -222,7 +222,7 @@ That is also how the chain across a third device works:
 1. **Mac ↔ iPhone**: the iPhone adopts the current Mac state.
 2. **Later iPhone ↔ Windows PC**: the Windows PC receives the same state – even though it was never directly connected to the Mac.
 
-There is no device limit: Mac, iPhone and Windows PC can be connected at the same time. Syncing runs automatically as long as Toolbox is open on the devices and all are on the same Wi-Fi network.
+There is no device limit: Mac, iPhone and Windows PC can be connected at the same time. Syncing runs automatically as long as Toolbox is open on the devices and all are on the same Wi-Fi network. Water logged from the Apple widget or via Siri while the app is running is forwarded to the running app immediately and reaches the other devices without another change.
 
 For the sync to work:
 
