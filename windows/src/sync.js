@@ -7,10 +7,8 @@ const { EventEmitter } = require('node:events')
 const {
   decodeMessageLine,
   encodeMessage,
-  isPeerBehind,
   normalizeSyncName,
   sameSyncName,
-  shouldApply,
 } = require('./protocol')
 
 const SERVICE_TYPE = 'toolboxsync'
@@ -392,13 +390,11 @@ class SyncService extends EventEmitter {
     }
 
     if (message.counter) {
-      const local = this.store.counterUpdatedAt()
-      if (shouldApply(local, message.counter.updatedAt)) {
-        this.store.applyRemoteCounter(message.counter)
-        applied = true
-      } else if (isPeerBehind(local, message.counter.updatedAt)) {
-        peerIsBehind = true
-      }
+      // Count and speed are merged independently: a device that only changed
+      // the speed keeps its old count timestamp and must not overwrite a
+      // newer count of this device.
+      if (this.store.applyRemoteCounter(message.counter)) applied = true
+      if (this.store.isCounterPeerBehind(message.counter)) peerIsBehind = true
     }
 
     if (applied) {

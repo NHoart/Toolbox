@@ -4,9 +4,11 @@ import Darwin
 struct HarnessStatus: Codable {
     var water: Int
     var counter: Int
+    var rate: Int
     var waterUpdatedAt: Double
     var waterSizesUpdatedAt: Double
     var counterUpdatedAt: Double
+    var counterRateUpdatedAt: Double
     var peers: Int
     var port: UInt16
 }
@@ -69,6 +71,10 @@ func handle(_ line: String) {
     case "increment":
         counter.increment()
 
+    case "setrate":
+        guard parts.count > 1, let rate = Int(parts[1]) else { return }
+        counter.incrementsPerSecond = rate
+
     case "savecounter":
         let name = parts.count > 1 ? parts[1] : "Interop-Stand"
         counter.saveCurrent(name: name)
@@ -95,9 +101,11 @@ func handle(_ line: String) {
         emit("STATUS", HarnessStatus(
             water: WaterStore.todayML,
             counter: counter.count,
+            rate: counter.incrementsPerSecond,
             waterUpdatedAt: WaterStore.updatedAt?.timeIntervalSinceReferenceDate ?? -1,
             waterSizesUpdatedAt: WaterStore.sizesUpdatedAt?.timeIntervalSinceReferenceDate ?? -1,
             counterUpdatedAt: CounterStore.updatedAt?.timeIntervalSinceReferenceDate ?? -1,
+            counterRateUpdatedAt: CounterStore.rateUpdatedAt?.timeIntervalSinceReferenceDate ?? -1,
             peers: LocalSync.shared.peerCount,
             port: LocalSync.shared.listeningPort ?? 0
         ))

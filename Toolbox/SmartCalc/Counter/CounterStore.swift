@@ -31,7 +31,7 @@ final class CounterStore: ObservableObject {
                 return
             }
             Self.defaults.set(clamped, forKey: Self.rateKey)
-            Self.markChanged()
+            Self.markRateChanged()
         }
     }
 
@@ -45,6 +45,8 @@ final class CounterStore: ObservableObject {
     private static let savedKey = "saved_counters"
     private static let rateKey = "counter_rate"
     private static let updatedKey = "sync.counter.updatedAt"
+    private static let rateUpdatedKey = "sync.counter.rateUpdatedAt"
+    private static let rateMigrationKey = "sync.counter.rateMigrated"
 
     /// The headless interop test isolates its data through its own suite.
     private static let defaults: UserDefaults = {
@@ -76,6 +78,7 @@ final class CounterStore: ObservableObject {
     }
 
     init() {
+        Self.migrateLegacyRateTimestamp()
         count = Self.defaults.integer(forKey: Self.countKey)
 
         let storedRate = Self.defaults.integer(forKey: Self.rateKey)
@@ -247,7 +250,7 @@ final class CounterStore: ObservableObject {
 
     // MARK: - Sync with other devices
 
-    /// Time of the last local change (for syncing).
+    /// Time of the last local change of the count (for syncing).
     static var updatedAt: Date? {
         get { Self.defaults.object(forKey: updatedKey) as? Date }
         set {
@@ -257,6 +260,34 @@ final class CounterStore: ObservableObject {
                 Self.defaults.removeObject(forKey: updatedKey)
             }
         }
+    }
+
+    /// Time of the last change of the auto-count speed.
+    ///
+    /// Count and speed keep separate timestamps: changing only the speed must
+    /// not make an old count look newer than the count of another device –
+    /// that used to overwrite a newer count on the next sync.
+    static var rateUpdatedAt: Date? {
+        get { Self.defaults.object(forKey: rateUpdatedKey) as? Date }
+        set {
+            if let newValue {
+                Self.defaults.set(newValue, forKey: rateUpdatedKey)
+            } else {
+                Self.defaults.removeObject(forKey: rateUpdatedKey)
+            }
+        }
+    }
+
+    /// States from older versions carry only the single counter timestamp.
+    /// Freeze it once as the rate time; the flag also keeps a fresh install
+    /// from stamping its default rate when the first count is logged.
+    private static func migrateLegacyRateTimestamp() {
+        let defaults = Self.defaults
+        guard !defaults.bool(forKey: rateMigrationKey) else { return }
+        defaults.set(true, forKey: rateMigrationKey)
+        guard defaults.object(forKey: rateUpdatedKey) == nil,
+              let legacy = updatedAt else { return }
+        defaults.set(legacy, forKey: rateUpdatedKey)
     }
 
     /// Is there any data worth syncing at all?
@@ -275,6 +306,9 @@ final class CounterStore: ObservableObject {
         var savedCounters: [SavedCounter]
         var rate: Int
         var updatedAt: Date
+        /// Missing in states of older app versions or when the speed was
+        /// never changed; such a state does not count as a rate change.
+        var rateUpdatedAt: Date?
     }
 
     static func syncSnapshot() -> SyncSnapshot {
@@ -294,24 +328,92 @@ final class CounterStore: ObservableObject {
             rate: storedRate > 0 ? min(maxRate, storedRate) : 5,
             // Without a change time the state counts as old: a fresh device
             // must not overwrite a newer state of the others with it.
-            updatedAt: updatedAt ?? .distantPast
+            updatedAt: updatedAt ?? .distantPast,
+            rateUpdatedAt: rateUpdatedAt
         )
     }
 
-    /// Adopts a foreign state without marking it as a new local change.
+    /// Result of merging a foreign state.
+    struct MergeResult {
+        /// Something was taken over from the other device.
+        var applied = false
+        /// The other device has older count data or speed and needs our state.
+        var peerIsBehind = false
+    }
+
+    /// Merges a foreign state area by area.
+    ///
+    /// Count (including saved values) and speed are compared with their own
+    /// timestamps: a device that only changed the speed keeps its old count
+    /// timestamp and cannot overwrite a newer count from another device.
+    static func mergeSync(_ remote: SyncSnapshot) -> MergeResult {
+        var result = MergeResult()
+
+        let localAmountsAt = updatedAt
+        let localRateAt = rateUpdatedAt
+        // States without a rate time (old app versions or a device that never
+        // changed the speed) count as old – they must not overwrite a real
+        // speed with the default value.
+        let remoteRateAt = remote.rateUpdatedAt ?? .distantPast
+
+        if let local = localAmountsAt {
+            if remote.updatedAt > local {
+                applyCounts(remote)
+                result.applied = true
+            } else if remote.updatedAt < local {
+                result.peerIsBehind = true
+            }
+        } else {
+            applyCounts(remote)
+            result.applied = true
+        }
+
+        if let local = localRateAt {
+            if remoteRateAt > local {
+                applyRate(remote)
+                result.applied = true
+            } else if remoteRateAt < local {
+                result.peerIsBehind = true
+            }
+        } else {
+            applyRate(remote)
+            result.applied = true
+        }
+
+        return result
+    }
+
+    /// Adopts a foreign state without merging – for imports and tests.
     static func applySync(_ snapshot: SyncSnapshot) {
+        applyCounts(snapshot)
+        applyRate(snapshot)
+    }
+
+    private static func applyCounts(_ snapshot: SyncSnapshot) {
         let defaults = Self.defaults
         defaults.set(snapshot.count, forKey: countKey)
         if let data = try? JSONEncoder().encode(snapshot.savedCounters) {
             defaults.set(data, forKey: savedKey)
         }
-        defaults.set(min(maxRate, max(minRate, snapshot.rate)), forKey: rateKey)
         updatedAt = snapshot.updatedAt
     }
 
-    /// Notes the change for the Wi-Fi sync.
+    private static func applyRate(_ snapshot: SyncSnapshot) {
+        Self.defaults.set(min(maxRate, max(minRate, snapshot.rate)), forKey: rateKey)
+        // A state without its own rate time never changed the speed: it must
+        // not count as newer than a real speed on another device.
+        rateUpdatedAt = snapshot.rateUpdatedAt ?? .distantPast
+    }
+
+    /// Notes a count change for the Wi-Fi sync.
     private static func markChanged() {
         updatedAt = Date()
+        NotificationCenter.default.post(name: .counterStoreDidChange, object: nil)
+    }
+
+    /// Notes a speed change; the count timestamp stays untouched.
+    private static func markRateChanged() {
+        rateUpdatedAt = Date()
         NotificationCenter.default.post(name: .counterStoreDidChange, object: nil)
     }
 

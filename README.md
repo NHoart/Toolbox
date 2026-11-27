@@ -215,7 +215,7 @@ The Windows app stores the same state in `%APPDATA%\Toolbox\data.json`. For the 
 
 ### Sync over the local Wi-Fi network (Mac, iPhone, Windows)
 
-All versions speak the same protocol: every device advertises the Bonjour service `_toolboxsync._tcp` and searches for it at the same time. When a connection is established, both sides send their complete state including a timestamp; per area (water and counter) the most recently changed state wins. Inside the water tracker, the amounts and the sizes (glass, bottle, daily goal) are compared separately, so changing a size never overwrites a newer water level. Adopted states are passed on immediately to all open connections – including devices that are not directly connected to the origin.
+All versions speak the same protocol: every device advertises the Bonjour service `_toolboxsync._tcp` and searches for it at the same time. When a connection is established, both sides send their complete state including a timestamp; per area (water and counter) the most recently changed state wins. Inside the water tracker, the amounts and the sizes (glass, bottle, daily goal) are compared separately, so changing a size never overwrites a newer water level; the same applies to the counter value and its automatic count speed. Adopted states are passed on immediately to all open connections – including devices that are not directly connected to the origin.
 
 That is also how the chain across a third device works:
 

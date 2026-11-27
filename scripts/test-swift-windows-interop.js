@@ -245,6 +245,10 @@ function assertSnapshot(label, swift, winWater, winCounter) {
     Math.abs(swift.counter.updatedAt - winCounter.updatedAt) < 0.001,
     `${label}: counter timestamp`
   )
+  assert.ok(
+    Math.abs(swift.counter.rateUpdatedAt - winCounter.rateUpdatedAt) < 0.001,
+    `${label}: speed timestamp`
+  )
 }
 
 async function main() {
@@ -509,6 +513,67 @@ async function main() {
     )
     assert.deepEqual(windows.sizes, { glass: 300, bottle: 700, goal: 2700 })
 
+    // Same regression for the counter: a speed-only change must not push an
+    // older count over a newer one.
+    iphone.child.stdin.write('stopsync\n')
+    await waitForStatus(iphone.harness, status => status.port === 0, 'the iPhone goes offline again')
+    await waitFor(() => sync.peerCount === 1, 'Windows only sees the Mac again')
+
+    await delay(300)
+    mac.child.stdin.write('increment\n')
+    const macCount3 = await waitForStatus(
+      mac.harness,
+      status => status.counter === 3,
+      'the Mac counts while the iPhone is offline'
+    )
+    await waitFor(() => windows.count === 3, 'Windows receives the newer count')
+
+    const iphoneCounterBefore = await iphone.harness.status()
+    assert.equal(iphoneCounterBefore.counter, 2, 'the offline iPhone keeps its older count')
+
+    await delay(300)
+    iphone.child.stdin.write('setrate 9\n')
+    const iphoneRate = await waitForStatus(
+      iphone.harness,
+      status => status.rate === 9
+        && status.counterRateUpdatedAt > iphoneCounterBefore.counterRateUpdatedAt,
+      'the iPhone changes only its speed'
+    )
+    assert.equal(iphoneRate.counter, 2, 'a speed change does not touch the count')
+    assert.equal(
+      iphoneRate.counterUpdatedAt,
+      iphoneCounterBefore.counterUpdatedAt,
+      'a speed change keeps the count timestamp'
+    )
+
+    iphone.child.stdin.write('startsync\n')
+    const iphoneCounterPort = (await waitForStatus(
+      iphone.harness,
+      status => status.port > 0,
+      'the iPhone is back online for the counter test'
+    )).port
+    sync.connectTo('127.0.0.1', iphoneCounterPort)
+
+    await waitForStatus(
+      iphone.harness,
+      status => status.counter === 3 && status.rate === 9,
+      'the iPhone adopts the newer count and keeps its speed'
+    )
+    await waitFor(() => windows.rate === 9, 'Windows adopts the newer speed')
+    await waitForStatus(
+      mac.harness,
+      status => status.counter === 3 && status.rate === 9,
+      'the Mac keeps its count and adopts the speed'
+    )
+
+    assert.equal(windows.count, 3, 'a speed-only change must not reset the count')
+    assert.equal(windows.counterUpdatedAt(), macCount3.counterUpdatedAt, 'the count timestamp stays')
+    assert.equal(
+      windows.counterRateUpdatedAt(),
+      iphoneRate.counterRateUpdatedAt,
+      'the speed timestamp is adopted'
+    )
+
     // A device with a different group name stays out, even if it
     // is directly reachable and we already have data.
     sync.connectTo('127.0.0.1', outsiderPort)
@@ -524,7 +589,8 @@ async function main() {
       'Drei echte Peers erfolgreich: A=Mac, B=iPhone, Windows; '
       + 'v1 400 -> Windows/B; v2 600 -> Windows/B; '
       + 'Windows 850/counter 2 -> A/B; late A-v2 600 discarded; snapshots identical; '
-      + 'B sizes-only 300/700/2700 kept A at 950.'
+      + 'B sizes-only 300/700/2700 kept A at 950; '
+      + 'A count 3 + B speed 9 merged without a reset.'
     )
   } catch (error) {
     const details = clients

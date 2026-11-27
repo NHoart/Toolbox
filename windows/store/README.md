@@ -33,7 +33,8 @@ brand-header note.
 `Toolbox-3.7.4.appx` (version `3.7.4.0`, x64, SHA256
 `b667707c43085a9c8d29369ff30a9a72bfd3a7960f07c54b06e021ac92677c1e`) was built
 by run `46014096867` from the `v3.7.4` tag and must be submitted as Submission
-5; it supersedes 3.7.3 in the Store.
+5; it supersedes 3.7.3 in the Store. 3.7.5 (counter sync fix) is prepared;
+once it is released, build and submit its AppX instead.
 
 ## One-time setup
 

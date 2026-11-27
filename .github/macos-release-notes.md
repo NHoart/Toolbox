@@ -13,6 +13,15 @@ Download `Toolbox.dmg` above.
      “Toolbox was blocked”, or
    - in Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
+### New in 3.7.5
+
+- **No more unexpected counter resets when syncing:** the counter value and the
+  automatic count speed now carry separate change times. Changing only the speed
+  on one device therefore no longer makes its older count look newer, so it can
+  no longer overwrite a newer count from another device during the next sync.
+- **No other functional changes on macOS:** the tools, water tracker, widget and
+  Siri shortcuts behave as in 3.7.4.
+
 ### New in 3.7.4
 
 - **No more unexpected water amounts when syncing:** amounts and sizes (glass,

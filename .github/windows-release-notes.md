@@ -7,6 +7,16 @@ rights.
 Because the installer is not signed, Windows SmartScreen may show a warning on
 the first launch. **More info → Run anyway** starts the app.
 
+### New in 3.7.5
+
+- **No more unexpected counter resets when syncing:** the counter value and the
+  automatic count speed now carry separate change times. Changing only the speed
+  on the Windows PC therefore no longer makes its older count look newer, so it
+  can no longer overwrite a newer count from the Mac or iPhone during the next
+  sync – and the other way round.
+- **No other functional changes on Windows:** the tools, water tracker, installer
+  update check and Wi-Fi sync behave as in 3.7.4.
+
 ### New in 3.7.4
 
 - **No more unexpected water amounts when syncing:** amounts and sizes (glass,

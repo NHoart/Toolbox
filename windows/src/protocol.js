@@ -144,11 +144,16 @@ function normalizeWaterSnapshot(raw) {
 function normalizeCounterSnapshot(raw) {
   if (!raw || typeof raw !== 'object') return null
   const rate = toInteger(raw.rate, DEFAULT_RATE)
+  const updatedAt = parseAppleTime(raw.updatedAt)
   return {
     count: Math.max(0, toInteger(raw.count, 0)),
     savedCounters: normalizeSavedCounters(raw.savedCounters),
     rate: clamp(rate > 0 ? rate : DEFAULT_RATE, MIN_RATE, MAX_RATE),
-    updatedAt: parseAppleTime(raw.updatedAt),
+    updatedAt,
+    // Older clients only send one timestamp for count and speed, and a device
+    // that never changed the speed sends none at all. Both count as old: they
+    // must not overwrite a real speed with the default value.
+    rateUpdatedAt: parseAppleTime(raw.rateUpdatedAt, APPLE_DISTANT_PAST),
   }
 }
 

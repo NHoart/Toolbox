@@ -71,6 +71,7 @@ class ToolboxStore extends EventEmitter {
         savedCounters: [],
         rate: DEFAULT_RATE,
         updatedAt: null,
+        rateUpdatedAt: null,
       },
     }
   }
@@ -126,9 +127,17 @@ class ToolboxStore extends EventEmitter {
 
     const counter = normalizeCounterSnapshot(raw.counter)
     if (counter) {
+      const legacyUpdatedAt = raw.counter.updatedAt
+      const legacyRateUpdatedAt = raw.counter.rateUpdatedAt
       data.counter = {
         ...counter,
-        updatedAt: raw.counter.updatedAt === null || raw.counter.updatedAt === undefined ? null : counter.updatedAt,
+        updatedAt: legacyUpdatedAt === null || legacyUpdatedAt === undefined ? null : counter.updatedAt,
+        // Older files only carry `updatedAt`. Freeze it once as the speed
+        // time; new files always contain the key, so a count change never
+        // moves it afterwards.
+        rateUpdatedAt: legacyRateUpdatedAt === undefined
+          ? (legacyUpdatedAt === null || legacyUpdatedAt === undefined ? null : counter.updatedAt)
+          : counter.rateUpdatedAt,
       }
     }
 
@@ -455,7 +464,7 @@ class ToolboxStore extends EventEmitter {
     const rate = Math.min(MAX_RATE, Math.max(MIN_RATE, Math.trunc(Number(value))))
     if (!Number.isFinite(rate) || rate === this.data.counter.rate) return
     this.data.counter.rate = rate
-    this.markChanged('counter')
+    this.markRateChanged()
   }
 
   startAuto() {
@@ -541,29 +550,68 @@ class ToolboxStore extends EventEmitter {
     return this.data.counter.updatedAt
   }
 
+  counterRateUpdatedAt() {
+    return this.data.counter.rateUpdatedAt
+  }
+
   hasCounterData() {
     return this.data.counter.count !== 0 || this.data.counter.savedCounters.length > 0
   }
 
   counterSnapshot() {
     const updatedAt = this.data.counter.updatedAt
-    if (!this.hasCounterData() && updatedAt === null) return null
+    const rateUpdatedAt = this.data.counter.rateUpdatedAt
+    if (!this.hasCounterData() && updatedAt === null && rateUpdatedAt === null) return null
     return {
       count: this.data.counter.count,
       savedCounters: this.data.counter.savedCounters.map(item => ({ ...item })),
       rate: this.data.counter.rate,
       updatedAt: updatedAt === null ? APPLE_DISTANT_PAST : updatedAt,
+      rateUpdatedAt: rateUpdatedAt === null ? APPLE_DISTANT_PAST : rateUpdatedAt,
     }
   }
 
+  /**
+   * Merges a foreign state area by area. Count (including saved values) and
+   * speed keep their own timestamps: a device that only changed the speed
+   * cannot overwrite a newer count of this device.
+   */
   applyRemoteCounter(snapshot) {
     const normalized = normalizeCounterSnapshot(snapshot)
     if (!normalized) return false
-    this.stopAuto({ silent: true })
-    this.data.counter = { ...normalized, savedCounters: normalizeSavedCounters(normalized.savedCounters) }
+
+    const counter = this.data.counter
+    let applied = false
+
+    if (counter.updatedAt === null || normalized.updatedAt > counter.updatedAt) {
+      this.stopAuto({ silent: true })
+      counter.count = normalized.count
+      counter.savedCounters = normalizeSavedCounters(normalized.savedCounters)
+      counter.updatedAt = normalized.updatedAt
+      applied = true
+    }
+
+    if (counter.rateUpdatedAt === null || normalized.rateUpdatedAt > counter.rateUpdatedAt) {
+      counter.rate = normalized.rate
+      counter.rateUpdatedAt = normalized.rateUpdatedAt
+      applied = true
+    }
+
+    if (!applied) return false
+
     this.persistSoon()
     this.emit('remote', 'counter')
     return true
+  }
+
+  /** Does the other device have older count data or speed? */
+  isCounterPeerBehind(snapshot) {
+    const normalized = normalizeCounterSnapshot(snapshot)
+    if (!normalized) return false
+    const counter = this.data.counter
+    if (counter.updatedAt !== null && normalized.updatedAt < counter.updatedAt) return true
+    if (counter.rateUpdatedAt !== null && normalized.rateUpdatedAt < counter.rateUpdatedAt) return true
+    return false
   }
 
   // MARK: - State for the interface
@@ -604,6 +652,13 @@ class ToolboxStore extends EventEmitter {
     this.data.water.sizesUpdatedAt = toAppleTime(this.now())
     this.persistSoon()
     this.emit('changed', 'water')
+  }
+
+  /** Notes a speed change; the count timestamp stays untouched. */
+  markRateChanged() {
+    this.data.counter.rateUpdatedAt = toAppleTime(this.now())
+    this.persistSoon()
+    this.emit('changed', 'counter')
   }
 }
 

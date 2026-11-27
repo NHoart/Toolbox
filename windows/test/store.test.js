@@ -7,7 +7,7 @@ const os = require('node:os')
 const path = require('node:path')
 
 const { ToolboxStore } = require('../src/store')
-const { localDayString, toAppleTime } = require('../src/protocol')
+const { APPLE_DISTANT_PAST, localDayString, toAppleTime } = require('../src/protocol')
 
 function createStore(t, clock) {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'toolbox-store-'))
@@ -161,6 +161,38 @@ test('Counter: plus, minus, undo, reset and rate', t => {
   assert.equal(store.count, 0)
 })
 
+test('A rate change keeps the count timestamp and an older count', t => {
+  const base = Date.UTC(2026, 10, 13, 9, 0, 0)
+  const clock = { value: base }
+  const { store } = createStore(t, clock)
+
+  store.increment()
+  store.increment()
+  const countTime = store.counterUpdatedAt()
+
+  clock.value = base + 60_000
+  store.setRate(9)
+
+  assert.equal(store.count, 2)
+  assert.equal(store.counterUpdatedAt(), countTime, 'setRate darf den Zähler-Zeitstempel nicht ändern')
+  assert.equal(store.counterRateUpdatedAt(), toAppleTime(clock.value))
+
+  // A device with an older count but newer speed must not reset the count.
+  const applied = store.applyRemoteCounter({
+    count: 1,
+    savedCounters: [],
+    rate: 12,
+    updatedAt: countTime - 120,
+    rateUpdatedAt: toAppleTime(clock.value) + 120,
+  })
+
+  assert.equal(applied, true)
+  assert.equal(store.count, 2, 'the newer count wins')
+  assert.equal(store.counterUpdatedAt(), countTime)
+  assert.equal(store.rate, 12, 'the newer speed wins')
+  assert.equal(store.counterRateUpdatedAt(), toAppleTime(clock.value) + 120)
+})
+
 test('Save, load and delete stored counter values', t => {
   const clock = { value: Date.UTC(2026, 10, 13, 9, 0, 0) }
   const { store } = createStore(t, clock)
@@ -217,6 +249,7 @@ test('Foreign state is adopted without a local change time', t => {
   assert.equal(store.rate, 12)
   assert.equal(store.counterUpdatedAt(), 777)
   assert.deepEqual(changes, [])
+  assert.equal(store.counterRateUpdatedAt(), APPLE_DISTANT_PAST)
 })
 
 test('State survives an app restart', t => {

@@ -107,6 +107,21 @@ test('Counter value is clamped and saved values are added', () => {
   assert.equal(snapshot.savedCounters[0].name, 'Runde 1')
   assert.ok(snapshot.savedCounters[0].id.length > 0)
   assert.equal(snapshot.savedCounters[0].date, 77)
+  // No separate speed time: the speed counts as old, not as changed now.
+  assert.equal(snapshot.rateUpdatedAt, APPLE_DISTANT_PAST)
+})
+
+test('Counter snapshot keeps a separate speed timestamp', () => {
+  const snapshot = normalizeCounterSnapshot({
+    count: 7,
+    savedCounters: [],
+    rate: 9,
+    updatedAt: 50,
+    rateUpdatedAt: 60,
+  })
+
+  assert.equal(snapshot.updatedAt, 50)
+  assert.equal(snapshot.rateUpdatedAt, 60)
 })
 
 test('Message matches the Swift format (one line, nil fields omitted)', () => {

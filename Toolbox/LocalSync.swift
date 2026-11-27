@@ -377,7 +377,7 @@ final class LocalSync: ObservableObject {
         // "newer".
         let water = (WaterStore.hasData || WaterStore.updatedAt != nil || WaterStore.sizesUpdatedAt != nil)
             ? WaterStore.syncSnapshot() : nil
-        let counter = (CounterStore.hasData || CounterStore.updatedAt != nil)
+        let counter = (CounterStore.hasData || CounterStore.updatedAt != nil || CounterStore.rateUpdatedAt != nil)
             ? CounterStore.syncSnapshot() : nil
 
         let message = Message(
@@ -428,13 +428,12 @@ final class LocalSync: ObservableObject {
         }
 
         if let remote = message.counter {
-            let local = CounterStore.updatedAt
-            if local == nil || remote.updatedAt > (local ?? .distantPast) {
-                CounterStore.applySync(remote)
-                applied = true
-            } else if let local, local > remote.updatedAt {
-                peerIsBehind = true
-            }
+            // Count and speed are merged independently: a device that only
+            // changed the speed keeps its old count timestamp and must not
+            // overwrite a newer count of this device.
+            let result = CounterStore.mergeSync(remote)
+            if result.applied { applied = true }
+            if result.peerIsBehind { peerIsBehind = true }
         }
 
         if applied {

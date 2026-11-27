@@ -268,6 +268,51 @@ test('A size change on an offline device does not reset newer amounts', async t 
   assert.equal(mac.store.waterSizesUpdatedAt(), phone.store.waterSizesUpdatedAt())
 })
 
+test('A speed change on an offline device does not reset a newer count', async t => {
+  const base = Date.UTC(2026, 10, 13, 9, 0, 0)
+  const clockA = { value: base }
+  const clockB = { value: base + 60_000 }
+
+  const mac = createNode(t, 'Mac', clockA)
+  const phone = createNode(t, 'iPhone', clockB)
+
+  mac.store.increment()
+  mac.store.increment()
+
+  await startNode(mac)
+  await startNode(phone)
+  phone.sync.connectTo('127.0.0.1', mac.sync.port)
+
+  await waitFor(() => phone.store.count === 2, 'the iPhone receives the count')
+
+  // The iPhone goes offline with count 2; the Mac counts one more meanwhile.
+  phone.sync.stop()
+  await delay(100)
+  clockA.value = base + 30_000
+  mac.store.increment()
+  assert.equal(mac.store.count, 3)
+
+  // Later the iPhone changes only the auto-count speed. With the old shared
+  // timestamp its stale count 2 would look newer and reset the Mac.
+  clockB.value = base + 60_000
+  phone.store.setRate(9)
+  assert.equal(phone.store.count, 2)
+
+  phone.sync.start()
+  await waitFor(() => phone.sync.listening, 'the iPhone is back online')
+  mac.sync.connectTo('127.0.0.1', phone.sync.port)
+
+  await waitFor(() => phone.store.count === 3, 'the iPhone adopts the newer count')
+  await waitFor(() => mac.store.rate === 9, 'the Mac adopts the newer speed')
+
+  assert.equal(mac.store.count, 3, 'the Mac keeps its newer count')
+  assert.equal(phone.store.count, 3)
+  assert.equal(mac.store.rate, 9)
+  assert.equal(phone.store.rate, 9)
+  assert.equal(mac.store.counterUpdatedAt(), phone.store.counterUpdatedAt())
+  assert.equal(mac.store.counterRateUpdatedAt(), phone.store.counterRateUpdatedAt())
+})
+
 test('Three separate clients: v1 -> v2 -> new Windows, and back', async t => {
   const base = Date.UTC(2026, 10, 13, 9, 0, 0)
   const clockMac = { value: base }
