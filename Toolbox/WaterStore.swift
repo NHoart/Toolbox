@@ -28,6 +28,7 @@ enum WaterStore {
         static let history = "historyML"
         static let recentAdds = "recentAddsML"
         static let updatedAt = "sync.water.updatedAt"
+        static let sizesUpdatedAt = "sync.water.sizesUpdatedAt"
     }
 
     /// One day in the history (for HistoryView).
@@ -143,7 +144,7 @@ enum WaterStore {
 
     // MARK: - Sync with other devices
 
-    /// Time of the last local change (for syncing).
+    /// Time of the last local change of the amounts (for syncing).
     static var updatedAt: Date? {
         get { defaults.object(forKey: Key.updatedAt) as? Date }
         set {
@@ -151,6 +152,33 @@ enum WaterStore {
                 defaults.set(newValue, forKey: Key.updatedAt)
             } else {
                 defaults.removeObject(forKey: Key.updatedAt)
+            }
+        }
+    }
+
+    /// Time of the last change of glass, bottle or goal.
+    ///
+    /// Amounts and sizes keep separate timestamps: a settings change alone
+    /// must not make an old water level look newer than the level of another
+    /// device. Exactly that used to overwrite amounts logged on the other
+    /// device as soon as the two devices synced again.
+    static var sizesUpdatedAt: Date? {
+        get {
+            if let date = defaults.object(forKey: Key.sizesUpdatedAt) as? Date {
+                return date
+            }
+            // States from older versions carry only the single `updatedAt`.
+            // Freeze it once as the sizes time, so later amount changes no
+            // longer move the sizes timestamp along with them.
+            guard let legacy = updatedAt else { return nil }
+            defaults.set(legacy, forKey: Key.sizesUpdatedAt)
+            return legacy
+        }
+        set {
+            if let newValue {
+                defaults.set(newValue, forKey: Key.sizesUpdatedAt)
+            } else {
+                defaults.removeObject(forKey: Key.sizesUpdatedAt)
             }
         }
     }
@@ -170,12 +198,17 @@ enum WaterStore {
         var bottle: Int
         var goal: Int
         var updatedAt: Date
+        /// Missing in states of older app versions or when no size was ever
+        /// changed; such a state does not count as a size change.
+        var sizesUpdatedAt: Date?
     }
 
     static func syncSnapshot() -> SyncSnapshot {
         SyncSnapshot(
             history: history,
-            recentAdds: defaults.array(forKey: Key.recentAdds) as? [Int] ?? [],
+            // Only today's undo stack belongs to the current amount; a stack
+            // from yesterday must not travel to other devices as today's.
+            recentAdds: recentAdds,
             day: defaults.string(forKey: Key.day),
             total: defaults.integer(forKey: Key.total),
             glass: glassML,
@@ -183,12 +216,70 @@ enum WaterStore {
             goal: goalML,
             // Without a change time the state counts as old: a fresh device
             // must not overwrite a newer state of the others with it.
-            updatedAt: updatedAt ?? .distantPast
+            updatedAt: updatedAt ?? .distantPast,
+            sizesUpdatedAt: sizesUpdatedAt
         )
     }
 
-    /// Adopts a foreign state without marking it as a new local change.
+    /// Result of merging a foreign state.
+    struct MergeResult {
+        /// Something was taken over from the other device.
+        var applied = false
+        /// The other device has older amounts or sizes and needs our state.
+        var peerIsBehind = false
+    }
+
+    /// Merges a foreign state area by area.
+    ///
+    /// Amounts and sizes are compared with their own timestamps: a device that
+    /// only changed the goal keeps its old amount timestamp and therefore
+    /// cannot overwrite newer amounts of another device.
+    static func mergeSync(_ remote: SyncSnapshot) -> MergeResult {
+        var result = MergeResult()
+
+        // Read both local timestamps before applying anything: `sizesUpdatedAt`
+        // migrates from `updatedAt` on older states and must see the old value,
+        // not the amount time that is about to be adopted.
+        let localAmountsAt = updatedAt
+        let localSizesAt = sizesUpdatedAt
+        // States without a sizes time (old app versions or a device that never
+        // changed a size) count as old – they must not overwrite real sizes.
+        let remoteSizesAt = remote.sizesUpdatedAt ?? .distantPast
+
+        if let local = localAmountsAt {
+            if remote.updatedAt > local {
+                applyAmounts(remote)
+                result.applied = true
+            } else if remote.updatedAt < local {
+                result.peerIsBehind = true
+            }
+        } else {
+            applyAmounts(remote)
+            result.applied = true
+        }
+
+        if let local = localSizesAt {
+            if remoteSizesAt > local {
+                applySizes(remote)
+                result.applied = true
+            } else if remoteSizesAt < local {
+                result.peerIsBehind = true
+            }
+        } else {
+            applySizes(remote)
+            result.applied = true
+        }
+
+        return result
+    }
+
+    /// Adopts a foreign state without merging – for imports and tests.
     static func applySync(_ snapshot: SyncSnapshot) {
+        applyAmounts(snapshot)
+        applySizes(snapshot)
+    }
+
+    private static func applyAmounts(_ snapshot: SyncSnapshot) {
         var h = snapshot.history
         if let cutoff = Calendar.current.date(byAdding: .day, value: -400, to: Date()) {
             let cutoffKey = dayString(cutoff)
@@ -203,16 +294,44 @@ enum WaterStore {
             defaults.removeObject(forKey: Key.day)
         }
         defaults.set(snapshot.total, forKey: Key.total)
-        defaults.set(snapshot.glass, forKey: Key.glass)
-        defaults.set(snapshot.bottle, forKey: Key.bottle)
-        defaults.set(snapshot.goal, forKey: Key.goal)
 
         updatedAt = snapshot.updatedAt
     }
 
-    /// Notes a local change, refreshes the widget and triggers the sync.
+    private static func applySizes(_ snapshot: SyncSnapshot) {
+        defaults.set(snapshot.glass, forKey: Key.glass)
+        defaults.set(snapshot.bottle, forKey: Key.bottle)
+        defaults.set(snapshot.goal, forKey: Key.goal)
+
+        // A state without its own sizes time never changed a size: it must
+        // not count as newer than real sizes on another device.
+        sizesUpdatedAt = snapshot.sizesUpdatedAt ?? .distantPast
+    }
+
+    /// Sets all three sizes at once and marks only the sizes as changed.
+    static func setSizes(glass: Int, bottle: Int, goal: Int) {
+        guard glass != glassML || bottle != bottleML || goal != goalML else { return }
+        glassML = glass
+        bottleML = bottle
+        goalML = goal
+        markSizesChanged()
+    }
+
+    /// Notes a local change of the amounts, refreshes the widget and triggers
+    /// the sync.
     static func markChanged() {
         updatedAt = Date()
+        notifyChanged()
+    }
+
+    /// Notes a local change of glass, bottle or goal. The amounts keep their
+    /// own timestamp, so the size alone cannot make an old water level newer.
+    static func markSizesChanged() {
+        sizesUpdatedAt = Date()
+        notifyChanged()
+    }
+
+    private static func notifyChanged() {
         WidgetCenter.shared.reloadAllTimelines()
         NotificationCenter.default.post(name: .waterStoreDidChange, object: nil)
     }

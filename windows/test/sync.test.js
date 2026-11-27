@@ -216,6 +216,58 @@ test('A fresh device does not overwrite a newer state', async t => {
   assert.equal(old.store.count, 1)
 })
 
+test('A size change on an offline device does not reset newer amounts', async t => {
+  const base = Date.UTC(2026, 10, 13, 9, 0, 0)
+  const clockA = { value: base }
+  const clockB = { value: base + 60_000 }
+
+  const mac = createNode(t, 'Mac', clockA)
+  const phone = createNode(t, 'iPhone', clockB)
+
+  mac.store.addWater(850)
+  mac.store.setSizes({ goal: 2400 })
+
+  await startNode(mac)
+  await startNode(phone)
+  phone.sync.connectTo('127.0.0.1', mac.sync.port)
+
+  await waitFor(
+    () => phone.store.todayML() === 850 && phone.store.sizes.goal === 2400,
+    'the iPhone receives the initial state'
+  )
+
+  // The iPhone goes offline with 850 ml; the Mac logs 100 ml more meanwhile.
+  phone.sync.stop()
+  await delay(100)
+  clockA.value = base + 30_000
+  mac.store.addWater(100)
+  assert.equal(mac.store.todayML(), 950)
+
+  // Later the iPhone changes only its sizes. With the old shared timestamp
+  // its stale 850 ml would look newer and reset the Mac to 850 on reconnect.
+  clockB.value = base + 60_000
+  phone.store.setSizes({ glass: 300, bottle: 700, goal: 2700 })
+  assert.equal(phone.store.todayML(), 850)
+
+  phone.sync.start()
+  await waitFor(() => phone.sync.listening, 'the iPhone is back online')
+  mac.sync.connectTo('127.0.0.1', phone.sync.port)
+
+  await waitFor(() => phone.store.todayML() === 950, 'the iPhone adopts the newer amount')
+  await waitFor(
+    () => mac.store.sizes.glass === 300 && mac.store.sizes.bottle === 700
+      && mac.store.sizes.goal === 2700,
+    'the Mac adopts the newer sizes'
+  )
+
+  assert.equal(mac.store.todayML(), 950, 'the Mac keeps its newer amount')
+  assert.equal(phone.store.todayML(), 950)
+  assert.deepEqual(mac.store.sizes, { glass: 300, bottle: 700, goal: 2700 })
+  assert.deepEqual(phone.store.sizes, { glass: 300, bottle: 700, goal: 2700 })
+  assert.equal(mac.store.waterUpdatedAt(), phone.store.waterUpdatedAt())
+  assert.equal(mac.store.waterSizesUpdatedAt(), phone.store.waterSizesUpdatedAt())
+})
+
 test('Three separate clients: v1 -> v2 -> new Windows, and back', async t => {
   const base = Date.UTC(2026, 10, 13, 9, 0, 0)
   const clockMac = { value: base }

@@ -69,6 +69,26 @@ test('Water level is normalized defensively', () => {
   assert.equal(snapshot.goal, 3000)
   assert.deepEqual(snapshot.recentAdds, [250, 500])
   assert.equal(snapshot.updatedAt, 42)
+  // Without a separate sizes time the sizes count as old and must not
+  // overwrite real sizes of another device.
+  assert.equal(snapshot.sizesUpdatedAt, APPLE_DISTANT_PAST)
+})
+
+test('Water snapshot keeps a separate sizes timestamp', () => {
+  const snapshot = normalizeWaterSnapshot({
+    history: { '2026-11-13': 1750 },
+    recentAdds: [250],
+    day: '2026-11-13',
+    total: 1750,
+    glass: 250,
+    bottle: 700,
+    goal: 2400,
+    updatedAt: 42,
+    sizesUpdatedAt: 99,
+  })
+
+  assert.equal(snapshot.updatedAt, 42)
+  assert.equal(snapshot.sizesUpdatedAt, 99)
 })
 
 test('Counter value is clamped and saved values are added', () => {

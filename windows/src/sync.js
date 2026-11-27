@@ -384,13 +384,11 @@ class SyncService extends EventEmitter {
     let peerIsBehind = false
 
     if (message.water) {
-      const local = this.store.waterUpdatedAt()
-      if (shouldApply(local, message.water.updatedAt)) {
-        this.store.applyRemoteWater(message.water)
-        applied = true
-      } else if (isPeerBehind(local, message.water.updatedAt)) {
-        peerIsBehind = true
-      }
+      // Amounts and sizes are merged independently: a device that only
+      // changed a size keeps its old amount timestamp and must not
+      // overwrite newer amounts of this device.
+      if (this.store.applyRemoteWater(message.water)) applied = true
+      if (this.store.isWaterPeerBehind(message.water)) peerIsBehind = true
     }
 
     if (message.counter) {

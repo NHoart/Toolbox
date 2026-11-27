@@ -7,6 +7,18 @@ rights.
 Because the installer is not signed, Windows SmartScreen may show a warning on
 the first launch. **More info → Run anyway** starts the app.
 
+### New in 3.7.4
+
+- **No more unexpected water amounts when syncing:** amounts and sizes (glass,
+  bottle, daily goal) now carry separate change times. Changing a size on the
+  Windows PC therefore no longer makes its older water level look newer, so it
+  can no longer overwrite amounts logged on the Mac or iPhone during the next
+  sync – and the other way round.
+- **Undo stays with its day:** the water tracker only syncs the undo history of
+  the current day.
+- **No other functional changes on Windows:** the tools, the installer update
+  check and the Wi-Fi sync behave as in 3.7.3.
+
 ### New in 3.7.2
 
 - **Updated brand header:** the title bar now shows the Toolbox app icon at the

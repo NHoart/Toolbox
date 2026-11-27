@@ -79,7 +79,44 @@ test('Amounts are clamped like in the Mac app settings', t => {
   clock.value += 5000
   store.setSizes({ glass: 300, bottle: 750, goal: 2500 })
   assert.deepEqual(store.sizes, { glass: 300, bottle: 750, goal: 2500 })
-  assert.equal(store.waterUpdatedAt(), toAppleTime(clock.value))
+  // A size change must not touch the amount timestamp.
+  assert.equal(store.waterUpdatedAt(), null)
+  assert.equal(store.waterSizesUpdatedAt(), toAppleTime(clock.value))
+})
+
+test('A size change keeps the amount timestamp and an older water level', t => {
+  const base = Date.UTC(2026, 10, 13, 9, 0, 0)
+  const clock = { value: base }
+  const { store } = createStore(t, clock)
+
+  store.addWater(750)
+  const amountTime = store.waterUpdatedAt()
+
+  clock.value = base + 60_000
+  store.setSizes({ goal: 2500 })
+
+  assert.equal(store.todayML(), 750)
+  assert.equal(store.waterUpdatedAt(), amountTime, 'setSizes nur den Größen-Zeitstempel setzen')
+  assert.equal(store.waterSizesUpdatedAt(), toAppleTime(clock.value))
+
+  // A device with an older amount but newer sizes must not reset the level.
+  const applied = store.applyRemoteWater({
+    history: { '2026-11-13': 400 },
+    recentAdds: [400],
+    day: '2026-11-13',
+    total: 400,
+    glass: 200,
+    bottle: 500,
+    goal: 2000,
+    updatedAt: amountTime - 120,
+    sizesUpdatedAt: toAppleTime(clock.value) + 120,
+  })
+
+  assert.equal(applied, true)
+  assert.equal(store.todayML(), 750, 'the newer amount wins')
+  assert.equal(store.waterUpdatedAt(), amountTime)
+  assert.deepEqual(store.sizes, { glass: 200, bottle: 500, goal: 2000 }, 'the newer sizes win')
+  assert.equal(store.waterSizesUpdatedAt(), toAppleTime(clock.value) + 120)
 })
 
 test('A new day starts at 0 ml and without an old undo stack', t => {

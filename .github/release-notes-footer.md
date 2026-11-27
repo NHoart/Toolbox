@@ -1,13 +1,15 @@
 ## Verified release state
 
-3.7.2 refreshes the brand headers in the macOS sidebar and the Windows title
-bar. The Windows test suite
-(43 tests) and the headless sync smoke test run with this release; the Xcode
-builds for macOS and iOS are produced by the GitHub Actions workflows, and
-`scripts/test-apple-localization.sh` verifies on the built bundles that every
-app and widget catalog key resolves in German, Spanish and French and falls back
-to English for unsupported languages. A test on physical devices, a real Wi-Fi
-test, an update run and the native Windows interface are still outstanding.
+3.7.4 fixes the water tracker sync: amounts and sizes now carry separate change
+times, so changing the glass or bottle size or the daily goal on one device can
+no longer overwrite a newer water level from another device. The Windows test
+suite (48 tests) and the headless Swift↔Windows interop test run with this
+release; the Xcode builds for macOS and iOS are produced by the GitHub Actions
+workflows, and `scripts/test-apple-localization.sh` verifies on the built
+bundles that every app and widget catalog key resolves in German, Spanish and
+French and falls back to English for unsupported languages. A test on physical
+devices, a real Wi-Fi test, an update run and the native Windows interface are
+still outstanding.
 
 ## Checklist: first launch and three-device sync
 

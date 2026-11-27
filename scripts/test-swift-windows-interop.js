@@ -222,6 +222,10 @@ function assertSnapshot(label, swift, winWater, winCounter) {
     Math.abs(swift.water.updatedAt - winWater.updatedAt) < 0.001,
     `${label}: Wasser-Zeitstempel`
   )
+  assert.ok(
+    Math.abs(swift.water.sizesUpdatedAt - winWater.sizesUpdatedAt) < 0.001,
+    `${label}: Größen-Zeitstempel`
+  )
 
   assert.equal(swift.counter.count, winCounter.count, `${label}: count`)
   assert.equal(swift.counter.rate, winCounter.rate, `${label}: rate`)
@@ -437,6 +441,74 @@ async function main() {
     assertSnapshot('Mac', macSnapshot, winWaterSnapshot, winCounterSnapshot)
     assertSnapshot('iPhone', iphoneSnapshot, winWaterSnapshot, winCounterSnapshot)
 
+    // Regression for the "ghost water" bug: a device that only changes its
+    // sizes must not push its older water level over a newer one.
+    iphone.child.stdin.write('stopsync\n')
+    await waitForStatus(iphone.harness, status => status.port === 0, 'the iPhone goes offline')
+    await waitFor(() => sync.peerCount === 1, 'Windows only sees the Mac while the iPhone is offline')
+
+    await delay(300)
+    mac.child.stdin.write('addwater 100\n')
+    const mac950 = await waitForStatus(
+      mac.harness,
+      status => status.water === 950,
+      'the Mac logs 100 ml while the iPhone is offline'
+    )
+    await waitFor(() => windows.todayML() === 950, 'Windows receives the newer amount')
+
+    const iphoneBefore = await iphone.harness.status()
+    assert.equal(iphoneBefore.water, 850, 'the offline iPhone keeps its older amount')
+
+    await delay(300)
+    iphone.child.stdin.write('setsizes 300 700 2700\n')
+    const iphoneSizes = await waitForStatus(
+      iphone.harness,
+      status => status.waterSizesUpdatedAt > iphoneBefore.waterSizesUpdatedAt,
+      'the iPhone changes only its sizes'
+    )
+    assert.equal(iphoneSizes.water, 850, 'a size change does not touch the amount')
+    assert.equal(
+      iphoneSizes.waterUpdatedAt,
+      iphoneBefore.waterUpdatedAt,
+      'a size change keeps the amount timestamp'
+    )
+
+    iphone.child.stdin.write('startsync\n')
+    const iphoneSyncPort = (await waitForStatus(
+      iphone.harness,
+      status => status.port > 0,
+      'the iPhone is back online'
+    )).port
+    sync.connectTo('127.0.0.1', iphoneSyncPort)
+
+    const iphoneAfter = await waitForStatus(
+      iphone.harness,
+      status => status.water === 950,
+      'the iPhone adopts the newer amount'
+    )
+    assert.ok(Math.abs(iphoneAfter.waterUpdatedAt - mac950.waterUpdatedAt) < 0.001)
+
+    await waitFor(
+      () => windows.sizes.glass === 300
+        && windows.sizes.bottle === 700
+        && windows.sizes.goal === 2700,
+      'Windows adopts the newer sizes'
+    )
+    await waitForStatus(
+      mac.harness,
+      status => status.water === 950,
+      'the Mac keeps its newer amount'
+    )
+
+    assert.equal(windows.todayML(), 950, 'a size-only change must not reset the amount')
+    assert.equal(windows.waterUpdatedAt(), mac950.waterUpdatedAt, 'the amount timestamp stays')
+    assert.equal(
+      windows.waterSizesUpdatedAt(),
+      iphoneSizes.waterSizesUpdatedAt,
+      'the sizes timestamp is adopted'
+    )
+    assert.deepEqual(windows.sizes, { glass: 300, bottle: 700, goal: 2700 })
+
     // A device with a different group name stays out, even if it
     // is directly reachable and we already have data.
     sync.connectTo('127.0.0.1', outsiderPort)
@@ -446,12 +518,13 @@ async function main() {
     assert.equal(outsiderStatus.water, 0, 'fremder Name darf keine Daten bekommen')
     const outsiderSnapshot = await outsider.harness.snapshot()
     assert.equal(outsiderSnapshot.water.total, 0, 'fremder Name darf keinen Verlauf bekommen')
-    assert.equal(windows.todayML(), 850, 'a foreign name must not change Windows')
+    assert.equal(windows.todayML(), 950, 'a foreign name must not change Windows')
 
     console.log(
       'Drei echte Peers erfolgreich: A=Mac, B=iPhone, Windows; '
       + 'v1 400 -> Windows/B; v2 600 -> Windows/B; '
-      + 'Windows 850/counter 2 -> A/B; late A-v2 600 discarded; snapshots identical.'
+      + 'Windows 850/counter 2 -> A/B; late A-v2 600 discarded; snapshots identical; '
+      + 'B sizes-only 300/700/2700 kept A at 950.'
     )
   } catch (error) {
     const details = clients

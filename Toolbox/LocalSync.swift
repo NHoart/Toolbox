@@ -375,7 +375,7 @@ final class LocalSync: ObservableObject {
         // A device without its own data and without a change time sends no
         // empty state – otherwise it could overwrite the state of other devices as
         // "newer".
-        let water = (WaterStore.hasData || WaterStore.updatedAt != nil)
+        let water = (WaterStore.hasData || WaterStore.updatedAt != nil || WaterStore.sizesUpdatedAt != nil)
             ? WaterStore.syncSnapshot() : nil
         let counter = (CounterStore.hasData || CounterStore.updatedAt != nil)
             ? CounterStore.syncSnapshot() : nil
@@ -416,16 +416,15 @@ final class LocalSync: ObservableObject {
         var applied = false
 
         if let remote = message.water {
-            let local = WaterStore.updatedAt
-            // Without our own state (fresh device) always adopt, otherwise
-            // the most recently changed state wins.
-            if local == nil || remote.updatedAt > (local ?? .distantPast) {
-                WaterStore.applySync(remote)
+            // Amounts and sizes are merged independently: a device that only
+            // changed a size keeps its old amount timestamp and must not
+            // overwrite newer amounts of this device.
+            let result = WaterStore.mergeSync(remote)
+            if result.applied {
                 WidgetCenter.shared.reloadAllTimelines()
                 applied = true
-            } else if let local, local > remote.updatedAt {
-                peerIsBehind = true
             }
+            if result.peerIsBehind { peerIsBehind = true }
         }
 
         if let remote = message.counter {

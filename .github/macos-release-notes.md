@@ -13,6 +13,18 @@ Download `Toolbox.dmg` above.
      “Toolbox was blocked”, or
    - in Terminal: `xattr -dr com.apple.quarantine /Applications/Toolbox.app`
 
+### New in 3.7.4
+
+- **No more unexpected water amounts when syncing:** amounts and sizes (glass,
+  bottle, daily goal) now carry separate change times. Changing a size on one
+  device therefore no longer makes its older water level look newer, so it can
+  no longer overwrite amounts logged on another device during the next sync.
+- **Undo stays with its day:** the water tracker only syncs the undo history of
+  the current day; yesterday's entries can no longer appear in today's undo
+  list.
+- **No other functional changes on macOS:** the tools, widget and Siri shortcuts
+  behave as in 3.7.2.
+
 ### New in 3.7.2
 
 - **The real app icon in the sidebar:** the header now shows the Toolbox app

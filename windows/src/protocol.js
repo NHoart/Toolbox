@@ -122,6 +122,8 @@ function normalizeWaterSnapshot(raw) {
         .slice(-MAX_RECENT_ADDS)
     : []
 
+  const updatedAt = parseAppleTime(raw.updatedAt)
+
   return {
     history: pruneHistory(raw.history),
     recentAdds,
@@ -131,7 +133,11 @@ function normalizeWaterSnapshot(raw) {
     glass: glass > 0 ? glass : DEFAULT_GLASS,
     bottle: bottle > 0 ? bottle : DEFAULT_BOTTLE,
     goal: goal > 0 ? goal : DEFAULT_GOAL,
-    updatedAt: parseAppleTime(raw.updatedAt),
+    updatedAt,
+    // Older clients only send one timestamp for amounts and sizes, and a
+    // device that never changed a size sends none at all. Both count as old:
+    // they must not overwrite real sizes with default values.
+    sizesUpdatedAt: parseAppleTime(raw.sizesUpdatedAt, APPLE_DISTANT_PAST),
   }
 }
 

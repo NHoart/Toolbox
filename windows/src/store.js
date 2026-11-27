@@ -64,6 +64,7 @@ class ToolboxStore extends EventEmitter {
         bottle: DEFAULT_SIZES.bottle,
         goal: DEFAULT_SIZES.goal,
         updatedAt: null,
+        sizesUpdatedAt: null,
       },
       counter: {
         count: 0,
@@ -110,9 +111,16 @@ class ToolboxStore extends EventEmitter {
 
     const water = normalizeWaterSnapshot(raw.water)
     if (water) {
+      const legacyUpdatedAt = raw.water.updatedAt
+      const legacySizesUpdatedAt = raw.water.sizesUpdatedAt
       data.water = {
         ...water,
-        updatedAt: raw.water.updatedAt === null || raw.water.updatedAt === undefined ? null : water.updatedAt,
+        updatedAt: legacyUpdatedAt === null || legacyUpdatedAt === undefined ? null : water.updatedAt,
+        // Older files only carry `updatedAt`. Freeze it once as the sizes
+        // time so later amount changes no longer move it.
+        sizesUpdatedAt: legacySizesUpdatedAt === null || legacySizesUpdatedAt === undefined
+          ? (legacyUpdatedAt === null || legacyUpdatedAt === undefined ? null : water.updatedAt)
+          : water.sizesUpdatedAt,
       }
     }
 
@@ -281,7 +289,7 @@ class ToolboxStore extends EventEmitter {
       }
     }
 
-    if (changed) this.markChanged('water')
+    if (changed) this.markSizesChanged()
     return changed
   }
 
@@ -313,6 +321,10 @@ class ToolboxStore extends EventEmitter {
     return this.data.water.updatedAt
   }
 
+  waterSizesUpdatedAt() {
+    return this.data.water.sizesUpdatedAt
+  }
+
   hasWaterData() {
     return Object.keys(this.data.water.history).length > 0 || this.data.water.total !== 0
   }
@@ -320,28 +332,72 @@ class ToolboxStore extends EventEmitter {
   /** null = nothing to sync yet (like WaterStore.sendState on the Mac). */
   waterSnapshot() {
     const updatedAt = this.data.water.updatedAt
-    if (!this.hasWaterData() && updatedAt === null) return null
+    const sizesUpdatedAt = this.data.water.sizesUpdatedAt
+    if (!this.hasWaterData() && updatedAt === null && sizesUpdatedAt === null) return null
     const sizes = this.sizes
+    const today = localDayString(new Date(this.now()))
+    // Only today's undo stack belongs to the current amount.
+    const recentAdds = this.data.water.day === today
+      ? [...this.data.water.recentAdds]
+      : []
     return {
       history: { ...this.data.water.history },
-      recentAdds: [...this.data.water.recentAdds],
+      recentAdds,
       day: this.data.water.day,
       total: this.data.water.total,
       glass: sizes.glass,
       bottle: sizes.bottle,
       goal: sizes.goal,
       updatedAt: updatedAt === null ? APPLE_DISTANT_PAST : updatedAt,
+      sizesUpdatedAt: sizesUpdatedAt === null ? APPLE_DISTANT_PAST : sizesUpdatedAt,
     }
   }
 
-  /** Adopts a foreign state without marking it as a local change. */
+  /**
+   * Merges a foreign state area by area. Amounts and sizes keep their own
+   * timestamps: a device that only changed the goal keeps its old amount
+   * timestamp and cannot overwrite newer amounts of this device.
+   * Adopts a foreign state without marking it as a local change.
+   */
   applyRemoteWater(snapshot) {
     const normalized = normalizeWaterSnapshot(snapshot)
     if (!normalized) return false
-    this.data.water = { ...normalized }
+
+    const water = this.data.water
+    let applied = false
+
+    if (water.updatedAt === null || normalized.updatedAt > water.updatedAt) {
+      water.history = normalized.history
+      water.recentAdds = normalized.recentAdds
+      water.day = normalized.day
+      water.total = normalized.total
+      water.updatedAt = normalized.updatedAt
+      applied = true
+    }
+
+    if (water.sizesUpdatedAt === null || normalized.sizesUpdatedAt > water.sizesUpdatedAt) {
+      water.glass = normalized.glass
+      water.bottle = normalized.bottle
+      water.goal = normalized.goal
+      water.sizesUpdatedAt = normalized.sizesUpdatedAt
+      applied = true
+    }
+
+    if (!applied) return false
+
     this.persistSoon()
     this.emit('remote', 'water')
     return true
+  }
+
+  /** Does the other device have older amounts or sizes? */
+  isWaterPeerBehind(snapshot) {
+    const normalized = normalizeWaterSnapshot(snapshot)
+    if (!normalized) return false
+    const water = this.data.water
+    if (water.updatedAt !== null && normalized.updatedAt < water.updatedAt) return true
+    if (water.sizesUpdatedAt !== null && normalized.sizesUpdatedAt < water.sizesUpdatedAt) return true
+    return false
   }
 
   // MARK: - Counter
@@ -541,6 +597,13 @@ class ToolboxStore extends EventEmitter {
     }
     this.persistSoon()
     this.emit('changed', section)
+  }
+
+  /** Notes a size change; the amount timestamp stays untouched. */
+  markSizesChanged() {
+    this.data.water.sizesUpdatedAt = toAppleTime(this.now())
+    this.persistSoon()
+    this.emit('changed', 'water')
   }
 }
 

@@ -5,8 +5,10 @@ struct HarnessStatus: Codable {
     var water: Int
     var counter: Int
     var waterUpdatedAt: Double
+    var waterSizesUpdatedAt: Double
     var counterUpdatedAt: Double
     var peers: Int
+    var port: UInt16
 }
 
 struct HarnessSnapshot: Codable {
@@ -75,17 +77,29 @@ func handle(_ line: String) {
         guard parts.count > 1 else { return }
         let values = parts[1].split(separator: " ").compactMap { Int($0) }
         guard values.count == 3 else { return }
-        WaterStore.glassML = values[0]
-        WaterStore.bottleML = values[1]
-        WaterStore.goalML = values[2]
+        WaterStore.setSizes(glass: values[0], bottle: values[1], goal: values[2])
+
+    case "undowater":
+        WaterStore.undoLast()
+
+    case "resetwater":
+        WaterStore.reset()
+
+    case "stopsync":
+        LocalSync.shared.setEnabled(false)
+
+    case "startsync":
+        LocalSync.shared.setEnabled(true)
 
     case "status":
         emit("STATUS", HarnessStatus(
             water: WaterStore.todayML,
             counter: counter.count,
             waterUpdatedAt: WaterStore.updatedAt?.timeIntervalSinceReferenceDate ?? -1,
+            waterSizesUpdatedAt: WaterStore.sizesUpdatedAt?.timeIntervalSinceReferenceDate ?? -1,
             counterUpdatedAt: CounterStore.updatedAt?.timeIntervalSinceReferenceDate ?? -1,
-            peers: LocalSync.shared.peerCount
+            peers: LocalSync.shared.peerCount,
+            port: LocalSync.shared.listeningPort ?? 0
         ))
 
     case "snapshot":

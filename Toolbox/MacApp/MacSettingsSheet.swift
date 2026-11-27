@@ -45,9 +45,9 @@ struct MacSettingsSheet: View {
         .sheet(item: $manualUpdate) { update in
             UpdateSheet(update: update)
         }
-        .onChange(of: glass) { _, _ in WaterStore.markChanged() }
-        .onChange(of: bottle) { _, _ in WaterStore.markChanged() }
-        .onChange(of: goal) { _, _ in WaterStore.markChanged() }
+        .onChange(of: glass) { _, _ in WaterStore.markSizesChanged() }
+        .onChange(of: bottle) { _, _ in WaterStore.markSizesChanged() }
+        .onChange(of: goal) { _, _ in WaterStore.markSizesChanged() }
         .onChange(of: lanEnabled) { _, enabled in LocalSync.shared.setEnabled(enabled) }
     }
 

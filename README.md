@@ -50,7 +50,7 @@ The Windows app is available as an installer straight from GitHub:
 
 Windows 10/11 (64-bit). Run the installer after downloading; it installs into the user profile without administrator rights. The installer is not signed, so SmartScreen may warn on the first launch – **More info → Run anyway** starts the app regardless.
 
-The Microsoft Store version is an additional installation path and does not replace the installer. It has been available in the Microsoft Store since 17 November 2026, currently at version 3.6.0:
+The Microsoft Store version is an additional installation path and does not replace the installer. It has been available in the Microsoft Store since 17 November 2026, currently at version 3.7.2:
 
 [**Toolbox for Windows in the Microsoft Store**](https://apps.microsoft.com/detail/9P4FPTHZHVJD)
 
@@ -215,7 +215,7 @@ The Windows app stores the same state in `%APPDATA%\Toolbox\data.json`. For the 
 
 ### Sync over the local Wi-Fi network (Mac, iPhone, Windows)
 
-All versions speak the same protocol: every device advertises the Bonjour service `_toolboxsync._tcp` and searches for it at the same time. When a connection is established, both sides send their complete state including a timestamp; per area (water and counter) the most recently changed state wins. Adopted states are passed on immediately to all open connections – including devices that are not directly connected to the origin.
+All versions speak the same protocol: every device advertises the Bonjour service `_toolboxsync._tcp` and searches for it at the same time. When a connection is established, both sides send their complete state including a timestamp; per area (water and counter) the most recently changed state wins. Inside the water tracker, the amounts and the sizes (glass, bottle, daily goal) are compared separately, so changing a size never overwrites a newer water level. Adopted states are passed on immediately to all open connections – including devices that are not directly connected to the origin.
 
 That is also how the chain across a third device works:
 

@@ -1,6 +1,6 @@
 # Toolbox – Microsoft Store submission status
 
-As of: **21 November 2026**
+As of: **27 November 2026**
 
 ## Summary
 
@@ -20,6 +20,11 @@ from commit `ab5c0f5` by workflow run `44847964079` on 21 November 2026. It adds
 the brand header and keeps the Store Settings without an Updates section, so the
 app will match the screenshots. Submission 4 (`1152921505702465324`) was
 submitted for certification on 21 November 2026.
+
+**3.7.4 supersedes 3.7.3:** the water-sync fix in 3.7.4 also applies to the
+Store version. Once the `v3.7.4` tag has built `Toolbox-3.7.4.appx` (version
+`3.7.4.0`), submit it as the next submission; until then Submission 4 (3.7.3)
+remains the newest submitted package and may still pass certification first.
 
 ## Partner Center
 
@@ -81,7 +86,9 @@ app logo.
    notes then include the Store row automatically.
 2. Wait for Submission 4 (3.7.3) to pass certification; the Store publishes it
    automatically and replaces the live 3.7.2.
-3. Future Store versions need their own submission; the procedure is described in
+3. Submit `Toolbox-3.7.4.appx` (version `3.7.4.0`) as the next submission once
+   the `v3.7.4` build has finished; it contains the water-sync fix.
+4. Future Store versions need their own submission; the procedure is described in
    [`windows/store/README.md`](windows/store/README.md).
 
 ## History
@@ -95,6 +102,7 @@ app logo.
 | 20 Nov 2026 | Submission 3 rejected under 10.1.1.3 (macOS screenshots) |
 | 21 Nov 2026 | Windows-rendered screenshots uploaded; Submission 3 passed certification and 3.7.2 published |
 | 21 Nov 2026 | `Toolbox-3.7.3.appx` built from `ab5c0f5`; Submission 4 submitted for certification |
+| 27 Nov 2026 | 3.7.4 fixes the water sync (separate timestamps for amounts and sizes); AppX build and Submission 5 pending |
 
 ## Checks performed
 
