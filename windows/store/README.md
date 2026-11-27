@@ -29,9 +29,11 @@ screenshots. Submission 4 (`1152921505702465324`) was submitted for
 certification on 21 Nov 2026. The four “What's new” texts contain the 3.7.3
 brand-header note.
 
-**Next (3.7.4):** the water-sync fix also applies to the Store version. After the
-`v3.7.4` tag, `Toolbox-3.7.4.appx` (version `3.7.4.0`) must be submitted as the
-next submission; it supersedes 3.7.3 in the Store.
+**Next (3.7.4):** the water-sync fix also applies to the Store version.
+`Toolbox-3.7.4.appx` (version `3.7.4.0`, x64, SHA256
+`b667707c43085a9c8d29369ff30a9a72bfd3a7960f07c54b06e021ac92677c1e`) was built
+by run `46014096867` from the `v3.7.4` tag and must be submitted as Submission
+5; it supersedes 3.7.3 in the Store.
 
 ## One-time setup
 

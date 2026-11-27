@@ -22,9 +22,10 @@ app will match the screenshots. Submission 4 (`1152921505702465324`) was
 submitted for certification on 21 November 2026.
 
 **3.7.4 supersedes 3.7.3:** the water-sync fix in 3.7.4 also applies to the
-Store version. Once the `v3.7.4` tag has built `Toolbox-3.7.4.appx` (version
-`3.7.4.0`), submit it as the next submission; until then Submission 4 (3.7.3)
-remains the newest submitted package and may still pass certification first.
+Store version. `Toolbox-3.7.4.appx` (version `3.7.4.0`, x64, SHA256
+`b667707c43085a9c8d29369ff30a9a72bfd3a7960f07c54b06e021ac92677c1e`) was built
+from the `v3.7.4` tag by workflow run `46014096867` on 27 November 2026 and must
+be submitted as Submission 5; Submission 4 (3.7.3) remains in certification.
 
 ## Partner Center
 
@@ -43,6 +44,17 @@ remains the newest submitted package and may still pass certification first.
 | Age ratings | USK 0, PEGI 3, ESRB Everyone, IARC 3+, Microsoft Store 3+ |
 
 ## AppX build
+
+### 3.7.4
+
+- Workflow: **Microsoft Store (AppX)**, run `46014096867` – **success**
+- File: `Toolbox-3.7.4.appx`, version `3.7.4.0`, x64
+- SHA256: `b667707c43085a9c8d29369ff30a9a72bfd3a7960f07c54b06e021ac92677c1e`
+- Manifest checked: identity `NHoartApps.ToolboxforWindows`, four languages
+- Contains the separate timestamps for water amounts and sizes
+- Submission 5 still open
+
+### 3.7.3
 
 - Workflow: **Microsoft Store (AppX)**
 - Ref: `main` at commit `ab5c0f5`
@@ -86,8 +98,8 @@ app logo.
    notes then include the Store row automatically.
 2. Wait for Submission 4 (3.7.3) to pass certification; the Store publishes it
    automatically and replaces the live 3.7.2.
-3. Submit `Toolbox-3.7.4.appx` (version `3.7.4.0`) as the next submission once
-   the `v3.7.4` build has finished; it contains the water-sync fix.
+3. Submit `Toolbox-3.7.4.appx` (version `3.7.4.0`, run `46014096867`) as
+   Submission 5; it contains the water-sync fix.
 4. Future Store versions need their own submission; the procedure is described in
    [`windows/store/README.md`](windows/store/README.md).
 
@@ -102,7 +114,7 @@ app logo.
 | 20 Nov 2026 | Submission 3 rejected under 10.1.1.3 (macOS screenshots) |
 | 21 Nov 2026 | Windows-rendered screenshots uploaded; Submission 3 passed certification and 3.7.2 published |
 | 21 Nov 2026 | `Toolbox-3.7.3.appx` built from `ab5c0f5`; Submission 4 submitted for certification |
-| 27 Nov 2026 | 3.7.4 fixes the water sync (separate timestamps for amounts and sizes); AppX build and Submission 5 pending |
+| 27 Nov 2026 | `Toolbox-3.7.4.appx` built from `v3.7.4` (run `46014096867`); Submission 5 pending |
 
 ## Checks performed
 
