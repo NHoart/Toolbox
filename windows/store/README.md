@@ -33,8 +33,9 @@ brand-header note.
 `Toolbox-3.7.4.appx` (version `3.7.4.0`, x64, SHA256
 `b667707c43085a9c8d29369ff30a9a72bfd3a7960f07c54b06e021ac92677c1e`) was built
 by run `46014096867` from the `v3.7.4` tag and must be submitted as Submission
-5; it supersedes 3.7.3 in the Store. 3.7.5 (counter sync fix) is prepared;
-once it is released, build and submit its AppX instead.
+5; it supersedes 3.7.3 in the Store. The four “What's new” texts for this
+submission are prepared below. 3.7.5 (counter sync fix) is prepared; once it is
+released, build and submit its AppX instead.
 
 ## One-time setup
 
@@ -291,9 +292,17 @@ repository: <https://github.com/NHoart/Toolbox/blob/main/LICENSE>
 listing. The files live under `windows/store/screenshots/<language>/`
 (`de`, `en`, `es`, `fr`); motifs in tab order: today (water tracker), history,
 units, counter, download time and power usage.  
-**What's new in this version:** use the following texts for the 3.7.3 Store
-submission, which adds the brand header and keeps the Store Settings without an
-Updates section:
+**What's new in this version:** use the following texts for the **3.7.4** Store
+submission (Submission 5, `Toolbox-3.7.4.appx`). 3.7.4 fixes the water-tracker
+sync and keeps Undo limited to the current day:
+
+- de-DE: `Keine unerwarteten Wassermengen mehr beim Abgleich: Eine Änderung der Glas- oder Flaschengröße bzw. des Tagesziels überschreibt keinen neueren Wasserstand eines anderen Geräts mehr. „Rückgängig“ bezieht sich außerdem nur noch auf den aktuellen Tag.`
+- en-US: `No more unexpected water amounts when syncing: changing the glass or bottle size or the daily goal no longer overwrites a newer water level from another device. Undo now applies only to the current day.`
+- es-ES: `Se acabaron las cantidades de agua inesperadas al sincronizar: cambiar el tamaño del vaso o de la botella o el objetivo diario ya no sobrescribe un nivel de agua más reciente de otro dispositivo. «Deshacer» ahora solo afecta al día actual.`
+- fr-FR: `Fin des quantités d’eau inattendues lors de la synchronisation : modifier la taille du verre ou de la bouteille, ou l’objectif quotidien, n’écrase plus un niveau d’eau plus récent d’un autre appareil. « Annuler » ne concerne désormais que le jour actuel.`
+
+**3.7.3 texts (historical, Submission 4):** these texts added the brand header
+and kept the Store Settings without an Updates section:
 
 - de-DE: `Die Titelzeile zeigt jetzt das Toolbox-App-Logo mit App-Namen und Untertitel. Die Einstellungen der Store-Fassung enthalten weiterhin keinen Update-Bereich; Updates kommen automatisch über den Microsoft Store.`
 - en-US: `The title bar now shows the Toolbox app logo with the app name and subtitle. The Store version's Settings still have no Updates section; updates are delivered automatically by the Microsoft Store.`
@@ -446,3 +455,7 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
 - [x] Replace the package and submit Submission 4 with `Toolbox-3.7.3.appx`
       (21 Nov 2026, in certification)
 - [x] Update the 3.7.3 "What's new" texts in all four Store listings
+- [x] Build `Toolbox-3.7.4.appx` from the `v3.7.4` tag (run `46014096867`, checksum verified)
+- [x] Prepare the 3.7.4 "What's new" texts in all four languages
+- [ ] Paste the 3.7.4 "What's new" texts into the four Store listings
+- [ ] Submit Submission 5 with `Toolbox-3.7.4.appx` for certification
