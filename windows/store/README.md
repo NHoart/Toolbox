@@ -5,38 +5,109 @@ unchanged; the Store version uses the same sync engine and the same local data.
 
 ## Status
 
-**Published:** Toolbox 3.7.2 is certified and has been available in the
-Microsoft Store since 21 November 2026.
+**Live in the Store:** Toolbox 3.7.2 is certified and has been available in the
+Microsoft Store since 21 November 2026. It was built from commit `dca01d1`,
+before the brand header change, so the live app still shows the old title bar
+while the live screenshots already show the new one.
 
 - Store page: <https://apps.microsoft.com/detail/9P4FPTHZHVJD>
 - Package: `Toolbox-3.7.2.appx`, version `3.7.2.0`, x64
 - Submission 3 (`1152921505702451589`) passed certification and published on
   21 Nov 2026
-- 3.7.2 was built from commit `dca01d1`, before the brand header change, so the
-  live app still shows the old title bar
-- Partner Center: “In Microsoft Store”, available for Windows 10/11 Desktop
+- `STORE_URL` is set as a repository variable to the URL above, so the release
+  notes of new releases carry the Store row
 
 Newer GitHub releases do not automatically reach the Store; every Store version
 needs its own submission (section 6). 3.5.0 and 3.6.1 were deliberately not
 submitted.
 
-**Submission 4 (in certification):** `Toolbox-3.7.3.appx`
-(version `3.7.3.0`, x64, SHA256
-`4fb97cb4368328304efdc7d0e4ea7921632cbba0d8612250ce96dc0b0db6c756`) was built
-from commit `ab5c0f5` by workflow run `44847964079` on 21 Nov 2026. It contains
-the brand header and the Store Settings change, so the app matches the
-screenshots. Submission 4 (`1152921505702465324`) was submitted for
-certification on 21 Nov 2026. The four “What's new” texts contain the 3.7.3
-brand-header note.
+**Ready for the next submission (3.7.5):** Toolbox 3.7.5 was released on
+28 November 2026 and its AppX is built and verified:
 
-**Next (3.7.4):** the water-sync fix also applies to the Store version.
-`Toolbox-3.7.4.appx` (version `3.7.4.0`, x64, SHA256
-`b667707c43085a9c8d29369ff30a9a72bfd3a7960f07c54b06e021ac92677c1e`) was built
-by run `46014096867` from the `v3.7.4` tag and must be submitted as Submission
-5; it supersedes 3.7.3 in the Store. The four “What's new” texts for this
-submission are prepared below. 3.7.5 (counter sync fix, widget/Siri sync and
-auto-count behavior) is prepared; once it is released, build and submit its
-AppX instead. Its four “What's new” texts are prepared below as well.
+- Package: `Toolbox-3.7.5.appx`, version `3.7.5.0`, x64, 156.2 MB
+- SHA256: `4190fc136a5291c2b4e56cc2dc0fa5f3cbd97ff5294cfd86f23a1f4088e6b85b`
+- Workflow run `46139026803` from the `v3.7.5` tag (commit `6f2f59e`), 28 Nov 2026
+- Content: the counter value and the automatic counting speed have separate
+  change times, so a speed-only change no longer overwrites a newer value from
+  another device; water logged from the widget or via Siri reaches the other
+  devices immediately while the app is running
+- Local copy: `build/release-verify/v3.7.5/appx/Toolbox-3.7.5.appx`
+
+**Submission 4 (`1152921505702465324`, 3.7.3) is in certification:**
+`Toolbox-3.7.3.appx` (version `3.7.3.0`, x64, SHA256
+`4fb97cb4368328304efdc7d0e4ea7921632cbba0d8612250ce96dc0b0db6c756`) was built
+from commit `ab5c0f5` by run `44847964079` on 21 Nov 2026. It contains the brand
+header and the Store Settings change. Its state in Partner Center has not been
+confirmed since it was submitted.
+
+**3.7.4 was never submitted.** `Toolbox-3.7.4.appx` (version `3.7.4.0`, x64,
+SHA256 `b667707c43085a9c8d29369ff30a9a72bfd3a7960f07c54b06e021ac92677c1e`) was
+built from the `v3.7.4` tag by run `46014096867` on 27 Nov 2026, but 3.7.5
+supersedes it. If Partner Center still shows an in-certification package, wait
+for its result or cancel it before uploading 3.7.5.
+
+### Partner Center
+
+| Field | Value |
+| --- | --- |
+| Product ID | `9P4FPTHZHVJD` |
+| Submission ID | `1152921505702465324` (Submission 4) |
+| Product name | Toolbox for Windows |
+| Status | live 3.7.2; Submission 4 state to check |
+| Package | `Toolbox-3.7.3.appx` – validated on upload |
+| Package version | `3.7.3.0`, x64 |
+| Device family | Windows 10/11 Desktop, at least `10.0.17763.0` |
+| Submission last changed | 21 November 2026 |
+| Publication | immediately after certification |
+| Age ratings | USK 0, PEGI 3, ESRB Everyone, IARC 3+, Microsoft Store 3+ |
+
+### AppX builds
+
+| Version | Package | Workflow run | SHA256 |
+| --- | --- | --- | --- |
+| 3.7.5 | `Toolbox-3.7.5.appx`, `3.7.5.0` | `46139026803` (28 Nov 2026) | `4190fc136a5291c2b4e56cc2dc0fa5f3cbd97ff5294cfd86f23a1f4088e6b85b` |
+| 3.7.4 | `Toolbox-3.7.4.appx`, `3.7.4.0` | `46014096867` (27 Nov 2026) | `b667707c43085a9c8d29369ff30a9a72bfd3a7960f07c54b06e021ac92677c1e` |
+| 3.7.3 | `Toolbox-3.7.3.appx`, `3.7.3.0` | `44847964079` (21 Nov 2026) | `4fb97cb4368328304efdc7d0e4ea7921632cbba0d8612250ce96dc0b0db6c756` |
+| 3.7.2 | `Toolbox-3.7.2.appx`, `3.7.2.0` | `44573892233` (19 Nov 2026) | – |
+
+The `v3.7.1` artifact predates the Settings change and must not be reused;
+`Toolbox-3.7.2.appx` predates the brand header.
+
+### Remaining Store work
+
+1. Check in Partner Center whether Submission 4 (3.7.3) is still in
+   certification, rejected or published; if it was never submitted, skip it.
+2. Upload `Toolbox-3.7.5.appx` as the next submission (section 4).
+3. Paste the 3.7.5 “What's new” texts into the four Store listings and submit.
+4. After certification, update the live version in this file and in the root
+   `README.md`.
+
+### History
+
+| Date | Event |
+| --- | --- |
+| 16 Nov 2026 | `Toolbox-3.4.0.appx` validated and submitted |
+| 17 Nov 2026 | 3.4.0 certified and published |
+| 18 Nov 2026 | 3.6.0 certified and published |
+| 19 Nov 2026 | Submission 3 resubmitted with `Toolbox-3.7.2.appx` |
+| 20 Nov 2026 | Submission 3 rejected under 10.1.1.3 (screenshots from the Mac app) |
+| 21 Nov 2026 | Windows-rendered screenshots uploaded; Submission 3 passed certification and 3.7.2 published |
+| 21 Nov 2026 | `Toolbox-3.7.3.appx` built from `ab5c0f5`; Submission 4 (`1152921505702465324`) submitted |
+| 27 Nov 2026 | `Toolbox-3.7.4.appx` built from `v3.7.4` (run `46014096867`); never submitted |
+| 28 Nov 2026 | 3.7.5 released; `Toolbox-3.7.5.appx` built (run `46139026803`, checksum verified) |
+
+### Checks performed
+
+- GitHub Actions runs `44847964079`, `46014096867` and `46139026803`: **success**
+- `npm test`: **45/45 passed** for 3.7.3, 52/52 on Windows for 3.7.5
+- AppX SHA256 matches `SHA256SUMS.txt` (3.7.4, 3.7.5)
+- Manifests checked: identity `NHoartApps.ToolboxforWindows`, x64, four
+  languages with `en-US` first
+- AppX contents checked for 3.7.3: `brand-tagline` present, `updateCard` hidden
+- Partner Center for 3.7.3: package **Validated**, languages supported in
+  packages **Updated**
+- Store listings: all four languages complete, six screenshots each
+- `STORE_URL` set and included in the 3.7.5 release notes
 
 ## One-time setup
 
@@ -116,10 +187,10 @@ The existing `windows-exe.yml` workflow is unchanged. The Store version is
 
 ### 4. Upload the AppX to Partner Center
 
-Current state (21 Nov 2026): Submission 3 (3.7.2) is published; Submission 4
-(`1152921505702465324`) is in certification with `Toolbox-3.7.3.appx` (version
-`3.7.3.0`, checksum above). The steps below describe the flow of a submission
-and apply unchanged to later versions.
+Current state (28 Nov 2026): 3.7.2 is published, Submission 4 (3.7.3) is in
+Partner Center and `Toolbox-3.7.5.appx` (version `3.7.5.0`, checksum above) is
+the package for the next submission. The steps below describe the flow of a
+submission and apply unchanged to later versions.
 
 1. **Start the workflow:** **Actions → Microsoft Store (AppX) → Run workflow**.
    For a release a `v<version>` tag is enough; the workflow then runs
@@ -136,8 +207,10 @@ and apply unchanged to later versions.
    ```
 
    Only the downloaded AppX should be in the folder. Both SHA256 values must
-   match. Optionally verify the manifest again (in the repository under
-   `windows`):
+   match. On macOS, `node scripts/verify-release.js v<version>` in the
+   repository root downloads the release artifacts and checks the AppX checksum
+   and manifest as well. Optionally verify the manifest again (in the repository
+   under `windows`):
 
    ```powershell
    powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-appx.ps1 -Path (Get-ChildItem .\Toolbox-*.appx).FullName
@@ -187,11 +260,11 @@ installation table. Without `STORE_URL` the row stays empty.
 4. The Store updates installed apps; `electron-updater` is disabled in the Store
    version.
 
-The submission with the Settings change and the brand header uses
-`Toolbox-3.7.3.appx` from run `44847964079` (commit `ab5c0f5`), uploaded to
-Submission 4 on 21 Nov 2026. The existing `v3.7.1` artifact was built before the
-Settings change and must not be reused; `Toolbox-3.7.2.appx` predates the brand
-header.
+The next submission uses `Toolbox-3.7.5.appx` from run `46139026803` (28 Nov
+2026). It supersedes `Toolbox-3.7.4.appx` (run `46014096867`, never submitted)
+and `Toolbox-3.7.3.appx` (run `44847964079`, Submission 4). The existing `v3.7.1`
+artifact was built before the Settings change and must not be reused;
+`Toolbox-3.7.2.appx` predates the brand header.
 
 Later automation can use the Microsoft Store Developer CLI with an Entra ID app.
 That requires seller ID, tenant ID, client ID and client secret; these
@@ -293,19 +366,22 @@ repository: <https://github.com/NHoart/Toolbox/blob/main/LICENSE>
 listing. The files live under `windows/store/screenshots/<language>/`
 (`de`, `en`, `es`, `fr`); motifs in tab order: today (water tracker), history,
 units, counter, download time and power usage.  
-**What's new in this version:** use the following texts for the **3.7.4** Store
-submission (Submission 5, `Toolbox-3.7.4.appx`). 3.7.4 fixes the water-tracker
-sync and keeps Undo limited to the current day:
+**What's new in this version:** the next Store submission is **3.7.5**
+(`Toolbox-3.7.5.appx`); enter its texts below. 3.7.5 keeps the counter value and
+the automatic counting speed apart and forwards water from the widget or Siri
+immediately.
+
+**3.7.4 texts (superseded, only if 3.7.4 is submitted first):** 3.7.4 fixes the
+water-tracker sync and keeps Undo limited to the current day:
 
 - de-DE: `Keine unerwarteten Wassermengen mehr beim Abgleich: Eine Änderung der Glas- oder Flaschengröße bzw. des Tagesziels überschreibt keinen neueren Wasserstand eines anderen Geräts mehr. „Rückgängig“ bezieht sich außerdem nur noch auf den aktuellen Tag.`
 - en-US: `No more unexpected water amounts when syncing: changing the glass or bottle size or the daily goal no longer overwrites a newer water level from another device. Undo now applies only to the current day.`
 - es-ES: `Se acabaron las cantidades de agua inesperadas al sincronizar: cambiar el tamaño del vaso o de la botella o el objetivo diario ya no sobrescribe un nivel de agua más reciente de otro dispositivo. «Deshacer» ahora solo afecta al día actual.`
 - fr-FR: `Fin des quantités d’eau inattendues lors de la synchronisation : modifier la taille du verre ou de la bouteille, ou l’objectif quotidien, n’écrase plus un niveau d’eau plus récent d’un autre appareil. « Annuler » ne concerne désormais que le jour actuel.`
 
-**3.7.5 texts (prepared, use after the 3.7.5 release):** the next Store
-submission covers the counter-sync fix, immediate widget/Siri sync and the
-auto-count behavior. Build `Toolbox-3.7.5.appx` from the `v3.7.5` tag and use
-these texts:
+**3.7.5 texts (current):** built from the `v3.7.5` tag by run `46139026803` on
+28 Nov 2026. These texts cover the counter-sync fix, the immediate widget/Siri
+sync and the auto-count behavior:
 
 - de-DE: `Der Zähler wird beim Abgleich nicht mehr unerwartet zurückgesetzt: Zählerstand und automatische Zählgeschwindigkeit haben jetzt getrennte Änderungszeiten, sodass eine reine Geschwindigkeitsänderung keinen neueren Zählerstand eines anderen Geräts mehr überschreibt. Wasser, das über das Widget oder Siri eingetragen wird, erreicht die anderen Geräte jetzt sofort, solange die App läuft. Ein laufendes automatisches Zählen läuft außerdem mit der neuen Geschwindigkeit weiter; erst ein neuerer Zählerstand eines anderen Geräts stoppt es.`
 - en-US: `The counter no longer resets unexpectedly during sync: its value and the automatic counting speed now have separate change times, so a speed-only change no longer overwrites a newer value from another device. Water logged from the widget or via Siri now reaches the other devices immediately while the app is running. A running automatic count also keeps going at the new speed; only a newer counter value from another device stops it.`
@@ -445,8 +521,8 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
 - [x] Upload and validate `Toolbox-3.4.0.appx` in Partner Center
 - [x] Submit on 16 Nov 2026, certified and published on 17 Nov 2026
 - [x] Build, validate and publish `Toolbox-3.6.0.appx` on 18 Nov 2026
-- [ ] Set `STORE_URL` as a repository variable
-      (`https://apps.microsoft.com/detail/9P4FPTHZHVJD`) – still open
+- [x] Set `STORE_URL` as a repository variable
+      (`https://apps.microsoft.com/detail/9P4FPTHZHVJD`)
 - [x] Replace the Store screenshots in Partner Center with the six-tab set
       (Submission 3, 19 Nov 2026, all four languages)
 - [x] Build `Toolbox-3.7.2.appx` from commit `dca01d1` with the Settings
@@ -467,9 +543,9 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
       (21 Nov 2026, in certification)
 - [x] Update the 3.7.3 "What's new" texts in all four Store listings
 - [x] Build `Toolbox-3.7.4.appx` from the `v3.7.4` tag (run `46014096867`, checksum verified)
-- [x] Prepare the 3.7.4 "What's new" texts in all four languages
-- [ ] Paste the 3.7.4 "What's new" texts into the four Store listings
-- [ ] Submit Submission 5 with `Toolbox-3.7.4.appx` for certification
+- [x] Prepare the 3.7.4 "What's new" texts in all four languages (superseded by 3.7.5)
+- [x] Build `Toolbox-3.7.5.appx` from the `v3.7.5` tag (run `46139026803`, checksum verified)
 - [x] Prepare the 3.7.5 "What's new" texts in all four languages
-- [ ] After the 3.7.5 release, build `Toolbox-3.7.5.appx`, paste the 3.7.5
-      "What's new" texts into the four Store listings and submit
+- [ ] Check in Partner Center whether Submission 4 (3.7.3) is still in certification
+- [ ] Upload `Toolbox-3.7.5.appx`, paste the 3.7.5 "What's new" texts into the
+      four Store listings and submit
