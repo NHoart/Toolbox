@@ -34,8 +34,9 @@ brand-header note.
 `b667707c43085a9c8d29369ff30a9a72bfd3a7960f07c54b06e021ac92677c1e`) was built
 by run `46014096867` from the `v3.7.4` tag and must be submitted as Submission
 5; it supersedes 3.7.3 in the Store. The four “What's new” texts for this
-submission are prepared below. 3.7.5 (counter sync fix) is prepared; once it is
-released, build and submit its AppX instead.
+submission are prepared below. 3.7.5 (counter sync fix, widget/Siri sync and
+auto-count behavior) is prepared; once it is released, build and submit its
+AppX instead. Its four “What's new” texts are prepared below as well.
 
 ## One-time setup
 
@@ -301,6 +302,16 @@ sync and keeps Undo limited to the current day:
 - es-ES: `Se acabaron las cantidades de agua inesperadas al sincronizar: cambiar el tamaño del vaso o de la botella o el objetivo diario ya no sobrescribe un nivel de agua más reciente de otro dispositivo. «Deshacer» ahora solo afecta al día actual.`
 - fr-FR: `Fin des quantités d’eau inattendues lors de la synchronisation : modifier la taille du verre ou de la bouteille, ou l’objectif quotidien, n’écrase plus un niveau d’eau plus récent d’un autre appareil. « Annuler » ne concerne désormais que le jour actuel.`
 
+**3.7.5 texts (prepared, use after the 3.7.5 release):** the next Store
+submission covers the counter-sync fix, immediate widget/Siri sync and the
+auto-count behavior. Build `Toolbox-3.7.5.appx` from the `v3.7.5` tag and use
+these texts:
+
+- de-DE: `Der Zähler wird beim Abgleich nicht mehr unerwartet zurückgesetzt: Zählerstand und automatische Zählgeschwindigkeit haben jetzt getrennte Änderungszeiten, sodass eine reine Geschwindigkeitsänderung keinen neueren Zählerstand eines anderen Geräts mehr überschreibt. Wasser, das über das Widget oder Siri eingetragen wird, erreicht die anderen Geräte jetzt sofort, solange die App läuft. Ein laufendes automatisches Zählen läuft außerdem mit der neuen Geschwindigkeit weiter; erst ein neuerer Zählerstand eines anderen Geräts stoppt es.`
+- en-US: `The counter no longer resets unexpectedly during sync: its value and the automatic counting speed now have separate change times, so a speed-only change no longer overwrites a newer value from another device. Water logged from the widget or via Siri now reaches the other devices immediately while the app is running. A running automatic count also keeps going at the new speed; only a newer counter value from another device stops it.`
+- es-ES: `El contador ya no se reinicia de forma inesperada al sincronizar: su valor y la velocidad de conteo automático ahora tienen marcas de tiempo separadas, por lo que un cambio solo de velocidad ya no sobrescribe un valor más reciente de otro dispositivo. El agua registrada desde el widget o mediante Siri ahora llega de inmediato a los demás dispositivos mientras la app está abierta. Además, el conteo automático en curso sigue funcionando con la nueva velocidad; solo un valor más reciente de otro dispositivo lo detiene.`
+- fr-FR: `Le compteur n’est plus réinitialisé de façon inattendue lors de la synchronisation : sa valeur et la vitesse de comptage automatique ont désormais des horodatages séparés, si bien qu’un simple changement de vitesse n’écrase plus une valeur plus récente d’un autre appareil. L’eau enregistrée depuis le widget ou via Siri arrive maintenant immédiatement sur les autres appareils tant que l’application est ouverte. De plus, un comptage automatique en cours continue à la nouvelle vitesse ; seule une valeur plus récente venant d’un autre appareil l’arrête.`
+
 **3.7.3 texts (historical, Submission 4):** these texts added the brand header
 and kept the Store Settings without an Updates section:
 
@@ -459,3 +470,6 @@ IARC 3+, Microsoft Store 3+. The IARC terms of use were accepted.
 - [x] Prepare the 3.7.4 "What's new" texts in all four languages
 - [ ] Paste the 3.7.4 "What's new" texts into the four Store listings
 - [ ] Submit Submission 5 with `Toolbox-3.7.4.appx` for certification
+- [x] Prepare the 3.7.5 "What's new" texts in all four languages
+- [ ] After the 3.7.5 release, build `Toolbox-3.7.5.appx`, paste the 3.7.5
+      "What's new" texts into the four Store listings and submit
